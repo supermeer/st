@@ -1,0 +1,55 @@
+<view class="usercenter-page-container">
+  <custom-nav
+    class="custom-nav"
+    show-back="{{false}}"
+    show-left-logo="{{true}}"
+    show-home="{{false}}"
+    transparent="{{true}}"
+  />
+  <view class="usercenter-content">
+    <view class="user-info">
+      <t-image class="user-info-avatar" src="/static/avatar.jpg" />
+      <view class="user-info-name">
+        <text>{{userInfo.nickname || '小柚子'}}</text>
+      </view>
+    </view>
+    <view class="vip-card" style="background-image: url('https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/vip.png');">
+      <view class="vip-card-header">
+        <t-image class="vip-card-header-icon" src="{{vipInfo.ifVip ? '/static/vip_icon.png' : '/static/vip_no_icon.png'}}" />
+        <text class="vip-card-header-text {{vipInfo.ifVip ? 'vip-card-header-text-vip' : 'vip-card-header-text-no-vip'}}">{{vipInfo.ifVip ? 'VIP' : '暂未开通VIP'}}</text>
+        <view
+          wx:if="{{vipInfo.ifVip}}"
+          class="vip-card-header-remain">本月剩余<view class="vip-card-header-remain-time">{{vipInfo.monthlyRemaining || 0}}</view>次
+        </view>
+        <view
+          wx:if="{{!vipInfo.ifVip && vipInfo.giftRemaining > 0}}"
+          class="vip-card-header-remain">赠送次数剩余<view class="vip-card-header-remain-time">{{vipInfo.giftRemaining}}</view>次
+        </view>
+      </view>
+      <view wx:if="{{vipInfo.ifVip}}" class="vip-card-bottom">
+        <view class="deadline-time">{{vipInfo.formattedMonthlyExpireTime}} 到期</view>
+        <view wx:if="{{vipInfo.monthlyRemainingDays > 0 && vipInfo.monthlyRemainingDays <= 5}}" class="deadline-time-countdown">过期将自动清零</view>
+        <view class="times-detail" bindtap="onTimesDetailClick">
+          详情
+        </view>
+      </view>
+      <view wx:else class="vip-card-bottom">
+        <view wx:if="{{vipInfo.giftRemaining > 0}}" class="times-detail" bindtap="onTimesDetailClick">
+          详情
+        </view>
+        <view wx:else class="vip-card-bottom-text">开启专属于你的AI旅程</view>
+      </view>
+      <view class="vip-renew" catchtap="onVipRenewClick">{{ vipInfo.ifVip ? '立即续费' : '开通VIP' }}</view>
+    </view>
+    <view class="user-center-items">
+      <view wx:for="{{userCenterItems}}" wx:key="index" class="user-center-item" bindtap="onClickCell" data-url="{{item.url}}">
+        <t-image class="user-center-item-icon" src="{{item.icon}}" />
+        <view class="user-center-item-title">{{item.title}}</view>
+        <view class="user-center-item-desc">{{item.desc}}</view>
+        <t-icon wx:if="{{!item.hideArr}}" class="user-center-item-arr" name="chevron-right" size="18" color="#999" />
+      </view>
+    </view>                                                           
+  </view>
+</view>
+
+<t-toast id="t-toast" />

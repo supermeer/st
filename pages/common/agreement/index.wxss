@@ -1,0 +1,69 @@
+/* pages/vip/agreement/index.wxss */
+
+page {
+  width: 100%;
+  height: 100%;
+  background-color: #f5f5f5;
+}
+
+.agreement-page {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 协议内容区域 */
+.agreement-content {
+  flex: 1;
+  padding: 0 32rpx;
+  height: calc(100vh - env(safe-area-inset-top) - 44px - env(safe-area-inset-bottom));
+  overflow-y: auto;
+  box-sizing: border-box;
+  background-color: #fff;
+  border-radius: 16rpx 16rpx 0 0;
+  position: relative;
+  z-index: 1;
+}
+
+/* 加载状态容器 */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200rpx;
+  color: #999;
+}
+
+/* 富文本内容样式 */
+.agreement-content rich-text {
+  display: block;
+  padding: 20rpx 0;
+}
+
+/* 适配不同屏幕尺寸 */
+@media screen and (max-height: 600px) {
+  .agreement-content {
+    height: calc(100vh - env(safe-area-inset-top) - 84rpx - env(safe-area-inset-bottom) - 20rpx);
+  }
+}
+
+/* 滚动条样式 */
+.agreement-content::-webkit-scrollbar {
+  width: 4rpx;
+}
+
+.agreement-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.agreement-content::-webkit-scrollbar-thumb {
+  background: #ddd;
+  border-radius: 2rpx;
+}
+
+.agreement-content::-webkit-scrollbar-thumb:hover {
+  background: #ccc;
+} 

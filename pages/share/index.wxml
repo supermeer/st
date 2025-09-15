@@ -1,0 +1,108 @@
+<view class="share-page-container">
+  <!-- 自定义导航栏 -->
+  <custom-nav
+    class="custom-nav"
+    show-back="{{navConfig.showBack}}"
+    show-left-logo="{{navConfig.showLeftLogo}}"
+    show-home="{{false}}"
+  />
+  <view class="header-bg">
+  </view>
+  <view class="white-board">
+  </view>
+  <view class="content-container">
+    <view class="share-status-container">
+      <view class="invite-title">{{inviteTitle}}
+        <view wx:if="{{inviteStatus === INVITE_STATUS.INVITE}}" class="invite-title-ai">AI</view>
+        <t-icon wx:if="{{inviteStatus === INVITE_STATUS.INVITED}}" name="close-circle" size="24" color="#F94B30" style="margin-left: 12rpx; font-weight: bold;" />
+      </view>
+      <view
+        wx:if="{{inviteStatus !== INVITE_STATUS.INVITED}}"
+        class="ray-bg {{inviteStatus === INVITE_STATUS.INVITE ? 'invite-ray' : inviteStatus === INVITE_STATUS.SUCCESS ? 'success-ray' : inviteStatus === INVITE_STATUS.INVITED ? 'invited-ray' : ''}}"
+        style="background-image: url('/static/share/ray-bg.png');" />
+      <t-image wx:if="{{inviteStatus === INVITE_STATUS.INVITE}}" class="invite-card" src="/static/share/invite_card.png" />
+      <t-image wx:if="{{inviteStatus === INVITE_STATUS.SUCCESS}}" class="success-card" src="/static/share/success_card.png" />
+      <t-image wx:if="{{inviteStatus === INVITE_STATUS.INVITED}}" class="invited-card" src="/static/share/invited_card.png" />
+      <view class="items-container {{inviteStatus === INVITE_STATUS.INVITE ? 'invite-items' : ''}}">
+        <view class="item-container">
+          {{inviteStatus === INVITE_STATUS.SUPPORT ? '邀请' : inviteStatus === INVITE_STATUS.SUPPORT_SUCCESS ? '您邀请' : '每邀请'}}<view class="item-number">1</view>个新用户
+        </view>
+        <t-image class="item-step" src="/static/share/invite_step.png" />
+        <view class="item-container">
+          {{inviteStatus === INVITE_STATUS.SUCCESS ? '每人免费' : inviteStatus === INVITE_STATUS.SUPPORT_SUCCESS ? '可再' : '双方均可'}}获得<view class="item-number">10</view>次试用
+        </view>
+      </view>
+    </view>
+
+    <view wx:if="{{inviteStatus !== INVITE_STATUS.SUCCESS}}" class="slogan-container">
+      外卖返现，不费力！
+      <view class="slogan-bg" />
+      <t-image class="slogan-icon" src="/static/share/slogan_finger.png" />
+      爆款攻略，任你写！
+    </view>
+    <view wx:if="{{inviteStatus === INVITE_STATUS.INVITE}}" class="invite-steps-container">
+      <view class="invite-step-num">1</view>
+      邀请好友
+      <view class="invite-step-line" />
+      <view class="invite-step-num">2</view>
+      好友注册
+      <view class="invite-step-line" />
+      <view class="invite-step-num">3</view>
+      次数到账
+    </view>
+    <view wx:if="{{!isShare || inviteStatus === INVITE_STATUS.SUPPORT}}" class="invite-content" >
+      <t-image class="invite-content-bg" src="/static/share/invite_content_bg.png" />
+      <view wx:if="{{inviteStatus === INVITE_STATUS.SUPPORT}}" class="invite-tip-container">
+        注册成功后，您将获得10次使用AI的机会哦
+      </view>
+      <view wx:if="{{inviteStatus === INVITE_STATUS.INVITE}}" class="invite-tip-container">点击【邀请好友】，即可分享</view>
+      <view wx:if="{{inviteStatus === INVITE_STATUS.SUCCESS}}" class="invite-tip-container">免费次数已到账，可在「我的」查收</view>
+      <button wx:if="{{inviteStatus !== INVITE_STATUS.SUCCESS}}" class="invite-avatar__add" open-type="share">
+        <t-image class="invite-avatar" src="/static/share/avatar_add.png" />
+      </button>
+      <!-- <t-image class="invite-avatar invite-avatar__name" src="/static/share/avatar.png" />
+      <view class="invite-name-tag">
+        <t-icon name="check-circle-filled" color="#52C41A" size="14" />
+        <view class="invite-name-tag-text">
+          Anna
+        </view>
+      </view>
+       -->
+      <view wx:if="{{inviteStatus === INVITE_STATUS.SUCCESS}}" class="barrage-container">
+        <view 
+          wx:for="{{barrageList}}" 
+          wx:key="id"
+          class="barrage-item" 
+          style="top: {{item.top}}%; animation: {{item.animation}};"
+        >
+          <t-image class="barrage-avatar" src="/static/avatar.jpg" />
+          {{item.text}}
+          <t-icon class="barrage-logo" name="check-circle-filled" color="#52C41A" size="14" />
+        </view>
+      </view>
+      <view class="invite-record" bindtap="onInviteRecordClick">
+        <t-image class="invite-record-icon" src="/static/share/record_icon.png" />
+        邀请记录
+      </view>
+    </view>
+    <view wx:else class="entrance-container">
+      <view class="entrance-container-title">进入柚子的世界，您可以体验以下功能</view>
+      <view class="entrance-items">
+        <view wx:for="{{entranceList}}" wx:key="id" data-index="{{index}}" class="entrance-item" bindtap="onEntranceItemClick">
+          <t-image class="entrance-item-icon" src="{{item.icon}}" />
+          <view class="entrance-item-content">
+            <view class="entrance-item-title">{{item.name}}</view>
+            <view class="entrance-item-desc">{{item.description}}</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view wx:if="{{inviteStatus === INVITE_STATUS.SUPPORT_SUCCESS}}" class="bottom-button" bindtap="onBottomButtonClick">返回主页</view>
+  <button wx:elif="{{inviteStatus === INVITE_STATUS.SUPPORT}}" class="bottom-button" open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber">立即注册</button>
+  <button wx:else class="bottom-button" open-type="share">
+    {{!isShare ? '邀请好友' : '邀请好友，获得次数'}}
+  </button>
+</view>
+
+<auth id="shareAuth" check-phone="{{false}}" bind:loginSuccess="loginSuccess" bind:bindPhoneSuccess="bindPhoneSuccess" />

@@ -1,0 +1,38 @@
+<view class="payment-container" style="background-image: url('https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/page_bg_1.png'); background-size: 100% 100%; background-repeat: no-repeat; background-position: center;">
+  <!-- 自定义导航栏 -->
+  <custom-nav
+    class="nav-container"
+    title="" 
+    showBack="{{true}}"
+    showHome="{{false}}"
+    bgColor="#ffffff"
+    transparent="{{true}}"
+    bind:back="onBackClick"
+  />
+
+  <!-- 内容区域 -->
+  <view class="content-container">
+    <!-- 支付状态卡片 -->
+    <view class="payment-card">
+      <t-loading wx:if="{{paymentInfo.status === 0}}" class="payment-icon" theme="spinner" size="80rpx" />
+      <t-image wx:if="{{paymentInfo.status === 1}}" class="payment-icon" src="/static/payment/pay_success.png" mode="aspectFit"></t-image>
+      
+      <!-- 标题 -->
+      <view class="payment-title">{{paymentInfo.status === 1 ? '支付成功' : paymentInfo.status === 2 ? '支付失败' : '结果查询中'}}</view>
+
+      
+      <!-- 消息 -->
+      <view wx:if="{{paymentInfo.status === 1}}" class="payment-message">恭喜您！成为Yours X尊贵的VIP</view>
+
+      
+      <!-- 提示信息 -->
+      <view class="payment-tips">过程中，有任何问题，可添联系客服。</view>
+    </view>
+    <view class="home-button" bindtap="goToHome">返回主页</view>
+    
+    <!-- 添加客服微信按钮 -->
+    <view class="contact-button" bindtap="contactCustomerService">联系客服</view>
+  </view>
+</view>
+
+<t-toast id="t-toast" /> 

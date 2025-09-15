@@ -1,0 +1,61 @@
+<view class="order-container" style="background-image: url('https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/page_bg_1.png'); background-size: 100% 100%; background-repeat: no-repeat; background-position: center;">
+  <!-- 自定义导航栏 -->
+  <custom-nav
+    class="nav-container"
+    title="订单确认" 
+    showBack="{{true}}"
+    showHome="{{false}}"
+    transparent="{{true}}"
+    bind:back="onBackClick"
+  />
+
+  <!-- 内容区域 -->
+  <view class="content-container">
+    <!-- 商品信息卡片 -->
+    <view class="product-card" style="background-image: url('https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/vip.png'); background-size: 100% 100%; background-repeat: no-repeat; background-position: center;">
+      <view class="product-info">
+        商品信息
+      </view>
+      <view class="product-price-line">
+        <view class="product-name">{{package.title}}</view>
+        <view class="product-price">
+          <view>优惠后</view>
+          <view class="price-value">{{package.amountInYuan}}</view>
+        </view>
+      </view>
+      <view class="original-price">{{package.originAmountInYuan}}</view>
+      <view class="bottom-line">
+        <t-image class="vip-icon" src="/static/vip_icon.png" mode="aspectFit" />
+        <view class="quantity-control">
+          <view class="quantity-btn quantity-btn-minus {{quantity <= 1 ? 'disabled' : ''}}" bindtap="decreaseQuantity">-</view>
+          <view class="quantity-value">{{quantity}}</view>
+          <view class="quantity-btn quantity-btn-plus {{quantity >= maxQuantity ? 'disabled' : ''}}" bindtap="increaseQuantity">+</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 价格明细卡片 -->
+    <view class="price-card">
+      <view class="price-info">
+        价格明细
+      </view>
+      <view class="price-item">
+        <text class="price-item-label">总价</text>
+        <text class="price-item-value">{{totalPrice}}</text>
+      </view>
+      <view class="price-item">
+        <text class="price-item-label">优惠</text>
+        <text class="price-item-value price-item-value-discount">-{{discountPrice}}</text>
+      </view>
+      <view class="price-item total">
+        <text class="price-item-label">合计</text>
+        <text class="price-item-value">{{finalPrice}}</text>
+      </view>
+    </view>
+
+    <!-- 下单按钮 -->
+    <view class="order-button" bindtap="submitOrder">立即下单</view>
+  </view>
+</view>
+
+<t-toast id="t-toast" /> 

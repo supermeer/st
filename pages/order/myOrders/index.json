@@ -1,0 +1,10 @@
+{
+  "usingComponents": {
+    "custom-nav": "/components/custom-nav/index",
+    "load-more": "/components/load-more/index",
+    "t-toast": "tdesign-miniprogram/toast/toast",
+    "t-pull-down-refresh": "tdesign-miniprogram/pull-down-refresh/pull-down-refresh"
+  },
+  "navigationStyle": "custom",
+  "disableScroll": true
+} 

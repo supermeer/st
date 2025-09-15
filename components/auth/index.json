@@ -1,0 +1,11 @@
+{
+  "component": true,
+  "usingComponents": {
+    "t-overlay": "tdesign-miniprogram/overlay/overlay",
+    "t-image": "tdesign-miniprogram/image/image",
+    "t-button": "tdesign-miniprogram/button/button",
+    "common-dialog-content": "/components/common-dialog-content/index",
+    "t-toast": "tdesign-miniprogram/toast/toast",
+    "t-loading": "tdesign-miniprogram/loading/loading"
+  }
+}

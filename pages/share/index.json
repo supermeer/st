@@ -1,0 +1,27 @@
+{
+    "navigationBarTitleText": "分享页",
+    "onReachBottomDistance": 10,
+    "backgroundTextStyle": "light",
+    "enablePullDownRefresh": false,
+    "navigationStyle": "custom",
+    "safeArea": {
+        "top": true,
+        "bottom": true,
+        "left": true,
+        "right": true
+    },
+    "usingComponents": {
+      "t-search": "tdesign-miniprogram/search/search",
+      "t-loading": "tdesign-miniprogram/loading/loading",
+      "t-swiper": "tdesign-miniprogram/swiper/swiper",
+      "t-swiper-nav": "tdesign-miniprogram/swiper-nav/swiper-nav",
+      "t-image": "tdesign-miniprogram/image/image",
+      "t-icon": "tdesign-miniprogram/icon/icon",
+      "t-toast": "tdesign-miniprogram/toast/toast",
+      "t-tabs": "tdesign-miniprogram/tabs/tabs",
+      "t-tab-panel": "tdesign-miniprogram/tab-panel/tab-panel",
+      "load-more": "/components/load-more/index",
+      "auth": "/components/auth/index",
+      "custom-nav": "/components/custom-nav/index"
+    }
+  }

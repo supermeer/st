@@ -1,0 +1,103 @@
+/* 自定义导航栏容器 */
+.custom-nav {
+  width: 100%;
+  position: relative;
+  z-index: 100;
+}
+
+/* 状态栏占位 */
+.status-bar {
+  width: 100%;
+}
+
+/* 导航栏内容区 */
+.nav-content {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+/* 左侧区域 */
+.nav-left {
+  height: 100%;
+  box-sizing: border-box; 
+  display: flex;
+  align-items: center;
+  padding-left: 40rpx;
+}
+
+/* 左侧插槽样式 */
+.nav-left [slot="left"] {
+  display: flex;
+  align-items: center;
+}
+
+.nav-back {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+.nav-home {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+.nav-home-separator {
+  display: flex;
+  align-items: center;
+  font-size: 28rpx;
+  color: #666;
+  margin-right: 16rpx;
+  line-height: 1;
+}
+
+.left-logo {
+  width: 152rpx;
+  height: 36rpx;
+}
+
+.nav-icon {
+}
+.default-back-icon {
+  /* padding: 32rpx; */
+}
+.default-home-icon {
+  margin-left: auto;
+}
+
+.nav-home-separator {
+  padding-right: 8rpx;
+}
+
+/* 中间标题区域 */
+.nav-center {
+  flex: 1;
+  text-align: center;
+  font-size: 28rpx;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.nav-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+/* 右侧区域 */
+.nav-right {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+} 

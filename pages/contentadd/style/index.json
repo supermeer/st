@@ -1,0 +1,10 @@
+{
+  "navigationBarTitleText": "选择风格",
+  "navigationStyle": "custom",
+  "disableScroll": true,
+  "usingComponents": {
+    "custom-nav": "/components/custom-nav/index",
+    "t-empty": "tdesign-miniprogram/empty/empty",
+    "t-loading": "tdesign-miniprogram/loading/loading"
+  }
+} 

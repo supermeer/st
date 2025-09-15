@@ -1,0 +1,24 @@
+<t-overlay
+    visible="{{ visible }}"
+    bindclose="close"
+    class="share-dialog"
+>
+    <common-dialog-content
+        class="dialog-content"
+        bindcancel="close"
+        bindconfirm="confirm"
+        cancelTitle="取消"
+        confirmTitle="分享"
+    >
+        <view class="share-dialog-content">
+            <t-image class="share-dialog-top-icon" src="/static/share-dialog_icon.png"></t-image>
+            <view class="share-dialog-title">次数已用完</view>
+            <view class="share-dialog-desc">
+                分享给<view class="share-dialog-desc-num">{{sharePersonNum}}</view>个新用户并完成注册
+            </view>
+            <view class="share-dialog-desc">
+                即可额外获得<view class="share-dialog-desc-num">{{freeTimes}}</view>此使用机会！
+            </view>
+        </view>
+    </common-dialog-content>
+</t-overlay>

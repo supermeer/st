@@ -1,0 +1,50 @@
+.custom-rate-container {
+  display: flex;
+  align-items: center;
+  width:100%;
+}
+
+.rate-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  flex-shrink: 0;
+  flex-grow: 0;
+}
+
+.rate-score {
+  font-size: 28rpx;
+  color: #666;
+  flex-shrink: 1;
+  flex-grow: 1;
+  height: 80rpx;
+  display: flex;
+  align-items: center;
+  padding:0 54rpx;
+}
+
+.text-rate-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 16rpx 0;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.text-rate-item {
+  font-size: 26rpx;
+  border-radius: 16rpx;
+  font-weight: bold;
+  transition: all 0.3s;
+  padding: 0 20rpx;
+  height: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+}
+
+.text-rate-item.active {
+  color: #fff;
+  background: var(--theme-color);
+} 

@@ -1,0 +1,37 @@
+<t-overlay
+    visible="{{ visible }}"
+    bindclose="close"
+    class="auth-overlay"
+    mask-closable="{{true}}"
+>
+  <t-loading
+    wx:if="{{ loggingInfo.logging }}"
+    theme="dots"
+    size="120rpx"
+    text="{{ loggingInfo.text }}"
+    layout="vertical"
+    class="loading-icon"
+  />
+
+  <common-dialog-content wx:if="{{loggingInfo.logErr || phoneLogin}}" bindclose="close" class="auth-dialog"> 
+    <view wx:if="{{ loggingInfo.logErr }}" class="auth-container">
+        <view class="auth-title">登录失败</view>
+        <view class="auth-subtitle">请检查您的网络连接，或稍后重试</view>
+        <view 
+            class="auth-btn primary" 
+            bindtap="login">重新登录</view>
+    </view>
+    <view wx:if="{{phoneLogin}}" class="auth-container">
+        <view class="auth-title">快捷登录</view>
+        <view class="auth-subtitle">为了给您提供更好的服务，请使用手机号登录</view>
+        <view class="auth-btn-container">
+          <button class="cancel-btn primary" bindtap="close">取消</button>
+          <button 
+              class="auth-btn primary" 
+              open-type="getPhoneNumber" 
+              bindgetphonenumber="onGetPhoneNumber">手机号登录</button>
+        </view>
+    </view>
+  </common-dialog-content>
+</t-overlay>
+<t-toast id="t-toast" />

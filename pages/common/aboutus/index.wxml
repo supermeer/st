@@ -1,0 +1,27 @@
+<view class="aboutus-container">
+  
+  <custom-nav
+    class="custom-nav"
+    title="关于我们"
+    showBack="{{true}}"
+    showHome="{{false}}">
+  </custom-nav>
+  <view class="aboutus-content">
+    <view wx:for="{{itemList}}" wx:key="index" class="aboutus-item" bindtap="onClickCell" data-url="{{item.url}}">
+      <view class="aboutus-item-title">{{item.title}}</view>
+      <view class="aboutus-item-desc">{{item.desc}}</view>
+      <t-icon wx:if="{{item.url}}" class="aboutus-item-arr" name="chevron-right" size="18" color="#999" />
+    </view>
+    <view class="logoff-item" bindtap="logoff">
+      <view class="logoff-item-title">注销账号</view>
+    </view>
+  </view>
+  
+</view>
+
+<logoff-dialog
+  id="logoff-dialog"
+  bindclose="closeLogoffDialog"
+  bindconfirm="confirmLogoffDialog"
+/>
+<t-toast id="t-toast" />

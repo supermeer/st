@@ -1,0 +1,31 @@
+<view class="custom-rate-container">
+  <view class="rate-title">{{title}}</view>
+  <view class="rate-score">
+    <block wx:if="{{displayMode === 'score'}}">
+      <t-rate
+        value="{{value}}"
+        size="{{size}}"
+        placement=""
+        variant="filled"
+        count="{{levels.length}}"
+        gap="{{gap}}"
+        readonly="{{readonly}}"
+        bind:change="onRateChange"
+      />
+    </block>
+
+    <block wx:elif="{{displayMode === 'chinese'}}">
+      <view class="text-rate-container">
+        <view 
+          wx:for="{{levels}}" 
+          wx:key="index"
+          class="text-rate-item {{item === value ? 'active' : ''}}"
+          data-value="{{item}}"
+          bindtap="{{readonly ? '' : 'onTextRateChange'}}"
+        >
+          {{item}}
+        </view>
+      </view>
+    </block>
+  </view>
+</view> 

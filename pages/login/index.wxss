@@ -1,0 +1,103 @@
+page {
+  background-color: #f5f5f5;
+  height: 100%;
+}
+.login-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  padding: 380rpx 84rpx 32rpx;
+  padding-bottom: calc(32rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+}
+
+.app-detail-line {
+  text-align: center;
+}
+
+.app-name {
+  /* 375 * 812的屏幕图标尺寸是170 * 42 转换尺寸 */
+  width: 340rpx;
+  height: 84rpx;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.app-intro {
+  font-size: 32rpx;
+  font-weight: bold;
+}
+
+.login-btn {
+  font-size: 32rpx;
+  background: linear-gradient(98deg, #6FD2FF -31%, #174DFF 89%);
+  box-shadow: 0px 17px 56px -8px rgba(56, 151, 243, 0.3823);
+  color: #fff;
+  font-weight: bold;
+  width: 100%;
+  text-align: center;
+  height: 110rpx;
+  line-height: 110rpx;
+  border-radius: 55rpx;
+  margin-top: 50rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-btn-icon {
+  width: 48rpx;
+  height: 48rpx;
+  margin-right: 24rpx;
+}
+
+/* 点击效果 */
+.login-btn:active {
+  background: linear-gradient(98deg, #6FD2FF -31%, #174DFF 89%);
+}
+
+.agreement {
+  font-size: 24rpx;
+  display: flex;
+  align-items: center;
+}
+
+.t-checkbox--block {
+  padding: 0 !important;
+  margin: 0;
+  background: transparent !important;
+}
+
+.t-radio--block {
+  padding: 0 !important;
+  margin: 0;
+}
+
+.link-text {
+  color: var(--theme-color);
+}
+
+.text {
+  color: var(--theme-color);
+}
+
+.login-bg {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  left: 0;
+  top: 0;
+  z-index: -1;
+  overflow: hidden;
+  background: #fff;
+}
+.login-content {
+  position: relative;
+  z-index: 1;
+}

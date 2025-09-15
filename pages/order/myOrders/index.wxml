@@ -1,0 +1,73 @@
+<view class="orders-container" style="background-image: url('https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/page_bg_1.png'); background-size: 100% 100%; background-repeat: no-repeat; background-position: center;">
+  <!-- 自定义导航栏 -->
+  <custom-nav
+    class="nav-container"
+    title="我的订单" 
+    showBack="{{true}}"
+    showHome="{{false}}"
+    transparent="{{true}}"
+    bgColor="#ffffff"
+    bind:back="onBackClick"
+    bind:home="onHomeClick"
+  />
+
+  <!-- 内容区域 -->
+  <view class="content-container">
+    <t-pull-down-refresh
+      value="{{refreshing}}"
+      loadingProps="{{loadingProps}}"
+      loadingTexts="{{['下拉刷新', '松手刷新', '正在刷新', '刷新完成']}}"
+      bind:refresh="onRefresh"
+      bind:timeout="onTimeout"
+      class="order-list-refresh"
+    >
+      <!-- 订单列表 -->
+      <scroll-view 
+        scroll-y 
+        class="order-list-container"
+        bindscrolltolower="onLoadMore"
+      >
+        <block wx:if="{{orderList.length > 0}}">
+          <view class="order-list">
+            <view
+              wx:for="{{orderList}}"
+              wx:key="id"
+              class="order-item"
+              bindtap="onOrderClick"
+              data-id="{{item.id}}"
+              style="background-image: url('https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/order_bg.png'); background-size: 100% 100%; background-repeat: no-repeat; background-position: center;"
+            >
+              <view class="order-header">订单编号：{{item.orderNumber}}</view>
+              <view class="order-goods">
+                <view class="order-goods-name">{{item.title}}</view>
+                <view class="order-goods-count">x{{item.count}}</view>
+                <view class="order-goods-price">{{item.totalAmount ? '¥' + item.totalAmount : '赠送' }}</view>
+              </view>
+              <view class="order-footer">
+                <view class="order-time">{{item.createTime}}</view>
+                <view wx:if="{{item.orderType === 301}}" class="order-status">赠送成功</view>
+                <view wx:else class="{{item.orderStatus === 2 ? 'order-status order-status-error' : 'order-status'}}">支付{{item.orderStatus === 0 ? '中' : item.orderStatus === 1 ? '成功' : '失败'}}</view>
+                <!-- 0 支付中 1 支付成功 2 支付失败 -->
+              </view>
+            </view>
+          </view>
+          
+          <!-- 加载更多 -->
+          <load-more
+            status="{{loadMoreStatus}}"
+            no-more-text="没有更多了"
+            bind:tap="onRetryLoad"
+          />
+        </block>
+        
+        <!-- 空状态 -->
+        <view wx:else class="empty-container">
+          <image class="empty-image" src="/static/images/empty-order.png" mode="aspectFit" />
+          <view class="empty-text">暂无订单</view>
+        </view>
+      </scroll-view>
+    </t-pull-down-refresh>
+  </view>
+</view>
+
+<t-toast id="t-toast" /> 

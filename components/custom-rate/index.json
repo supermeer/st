@@ -1,0 +1,8 @@
+{
+  "component": true,
+  "usingComponents": {
+    "t-rate": "tdesign-miniprogram/rate/rate",
+    "t-icon": "tdesign-miniprogram/icon/icon",
+    "t-tab-bar": "tdesign-miniprogram/tab-bar/tab-bar"
+  }
+} 

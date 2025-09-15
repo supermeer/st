@@ -1,0 +1,48 @@
+<view class="theme-container" style="background-image: url('https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/page_bg_1.png'); background-size: 100% 100%; background-repeat: no-repeat; background-position: center;">
+  <!-- 自定义导航栏 -->
+  <custom-nav
+    class="custom-nav"
+    show-back="{{true}}"
+    show-left-logo="{{false}}"
+    show-home="{{false}}"
+    title="风格"
+    transparent="{{false}}"
+  />
+
+  <view class="theme-content">
+    <!-- 内容滚动区域 -->
+    <scroll-view 
+      scroll-y 
+      class="scroll-area"
+      enable-back-to-top="{{true}}"
+      enhanced="{{true}}"
+      show-scrollbar="{{false}}"
+      scroll-top="{{scrollTop}}"
+      id="styleScrollView"
+    >
+        <!-- 加载中 -->
+        <view class="tab-loading-wrap" wx:if="{{loading}}">
+          <t-loading t-class="tab-loading" theme="circular" size="68rpx" />
+        </view>
+
+        <!-- 空状态 -->
+        <view class="empty-wrap" wx:if="{{styleList.length === 0 && hasLoaded && !loading}}">
+          <t-empty t-class="empty-tips" size="240rpx" description="暂无数据" />
+        </view>
+
+        <!-- 列表 -->
+        <view class="theme-list" wx:if="{{styleList.length > 0 && !loading}}">
+          <view 
+            wx:for="{{styleList}}"
+            wx:key="id"
+            class="theme-item"
+            bindtap="onStyleItemClick"
+            data-style="{{item}}"
+          >
+            <view class="theme-name">{{item.name}}</view>
+            <view class="theme-description">{{item.description}}</view>
+          </view>
+        </view>
+      </scroll-view>
+  </view>
+</view> 

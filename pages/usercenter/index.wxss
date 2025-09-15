@@ -1,0 +1,182 @@
+page {
+  background-color: #f5f5f5;
+  background: linear-gradient(345deg, #EEF2FF 4%, #CCF9FF 69%, #FFB79B 96%);
+  overflow: hidden;
+}
+.usercenter-page-container {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+.custom-nav {
+  flex-shrink: 0;
+}
+.usercenter-content {
+  padding: 0 32rpx;
+  box-sizing: border-box;
+  /* flex: 1; */
+  padding-bottom: 32rpx;
+  overflow: auto;
+  height: calc(100vh - 44px - env(safe-area-inset-bottom) - env(safe-area-inset-top) - 172rpx);
+}
+
+/* 自定义logo样式 */
+.usercenter-logo {
+  width: 152rpx;
+  height: 36rpx;
+  padding-left: 8rpx;
+  padding-top: 4rpx;
+}
+
+.user-info {
+  width: 100%;
+  margin-top: 30rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+}
+.user-info-avatar {
+  width: 136rpx;
+  height: 136rpx;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid #fff;
+}
+.user-info-name {
+  font-size: 40rpx;
+  font-weight: bold;
+  margin-top: 20rpx;
+}
+
+.vip-card {
+  width: 100%;
+  height: 180rpx;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  margin-top: 52rpx;
+  padding: 36rpx 46rpx 26rpx;
+  box-sizing: border-box;
+  position: relative;
+}
+.vip-card-header {
+  display: flex;
+  align-items: center;
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #fff;
+}
+.vip-card-header-icon {
+  width: 36rpx;
+  height: 32rpx;
+  margin-right: 16rpx;
+}
+.vip-card-header-text {
+  font-size: 32rpx;
+  color: #fff;
+}
+.vip-card-header-text-vip {
+  font-weight: bold;
+}
+.vip-card-header-remain {
+  font-size: 26rpx;
+  color: #fff;
+  font-weight: normal;
+  margin-left: 46rpx;
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+}
+.vip-card-header-remain-time {
+  font-size: 48rpx;
+  padding: 0 8rpx;
+  height: 40rpx;
+  line-height: 40rpx;
+  font-weight: bold;
+  background: linear-gradient(180deg, #FF5D4B 0%, #FF53B3 98%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.vip-card-bottom {
+  font-size: 24rpx;
+  position: absolute;
+  bottom: 20rpx;
+  left: 46rpx;
+  right: 32rpx;
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.8rpx;
+  color: #fff;
+}
+.deadline-time {
+  color: #fff;
+}
+.deadline-time-countdown {
+  color: #ffce5e;
+  margin-left: 20rpx;
+}
+
+.times-detail {
+  color: #fff;
+  padding: 20rpx;
+  margin-left: auto;
+}
+
+.vip-renew {
+  font-size: 24rpx;
+  font-weight: bold;
+  color: #fff;
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 48rpx;
+  line-height: 48rpx;
+  padding: 4rpx 16rpx;
+  background: linear-gradient(180deg, #FF5D4B 0%, #FF53B3 98%);
+  border-bottom-left-radius: 24rpx;
+  border-top-right-radius: 24rpx;
+}
+
+.user-center-items {
+  width: 100%;
+  box-sizing: border-box;
+}
+.user-center-item {
+  width: 100%;
+  height: 110rpx;
+  background-color: #fff;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  margin-top: 20rpx;
+  border-radius: 24rpx;
+  padding: 0 32rpx;
+}
+.user-center-item:active {
+  background-color: #f5f5f5;
+}
+
+.user-center-item-icon {
+  width: 40rpx;
+  height: 40rpx;
+}
+.user-center-item-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  margin-left: 32rpx;
+  background: transparent;
+}
+.user-center-item-desc {
+  font-size: 24rpx;
+  color: #999;
+  margin-left: auto;
+  background: transparent;
+  height: 36rpx;
+}
+.user-center-item-arr {
+  margin-left: 12rpx;
+  background: transparent;
+}

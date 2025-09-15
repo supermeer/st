@@ -1,0 +1,30 @@
+.uploader {
+  width: 100%;
+}
+.upload-btn {
+  width: 120rpx;
+  height: 120rpx;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.upload-btn-wrap {
+  position: relative;
+}
+.upload-btn-icon-wrap {
+  position: absolute;
+  top: 4rpx;
+  right: 4rpx;
+  background-color: #174dff;
+  border-radius: 50%;
+  padding: 4rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28rpx;
+  height: 28rpx;
+}
+.upload-btn-icon {
+  width: 18rpx;
+  height: 14rpx;
+} 

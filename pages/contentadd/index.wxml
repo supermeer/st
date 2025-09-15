@@ -1,0 +1,82 @@
+<view class="container">
+  <!-- 添加自定义导航栏 -->
+  <custom-nav
+    class="custom-nav"
+    title="{{title || '内容添加'}}" 
+    showBack="{{true}}"
+    titleColor="#333333">
+  </custom-nav>
+  <view class="page-content">
+    <view class="rate-container">
+      <custom-rate
+        levels="{{categoryInfo.commentLevel}}"
+        readonly="{{isReadOnly}}"
+        title="{{categoryInfo.commentType === 'score' ? '好评度' : '综合评分'}}"
+        displayMode="{{categoryInfo.commentType || 'score'}}"
+        bind:change="onRateChange"
+      />
+    </view>
+
+    <view class="section">
+      <view class="section-header">
+        评价内容
+        <view wx:if="{{originCommentContent}}" class="undo-btn" bindtap="onUndoClick">
+          撤销
+        </view>
+        <view class="clear-btn" bindtap="onClearBtnTap">
+          清空
+          <t-image class="clear-btn__icon" src="{{'/static/clear.png'}}" />
+        </view>
+      </view>
+      <t-divider />
+      <view class="textarea-container">
+        <textarea 
+          placeholder="请输入您的评价内容..." 
+          value="{{commentContent}}"
+          bindinput="onCommentInput"
+          bindblur="onCommentBlur"
+          maxlength="{{maxCommentLength}}"
+          confirm-type="done"
+        ></textarea>
+        <view class="word-count">{{commentContent.length}}/{{maxCommentLength}}</view>
+      </view>
+      
+      <view class="image-uploader">
+        <uploader
+          media-type="{{['image']}}"
+          files="{{imageList}}"
+          max="{{maxImageCount}}"
+          sizeLimit="{{sizeLimit}}"
+          bind:change="onFilesChange"
+          bind:remove="handleRemove"
+        />
+      </view>
+    </view>
+    <view class="section template-container" hover-class="template-hover" bindtap="onTemplateClick">  
+      <view class="section-header template-header">参考模板</view>
+      <t-textarea class="template-textarea"  disable-default-padding="{{true}}" value="{{categoryInfo.template}}" readonly autosize="{{true}}" />
+    </view>
+    <view class="tip-word">-生成文案仅供参考-</view>
+    <!-- <rich-text nodes="{{htmlContent}}" /> -->
+    <view class="button-group">
+      <t-image class="btn-history" src="{{'/static/contentadd/history_icon.png'}}" bindtap="viewHistory" />
+      <view class="btn-generate" bindtap="generateContent">
+        立即生成
+        <!-- <view class="remain-times">
+          （剩余次数：{{remainTimes}}）
+        </view> -->
+      </view>
+    </view>
+  </view>
+
+</view> 
+
+<t-dialog
+  visible="{{showVipDialog}}"
+  title="次数不足"
+  content="次数不足，请升级会员或购买加油包"
+  confirm-btn="{{ { content: '立即购买', variant: 'base' } }}"
+  cancel-btn="{{ { content: '取消', variant: 'base' } }}"
+  bind:confirm="onOpenVip"
+  bind:cancel="onCancel"
+/>

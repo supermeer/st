@@ -1,0 +1,9 @@
+{
+  "component": true,
+  "usingComponents": {
+    "t-upload": "tdesign-miniprogram/upload/upload",
+    "t-image": "tdesign-miniprogram/image/image",
+    "t-dialog": "tdesign-miniprogram/dialog/dialog",
+    "t-button": "tdesign-miniprogram/button/button"
+  }
+} 

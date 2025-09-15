@@ -1,0 +1,19 @@
+{
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "t-rate": "tdesign-miniprogram/rate/rate",
+    "t-icon": "tdesign-miniprogram/icon/icon",
+    "custom-rate": "/components/custom-rate/index",
+    "t-image": "tdesign-miniprogram/image/image",
+    "t-divider": "tdesign-miniprogram/divider/divider",
+    "t-textarea": "tdesign-miniprogram/textarea/textarea",
+    "custom-nav": "/components/custom-nav/index",
+    "t-upload": "tdesign-miniprogram/upload/upload",
+    "t-picker": "tdesign-miniprogram/picker/picker",
+    "t-picker-item": "tdesign-miniprogram/picker-item/picker-item",
+    "uploader": "/components/uploader/index",
+    "t-action-sheet": "tdesign-miniprogram/action-sheet/action-sheet",
+    "t-tag": "tdesign-miniprogram/tag/tag",
+    "t-dialog": "tdesign-miniprogram/dialog/dialog"
+  }
+} 

@@ -1,0 +1,27 @@
+<view class="custom-tab-bar">
+  <view class="tab-bar-container"
+    id="tabContainer"
+    data-padding="60" 
+    data-border="1"
+    id="tabContainer">
+    <view 
+      wx:for="{{list}}"
+      wx:key="index"
+      class="tab-item {{active === index ? 'active' : ''}} tab-{{index}}"
+      bindtap="onChange"
+      data-id="{{index}}"
+      id="tab-{{index}}"
+    >
+      <image class="icon" src="{{item.icon}}"></image>
+      <view class="text">{{item.text}}</view>
+    </view>
+    <!-- 动态滑块 -->
+    <view 
+      class="slider"
+      style="transform: translateX({{sliderPosition.x}}px) scaleX({{sliderPosition.scaleX}});width: {{sliderPosition.width}}px;border-radius: {{sliderPosition.radius}}px;background: {{sliderGradient}};"
+    >
+      <view class="shine"></view> <!-- 流光效果 -->
+    </view>
+  </view>
+</view>
+

@@ -1,0 +1,90 @@
+{
+  "pages": ["pages/home/home", "pages/merchant/index", "pages/usercenter/index"],
+  "subpackages": [
+    {
+      "root": "pages/share",
+      "name": "share",
+      "pages": ["index", "record/index"]
+    },
+    {
+      "root": "pages/contentadd",
+      "name": "contentadd",
+      "pages": ["index", "blog/index", "theme/index", "style/index"]
+    },
+    {
+      "root": "pages/goods",
+      "name": "goods",
+      "pages": [
+        "list/index",
+        "details/index",
+        "search/index",
+        "result/index",
+        "comments/index",
+        "comments/create/index"
+      ]
+    },
+    {
+      "root": "pages/order",
+      "name": "order",
+      "pages": [
+        "myOrders/index"
+      ]
+    },
+    {
+      "root": "pages/chat",
+      "name": "chat",
+      "pages": ["session/index", "history/index"]
+    },
+    {
+      "root": "pages/vip",
+      "name": "vip",
+      "pages": ["packages/index", "payment-status/index", "order-confirm/index", "times-detail/index"]
+    },
+    {
+      "root": "pages/common",
+      "name": "common",
+      "pages": ["aboutus/index", "agreement/index"]
+    }
+  ],
+  "tabBar": {
+    "custom": true,
+    "color": "#666666",
+    "selectedColor": "#FF5F15",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/home/home",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/merchant/index",
+        "text": "商户"
+      },
+      {
+        "pagePath": "pages/usercenter/index",
+        "text": "我的"
+      }
+    ]
+  },
+  "requiredPrivateInfos": ["chooseAddress"],
+  "lazyCodeLoading": "requiredComponents",
+  "usingComponents": {},
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "Weixin",
+    "navigationBarTextStyle": "black"
+  },
+  "enableShareAppMessage": true,
+  "enableShareTimeline": true,
+  "sitemapLocation": "sitemap.json",
+  "permission": {
+    "scope.camera": {
+      "desc": "你的相机将用于小程序图片文件上传"
+    },
+    "scope.writePhotosAlbum": {
+      "desc": "你的相册将用于小程序中图片文件保存"
+    }
+  }
+}

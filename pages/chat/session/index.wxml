@@ -1,0 +1,93 @@
+<view class="chat-container" style="height: calc(100vh - {{keyboardHeight}}px);">
+  <custom-nav
+    class="custom-nav"
+    title="智能助手"
+    showBack="{{true}}">
+  </custom-nav>
+  <view class="page-content" style="height: {{contentHeight}}px;">
+    <!-- 消息列表区域 -->
+    <scroll-view 
+      class="message-list" 
+      scroll-y 
+      scroll-into-view="{{intoViewId}}"
+      enhanced
+      show-scrollbar="{{false}}"
+      id="message-container"
+    >
+      <block wx:if="{{messageList.length === 0}}">
+        <view class="empty-container">
+          <view class="empty-tips">发送消息开始对话</view>
+        </view>
+      </block>
+      
+      <block wx:for="{{messageList}}" wx:key="time">
+        <!-- 用户消息 -->
+        <view wx:if="{{item.senderType === 1}}" class="user-message-item">
+          <view class="images-container">
+            <t-image wx:for="{{item.images}}" class="image-item" wx:key="index" src="{{item && item.length > 0 ? item : item.url}}" mode="widthFix" />
+          </view>
+          <view wx:if="{{item.content}}" class="user-message">
+            <view class="message-content">{{item.content}}</view>
+          </view>
+          <view wx:if="{{item.error}}" class="user-btn-container" data-index="{{index}}" bindtap="resend">
+            <t-icon name="refresh" class="icon-btn" size="24rpx" />
+            重新发送
+          </view>
+        </view>
+        
+        <!-- AI回复 -->
+        <view wx:if="{{item.senderType === 2}}" class="message-item ai-message">
+          <view wx:if="{{isLoading && (!item.content || item.content.length === 0)}}" class="loading-container">
+            <t-loading theme="dots" size="40rpx" class="loading-icon" />
+          </view>
+          <view wx:if="{{item.error}}" class="error-message">
+            <view>{{item.content || '获取回复失败，请稍后重试'}}</view>
+          </view>
+          <view wx:if="{{item.content && !item.error}}" class="message-content markdown-body">
+            <!-- 使用rich-text显示转换后的HTML -->
+            <rich-text nodes="{{item.htmlContent}}"></rich-text>
+          </view>
+          <!-- copy -->
+          <view wx:if="{{!item.loading && !item.error}}" class="copy-btn-container" data-index="{{index}}" bindtap="copyContent">
+            <t-icon name="copy" class="copy-btn" size="28rpx" />
+            复制  
+          </view>
+        </view>
+      </block>
+      
+      <!-- 底部占位，确保新消息可见 -->
+      <view class="bottom-space"></view>
+      <view id="bottom-anchor" style="height: 1rpx;"></view>
+    </scroll-view>
+    
+    <!-- 输入区域 -->
+    <view class="input-container" style="padding-bottom: {{keyboardHeight <= 0 ? 'calc(env(safe-area-inset-bottom) + 12rpx)' : '12rpx'}}">
+      <view class="input-wrapper">
+        <textarea 
+          class="message-input" 
+          value="{{inputValue}}"
+          bindinput="onInput"
+          auto-height
+          placeholder="继续补充其他需求"
+          hold-keyboard="{{true}}"
+          confirm-type="send"
+          disabled="{{isLoading}}"
+          adjust-position="{{false}}"
+          bindkeyboardheightchange="onKeyboardHeightChange"
+          maxlength="1000"
+        />
+        <t-image wx:if="{{!isLoading}}" class="send-btn" src="{{'/static/chat/msg_send.png'}}" bindtap="sendAction" />
+        <t-loading wx:else theme="circular" size="40rpx" class="wrapper send-btn" />
+      </view>
+    </view>
+  </view>
+</view>
+<t-dialog
+  visible="{{showOpenVipDialog}}"
+  title="次数不足"
+  content="次数不足，请升级会员或购买加油包。"
+  confirm-btn="{{ { content: '立即升级', variant: 'base' } }}"
+  cancel-btn="{{ { content: '取消', variant: 'base' } }}"
+  bind:confirm="onOpenVip"
+  bind:cancel="onCancel"
+/>

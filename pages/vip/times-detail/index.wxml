@@ -1,0 +1,30 @@
+<view class="times-detail-container" style="background-image: url('https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/page_bg_1.png'); background-size: 100% 100%; background-repeat: no-repeat; background-position: center;">
+  <!-- 自定义导航栏 -->
+  <custom-nav
+    class="nav-container"
+    title="使用记录" 
+    showBack="{{true}}"
+    showHome="{{false}}"
+    transparent="{{true}}"
+    bind:back="onBackClick"
+  />
+
+  <!-- 内容区域 -->
+  <view class="content-container">
+    <view class="times-list">
+      <view wx:for="{{list}}" wx:key="index" class="times-item">
+        <view class="left-content">
+          <view class="left-content-title">{{item.planTitle}}</view>
+          <view wx:if="{{item.startTime && item.endTime}}" class="left-content-time">{{item.startTime}} - {{item.endTime}}{{item.status === 0 ? '（待生效）' : ''}}</view>
+          <view wx:else class="left-content-time">永久有效</view>
+        </view>
+        <view class="right-content">
+          剩余
+          <view class="right-content-remain">{{item.remaining}}次</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <t-toast id="t-toast" />
+</view> 

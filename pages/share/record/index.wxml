@@ -1,0 +1,63 @@
+<view class="record-container" style="background-image: url('https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/page_bg_1.png'); background-size: 100% 100%; background-repeat: no-repeat; background-position: center;">
+  <!-- 自定义导航栏 -->
+  <custom-nav
+    class="nav-container"
+    title="邀请记录" 
+    showBack="{{true}}"
+    showHome="{{false}}"
+    transparent="{{true}}"
+    bgColor="#ffffff"
+  />
+
+  <!-- 内容区域 -->
+  <view class="content-container">
+    <t-pull-down-refresh
+      value="{{refreshing}}"
+      loadingProps="{{loadingProps}}"
+      loadingTexts="{{['下拉刷新', '松手刷新', '正在刷新', '刷新完成']}}"
+      bind:refresh="onRefresh"
+      bind:timeout="onTimeout"
+      class="record-list-refresh"
+    >
+      <!-- 邀请记录列表 -->
+      <scroll-view 
+        scroll-y 
+        class="record-list-container"
+        bindscrolltolower="onLoadMore"
+      >
+        <block wx:if="{{recordList.length > 0}}">
+          <view class="record-list">
+            <view
+              wx:for="{{recordList}}"
+              wx:key="id"
+              class="record-item"
+            >
+              <view class="user-avatar">
+                <t-image class="avatar-image" src="/static/avatar.jpg" />
+              </view>
+              <view class="user-info">
+                <view class="user-name">{{item.nickname}}</view>
+              </view>
+              <view class="record-time">{{item.invitedTime}}</view>
+            </view>
+          </view>
+          
+          <!-- 加载更多 -->
+          <load-more
+            status="{{loadMoreStatus}}"
+            no-more-text="没有更多了"
+            bind:tap="onRetryLoad"
+          />
+        </block>
+        
+        <!-- 空状态 -->
+        <view wx:else class="empty-container">
+          <image class="empty-image" src="/static/images/empty-data.png" mode="aspectFit" />
+          <view class="empty-text">暂无邀请记录</view>
+        </view>
+      </scroll-view>
+    </t-pull-down-refresh>
+  </view>
+</view>
+
+<t-toast id="t-toast" />

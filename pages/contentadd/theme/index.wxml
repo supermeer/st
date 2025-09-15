@@ -1,0 +1,70 @@
+<view class="theme-container" style="background-image: url('https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/page_bg_1.png'); background-size: 100% 100%; background-repeat: no-repeat; background-position: center;">
+  <!-- 自定义导航栏 -->
+  <custom-nav
+    class="custom-nav"
+    show-back="{{true}}"
+    show-left-logo="{{false}}"
+    show-home="{{false}}"
+    title="主题"
+    transparent="{{false}}"
+  />
+
+  <view class="theme-content">
+    <!-- 标签页切换 -->
+    <t-tabs
+      defaultValue="{{activeTab}}"
+      bind:change="onTabsChange"
+      t-class="custom-tabs"
+    >
+      <t-tab-panel label="商务风格" value="0" />
+      <t-tab-panel label="创意风格" value="1" />
+      <t-tab-panel label="简约风格" value="2" />
+    </t-tabs>
+
+    <!-- 内容滚动区域 -->
+    <scroll-view 
+      scroll-y 
+      class="scroll-area"
+      bindscrolltolower="onReachBottom"
+      lower-threshold="100"
+      enable-back-to-top="{{true}}"
+      enhanced="{{true}}"
+      show-scrollbar="{{false}}"
+      scroll-top="{{scrollTop}}"
+      id="themeScrollView"
+    >
+        <!-- Tab切换加载中 -->
+        <view class="tab-loading-wrap" wx:if="{{tabLoading}}">
+          <t-loading t-class="tab-loading" theme="circular" size="68rpx" />
+        </view>
+
+        <!-- 空状态 -->
+        <view class="empty-wrap" wx:if="{{themeList.length === 0 && hasLoaded && !tabLoading}}">
+          <t-empty t-class="empty-tips" size="240rpx" description="暂无主题风格" />
+        </view>
+
+        <!-- 主题列表 -->
+        <view class="theme-list" wx:if="{{themeList.length > 0 && !tabLoading}}">
+          <view 
+            wx:for="{{themeList}}"
+            wx:key="id"
+            class="theme-item"
+            bindtap="onThemeItemClick"
+            data-theme="{{item}}"
+          >
+            <view class="theme-name">{{item.name}}</view>
+            <view class="theme-description">{{item.description}}</view>
+          </view>
+        </view>
+        
+        <!-- 加载更多 -->
+        <view class="load-more-view" wx:if="{{themeList.length > 0}}">
+          <load-more 
+            status="{{loadMoreStatus}}" 
+            no-more-text="已加载全部主题" 
+            bind:retry="onRetryLoad"
+          />
+        </view>
+      </scroll-view>
+  </view>
+</view>

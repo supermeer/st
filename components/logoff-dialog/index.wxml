@@ -1,0 +1,22 @@
+<t-overlay
+    visible="{{ visible }}"
+    bindclose="close"
+    class="logoff-dialog"
+>
+    <common-dialog-content
+        class="dialog-content"
+        bindcancel="confirm"
+        bindconfirm="close"
+        cancelTitle="注销账号"
+        confirmTitle="取消"
+    >
+        <view class="logoff-dialog-content">
+            <view class="logoff-dialog-title">
+                注销账号
+            </view>
+            <view class="logoff-dialog-desc">
+                注销后，您<text class="desc-underline">未使用的会员次数</text>、<text class="desc-underline">历史记录</text>及您的<text class="desc-underline">个人信息</text>将一并删除，且无法恢复。
+            </view>
+        </view>
+    </common-dialog-content>
+</t-overlay>

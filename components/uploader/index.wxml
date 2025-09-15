@@ -1,0 +1,35 @@
+<view class="uploader">
+  <t-upload
+    wx:if="{{vipInfo.ifVip}}"
+    media-type="{{mediaType}}"
+    files="{{files}}"
+    max="{{max}}"
+    gridConfig="{{gridConfig}}"
+    sizeLimit="{{sizeLimit}}"
+    bind:add="onAdd"
+    bind:remove="onRemove"
+    bind:click="onClick"
+  >
+    <view slot="add-content" class="upload-btn-wrap">
+      <t-image class="upload-btn" src="/static/contentadd/upload_icon.png" />
+      <view class="upload-btn-icon-wrap">
+        <t-image class="upload-btn-icon" src="/static/vip_icon.png" />
+      </view>
+    </view>
+  </t-upload>
+  <view wx:else class="upload-btn-wrap" style="display: inline-block;" bind:tap="onUploadTap">
+    <t-image class="upload-btn" src="/static/contentadd/upload_icon.png" />
+    <view class="upload-btn-icon-wrap">
+      <t-image class="upload-btn-icon" src="/static/vip_icon.png" />
+    </view>
+  </view>
+</view> 
+<t-dialog
+  visible="{{showWarnConfirm}}"
+  title="开通会员"
+  content="开通会员后，才可以上传图片。"
+  confirm-btn="{{ { content: '立即开通', variant: 'base' } }}"
+  cancel-btn="{{ { content: '取消', variant: 'base' } }}"
+  bind:confirm="onOpenVip"
+  bind:cancel="onCancel"
+/>

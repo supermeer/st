@@ -1,0 +1,235 @@
+page{
+  width: 100%;
+}
+.blog-container {
+  background: rgba(23, 77, 255, 0.12);
+  height: 100vh;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-content{
+  padding: 12rpx 32rpx 0;
+}
+
+.form-container {
+  height: calc(100vh - env(safe-area-inset-top) - 44px - 260rpx - env(safe-area-inset-bottom));
+  overflow-y: auto;
+}
+
+.section {
+  background-color: #fff;
+  border-radius: 24rpx;
+  margin-bottom: 16rpx;
+  padding: 26rpx 32rpx;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* .selector-container{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 88rpx;
+ } */
+
+.section-header {
+  margin-bottom: 20rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.section-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  position: relative;
+}
+
+.section-title::before {
+  content: '*';
+  display: inline-block;
+  position: absolute;
+  left: -16rpx;
+  top: 0;
+  color: #FF4D4F;
+  font-size: 28rpx;
+}
+
+.selector-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60rpx;
+  font-size: 28rpx;
+}
+
+.selector-item-title {
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.selector-item-placeholder {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.history-container {
+  display: flex;
+  align-items: center;
+  margin-top: 16rpx;
+}
+
+.history-tag {
+  margin-right: 16rpx;
+}
+
+.clear-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24rpx;
+  color: rgba(0, 0, 0, 0.6);
+  font-weight: normal;
+}
+
+.clear-btn:active{
+  color: #666;
+}
+
+/* 点击效果 */
+.clear-btn__icon {
+  width: 24rpx;
+  height: 24rpx;
+  margin-left: 12rpx;
+  transition: transform 0.5s ease;
+}
+
+/* 评价内容区域 */
+.textarea-container {
+  position: relative;
+  width: 100%;
+  margin-bottom: 20rpx 0;
+  padding-bottom: 50rpx;
+}
+
+textarea {
+  width: 100%;
+  min-height: 200rpx;
+  height: 200rpx;
+  padding: 20 0rpx;
+  font-size: 28rpx !important;
+  border-radius: 8rpx;
+  box-sizing: border-box;
+  line-height: 1.6;
+}
+
+.word-count {
+  position: absolute;
+  bottom: 10rpx;
+  right: 20rpx;
+  font-size: 24rpx;
+  color: #999;
+}
+
+/* 图片上传区域 */
+.image-uploader {
+  margin-top: 30rpx;
+}
+
+.upload-btn {
+  width: 96rpx;
+  height: 96rpx;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.upload-btn-wrap {
+  position: relative;
+}
+
+.upload-btn-icon-wrap {
+  position: absolute;
+  top: 2rpx;
+  right: 2rpx;
+  background-color: #174dff;
+  border-radius: 50%;
+  padding: 4rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28rpx;
+  height: 28rpx;
+}
+
+.upload-btn-icon {
+  width: 18rpx;
+  height: 14rpx;
+}
+
+.upload-tips {
+  font-size: 24rpx;
+  color: #999;
+  margin-top: 10rpx;
+  text-align: center;
+}
+
+.reference-btns {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30rpx;
+}
+
+.t-textarea__wrapper-inner{
+  font-size: 24rpx !important;
+  line-height: 40rpx !important;
+}
+
+.tip-word {
+  font-size: 24rpx;
+  color: #aaa;
+  text-align: center;
+  letter-spacing: 0.8rpx;
+  position: fixed;
+  width: 100%;
+  bottom: calc(env(safe-area-inset-bottom) + 120rpx);
+}
+
+/* 按钮区域 吸底效果 */
+.button-group {
+  position: fixed;
+  bottom: calc(env(safe-area-inset-bottom) + 12rpx);
+  left: 0;
+  right: 0;
+  padding: 0 32rpx;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+}
+
+.btn-history {
+  width: 80rpx;
+  height: 80rpx;
+}
+.btn-generate {
+  margin-left: 24rpx;
+  font-size: 24rpx;
+  width: calc(100% - 104rpx);
+  height: 92rpx;
+  color: #fff;
+  background: linear-gradient(102deg, #63B4FF 16%, #174DFF 89%);
+  border-radius: 24rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 30rpx;
+  font-weight: bold;
+}
+
+.remain-times {
+  font-size: 20rpx;
+  color: #fff;
+  margin-left: 10rpx;
+  font-weight: normal;
+}

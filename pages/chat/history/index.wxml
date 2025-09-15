@@ -1,0 +1,71 @@
+<view class="chat-history-container" style="background-image: url('https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/page_bg_1.png'); background-size: 100% 100%; background-repeat: no-repeat; background-position: center;">
+  <!-- 使用默认导航栏 -->
+  <custom-nav
+    class="custom-nav"
+    show-back="{{true}}"
+    show-left-logo="{{false}}"
+    show-home="{{false}}"
+    title="历史记录"
+    transparent="{{false}}"
+  />
+
+  <view class="history-content">
+    <!-- 标签页切换 -->
+    <t-tabs
+      wx:if="{{categoryList.length > 0}}"
+      defaultValue="{{activeTab}}"
+      value="{{activeTab}}"
+      bind:change="onTabsChange"
+      t-class="custom-tabs"
+    >
+      <t-tab-panel wx:for="{{categoryList}}" wx:key="id" label="{{item.name}}" value="{{item.id}}" />
+    </t-tabs>
+
+    <!-- 内容滚动区域 -->
+    <scroll-view 
+      scroll-y 
+      class="scroll-area"
+      enable-back-to-top="{{true}}"
+      enhanced="{{true}}"
+      show-scrollbar="{{false}}"
+      scroll-top="{{scrollTop}}"
+      id="chatScrollView"
+    >
+        <!-- Tab切换Loading状态 -->
+        <view class="tab-loading-wrap" wx:if="{{tabLoading}}">
+          <t-loading theme="circular" size="68rpx" />
+        </view>
+
+        <!-- 空状态 -->
+        <view class="empty-wrap" wx:if="{{chatList.length === 0 && hasLoaded && !tabLoading}}">
+          <t-empty t-class="empty-tips" size="240rpx" description="暂无数据" />
+        </view>
+
+        <!-- 聊天记录列表 -->
+        <view class="chat-list" wx:if="{{chatList.length > 0 && !tabLoading}}">
+          <view 
+            wx:for="{{chatList}}"
+            wx:key="id"
+            class="chat-item"
+            bindtap="onChatItemClick"
+            data-id="{{item.id}}"
+          >
+            <view wx:if="{{item.images && item.images.length > 0}}" class="chat-image-wrap">
+              <image
+                wx:for="{{item.images}}"
+                wx:key="index"
+                class="chat-image"
+                src="{{item.images[index]}}"
+                mode="aspectFill" />
+            </view>
+            <view wx:else class="chat-content">{{item.firstMessage}}</view>
+            <t-divider />
+            <view class="chat-time">{{item.createTime}}</view>
+          </view>
+        </view>
+        
+      </scroll-view>
+  </view>
+</view>
+
+<t-toast id="t-toast" /> 

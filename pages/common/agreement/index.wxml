@@ -1,0 +1,22 @@
+<!--pages/vip/agreement/index.wxml-->
+<view class="agreement-page">
+  <!-- 固定导航栏 -->
+  <custom-nav
+    class="custom-nav"
+    show-back="{{true}}"
+    show-home="{{false}}"
+    transparent="{{true}}"
+    title="{{title}}"
+  />
+  
+  <!-- 协议内容区域 -->
+  <view class="agreement-content">
+    <!-- 加载状态 -->
+    <view wx:if="{{loading}}" class="loading-container">
+      <t-loading theme="circular" size="40rpx" text="加载中..." />
+    </view>
+    
+    <!-- 富文本内容 -->
+    <rich-text wx:else nodes="{{agreementContent}}"></rich-text>
+  </view>
+</view>

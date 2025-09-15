@@ -1,0 +1,21 @@
+@import 'style/iconfont.wxss';
+
+@import 'style/theme.wxss';
+
+/* 声明主题色 */
+:root {
+  --theme-color: #174DFF;
+}
+
+.cell--noborder .t-cell::after {
+  border-bottom: none !important;
+}
+
+page {
+  --theme-color: #174DFF;
+  --desc-color: #999;
+}
+.page-content {
+  flex: 1;
+  padding-bottom: calc(env(safe-area-inset-bottom) + 32rpx);
+}

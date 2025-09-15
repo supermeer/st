@@ -1,0 +1,124 @@
+<view class="blog-container">
+  <!-- 添加自定义导航栏 -->
+  <custom-nav
+    class="custom-nav"
+    title="{{title}}" 
+    showBack="{{true}}">
+  </custom-nav>
+  <view class="page-content">
+    <view class="form-container">
+      <view class="selector-container section">
+        <view class="section-header">
+          <view class="section-title">博主</view>
+        </view>
+        <t-divider />
+        <view class="selector-item" bindtap="onBlogTap">
+          <view wx:if="{{blogForm.value.length > 0}}" class="selector-item-title">
+            {{blogForm.labelStr}}
+          </view>
+          <view wx:else class="selector-item-placeholder">
+            请选择
+          </view>
+          <t-icon name="chevron-right" size="20" color="#999" />
+        </view>
+        <view class="history-container">
+          <t-tag wx:for="{{historyBlogList}}" wx:key="index" data-id="{{item.id}}" class="history-tag" size="large" variant="light" bindtap="onHistoryBlogTap">{{item.name}}</t-tag>
+        </view>
+      </view>
+
+      <view class="selector-container section">
+        <view class="section-header">
+          <view class="section-title">风格类型</view>
+        </view>
+        <t-divider />
+        <view class="selector-item" bindtap="onStyleItemTap">
+          <view wx:if="{{!formData.baowenStyleId}}" class="selector-item-placeholder">
+            请选择
+          </view>
+          <view wx:else class="selector-item-title">
+            {{ formData.baowenStyleName }}
+          </view>
+          <t-icon name="chevron-right" size="20" color="#999" />
+        </view>
+      </view>
+
+      <view class="section">
+        <view class="section-header">
+          <view class="section-title">笔记要求</view>
+          <view class="clear-btn" bindtap="onClearBtnTap">
+            清空
+            <t-image class="clear-btn__icon" src="{{'/static/clear.png'}}" />
+          </view>
+        </view>
+        <t-divider />
+        <view class="textarea-container">
+          <textarea
+            placeholder="请告诉我具体细节，如人物特征、具体事情、真实感受等。您描述的越具体，我给出的笔记真实感越强哦~" 
+            value="{{commentContent}}"
+            auto-height
+            adjust-position="{{true}}"
+            cursor-spacing="40"
+            bindinput="onCommentInput"
+            bindblur="onCommentBlur"
+            maxlength="{{maxCommentLength}}"
+          ></textarea>
+          <view class="word-count">{{commentContent.length}}/{{maxCommentLength}}</view>
+        </view>
+        <view class="image-uploader">
+          <uploader
+            media-type="{{['image']}}"
+            files="{{imageList}}"
+            max="{{maxImageCount}}"
+            sizeLimit="{{sizeLimit}}"
+            bind:change="onFilesChange"
+            bind:remove="handleRemove"
+          />
+        </view>
+      </view>
+    </view>
+    <view class="tip-word">-生成文案仅供参考-</view>
+    <!-- <rich-text nodes="{{htmlContent}}" /> -->
+    <view class="button-group">
+      <t-image class="btn-history" src="{{'/static/contentadd/history_icon.png'}}" bindtap="viewHistory" />
+      <view class="btn-generate" bindtap="generateContent">
+        立即生成
+        <!-- <view class="remain-times">
+          （剩余次数：{{remainTimes}}）
+        </view> -->
+      </view>
+    </view>
+  </view>
+  <t-picker
+    visible="{{blogForm.visible}}"
+    value="{{blogForm.value}}"
+    title="选择博主"
+    cancelBtn="取消"
+    confirmBtn="确认"
+    usingCustomNavbar
+    bindconfirm="onPickerChange"
+    bindpick="onColumnChange"
+    bindcancel="onPickerCancel"
+  >
+    <t-picker-item options="{{blogForm.bloggertype}}"></t-picker-item>
+    <t-picker-item options="{{blogForm.bloggerSubType}}"></t-picker-item>
+  </t-picker>
+  <!-- 风格 ActionSheet -->
+  <t-action-sheet
+    visible="{{styleActionSheet.visible}}"
+    items="{{styleActionSheet.items}}"
+    theme="list"
+    description="选择风格类型"
+    bind:selected="onStyleSelect"
+    bind:close="onStyleClose"
+  />
+</view>
+
+<t-dialog
+  visible="{{showVipDialog}}"
+  title="次数不足"
+  content="次数不足，请升级会员或购买加油包"
+  confirm-btn="{{ { content: '立即购买', variant: 'base' } }}"
+  cancel-btn="{{ { content: '取消', variant: 'base' } }}"
+  bind:confirm="onOpenVip"
+  bind:cancel="onCancel"
+/>

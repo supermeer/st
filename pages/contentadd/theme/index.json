@@ -1,0 +1,13 @@
+{
+  "navigationBarTitleText": "选择主题风格",
+  "navigationStyle": "custom",
+  "disableScroll": true,
+  "usingComponents": {
+    "custom-nav": "/components/custom-nav/index",
+    "t-tabs": "tdesign-miniprogram/tabs/tabs",
+    "t-tab-panel": "tdesign-miniprogram/tab-panel/tab-panel",
+    "t-loading": "tdesign-miniprogram/loading/loading",
+    "load-more": "/components/load-more/index",
+    "t-empty": "tdesign-miniprogram/empty/empty"
+  }
+}
