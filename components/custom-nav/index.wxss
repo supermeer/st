@@ -3,6 +3,7 @@
   width: 100%;
   position: relative;
   z-index: 100;
+  color: #fff;
 }
 
 /* 状态栏占位 */
@@ -46,13 +47,14 @@
   align-items: center;
   height: 100%;
   width: 100%;
+  margin-left: 6rpx;
 }
 
 .nav-home-separator {
   display: flex;
   align-items: center;
   font-size: 28rpx;
-  color: #666;
+  color: #fff;
   margin-right: 16rpx;
   line-height: 1;
 }
@@ -85,6 +87,9 @@
   justify-content: center;
   align-items: center;
   overflow: hidden;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .nav-title {

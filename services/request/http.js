@@ -26,7 +26,6 @@ request.useRequestInterceptor((config) => {
   config.url = config.url.replace('/api/v1', configData.baseUrl + '/api/v1')
   config.header = config.headers || {}
   config.header.Authorization = `Bearer ${wx.getStorageSync('token') || ''}`
-  console.log('token --------->', wx.getStorageSync('token'))
   return config
 })
 

@@ -52,7 +52,11 @@ Component({
     // 标题颜色
     titleColor: {
       type: String,
-      value: '#000000'
+      value: '#fff'
+    },
+    navColor: {
+      type: String,
+      value: '#252525'
     },
     // 自定义左侧插槽宽度，默认与右侧胶囊按钮同宽
     leftSlotWidth: {
@@ -64,9 +68,7 @@ Component({
   data: {
     statusBarHeight: 20,
     navContentHeight: 44,
-    navHeight: 64,
-    menuButtonWidth: 87,
-    menuButtonInfo: null
+    navHeight: 64
   },
 
   lifetimes: {
@@ -80,33 +82,20 @@ Component({
     initNavigation: function () {
       try {
         // 从全局获取导航栏信息
-        const navInfo = systemInfo.getNavInfo()
+        const windowInfo = systemInfo.getNavInfo()
 
-        if (navInfo) {
+        if (windowInfo) {
           // 使用全局导航栏信息
           this.setData({
-            statusBarHeight: navInfo.statusBarHeight,
-            navHeight: navInfo.navHeight,
-            menuButtonInfo: navInfo.menuButtonInfo,
-            // 计算内容区高度（导航高度减去状态栏高度）
-            navContentHeight: navInfo.navHeight - navInfo.statusBarHeight,
-            // 胶囊按钮宽度
-            menuButtonWidth:
-              this.properties.leftSlotWidth ||
-              (navInfo.menuButtonInfo ? navInfo.menuButtonInfo.width + 8 : 87)
+            statusBarHeight: windowInfo.statusBarHeight,
+            navHeight: windowInfo.navHeight,
+            navContentHeight: windowInfo.navHeight - windowInfo.statusBarHeight
           })
         } else {
-          // fallback到原有逻辑
-          const systemInfoSync = wx.getSystemInfoSync()
-          const statusBarHeight = systemInfoSync.statusBarHeight
-          const navContentHeight = 44
-          const navHeight = statusBarHeight + navContentHeight
-
           this.setData({
-            statusBarHeight: statusBarHeight,
-            navContentHeight: navContentHeight,
-            navHeight: navHeight,
-            menuButtonWidth: this.properties.leftSlotWidth || 87
+            statusBarHeight: 20,
+            navContentHeight: 44,
+            navHeight: 64
           })
         }
       } catch (e) {

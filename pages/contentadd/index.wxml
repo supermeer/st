@@ -3,8 +3,7 @@
   <custom-nav
     class="custom-nav"
     title="{{title || '内容添加'}}" 
-    showBack="{{true}}"
-    titleColor="#333333">
+    showBack="{{true}}">
   </custom-nav>
   <view class="page-content">
     <view class="rate-container">

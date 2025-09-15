@@ -1,22 +1,22 @@
-<view class="custom-nav" style="height:{{navHeight}}px; background-color: {{transparent ? 'transparent' : (bgColor || 'transparent')}}">
+<view class="custom-nav" style="height:{{navHeight}}px; background-color: {{navColor ? navColor : 'transparent'}}">
   <!-- 状态栏占位 -->
   <view class="status-bar" style="height:{{statusBarHeight}}px;"></view>
   
   <!-- 导航栏内容区 -->
   <view class="nav-content" style="height:{{navContentHeight}}px;">
     <!-- 左侧区域 -->
-    <view class="nav-left" style="width:{{menuButtonWidth}}px;">
+    <view class="nav-left">
       <!-- 优先显示插槽内容 -->
       <slot wx:if="{{customLeft}}" name="left"></slot>
       <view wx:if="{{showLeftLogo}}" class="left-logo left-content">
         <t-image class="left-logo" src="/static/logo.png" />
       </view>
       <view wx:if="{{showBack}}" class="nav-back left-content" bindtap="onBack">
-        <t-icon class="nav-icon default-back-icon" name="chevron-left-s" size="28" />
+        <t-icon class="nav-icon default-back-icon" name="chevron-left" size="26" />
       </view>
       <view wx:if="{{showBack}}" class="nav-home left-content" bindtap="onHome">
         <view class="nav-home-separator">|</view>
-        <t-icon class="nav-icon default-home-icon" name="home" size="18" />
+        <t-icon class="nav-icon default-home-icon" name="home" size="20" />
       </view>
     </view>
     

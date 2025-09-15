@@ -5,6 +5,7 @@
 /* 声明主题色 */
 :root {
   --theme-color: #174DFF;
+  --theme-color-black: #252525;
 }
 
 .cell--noborder .t-cell::after {
@@ -13,9 +14,15 @@
 
 page {
   --theme-color: #174DFF;
+  --theme-color-black: #252525;
   --desc-color: #999;
+  background-color: var(--theme-color-black);
 }
 .page-content {
   flex: 1;
   padding-bottom: calc(env(safe-area-inset-bottom) + 32rpx);
+}
+
+.page-content-full {
+  padding-bottom: 0;
 }

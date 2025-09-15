@@ -76,8 +76,8 @@ const getNavInfo = () => {
     return {
       navHeight: app.globalData.navHeight,
       statusBarHeight: app.globalData.statusBarHeight,
-      menuButtonInfo: app.globalData.menuButtonInfo,
-      contentHeight: app.globalData.contentHeight
+      safeAreaTop: app.globalData.safeAreaTop,
+      safeAreaBottom: app.globalData.safeAreaBottom
     }
   }
 

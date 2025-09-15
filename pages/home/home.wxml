@@ -1,4 +1,4 @@
-<view class="home-page-container" style="background-image: url('https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/home_bg.png'); background-size: 100% 100%; background-repeat: no-repeat; background-position: center;">
+<view class="home-page-container">
   <!-- 自定义导航栏 -->
   <custom-nav
     class="custom-nav"

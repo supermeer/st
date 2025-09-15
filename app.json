@@ -71,7 +71,7 @@
   "lazyCodeLoading": "requiredComponents",
   "usingComponents": {},
   "window": {
-    "backgroundTextStyle": "light",
+    "backgroundTextStyle": "dark",
     "navigationBarBackgroundColor": "#fff",
     "navigationBarTitleText": "Weixin",
     "navigationBarTextStyle": "black"

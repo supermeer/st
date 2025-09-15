@@ -55,8 +55,9 @@ App({
     },
     navHeight: 0, // 导航栏高度
     statusBarHeight: 0, // 状态栏高度
-    menuButtonInfo: null, // 胶囊按钮信息
-    contentHeight: 0 // 内容区域高度
+    safeAreaTop: 0,
+    safeAreaBottom: 0,
+    menuButtonInfo: null
   },
   onLaunch: function () {
     // 使用 westore 初始化用户登录态与信息
@@ -73,31 +74,21 @@ App({
   // 获取导航栏高度
   getNavHeight() {
     try {
-      const systemInfo = wx.getSystemInfoSync()
-      const menuButtonInfo = wx.getMenuButtonBoundingClientRect()
-
-      // 计算导航栏高度
-      const statusBarHeight = systemInfo.statusBarHeight
-      const navHeight =
-        (menuButtonInfo.top - statusBarHeight) * 2 +
-        menuButtonInfo.height +
-        statusBarHeight
-
-      // 设置到全局数据
-      this.globalData.navHeight = navHeight
-      this.globalData.statusBarHeight = statusBarHeight
-      this.globalData.menuButtonInfo = menuButtonInfo
-      this.globalData.contentHeight = systemInfo.windowHeight - navHeight
+      const windowInfo = wx.getWindowInfo()
+      const safeArea = windowInfo.safeArea
+      this.globalData.safeAreaTop = safeArea.top
+      this.globalData.safeAreaBottom = windowInfo.windowHeight - safeArea.bottom
+      this.globalData.statusBarHeight = safeArea.top
+      this.globalData.navHeight = safeArea.top + 44
 
       return {
-        navHeight,
-        statusBarHeight,
-        menuButtonInfo,
-        contentHeight: systemInfo.windowHeight - navHeight
+        safeAreaTop: this.globalData.safeAreaTop,
+        safeAreaBottom: this.globalData.safeAreaBottom,
+        statusBarHeight: this.globalData.statusBarHeight,
+        navHeight: this.globalData.navHeight
       }
     } catch (e) {
-      console.error('获取导航栏高度失败', e)
-      return null
+      return {}
     }
   }
 })
