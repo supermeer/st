@@ -25,6 +25,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
   height: 100%;
   position: relative;
   z-index: 2;
@@ -35,6 +36,7 @@
   letter-spacing: 0.5px;
   font-weight: bold;
   color: #aaa;
+  margin-top: 4rpx;
 }
 
 .tab-item.active .text {
@@ -42,3 +44,15 @@
   color: white;
   display: block;
 }
+
+.icon {
+  width: 48rpx;
+  height: 48rpx;
+}
+
+.icon-add {
+  font-size: 54rpx;
+  color: #fff;
+}
+
+/* 激活状态的图标颜色现在通过不同的 SVG 文件控制 */

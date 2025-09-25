@@ -1,26 +1,5 @@
 import { getCategoryList } from '../../services/home/home'
 import userStore from '../../store/user'
-
-// "plugins": {
-//   "WechatSI": {
-//     "version": "0.3.1",
-//     "provider": "wx069ba97219f66d99"
-//   }
-// }
-// text() {
-//   var plugin = requirePlugin('WechatSI')
-//   let manager = plugin.getRecordRecognitionManager()
-//   manager.onStop = function (res) {
-//     console.log(res, 'onStop')
-//   }
-//   manager.onStart = function (res) {
-//     console.log(res, 'onStart')
-//   }
-//   manager.onError = function (res) {
-//     console.log(res, 'onError')
-//   }
-//   manager.start({ duration: 30000, lang: 'zh_CN' })
-// },
 // pages/home/home.js
 Page(
   Object.assign({}, userStore.data, {

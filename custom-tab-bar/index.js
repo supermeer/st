@@ -3,6 +3,8 @@ import TabMenu from './data'
 Component({
   data: {
     active: 0,
+    defaultColor: '#aaa',
+    activeColor: '#fff',
     list: TabMenu,
     sliderPosition: {
       x: 0,
@@ -29,9 +31,9 @@ Component({
 
     onChange(event) {
       const index = event.currentTarget.dataset.id
-      if (this.data.interceptor && !this.data.interceptor()) {
-        return
-      }
+      // if (this.data.interceptor && !this.data.interceptor()) {
+      //   return
+      // }
       wx.switchTab({ url: this.data.list[index].url })
     },
 

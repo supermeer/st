@@ -12,7 +12,9 @@
       data-id="{{index}}"
       id="tab-{{index}}"
     >
-      <view class="text">{{item.text}}</view>
+      <t-icon class="icon icon-add" wx:if="{{item.icon}}" name="{{item.icon}}"></t-icon>
+      <image class="icon" wx:if="{{item.img}}" src="{{active === index ? item.activeImg : item.img}}" mode="widthFix"></image>
+      <view wx:if="{{item.text}}" class="text">{{item.text}}</view>
     </view>
   </view>
 </view>
