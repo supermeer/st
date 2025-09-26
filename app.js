@@ -18,7 +18,7 @@ Page = function (pageConfig) {
     const currentPage = pages[pages.length - 1]
     const path = currentPage.route
     return {
-      title: 'yous X',
+      title: '柚见星辰',
       path: `/${path}?isShare=true`, // 自动携带当前页面路径
       imageUrl: '/images/global-share.jpg'
     }
@@ -53,6 +53,7 @@ App({
       url: 'https://work.weixin.qq.com/kfid/kfc4c8cfdf03c22699d',
       corpId: 'ww1e592fef17bb94fd'
     },
+    tabbarHeight: 100,
     navHeight: 0, // 导航栏高度
     statusBarHeight: 0, // 状态栏高度
     safeAreaTop: 0,
@@ -80,12 +81,13 @@ App({
       this.globalData.safeAreaBottom = windowInfo.windowHeight - safeArea.bottom
       this.globalData.statusBarHeight = safeArea.top
       this.globalData.navHeight = safeArea.top + 44
-
+      this.globalData.tabbarHeight = 100
       return {
         safeAreaTop: this.globalData.safeAreaTop,
         safeAreaBottom: this.globalData.safeAreaBottom,
         statusBarHeight: this.globalData.statusBarHeight,
-        navHeight: this.globalData.navHeight
+        navHeight: this.globalData.navHeight,
+        tabbarHeight: this.globalData.tabbarHeight
       }
     } catch (e) {
       return {}

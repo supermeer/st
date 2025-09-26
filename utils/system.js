@@ -70,14 +70,15 @@ const isDevTools = () => getDeviceType() === DEVICE_TYPE.DEVTOOLS
  * 获取导航栏相关高度信息
  * @returns {Object} 导航栏高度信息
  */
-const getNavInfo = () => {
+const getPageInfo = () => {
   // 如果全局已有数据，直接返回
   if (app.globalData.navHeight > 0) {
     return {
       navHeight: app.globalData.navHeight,
       statusBarHeight: app.globalData.statusBarHeight,
       safeAreaTop: app.globalData.safeAreaTop,
-      safeAreaBottom: app.globalData.safeAreaBottom
+      safeAreaBottom: app.globalData.safeAreaBottom,
+      tabbarHeight: app.globalData.tabbarHeight
     }
   }
 
@@ -90,8 +91,8 @@ const getNavInfo = () => {
  * @returns {Number} 内容区域高度（单位px）
  */
 const getContentHeight = () => {
-  const navInfo = getNavInfo()
-  return navInfo ? navInfo.contentHeight : 0
+  const pageInfo = getPageInfo()
+  return pageInfo ? pageInfo.contentHeight : 0
 }
 
 /**
@@ -146,7 +147,7 @@ const observeViewportChange = (pageInstance, callback) => {
 }
 
 module.exports = {
-  getNavInfo,
+  getPageInfo,
   getContentHeight,
   getSafeArea,
   getBottomSafeHeight,

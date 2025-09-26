@@ -65,7 +65,7 @@ Page({
 
 ### 可用的系统信息方法
 
-- `systemInfo.getNavInfo()` - 获取导航栏相关高度信息
+- `systemInfo.getPageInfo()` - 获取导航栏相关高度信息
 - `systemInfo.getContentHeight()` - 获取内容区域高度
 - `systemInfo.getSafeArea()` - 获取安全区域信息
 - `systemInfo.getBottomSafeHeight()` - 获取底部安全区域高度

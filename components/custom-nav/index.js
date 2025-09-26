@@ -82,7 +82,7 @@ Component({
     initNavigation: function () {
       try {
         // 从全局获取导航栏信息
-        const windowInfo = systemInfo.getNavInfo()
+        const windowInfo = systemInfo.getPageInfo()
 
         if (windowInfo) {
           // 使用全局导航栏信息

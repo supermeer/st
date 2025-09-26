@@ -1,0 +1,40 @@
+.msg-container {
+    background: transparent;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-bottom: 24rpx;
+}
+
+.images-container {
+    width: 80%;
+    display: inline-block;
+    text-align: right;
+}
+
+.image-item-container {
+    width: 25%;
+    padding: 10rpx;
+    box-sizing: border-box;
+    display: inline-block;
+}
+
+.image-item {
+    width: 100%;
+    display: block;
+}
+
+.msg-content {
+    max-width: 80%;
+    background-color: #fff;
+}
+
+.btn-container {
+    margin-top: 10rpx;
+    max-width: 80%;
+}
+
+.icon-btn {
+    margin-right: 10rpx;
+}

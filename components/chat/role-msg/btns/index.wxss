@@ -1,0 +1,9 @@
+.btns-container {
+    background: rgba(0, 0, 0, 0.6);
+    padding: 12rpx 20rpx;
+}
+
+.btn-image {
+    width: 40rpx;
+    height: 40rpx;
+}

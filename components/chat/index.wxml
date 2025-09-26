@@ -1,0 +1,18 @@
+<view class="chat-container">
+  <t-image class="bg-image" src="/static/home/bg.png" mode="aspectFill" />
+  <view class="role-info"></view>
+  <scroll-view class="message-list">
+    <block wx:for="{{messageList}}" wx:key="index">
+      <role-msg wx:if="{{item.senderType === 1}}" class="message-item" message="{{item}}" />
+      <user-msg wx:if="{{item.senderType === 2}}" class="message-item" message="{{item}}" />
+    </block>
+  </scroll-view>
+  <view class="input-container">
+    <view class="input-container-input">
+      <t-input class="input-container-input-input" placeholder="请输入内容" />
+    </view>
+    <view class="input-container-send">
+      <t-button class="input-container-send-button" type="primary">发送</t-button>
+    </view>
+  </view>
+</view>

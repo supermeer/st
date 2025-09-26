@@ -5,7 +5,8 @@
   position: relative;
   font-size: 16px;
   box-sizing: border-box;
-  background-color: rgba(0, 0, 0, 0.4);
+  /* background-color: rgba(0, 0, 0, 0.4); */
+  background-color: #000;
   /* 高斯模糊 */
   backdrop-filter: blur(0px);
   padding-bottom: constant(safe-area-inset-bottom);

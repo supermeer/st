@@ -1,67 +1,7 @@
 <view class="home-page-container">
-  <!-- 自定义导航栏 -->
-  <custom-nav
-    class="custom-nav"
-    show-back="{{false}}"
-    show-left-logo="{{true}}"
-    show-home="{{false}}"
-    transparent="{{true}}"
-  />
-
-  <t-image
-    wx:if="{{!isLogin}}"
-    class="header login-container"
-    bindtap="goLogin"
-    src="/static/home/login_btn.png"
-  />
-  <view wx:if="{{isLogin}}" class="header info-container">
-    <t-image class="avatar" src="/static/avatar.jpg"/>
-    <view class="user-name">
-      hi,{{userInfo.nickname || '小柚子'}}
-    </view>
-    <t-image
-      class="user-tag"
-      bindtap="vipClick"
-      src="{{vipInfo.ifVip ? '/static/home/vip_icon.png' : '/static/home/non_vip_icon.png'}}"
-      style="{{vipInfo.ifVip ? 'width: 136rpx; height: 56rpx;' : 'width: 168rpx; height: 56rpx;'}}"
-    />
+  <view class="home-content" style="padding-bottom: calc({{pageInfo.safeAreaBottom}}px + {{pageInfo.tabbarHeight}}rpx);">
+    <chat class="chat-container" messageList="{{messageList}}" />
   </view>
-  <view class="home-content">
-    <t-tabs
-      bind:change="onTabsChange"
-      bind:click="onTabsClick"
-      t-class="custom-tabs"
-      theme="tag"
-      value="{{currentCategoryId}}"
-    >
-      <t-tab-panel
-        wx:for="{{categoryList}}"
-        wx:for-index="index"
-        wx:key="id"
-        label="{{item.name}}"
-        value="{{item.id}}"
-      />
-    </t-tabs>
-    <view class="category-desc">{{currentCategoryDesc}}</view>
-    <view class="tab-content-container">
-      <view
-        wx:for="{{categoryItemList}}"
-        wx:for-index="index"
-        wx:key="index"
-        class="cate-item {{categoryItemList.length < 4 ? 'cate-item__long' : ''}}"
-        data-id="{{item.id}}"
-        data-code="{{item.code}}"
-        bindtap="navToCategoryDetail"
-      >
-        <t-image class="cate-icon" src="{{item.icon}}" />
-        <view class="cate-content">
-          <view class="cate-name">{{item.name}}</view>
-          <view class="cate-desc">{{item.description}}</view>
-        </view>
-      </view>
-    </view>
-  </view>
-
 </view>
 
 <!-- <auth id="auth" check-phone="{{false}}" bind:loginSuccess="loginSuccess" /> -->
