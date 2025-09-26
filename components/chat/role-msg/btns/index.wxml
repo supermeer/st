@@ -1,5 +1,5 @@
 <view class="btns-container">
-  <image class="btn-image" src="/static/chat/bf.png" />
-  <image class="btn-image" src="/static/chat/cs.png" />
-  <image class="btn-image" src="/static/chat/jx.png" />
+  <image class="btn-image" src="/static/chat/bf.svg" />
+  <image class="btn-image" src="/static/chat/cs.svg" />
+  <image class="btn-image" src="/static/chat/jx.svg" />
 </view>

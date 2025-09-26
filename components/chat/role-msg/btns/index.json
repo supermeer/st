@@ -3,6 +3,6 @@
     "usingComponents": {
         "t-icon": "tdesign-miniprogram/icon/icon",
         "t-image": "tdesign-miniprogram/image/image",
-        "van-popover": "vant-weapp/popup/popup"
+        "van-popover": "@vant/weapp/popup/index"
     }
 }

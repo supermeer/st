@@ -2,4 +2,5 @@
   <view class="msg-content msg-cell">
     <text>{{message.content}}</text>
   </view>
+  <btns btns="{{message.btns}}" />
 </view>
