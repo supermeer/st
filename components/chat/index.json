@@ -2,6 +2,7 @@
   "component": true,
   "usingComponents": {
     "user-msg": "/components/chat/user-msg/index",
-    "role-msg": "/components/chat/role-msg/index"
+    "role-msg": "/components/chat/role-msg/index",
+    "input-box": "/components/chat/input-box/index"
   }
 }

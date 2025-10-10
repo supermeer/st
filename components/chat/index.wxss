@@ -1,10 +1,25 @@
 .chat-container {
   width: 100%;
-  height: 100%;
-  padding: 0 24rpx;
-  background: linear-gradient(345deg, #EEF2FF 4%, #CCF9FF 69%, #FFB79B 96%);
+  /* background: linear-gradient(345deg, #EEF2FF 4%, #CCF9FF 69%, #FFB79B 96%); */
+  background: #00000069;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  /* 匀速过渡 */
+  transition: height 0.2s ease-in-out;
+}
+
+.message-list {
+  flex: 1;
+  height: 0; /* 配合 flex: 1 使用，确保有明确高度 */
+  /* padding: 0 24rpx; */
+  box-sizing: border-box;
 }
 
 .message-item {
   margin-bottom: 24rpx;
+}
+
+.input-box {
+  flex: none;  /* 等同于 flex: 0 0 auto，不增长也不收缩 */
 }

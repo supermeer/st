@@ -5,6 +5,7 @@
     flex-direction: column;
     align-items: flex-end;
     margin-bottom: 24rpx;
+    padding-right: 24rpx;
 }
 
 .images-container {

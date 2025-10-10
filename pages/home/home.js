@@ -31,6 +31,46 @@ Page({
           'https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/order_bg.png',
           'https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/order_bg.png'
         ]
+      },{
+        senderType: 1,
+        content:
+          '咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟',
+        images: [
+          'https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/order_bg.png',
+          'https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/order_bg.png'
+        ]
+      },{
+        senderType: 1,
+        content:
+          '咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟',
+        images: [
+          'https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/order_bg.png',
+          'https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/order_bg.png'
+        ]
+      },{
+        senderType: 1,
+        content:
+          '咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟',
+        images: [
+          'https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/order_bg.png',
+          'https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/order_bg.png'
+        ]
+      },{
+        senderType: 1,
+        content:
+          '咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟',
+        images: [
+          'https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/order_bg.png',
+          'https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/order_bg.png'
+        ]
+      },{
+        senderType: 1,
+        content:
+          '咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟',
+        images: [
+          'https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/order_bg.png',
+          'https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/order_bg.png'
+        ]
       },
       {
         senderType: 2,

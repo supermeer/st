@@ -1,0 +1,43 @@
+<view class="input-box-container">
+  <view wx:if="{{inputType != 1}}" class="input-box">
+    <t-image wx:if="{{inputType == 2}}" class="input-box-image" src="/static/chat/yuyin.png" data-type="0" bindtap="changeInputType" />
+    <t-image wx:if="{{inputType == 0}}" class="input-box-image" src="/static/chat/jianpan.png" data-type="2" bindtap="changeInputType" />
+    <view class="input-box-text" wx:if="{{inputType == 0}}" bindtap="changeInputType" data-type="1">{{inputValue || '对ta说'}}</view>
+    <view class="input-box-text input-box-text__audio" wx:if="{{inputType == 2}}">按住说话</view>
+    <t-image class="input-box-image" src="/static/chat/linggan.png" />
+    <t-image class="input-box-image" src="/static/chat/add.png" />
+  </view>
+  <view wx:if="{{inputType == 1}}" class="input-box-input">
+    <t-textarea
+      class="input-box-textarea"
+      value="{{inputValue}}"
+      focus="{{focus}}"
+      hold-keyboard="{{false}}"
+      show-confirm-bar="{{false}}"
+      autosize="{{inputConfig}}"
+      placeholder="发送消息，环境、动作等可写在括号里"
+      bind:blur="onInputBlur"
+      bind:change="onInput"
+      confirm-type="send"
+      maxlength="1000"
+      adjust-position="{{false}}"
+      bind:line-change="onInputLineChange"
+      bind:keyboardheightchange="onKeyboardHeightChange"
+    />
+    <view class="bottom-line">
+      <t-image class="input-box-image" src="/static/chat/linggan.png" />
+      <view class="icon-wrapper">
+        <view class="icon-item icon-add-wrapper" style="opacity: {{inputValue && inputValue.length > 0 ? 0 : 1}}; pointer-events: {{inputValue && inputValue.length > 0 ? 'none' : 'auto'}};">
+          <t-image class="input-box-image" src="/static/chat/add.png" />
+        </view>
+        <view class="icon-item icon-send-wrapper" style="opacity: {{!inputValue || inputValue.length == 0 ? 0 : 1}}; pointer-events: {{!inputValue || inputValue.length == 0 ? 'none' : 'auto'}};">
+          <t-image class="input-box-image" src="/static/chat/send.png" />
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class="input-box-inspiration">
+  </view>
+  <view class="input-box-board">
+  </view>
+</view>

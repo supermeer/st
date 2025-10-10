@@ -1,4 +1,4 @@
-<view class="home-page-container">
+<view class="home-page-container" style="background: url('/static/home/bg.png') no-repeat center center; background-size: cover;">
   <view class="home-content" style="padding-bottom: calc({{pageInfo.safeAreaBottom}}px + {{pageInfo.tabbarHeight}}rpx);">
     <chat class="chat-container" messageList="{{messageList}}" />
   </view>

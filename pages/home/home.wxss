@@ -2,8 +2,7 @@ page {
   height: 100vh;
   box-sizing: border-box;
   overflow: hidden;
-  /* background-color: var(--theme-color-black); */
-  background: #fff;
+  background-color: var(--theme-color-black);
 }
 
 .home-page-container {
