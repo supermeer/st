@@ -1,0 +1,13 @@
+{
+  "enablePullDownRefresh": false,
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "custom-nav": "/components/custom-nav/index",
+    "t-input": "tdesign-miniprogram/input/input",
+    "t-textarea": "tdesign-miniprogram/textarea/textarea",
+    "t-button": "tdesign-miniprogram/button/button",
+    "t-icon": "tdesign-miniprogram/icon/icon"
+  },
+  "navigationBarTitleText": "新增角色"
+}
+

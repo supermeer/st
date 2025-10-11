@@ -32,10 +32,17 @@ Component({
 
     onChange(event) {
       const index = event.currentTarget.dataset.id
+      const item = this.data.list[index]
       // if (this.data.interceptor && !this.data.interceptor()) {
       //   return
       // }
-      wx.switchTab({ url: this.data.list[index].url })
+      
+      // 根据配置决定使用哪种跳转方式
+      if (item.isNavigate) {
+        wx.navigateTo({ url: item.url })
+      } else {
+        wx.switchTab({ url: item.url })
+      }
     },
 
     // 初始化方法
@@ -47,7 +54,10 @@ Component({
           (item.url.startsWith('/') ? item.url.substr(1) : item.url) ===
           `${route}`
       )
-      this.setData({ active })
+      // 如果找到匹配的 tab，更新高亮状态（>=0 表示找到了）
+      if (active >= 0) {
+        this.setData({ active })
+      }
     },
     hide() {
       this.setData({ visible: false })

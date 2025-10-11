@@ -1,0 +1,21 @@
+<!--pages/role/role-detail/index.wxml-->
+<view class="role-detail-container">
+  <custom-nav title="" showBack="{{true}}" showHome="{{false}}" transparent="{{true}}" />
+  <view class="role-detail-header">
+    <text class="role-detail-title">角色详情</text>
+  </view>
+  
+  <view class="role-detail-content">
+    <!-- 角色信息展示区域 -->
+    <view class="role-info">
+      <text class="info-label">角色名称：</text>
+      <text class="info-value">{{roleInfo.name || '暂无'}}</text>
+    </view>
+    
+    <view class="role-info">
+      <text class="info-label">角色描述：</text>
+      <text class="info-value">{{roleInfo.description || '暂无'}}</text>
+    </view>
+  </view>
+</view>
+

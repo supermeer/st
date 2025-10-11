@@ -32,7 +32,7 @@ Component({
     // 是否显示首页按钮
     showHome: {
       type: Boolean,
-      value: false
+      value: true
     },
     // 自定义首页按钮图标
     homeIcon: {

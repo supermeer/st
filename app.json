@@ -1,5 +1,5 @@
 {
-  "pages": ["pages/home/home", "pages/merchant/index", "pages/usercenter/index"],
+  "pages": ["pages/home/home", "pages/discover/index", "pages/chat-list/index", "pages/usercenter/index"],
   "subpackages": [
     {
       "root": "pages/share",
@@ -31,9 +31,9 @@
       ]
     },
     {
-      "root": "pages/chat",
-      "name": "chat",
-      "pages": ["session/index", "history/index"]
+      "root": "pages/role",
+      "name": "role",
+      "pages": ["role-detail/index", "add/index"]
     },
     {
       "root": "pages/vip",
@@ -57,8 +57,12 @@
         "text": "首页"
       },
       {
-        "pagePath": "pages/merchant/index",
-        "text": "商户"
+        "pagePath": "pages/discover/index",
+        "text": "发现"
+      },
+      {
+        "pagePath": "pages/chat-list/index",
+        "text": "聊天"
       },
       {
         "pagePath": "pages/usercenter/index",

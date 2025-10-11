@@ -1,0 +1,41 @@
+<!--pages/chat/index.wxml-->
+<view class="chat-page-container">
+  <!-- 自定义导航栏 -->
+  <custom-nav
+    class="custom-nav"
+    title="聊天"
+    show-back="{{false}}"
+    show-left-logo="{{false}}"
+    show-home="{{false}}"
+    transparent="{{false}}"
+  />
+
+  <view class="chat-content">
+    <!-- 聊天列表 -->
+    <view class="chat-list" wx:if="{{chatList.length > 0}}">
+      <view 
+        class="chat-item" 
+        wx:for="{{chatList}}" 
+        wx:key="id"
+        data-id="{{item.id}}"
+        bindtap="onChatItemClick"
+      >
+        <view class="chat-avatar">
+          <image src="{{item.avatar || '/static/chat/default-avatar.png'}}" mode="aspectFill" />
+        </view>
+        <view class="chat-info">
+          <view class="chat-name">{{item.name}}</view>
+          <view class="chat-last-msg">{{item.lastMessage}}</view>
+        </view>
+        <view class="chat-time">{{item.time}}</view>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty-state" wx:else>
+      <t-icon name="chat" size="120rpx" color="#ccc" />
+      <text class="empty-text">暂无聊天记录</text>
+    </view>
+  </view>
+</view>
+

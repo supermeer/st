@@ -65,6 +65,9 @@ App({
     userStore.initFromLocal()
     // 获取系统信息和导航栏高度
     this.getNavHeight()
+    wx.navigateTo({
+      url: '/pages/role/role-detail/index',
+    })
   },
   onShow: function () {
     updateManager()

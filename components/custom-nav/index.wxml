@@ -14,7 +14,7 @@
       <view wx:if="{{showBack}}" class="nav-back left-content" bindtap="onBack">
         <t-icon class="nav-icon default-back-icon" name="chevron-left" size="26" />
       </view>
-      <view wx:if="{{showBack}}" class="nav-home left-content" bindtap="onHome">
+      <view wx:if="{{showHome}}" class="nav-home left-content" bindtap="onHome">
         <view class="nav-home-separator">|</view>
         <t-icon class="nav-icon default-home-icon" name="home" size="20" />
       </view>

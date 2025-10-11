@@ -1,0 +1,79 @@
+<!--pages/role/add/index.wxml-->
+<view class="role-add-container">
+  <!-- 自定义导航栏 -->
+  <custom-nav title="新增角色" showBack="{{true}}" showHome="{{false}}" transparent="{{false}}" />
+
+  <view class="form-container">
+    <!-- 头像 -->
+    <view class="form-item avatar-item">
+      <view class="form-label">角色头像</view>
+      <view class="avatar-upload" bindtap="onChooseAvatar">
+        <image wx:if="{{formData.avatar}}" src="{{formData.avatar}}" mode="aspectFill" class="avatar-image" />
+        <view wx:else class="avatar-placeholder">
+          <t-icon name="add" size="64rpx" color="#999" />
+          <text class="placeholder-text">点击上传</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 角色名称 -->
+    <view class="form-item">
+      <view class="form-label required">角色名称</view>
+      <t-input
+        value="{{formData.name}}"
+        placeholder="请输入角色名称"
+        data-field="name"
+        bind:change="onInputChange"
+        maxlength="20"
+      />
+    </view>
+
+    <!-- 角色描述 -->
+    <view class="form-item">
+      <view class="form-label required">角色描述</view>
+      <t-textarea
+        value="{{formData.description}}"
+        placeholder="请输入角色描述"
+        data-field="description"
+        bind:change="onInputChange"
+        maxlength="200"
+        indicator
+      />
+    </view>
+
+    <!-- 性格特征 -->
+    <view class="form-item">
+      <view class="form-label">性格特征</view>
+      <t-textarea
+        value="{{formData.personality}}"
+        placeholder="请输入性格特征"
+        data-field="personality"
+        bind:change="onInputChange"
+        maxlength="500"
+        indicator
+      />
+    </view>
+
+    <!-- 标签 -->
+    <view class="form-item">
+      <view class="form-label">角色标签</view>
+      <view class="tag-list">
+        <view 
+          class="tag-item {{selectedTags.indexOf(item) > -1 ? 'active' : ''}}"
+          wx:for="{{tagList}}"
+          wx:key="index"
+          data-tag="{{item}}"
+          bindtap="onTagClick"
+        >
+          {{item}}
+        </view>
+      </view>
+    </view>
+
+    <!-- 提交按钮 -->
+    <view class="submit-btn-wrapper">
+      <t-button theme="primary" size="large" bind:tap="onSubmit">创建角色</t-button>
+    </view>
+  </view>
+</view>
+

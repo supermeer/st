@@ -1,0 +1,12 @@
+{
+  "navigationBarTitleText": "聊天",
+  "onReachBottomDistance": 10,
+  "backgroundTextStyle": "light",
+  "enablePullDownRefresh": false,
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "t-icon": "tdesign-miniprogram/icon/icon",
+    "custom-nav": "/components/custom-nav/index"
+  }
+}
+
