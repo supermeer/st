@@ -1,24 +1,24 @@
-<van-swipe-cell left-width="{{100}}">
+<van-swipe-cell id="swipeCell" class="role-swipe-cell" left-width="{{100}}" async-close>
   <view class="msg-container">
     <view class="msg-content msg-cell">
       <text>{{message.content}}</text>
     </view>
     <btns btns="{{message.btns}}" />
   </view>
-  <view slot="left" class="swipe-cell-btns" bind:tap="onDelete">
-    <view class="swipe-cell-item">
+  <view slot="left" class="swipe-cell-btns">
+    <view class="swipe-cell-item" bind:tap="onButtonClick" data-action="rollback">
       <t-image class="icon-btn img-icon" src="/static/chat/huisu.png" />
       <text>回溯</text>
     </view>
-    <view class="swipe-cell-item">
+    <view class="swipe-cell-item" bind:tap="onButtonClick" data-action="newPlot">
       <t-image class="icon-btn img-icon" src="/static/chat/juqing.png" />
       <text>新剧情</text>
     </view>
-    <view class="swipe-cell-item">
+    <view class="swipe-cell-item" bind:tap="onButtonClick" data-action="like">
       <t-image class="icon-btn img-icon" src="/static/chat/zan.png" />
       <text>点赞</text>
     </view>
-    <view class="swipe-cell-item">
+    <view class="swipe-cell-item" bind:tap="onButtonClick" data-action="dislike">
       <t-image class="icon-btn img-icon" src="/static/chat/cai.png" />
       <text>点踩</text>
     </view>

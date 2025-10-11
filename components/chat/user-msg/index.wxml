@@ -1,5 +1,5 @@
-<van-swipe-cell right-width="{{50}}">
-  <view class="msg-container" long-press-gesture-handler="{{true}}" bindlongpress="userMsgLongPress">
+<van-swipe-cell id="swipeCell" class="user-swipe-cell" right-width="{{50}}" async-close>
+  <view class="msg-container">
     <view wx:if="{{message.images && message.images.length > 0}}" class="images-container">
       <view wx:for="{{message.images}}" wx:key="index" class="image-item-container">
         <t-image class="image-item" src="{{item}}" mode="widthFix" />
@@ -13,8 +13,8 @@
       重新发送
     </view>
   </view>
-  <view slot="right" class="swipe-cell-btns" bind:tap="onDelete">
-    <view class="swipe-cell-item">
+  <view slot="right" class="swipe-cell-btns">
+    <view class="swipe-cell-item" bind:tap="onButtonClick" data-action="rollback">
       <t-icon name="rollback" class="icon-btn" size="24rpx" />
       <text>撤回</text>
     </view>
