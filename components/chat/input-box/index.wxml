@@ -1,9 +1,46 @@
 <view class="input-box-container">
-  <view wx:if="{{inputType != 1}}" class="input-box">
+  <!-- 语音录音浮层 -->
+  <view wx:if="{{isRecording || voiceStatus}}" class="voice-modal">
+    <view class="voice-modal-content {{isTouchMoving ? 'voice-modal-cancel' : ''}}">
+      <!-- 录音中 -->
+      <view wx:if="{{voiceStatus == 'recording'}}" class="voice-status-box">
+        <view class="voice-animation">
+          <view class="voice-wave"></view>
+          <view class="voice-wave"></view>
+          <view class="voice-wave"></view>
+          <t-icon name="microphone-1-filled" class="voice-icon" size="80rpx" />
+        </view>
+        <view class="voice-tip">{{isTouchMoving ? '松开取消' : '正在录音...'}}</view>
+        <view class="voice-time" style="{{recordTime >= (inputDuration - 5) ? 'color: #ff4444;' : ''}}">{{recordTime}}s / {{inputDuration}}s</view>
+        <view class="voice-cancel-tip" wx:if="{{!isTouchMoving && recordTime < (inputDuration - 5)}}">上滑取消</view>
+        <view class="voice-warning" wx:if="{{recordTime >= (inputDuration - 5) && !isTouchMoving}}">即将自动结束</view>
+      </view>
+      <!-- 识别中 -->
+      <view wx:if="{{voiceStatus == 'recognizing'}}" class="voice-status-box">
+        <view class="voice-loading">
+          <view class="loading-dot"></view>
+          <view class="loading-dot"></view>
+          <view class="loading-dot"></view>
+        </view>
+        <view class="voice-tip">识别中...</view>
+      </view>
+    </view>
+  </view>
+  
+  <view wx:if="{{inputType != 1}}" class="input-box {{isRecording ? 'input-box-recording' : ''}}">
     <t-image wx:if="{{inputType == 2}}" class="input-box-image" src="/static/chat/yuyin.png" data-type="0" bindtap="changeInputType" />
     <t-image wx:if="{{inputType == 0}}" class="input-box-image" src="/static/chat/jianpan.png" data-type="2" bindtap="changeInputType" />
     <view class="input-box-text" wx:if="{{inputType == 0}}" bindtap="changeInputType" data-type="1">{{inputValue || '对ta说'}}</view>
-    <view class="input-box-text input-box-text__audio" wx:if="{{inputType == 2}}">按住说话</view>
+    <view 
+      class="input-box-text input-box-text__audio" 
+      wx:if="{{inputType == 2}}"
+      bindtouchstart="onVoiceTouchStartRecord"
+      bindtouchmove="onVoiceTouchMove"
+      bindtouchend="onVoiceTouchEnd"
+      bindtouchcancel="onVoiceTouchEnd"
+    >
+      {{isRecording ? '松开发送' : '按住说话'}}
+    </view>
     <t-image wx:if="{{!showInspiration}}" class="input-box-image" src="/static/chat/linggan.png" bindtap="showInspiration" />
     <t-image wx:else class="input-box-image" src="/static/chat/linggan_active.png" bindtap="showInspiration" />
     <t-image wx:if="{{!showBoard}}" class="input-box-image" src="/static/chat/add.png" bindtap="showBoard" />
