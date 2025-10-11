@@ -1,6 +1,11 @@
 <view class="home-page-container" style="background: url('/static/home/bg.png') no-repeat center center; background-size: cover;">
-  <view class="home-content" style="padding-bottom: calc({{pageInfo.safeAreaBottom}}px + {{pageInfo.tabbarHeight}}rpx);">
-    <chat class="chat-container" messageList="{{messageList}}" />
+  <view class="home-content" style="padding-bottom: {{paddingBtm}}">
+    <chat
+      class="chat-container"
+      messageList="{{messageList}}"
+      bind:hideTabbar="hideTabbar"
+      bind:showTabbar="showTabbar"
+    />
   </view>
 </view>
 

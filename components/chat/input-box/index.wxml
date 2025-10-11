@@ -4,8 +4,10 @@
     <t-image wx:if="{{inputType == 0}}" class="input-box-image" src="/static/chat/jianpan.png" data-type="2" bindtap="changeInputType" />
     <view class="input-box-text" wx:if="{{inputType == 0}}" bindtap="changeInputType" data-type="1">{{inputValue || '对ta说'}}</view>
     <view class="input-box-text input-box-text__audio" wx:if="{{inputType == 2}}">按住说话</view>
-    <t-image class="input-box-image" src="/static/chat/linggan.png" />
-    <t-image class="input-box-image" src="/static/chat/add.png" />
+    <t-image wx:if="{{!showInspiration}}" class="input-box-image" src="/static/chat/linggan.png" bindtap="showInspiration" />
+    <t-image wx:else class="input-box-image" src="/static/chat/linggan_active.png" bindtap="showInspiration" />
+    <t-image wx:if="{{!showBoard}}" class="input-box-image" src="/static/chat/add.png" bindtap="showBoard" />
+    <t-image wx:else class="input-box-image" src="/static/chat/add_active.png" bindtap="showBoard" />
   </view>
   <view wx:if="{{inputType == 1}}" class="input-box-input">
     <t-textarea
@@ -25,10 +27,10 @@
       bind:keyboardheightchange="onKeyboardHeightChange"
     />
     <view class="bottom-line">
-      <t-image class="input-box-image" src="/static/chat/linggan.png" />
+      <t-image class="input-box-image" src="/static/chat/linggan.png" bindtap="showInspiration" />
       <view class="icon-wrapper">
         <view class="icon-item icon-add-wrapper" style="opacity: {{inputValue && inputValue.length > 0 ? 0 : 1}}; pointer-events: {{inputValue && inputValue.length > 0 ? 'none' : 'auto'}};">
-          <t-image class="input-box-image" src="/static/chat/add.png" />
+          <t-image class="input-box-image" src="/static/chat/add.png" bindtap="showBoard" />
         </view>
         <view class="icon-item icon-send-wrapper" style="opacity: {{!inputValue || inputValue.length == 0 ? 0 : 1}}; pointer-events: {{!inputValue || inputValue.length == 0 ? 'none' : 'auto'}};">
           <t-image class="input-box-image" src="/static/chat/send.png" />
@@ -36,8 +38,33 @@
       </view>
     </view>
   </view>
-  <view class="input-box-inspiration">
+  <view wx:if="{{showInspiration}}" class="input-box-inspiration">
+    <view class="input-box-inspiration-title">灵感对话</view>
+    <view wx:for="{{inspirationList}}" wx:key="index" class="input-box-inspiration-item">
+      {{item}}
+      <t-icon name="edit-2-filled" class="icon-btn" size="28rpx" data-index="{{index}}" bindtap="editInspiration" />
+    </view>
   </view>
-  <view class="input-box-board">
+  <view wx:if="{{showBoard}}" class="input-box-board">
+    <view class="input-box-board-item" bindtap="restart">
+      <t-image class="board-box-image" src="/static/chat/chongxinkaishi.png" />
+      <text>重新开始</text>
+    </view>
+    <view class="input-box-board-item" bindtap="uploadImage">
+      <t-image class="board-box-image" src="/static/chat/tupian.png" />
+      <text>图片</text>
+    </view>
+    <view class="input-box-board-item" bindtap="storyList">
+      <t-image class="board-box-image" src="/static/chat/juqing.png" />
+      <text>其他剧情</text>
+    </view>
+    <button class="input-box-board-item" open-type="share">
+      <t-image class="board-box-image" src="/static/chat/fenxiang.png" />
+      <text>分享</text>
+    </button>
+    <view class="input-box-board-item" bindtap="report">
+      <t-image class="board-box-image" src="/static/chat/jubao.png" />
+      <text>举报</text>
+    </view>
   </view>
 </view>

@@ -82,14 +82,31 @@ Page({
         ]
       }
     ],
-    pageInfo: {}
+    pageInfo: {},
+    paddingBtm: 0
   },
   onLoad() {
     this.setData({
       pageInfo: { ...SystemInfo.getPageInfo(), ...this.data.pageInfo }
     })
+    // calc({{pageInfo.safeAreaBottom}}px + {{pageInfo.tabbarHeight}}rpx);
+    this.setData({
+      paddingBtm: `calc(${this.data.pageInfo.safeAreaBottom}px + ${this.data.pageInfo.tabbarHeight}rpx)`
+    })
   },
   onShow() {
     this.getTabBar().init()
+  },
+  hideTabbar() {
+    this.setData({
+      paddingBtm: 0
+    })
+    this.getTabBar().hide()
+  },
+  showTabbar() {
+    this.setData({
+      paddingBtm: `calc(${this.data.pageInfo.safeAreaBottom}px + ${this.data.pageInfo.tabbarHeight}rpx)`
+    })
+    this.getTabBar().show()
   }
 })

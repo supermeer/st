@@ -1,14 +1,22 @@
-<view class="msg-container">
-  <view wx:if="{{message.images && message.images.length > 0}}" class="images-container">
-    <view wx:for="{{message.images}}" wx:key="index" class="image-item-container">
-      <t-image class="image-item" src="{{item}}" mode="widthFix" />
+<van-swipe-cell right-width="{{50}}">
+  <view class="msg-container" long-press-gesture-handler="{{true}}" bindlongpress="userMsgLongPress">
+    <view wx:if="{{message.images && message.images.length > 0}}" class="images-container">
+      <view wx:for="{{message.images}}" wx:key="index" class="image-item-container">
+        <t-image class="image-item" src="{{item}}" mode="widthFix" />
+      </view>
+    </view>
+    <view wx:if="{{message.content}}" class="msg-content msg-cell" bindtap="userMsgClick">
+      <text class="message-content">{{message.content}}</text>
+    </view>
+    <view wx:if="{{message.error}}" class="btn-container" data-index="{{index}}" bindtap="resend">
+      <t-icon name="refresh" class="icon-btn" size="24rpx" />
+      重新发送
     </view>
   </view>
-  <view wx:if="{{message.content}}" class="msg-content msg-cell" bindtap="userMsgClick">
-    <text class="message-content">{{message.content}}</text>
+  <view slot="right" class="swipe-cell-btns" bind:tap="onDelete">
+    <view class="swipe-cell-item">
+      <t-icon name="rollback" class="icon-btn" size="24rpx" />
+      <text>撤回</text>
+    </view>
   </view>
-  <view wx:if="{{message.error}}" class="btn-container" data-index="{{index}}" bindtap="resend">
-    <t-icon name="refresh" class="icon-btn" size="24rpx" />
-    重新发送
-  </view>
-</view>
+</van-swipe-cell>

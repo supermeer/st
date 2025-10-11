@@ -3,5 +3,9 @@ Component({
     message: Object
   },
   data: {},
-  methods: {}
+  methods: {
+    userMsgLongPress(e) {
+      console.log(33333)
+    }
+  }
 })

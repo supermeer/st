@@ -6,6 +6,7 @@ Component({
     defaultColor: '#aaa',
     activeColor: '#fff',
     list: TabMenu,
+    visible: true,
     sliderPosition: {
       x: 0,
       width: 0,
@@ -47,6 +48,12 @@ Component({
           `${route}`
       )
       this.setData({ active })
+    },
+    hide() {
+      this.setData({ visible: false })
+    },
+    show() {
+      this.setData({ visible: true })
     }
   }
 })

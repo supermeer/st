@@ -2,6 +2,9 @@
   "component": true,
   "styleIsolation": "apply-shared",
   "usingComponents": {
-    "btns": "./btns/index"
+    "btns": "./btns/index",
+    "van-swipe-cell": "@vant/weapp/swipe-cell/index",
+    "t-icon": "tdesign-miniprogram/icon/icon",
+    "t-image": "tdesign-miniprogram/image/image"
   }
 }

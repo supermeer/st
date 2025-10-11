@@ -106,5 +106,84 @@
     height: 50rpx;
     transition: opacity 0.2s ease;
   }
+
+  .input-box-inspiration {
+    margin-top: 20rpx;
+    padding: 0 20rpx;
+    height: 400rpx;
+    overflow-y: auto;
+  }
+  .input-box-inspiration-title {
+    font-size: 28rpx;
+    color: #bbb;
+    margin-bottom: 20rpx;
+  }
+
+  .input-box-inspiration-item {
+    font-size: 28rpx;
+    color: #fff;
+    margin-bottom: 28rpx;
+    background: #ffffff30;
+    padding: 20rpx 32rpx 20rpx 20rpx;
+    border-radius: 20rpx;
+    letter-spacing: 0.8rpx;
+    display: flex;
+    /* align-items: center; */
+    justify-content: space-between;
+  }
+
+  .icon-btn {
+    margin-left: 20rpx;
+    flex-shrink: 0;
+    padding-top: 6rpx;
+  }
+
+  .input-box-board-item {
+    font-size: 28rpx;
+    color: #fff;
+    margin-bottom: 20rpx;
+  }
+
+  .input-box-board {
+    margin-top: 20rpx;
+    padding: 0 20rpx;
+  }
+  .input-box-board-item {
+    display: inline-flex;
+    width: calc(25% - 20rpx);
+    height: 142rpx;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background: #ffffff20;
+    margin: 20rpx 10rpx 20rpx;
+    border-radius: 28rpx;
+  }
+  .input-box-board-item:active {
+    background: #ffffff60;
+  }
+  .input-box-board-item text {
+    font-size: 24rpx;
+    color: #fff;
+    margin-top: 20rpx;
+    letter-spacing: 0.8rpx;
+  }
+
+  .board-box-image {
+    width: 50rpx;
+    height: 50rpx;
+  }
+
+  /* 重置分享按钮样式，使其与其他按钮一致 */
+  button.input-box-board-item {
+    border: none;
+    padding: 0;
+    line-height: normal;
+    background: #ffffff20;
+  }
+
+  button.input-box-board-item::after {
+    border: none;
+  }
  
  

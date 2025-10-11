@@ -67,5 +67,11 @@ Component({
         this.setData({ intoViewId: 'bottom-anchor' })
       }, 0)
     },
+    hideTabbar() {
+      this.triggerEvent('hideTabbar')
+    },
+    showTabbar() {
+      this.triggerEvent('showTabbar')
+    }
   }
 })

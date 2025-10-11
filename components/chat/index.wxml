@@ -8,5 +8,11 @@
     </block>
     <view id="bottom-anchor" style="height: 1rpx;"></view>
   </scroll-view>
-  <input-box class="input-box" bind:keyboardHeightChange="onKeyboardHeightChange" bind:inputLineChange="onInputLineChange" />
+  <input-box
+    class="input-box"
+    bind:keyboardHeightChange="onKeyboardHeightChange"
+    bind:inputLineChange="onInputLineChange"
+    bind:hideTabbar="hideTabbar"
+    bind:showTabbar="showTabbar"
+  />
 </view>
