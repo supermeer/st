@@ -1,0 +1,47 @@
+<!--pages/role/story/index.wxml-->
+<view class="story-page">
+  <!-- 固定背景图 -->
+  <image class="page-bg" src="https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/chat_bg.png" mode="aspectFill"></image>
+  
+  <!-- 固定顶部导航栏 -->
+  <custom-nav title="故事剧情" showBack="{{true}}" showHome="{{false}}" transparent="{{true}}" />
+  
+  <!-- 可滚动内容区域 -->
+  <scroll-view
+    class="scroll-content"
+    scroll-y
+    enhanced
+    show-scrollbar="{{false}}"
+    scroll-top="{{scrollTop}}"
+    id="storyScrollView"
+    style="height: calc(100% - {{ pageInfo.navHeight + pageInfo.safeAreaBottom}}px)"
+  >
+    
+    <!-- 故事列表 -->
+    <view class="story-list">
+      <view class="story-item blur-glass" wx:for="{{storyList}}" wx:key="id" bind:tap="onStoryTap" data-id="{{item.id}}">
+        <view class="story-header">
+          <view class="story-title">{{item.title}}</view>
+          <view class="story-status {{item.isUnlocked ? 'unlocked' : 'locked'}}">
+            {{item.isUnlocked ? '已解锁' : '未解锁'}}
+          </view>
+        </view>
+        <view class="story-desc">{{item.description}}</view>
+        <view class="story-footer">
+          <text class="story-time">{{item.time}}</text>
+          <view class="story-progress" wx:if="{{item.isUnlocked}}">
+            <text class="progress-text">进度: {{item.progress}}%</text>
+            <view class="progress-bar">
+              <view class="progress-fill" style="width: {{item.progress}}%"></view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 底部占位，防止内容被遮挡 -->
+    <view class="bottom-placeholder"></view>
+    
+  </scroll-view>
+</view>
+

@@ -47,6 +47,9 @@ Page({
   onTabChange(event) {
     const tab = event.currentTarget.dataset.tab
     if (tab == 3) {
+      wx.navigateTo({
+        url: '/pages/role/story/index'
+      })
       return
     }
     this.setData({ currentTab: tab })

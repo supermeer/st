@@ -33,13 +33,6 @@
   color: #fff;
 }
 
-.blur-glass {
-  background: rgba(100, 100, 100, 0.1);
-  backdrop-filter: blur(3.8px);
-  -webkit-backdrop-filter: blur(3.8px);
-  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
-}
-
 .dialog-setting {
   font-size: 24rpx;
   position: relative;
@@ -146,6 +139,7 @@
   font-size: 24rpx;
   padding-left: 24rpx;
   color: #fff;
+  margin-bottom: 12rpx;
 }
 .section-title-icon {
   color: #fff;
