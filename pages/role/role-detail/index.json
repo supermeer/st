@@ -2,7 +2,9 @@
   "enablePullDownRefresh": false,
   "navigationStyle": "custom",
   "usingComponents": {
-    "custom-nav": "/components/custom-nav/index"
+    "custom-nav": "/components/custom-nav/index",
+    "t-icon": "tdesign-miniprogram/icon/icon",
+    "t-slider": "tdesign-miniprogram/slider/slider"
   },
   "navigationBarTitleText": "角色详情"
 }

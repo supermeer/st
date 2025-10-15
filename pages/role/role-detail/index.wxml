@@ -1,21 +1,114 @@
 <!--pages/role/role-detail/index.wxml-->
-<view class="role-detail-container">
-  <custom-nav title="" showBack="{{true}}" showHome="{{false}}" transparent="{{true}}" />
-  <view class="role-detail-header">
-    <text class="role-detail-title">角色详情</text>
-  </view>
+<view class="role-detail-page">
+  <!-- 固定背景图 -->
+  <image class="page-bg" src="https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/chat_bg.png" mode="aspectFill"></image>
   
-  <view class="role-detail-content">
-    <!-- 角色信息展示区域 -->
-    <view class="role-info">
-      <text class="info-label">角色名称：</text>
-      <text class="info-value">{{roleInfo.name || '暂无'}}</text>
+  <!-- 固定顶部导航栏 -->
+  <custom-nav title="" showBack="{{true}}" showHome="{{false}}" transparent="{{true}}" />
+  <!-- 可滚动内容区域 -->
+  <scroll-view
+    class="scroll-content"
+    scroll-y
+    enhanced
+    show-scrollbar="{{false}}"
+    scroll-top="{{scrollTop}}"
+    id="roleDetailScrollView"
+    style="height: calc(100% - {{ pageInfo.navHeight + pageInfo.safeAreaBottom}}px)"
+  >
+    
+    <!-- 毛玻璃信息卡片 -->
+    <view class="info-card blur-glass">
+      <view class="role-name-section">
+        <text class="role-name">{{roleInfo.name || '角色名称'}}</text>
+        <text class="role-gender">{{roleInfo.gender || '♂'}}</text>
+        <view class="dialog-setting">对话设置</view>
+      </view>
+      <view class="role-tags">
+        <text class="tag">#角色扮演</text>
+        <text class="tag">#聊天</text>
+        <text class="tag">#娱乐</text>        
+        <text class="tag">#角色扮演</text>
+        <text class="tag">#聊天</text>
+        <text class="tag">#娱乐</text>
+      </view>
+    </view>
+
+    <view class="detail-content blur-glass">
+      <!-- 标签页 -->
+      <view class="tabs blur-glass">
+        <text class="tab {{currentTab === '1' ? 'active' : ''}}" bind:tap="onTabChange" data-tab="1">关于TA</text>
+        <text class="tab {{currentTab === '2' ? 'active' : ''}}" bind:tap="onTabChange" data-tab="2">记忆</text>
+        <text class="tab {{currentTab === '3' ? 'active' : ''}}" bind:tap="onTabChange" data-tab="3">故事</text>
+      </view>
+      
+      <!-- 内容区域 -->
+      <view wx:if="{{currentTab === '1'}}" class="content-section">
+        <view class="section-title">TA的设定</view>
+        <view class="section-content blur-glass">
+          <text>{{roleInfo.description || '暂无描述'}}</text>
+        </view>
+        
+        <view class="section-title">开场白</view>
+        <view class="section-content blur-glass">
+          <text>{{roleInfo.greeting || '你好，很高兴认识你！'}}</text>
+        </view>
+      </view>
+      <view wx:if="{{currentTab === '2'}}" class="content-section">
+        <view class="section-title-container">
+          <view class="section-title">当前剧情</view>
+          <t-icon name="chevron-right-s" class="section-title-icon" size="24" />
+        </view>
+        <view class="memory-content blur-glass">
+          <text>相遇那天</text>
+        </view>
+        <view class="section-title-container">
+          <view class="section-title">对话设定</view>
+          <t-icon name="chevron-right-s" class="section-title-icon" size="24" />
+        </view>
+        <view class="setting-container">
+          <view class="setting-item blur-glass">
+            <text class="setting-item-title">对我的称呼</text>
+            <text class="setting-item-value">暂无</text>
+          </view>
+          <view class="setting-item blur-glass">
+            <text class="setting-item-title">性别</text>
+            <text class="setting-item-value">暂无</text>
+          </view>
+          <view class="setting-item blur-glass">
+            <text class="setting-item-title">我是谁</text>
+            <text class="setting-item-value">暂无</text>
+          </view>
+        </view>
+        <view class="section-title-container">
+          <view class="section-title">智能体记忆力</view>
+          <t-icon name="chevron-right-s" class="section-title-icon" size="24" />
+        </view>
+        <view class="memory-content blur-glass">
+          <text>记忆</text>
+          <t-slider
+            class="memory-slider"
+            default-value="{{23}}"
+            value="{{memoryValue}}"
+            label="{{true}}"
+            step="{{0.1}}"
+            bind:change="memoryChange"
+          />
+        </view>
+
+        <view class="section-title-container">
+          <view class="section-title">对话风格</view>
+          <t-icon name="add-circle-filled" class="section-title-icon" size="18" />
+        </view>
+        <view class="style-content blur-glass">
+          <text>搞笑女没有爱情</text>
+          <view class="style-right-content">
+            <text class="style-right-text">智能体默认设置</text>
+            <t-icon name="chevron-right-s" class="section-title-icon" size="28" />
+          </view>
+        </view>
+      </view>
     </view>
     
-    <view class="role-info">
-      <text class="info-label">角色描述：</text>
-      <text class="info-value">{{roleInfo.description || '暂无'}}</text>
-    </view>
-  </view>
+  </scroll-view>
 </view>
 

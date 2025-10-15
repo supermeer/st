@@ -1,4 +1,4 @@
-<view class="custom-nav" style="height:{{navHeight}}px; background-color: {{navColor ? navColor : 'transparent'}}">
+<view class="custom-nav" style="height:{{navHeight}}px; background-color: {{transparent ? 'transparent' : navColor}}">
   <!-- 状态栏占位 -->
   <view class="status-bar" style="height:{{statusBarHeight}}px;"></view>
   

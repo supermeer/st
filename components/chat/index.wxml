@@ -1,6 +1,14 @@
-<view class="chat-container" style="height: {{contentHeight}};">
-  <t-image class="bg-image" src="/static/home/bg.png" mode="aspectFill" />
-  <view class="role-info"></view>
+<view class="chat-container" style="height: {{contentHeight}};padding-top: {{safeAreaTop}}px;">
+  <!-- <t-image class="bg-image" src="/static/home/bg.png" mode="aspectFill" /> -->
+  <view class="role-info-container">
+    <view class="role-info" bindtap="goRoleInfo">
+      <t-image class="role-avatar" src="/static/vip_icon.png" mode="aspectFill" />
+      <view class="role-msg">
+        <text class="role-name">张三</text>
+        <text class="role-job">便利店店员</text>
+      </view>
+    </view>
+  </view>
   <scroll-view class="message-list" scroll-y="{{true}}" scroll-into-view="{{intoViewId}}" scroll-with-animation="{{true}}" show-scrollbar="{{false}}">
     <block wx:for="{{messageList}}" wx:key="index">
       <role-msg wx:if="{{item.senderType === 1}}" class="message-item" message="{{item}}" />

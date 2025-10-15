@@ -25,12 +25,16 @@ Component({
     contentHeight: '100%',
     safeAreaBottom: 0,
     tabbarHeight: 0,
-    intoViewId: 0
+    intoViewId: 0,
+    navHeight: 0,
+    safeAreaTop: 0
   },
   methods: {
     getPageInfo() {
       const pageInfo = systemInfo.getPageInfo()
       this.setData({
+        safeAreaTop: pageInfo.safeAreaTop,
+        navHeight: pageInfo.navHeight,
         safeAreaBottom: pageInfo.safeAreaBottom,
         tabbarHeight: pageInfo.tabbarHeight
       })
@@ -72,6 +76,11 @@ Component({
     },
     showTabbar() {
       this.triggerEvent('showTabbar')
+    },
+    goRoleInfo() {
+      wx.navigateTo({
+        url: '/pages/role/role-detail/index'
+      })
     }
   }
 })

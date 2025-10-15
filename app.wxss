@@ -2,6 +2,7 @@
 
 @import 'style/theme.wxss';
 
+@import 'style/global.wxss';
 /* 声明主题色 */
 :root {
   --theme-color: #174DFF;
@@ -40,4 +41,5 @@ page {
 
 view, page, text, image, button, input, block {
   box-sizing: border-box;
+  letter-spacing: 0.8rpx;
 }
