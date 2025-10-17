@@ -9,6 +9,8 @@
   --theme-color-black: #252525;
   --desc-color: #ddd;
   --main-color-white: #fff;
+  /* 主题紫色 */
+  --theme-color-purple: #6c5ce7;
 }
 
 .cell--noborder .t-cell::after {
@@ -21,6 +23,7 @@ page {
   --desc-color: #999;
   --main-color-white: #fff;
   background-color: var(--theme-color-black);
+  --theme-color-purple: #6c5ce7;
 }
 .page-content {
   flex: 1;

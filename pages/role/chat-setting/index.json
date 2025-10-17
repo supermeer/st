@@ -3,9 +3,8 @@
   "navigationStyle": "custom",
   "usingComponents": {
     "custom-nav": "/components/custom-nav/index",
-    "t-icon": "tdesign-miniprogram/icon/icon",
-    "t-image": "tdesign-miniprogram/image/image"
+    "t-icon": "tdesign-miniprogram/icon/icon"
   },
-  "navigationBarTitleText": "故事剧情"
+  "navigationBarTitleText": "对话设定"
 }
 

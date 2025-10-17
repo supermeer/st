@@ -56,6 +56,15 @@ Component({
             // 监听识别开始
             manager.onStart = (res) => {
               console.log('录音识别开始', res)
+              
+              // 检查用户是否已经松手（快速点击的情况）
+              if (this.isCancelled || !this.isTouching) {
+                console.log('用户已松手，立即停止录音')
+                this.isCancelled = true
+                manager.stop()
+                return
+              }
+              
               this.setData({
                 isRecording: true,
                 voiceStatus: 'recording',
@@ -149,14 +158,17 @@ Component({
         
         // 开始录音定时器
         startTimer() {
+          console.log('启动定时器，最长时长:', this.data.inputDuration, '秒')
           this.recordTimer = setInterval(() => {
             const recordTime = this.data.recordTime + 1
+            console.log('录音时长:', recordTime, '秒')
             this.setData({
               recordTime
             })
             
             // 最长录音
             if (recordTime >= this.data.inputDuration) {
+              console.log('达到最大时长，自动停止录音')
               this.stopRecord()
             }
           }, 1000)
@@ -175,22 +187,28 @@ Component({
         onVoiceTouchStart(e) {
           // 标记用户正在按住按钮
           this.isTouching = true
+          // 清除上一次的取消标记
+          this.isCancelled = false
           
           // 检查权限
           wx.getSetting({
             success: (res) => {
               if (!res.authSetting['scope.record']) {
+                // 即将弹出授权对话框，先重置触摸状态
+                this.isTouching = false
+                
                 // 请求录音权限
                 wx.authorize({
                   scope: 'scope.record',
                   success: () => {
-                    // 授权成功后，检查用户是否还在按住
-                    if (this.isTouching) {
-                      this.startRecord()
-                    }
+                    // 授权成功后，提示用户重新按住说话
+                    wx.showToast({
+                      title: '授权成功，请重新按住说话',
+                      icon: 'none',
+                      duration: 2000
+                    })
                   },
                   fail: () => {
-                    this.isTouching = false
                     wx.showModal({
                       title: '提示',
                       content: '需要您授权录音权限',
@@ -204,6 +222,7 @@ Component({
                   }
                 })
               } else {
+                // 已有权限，直接开始录音
                 this.startRecord()
               }
             }
@@ -212,6 +231,7 @@ Component({
         
         // 开始录音
         startRecord() {
+          console.log('调用 startRecord')
           const { recorderManager, isRecording } = this.data
           if (!recorderManager) {
             wx.showToast({
@@ -236,14 +256,13 @@ Component({
             recordTime: 0
           })
           
-          // 清除取消标记
-          this.isCancelled = false
-          
           wx.vibrateShort({
             type: 'light'
           })
           
           // 使用 WechatSI 的实时语音识别
+          // 注意：不在这里清除 isCancelled，因为需要在 onStart 回调中检查
+          console.log('调用 recorderManager.start，duration:', this.data.inputDuration * 1000)
           recorderManager.start({
             duration: this.data.inputDuration * 1000, // 最长录音时长（秒转毫秒）
             lang: 'zh_CN' // 识别语言：简体中文
@@ -252,12 +271,16 @@ Component({
         
         // 停止录音
         stopRecord() {
+          console.log('调用 stopRecord，isRecording:', this.data.isRecording)
           const { recorderManager } = this.data
           if (recorderManager && this.data.isRecording) {
+            console.log('执行 recorderManager.stop()')
             wx.vibrateShort({
               type: 'light'
             })
             recorderManager.stop()
+          } else {
+            console.log('stopRecord 被忽略，recorderManager:', !!recorderManager, 'isRecording:', this.data.isRecording)
           }
         },
         
@@ -283,13 +306,21 @@ Component({
         
         // 松开手指
         onVoiceTouchEnd(e) {
+          console.log('松开手指，isRecording:', this.data.isRecording, 'isTouchMoving:', this.data.isTouchMoving)
+          
           // 标记用户已松开按钮
           this.isTouching = false
           
-          if (!this.data.isRecording) return
+          // 如果录音还没开始（异步启动中），标记为取消
+          if (!this.data.isRecording) {
+            console.log('录音还未开始，标记为取消')
+            this.isCancelled = true
+            return
+          }
           
           // 如果是取消状态，取消录音
           if (this.data.isTouchMoving) {
+            console.log('上滑取消录音')
             // 标记为取消操作
             this.isCancelled = true
             
@@ -300,6 +331,7 @@ Component({
             // 不在这里调用 stopTimer() 和 setData，让 onStop 回调统一处理
           } else {
             // 正常结束，清除取消标记
+            console.log('正常结束录音，准备调用 stopRecord')
             this.isCancelled = false
             this.stopRecord()
           }

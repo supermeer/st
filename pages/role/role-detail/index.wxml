@@ -21,7 +21,7 @@
       <view class="role-name-section">
         <text class="role-name">{{roleInfo.name || '角色名称'}}</text>
         <text class="role-gender">{{roleInfo.gender || '♂'}}</text>
-        <view class="dialog-setting">对话设置</view>
+        <view class="chat-setting" bind:tap="onDialogSetting">对话设定</view>
       </view>
       <view class="role-tags">
         <text class="tag">#角色扮演</text>

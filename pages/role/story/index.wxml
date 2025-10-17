@@ -6,6 +6,15 @@
   <!-- 固定顶部导航栏 -->
   <custom-nav title="故事剧情" showBack="{{true}}" showHome="{{false}}" transparent="{{true}}" />
   
+  <!-- 固定角色信息卡片 -->
+  <view class="role-header blur-glass" style="top: {{ pageInfo.navHeight }}px">
+    <image class="role-avatar" src="{{roleInfo.avatar}}" mode="aspectFill"></image>
+    <view class="role-info">
+      <view class="role-name">{{roleInfo.name}}</view>
+      <view class="role-desc">{{roleInfo.description}}</view>
+    </view>
+  </view>
+
   <!-- 可滚动内容区域 -->
   <scroll-view
     class="scroll-content"
@@ -14,33 +23,31 @@
     show-scrollbar="{{false}}"
     scroll-top="{{scrollTop}}"
     id="storyScrollView"
-    style="height: calc(100% - {{ pageInfo.navHeight + pageInfo.safeAreaBottom}}px)"
+    style="height: calc(100% - {{ pageInfo.navHeight}}px);"
   >
     
     <!-- 故事列表 -->
-    <view class="story-list">
+    <view class="story-list" style="padding-bottom: {{ pageInfo.safeAreaBottom}}px;">
       <view class="story-item blur-glass" wx:for="{{storyList}}" wx:key="id" bind:tap="onStoryTap" data-id="{{item.id}}">
         <view class="story-header">
+          <t-image
+          class="story-status-icon"
+          src="/static/role/story_s.png"
+          mode="aspectFill"
+          wx:if="{{item.active}}"
+          />
           <view class="story-title">{{item.title}}</view>
-          <view class="story-status {{item.isUnlocked ? 'unlocked' : 'locked'}}">
-            {{item.isUnlocked ? '已解锁' : '未解锁'}}
-          </view>
         </view>
         <view class="story-desc">{{item.description}}</view>
         <view class="story-footer">
           <text class="story-time">{{item.time}}</text>
-          <view class="story-progress" wx:if="{{item.isUnlocked}}">
-            <text class="progress-text">进度: {{item.progress}}%</text>
-            <view class="progress-bar">
-              <view class="progress-fill" style="width: {{item.progress}}%"></view>
-            </view>
+          <view class="footer-right-content" wx:if="{{!item.active}}">
+            <view class="footer-right-text">进入剧情</view>
+            <t-icon name="chevron-right-s" class="story-footer-icon" size="24" />
           </view>
         </view>
       </view>
     </view>
-
-    <!-- 底部占位，防止内容被遮挡 -->
-    <view class="bottom-placeholder"></view>
     
   </scroll-view>
 </view>

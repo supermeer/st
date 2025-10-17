@@ -25,9 +25,48 @@
   z-index: 1;
 }
 
+/* 角色信息卡片 */
+.role-header {
+  position: fixed;
+  left: 32rpx;
+  right: 32rpx;
+  z-index: 10;
+  padding: 32rpx;
+  border-radius: 24rpx;
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+}
+
+.role-avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 60rpx;
+  border: 4rpx solid rgba(255, 255, 255, 0.3);
+  flex-shrink: 0;
+}
+
+.role-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.role-name {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #fff;
+}
+
+.role-desc {
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.7);
+}
+
 /* 故事列表 */
 .story-list {
-  padding: 100rpx 32rpx 0;
+  padding: 232rpx 32rpx 32rpx;
 }
 
 /* 故事项 */
@@ -47,9 +86,14 @@
 /* 故事头部 */
 .story-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   margin-bottom: 16rpx;
+}
+
+.story-status-icon {
+  width: 40rpx;
+  height: 40rpx;
+  margin-right: 16rpx;
 }
 
 .story-title {
@@ -58,23 +102,6 @@
   color: #fff;
 }
 
-.story-status {
-  font-size: 24rpx;
-  padding: 8rpx 20rpx;
-  border-radius: 30rpx;
-  border: 1rpx solid rgba(255, 255, 255, 0.3);
-}
-
-.story-status.unlocked {
-  background-color: rgba(108, 92, 231, 0.3);
-  color: #6c5ce7;
-  border-color: #6c5ce7;
-}
-
-.story-status.locked {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.6);
-}
 
 /* 故事描述 */
 .story-desc {
@@ -99,34 +126,22 @@
   color: rgba(255, 255, 255, 0.6);
 }
 
-.story-progress {
+.footer-right-content {
   display: flex;
   align-items: center;
   gap: 16rpx;
 }
 
-.progress-text {
+.footer-right-text {
   font-size: 24rpx;
   color: rgba(255, 255, 255, 0.8);
+  line-height: 24rpx;
+  height: 24rpx;
 }
 
-.progress-bar {
-  width: 120rpx;
-  height: 8rpx;
-  background-color: rgba(255, 255, 255, 0.2);
-  border-radius: 4rpx;
-  overflow: hidden;
+.story-footer-icon {
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-
-.progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #6c5ce7, #a29bfe);
-  border-radius: 4rpx;
-  transition: width 0.3s ease;
-}
-
-/* 底部占位 */
-.bottom-placeholder {
-  height: 60rpx;
-}
-

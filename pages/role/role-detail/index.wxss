@@ -33,7 +33,7 @@
   color: #fff;
 }
 
-.dialog-setting {
+.chat-setting {
   font-size: 24rpx;
   position: relative;
   padding-bottom: 16rpx;
@@ -97,7 +97,7 @@
 }
 
 .tab.active {
-  color: #6c5ce7;
+  color: var(--theme-color-purple);
   font-weight: bold;
 }
 
@@ -108,7 +108,7 @@
   left: 0;
   right: 0;
   height: 4rpx;
-  background-color: #6c5ce7;
+  background-color: var(--theme-color-purple);
   border-radius: 2rpx;
 }
 

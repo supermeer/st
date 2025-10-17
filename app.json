@@ -33,7 +33,7 @@
     {
       "root": "pages/role",
       "name": "role",
-      "pages": ["role-detail/index", "add/index", "story/index"]
+      "pages": ["role-detail/index", "add/index", "story/index", "chat-setting/index"]
     },
     {
       "root": "pages/vip",

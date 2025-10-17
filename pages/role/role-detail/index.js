@@ -60,6 +60,11 @@ Page({
       memoryValue: value,
       memoryLabel: value + '%'
     })
+  },
+  onDialogSetting() {
+    wx.navigateTo({
+      url: '/pages/role/chat-setting/index'
+    })
   }
 })
 
