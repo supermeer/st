@@ -77,14 +77,6 @@ Page({
   onStoryTap(event) {
     const id = event.currentTarget.dataset.id
     const story = this.data.storyList.find(item => item.id === id)
-    
-    if (!story.isUnlocked) {
-      wx.showToast({
-        title: '该故事尚未解锁',
-        icon: 'none'
-      })
-      return
-    }
 
     // TODO: 跳转到故事详情页
     console.log('查看故事:', id)
