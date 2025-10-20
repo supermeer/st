@@ -82,7 +82,6 @@ App({
       const safeArea = windowInfo.safeArea
       this.globalData.safeAreaTop = safeArea.top
       this.globalData.safeAreaBottom = windowInfo.windowHeight - safeArea.bottom
-      console.log(this.globalData.safeAreaBottom, '=======', windowInfo.windowHeight, safeArea)
       this.globalData.statusBarHeight = safeArea.top
       this.globalData.navHeight = safeArea.top + 44
       this.globalData.tabbarHeight = 100

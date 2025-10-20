@@ -1,13 +1,105 @@
-<view class="home-page-container">
+<view class="discover-page">
   <!-- 自定义导航栏 -->
   <custom-nav
     class="custom-nav"
     show-back="{{false}}"
-    show-left-logo="{{true}}"
+    show-left-logo="{{false}}"
     show-home="{{false}}"
     transparent="{{true}}"
-  />
+  >
+    <t-image slot="center" src="/static/discover/discover_nav.png" width="112rpx" height="36rpx" />
+  </custom-nav>
 
+  <!-- 顶部导航标签 -->
+  <view class="top-nav">
+    <scroll-view class="nav-scroll" scroll-x enable-flex show-scrollbar="{{false}}" scroll-left="{{navScrollLeft}}" scroll-with-animation>
+      <view class="nav-tabs">
+        <view 
+          class="nav-tab {{activeNav === item.value ? 'active' : ''}}" 
+          wx:for="{{navList}}" 
+          wx:key="value"
+          bindtap="onNavChange"
+          data-value="{{item.value}}"
+          data-index="{{index}}"
+          id="nav-tab-{{index}}"
+        >
+          {{item.label}}
+          <view class="nav-underline" wx:if="{{activeNav === item.value}}"></view>
+        </view>
+      </view>
+    </scroll-view>
+    <view class="search-icon" bindtap="onSearch">
+      <t-icon name="search" size="48rpx" color="#ffffff" />
+    </view>
+  </view>
+
+  <!-- 筛选标签 -->
+  <view class="filter-tags">
+    <scroll-view class="tags-scroll" scroll-x show-scrollbar="{{false}}" scroll-left="{{tagScrollLeft}}" scroll-with-animation>
+      <view class="tag-item {{activeTag === item.value ? 'active' : ''}}" 
+        wx:for="{{tagList}}" 
+        wx:key="value"
+        bindtap="onTagChange"
+        data-value="{{item.value}}"
+        data-index="{{index}}"
+        id="tag-item-{{index}}"
+      >
+        {{item.label}}
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 下拉刷新 + 角色列表 -->
+  <t-pull-down-refresh
+    value="{{refreshing}}"
+    loadingProps="{{loadingProps}}"
+    loadingTexts="{{['下拉刷新', '松手刷新', '正在刷新', '刷新完成']}}"
+    bind:refresh="onRefresh"
+    bind:timeout="onTimeout"
+    disabled="{{!isScrollTop}}"
+  >
+    <scroll-view 
+      class="content-scroll" 
+      scroll-y
+      bindscrolltolower="onLoadMore"
+      bindscroll="onScroll"
+      style="height: {{scrollHeight}};"
+    >
+      <!-- 角色卡片列表 -->
+      <view class="role-list">
+        <view 
+          class="role-card" 
+          wx:for="{{roleList}}" 
+          wx:key="id"
+          bindtap="onRoleClick"
+          data-id="{{item.id}}"
+          style="background-image: url('{{item.image}}');"
+        >
+          <view class="role-info">
+            <view class="role-name-row">
+              <text class="role-name">{{item.name}}</text>
+              <t-icon name="check-circle-filled" size="32rpx" color="#4A9EFF" wx:if="{{item.verified}}" />
+            </view>
+            <view class="role-tags">
+              <text class="role-tag" wx:for="{{item.tags}}" wx:key="index" wx:for-item="tag">{{tag}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 加载更多组件 -->
+      <load-more 
+        status="{{loadMoreStatus}}" 
+        list-is-empty="{{listIsEmpty}}"
+        bind:retry="onRetryLoad"
+      >
+        <view slot="empty" class="empty-container">
+          <text class="empty-text">暂无内容</text>
+        </view>
+      </load-more>
+      <view style="height: calc({{pageInfo.safeAreaBottom}}px + {{pageInfo.tabbarHeight}}rpx);"></view>
+    </scroll-view>
+  </t-pull-down-refresh>
 </view>
 
-<!-- <auth id="auth" check-phone="{{false}}" bind:loginSuccess="loginSuccess" /> -->
+<t-toast id="t-toast" />

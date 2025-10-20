@@ -17,6 +17,10 @@
   color: #bbbbbb;
 }
 
+.t-class-divider {
+  padding: 0 30%;
+}
+
 .t-class-divider-content {
   margin: 0 10rpx;
   color: #bbbbbb;
