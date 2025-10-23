@@ -1,5 +1,11 @@
 {
-  "pages": ["pages/home/home", "pages/discover/index", "pages/chat-list/index", "pages/usercenter/index"],
+  "pages": [
+    "pages/home/home",
+    "pages/discover/index",
+    "pages/discover/search/index",
+    "pages/chat-list/index",
+    "pages/usercenter/index"
+  ],
   "subpackages": [
     {
       "root": "pages/share",

@@ -1,0 +1,124 @@
+<view class="search-page" style="padding-top: {{pageInfo.navHeight}}px;">
+  <!-- 搜索栏 -->
+  <view class="search-bar" style="top: {{pageInfo.navHeight}}px;">
+    <view class="search-input-wrapper">
+      <view class="search-icon">
+        <t-icon name="search" size="32rpx" color="#999999" />
+      </view>
+      <input 
+        class="search-input" 
+        type="text" 
+        placeholder="搜索内容" 
+        placeholder-style="color: #999999;"
+        value="{{keyword}}"
+        bindinput="onKeywordChange"
+        bindconfirm="onSearch"
+        focus="{{true}}"
+        confirm-type="search"
+      />
+      <view class="clear-icon" wx:if="{{keyword}}" bindtap="onClearKeyword">
+        <t-icon name="close-circle-filled" size="32rpx" color="#999999" />
+      </view>
+    </view>
+    <view class="cancel-btn" bindtap="onCancel">取消</view>
+  </view>
+
+  <!-- 内容区域 -->
+  <scroll-view
+    class="content-scroll"
+    scroll-y
+    style="height: calc(100vh - {{pageInfo.navHeight}}px - 100rpx);"
+  >
+    <!-- 默认状态：历史搜索和热门搜索 -->
+    <view class="default-content" wx:if="{{searchStatus === 'default'}}">
+      <!-- 历史搜索 -->
+      <view class="history-section" wx:if="{{historyList.length > 0}}">
+        <view class="section-header">
+          <view class="section-title">历史搜索</view>
+          <view class="clear-btn" bindtap="onShowClearDialog">
+            <t-icon name="delete" size="32rpx" color="#999999" />
+          </view>
+        </view>
+        <view class="keyword-list">
+          <view 
+            class="keyword-item" 
+            wx:for="{{historyList}}" 
+            wx:key="index"
+            bindtap="onHistoryClick"
+            data-keyword="{{item}}"
+          >
+            {{item}}
+          </view>
+        </view>
+      </view>
+
+      <!-- 热门搜索 -->
+      <view class="hot-section" wx:if="{{hotList.length > 0}}">
+        <view class="section-header">
+          <view class="section-title">热门搜索</view>
+        </view>
+        <view class="keyword-list">
+          <view 
+            class="keyword-item hot" 
+            wx:for="{{hotList}}" 
+            wx:key="index"
+            bindtap="onHotClick"
+            data-keyword="{{item}}"
+          >
+            <t-icon name="fire" size="28rpx" color="#FF6B6B" wx:if="{{index < 3}}" />
+            {{item}}
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 搜索结果状态 -->
+    <view class="result-content" wx:if="{{searchStatus === 'result'}}">
+      <!-- 搜索加载中 -->
+      <view class="searching-content" wx:if="{{searching}}">
+        <view class="loading-container">
+          <t-loading theme="circular" size="80rpx" />
+          <text class="loading-text">正在搜索...</text>
+        </view>
+      </view>
+
+      <!-- 搜索结果列表 -->
+      <view class="search-results" wx:if="{{!searching && searchResults.length > 0}}">
+        <view class="result-header">
+          <text class="result-count">找到 {{searchResults.length}} 个相关结果</text>
+        </view>
+        <view class="role-list">
+          <view 
+            class="role-card" 
+            wx:for="{{searchResults}}" 
+            wx:key="id"
+            bindtap="onRoleClick"
+            data-id="{{item.id}}"
+            style="background-image: url('{{item.image}}');"
+          >
+            <view class="role-info">
+              <view class="role-name-row">
+                <text class="role-name">{{item.name}}</text>
+                <t-icon name="check-circle-filled" size="32rpx" color="#4A9EFF" wx:if="{{item.verified}}" />
+              </view>
+              <view class="role-tags">
+                <text class="role-tag" wx:for="{{item.tags}}" wx:key="index" wx:for-item="tag">{{tag}}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 空态 -->
+      <view class="empty-container" wx:if="{{!searching && searchIsEmpty}}">
+        <t-icon name="search" size="120rpx" color="#666666" />
+        <text class="empty-text">未找到"{{currentSearchKeyword}}"相关内容</text>
+        <text class="empty-tip">换个关键词试试吧</text>
+      </view>
+    </view>
+
+    <view style="height: {{pageInfo.safeAreaBottom}}px;"></view>
+  </scroll-view>
+</view>
+
+<t-toast id="t-toast" />

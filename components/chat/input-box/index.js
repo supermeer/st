@@ -130,6 +130,7 @@ Component({
             
             // 监听识别错误
             manager.onError = (err) => {
+              console.log('识别错误', err)
               this.stopTimer()
               this.setData({
                 isRecording: false,
@@ -137,6 +138,19 @@ Component({
                 recordTime: 0,
                 isTouchMoving: false
               })
+              
+              // 检查是否是用户取消操作
+              if (this.isCancelled) {
+                this.isCancelled = false
+                wx.showToast({
+                  title: '已取消',
+                  icon: 'none',
+                  duration: 1000
+                })
+                return
+              }
+              
+              // 真实的识别错误
               wx.showToast({
                 title: '识别失败，请重试',
                 icon: 'none',
@@ -168,8 +182,13 @@ Component({
             
             // 最长录音
             if (recordTime >= this.data.inputDuration) {
-              console.log('达到最大时长，自动停止录音')
+              // 达到最大时长，自动停止录音
               this.stopRecord()
+            }
+            if (recordtime >= this.data.inputDuration - 5) {
+              wx.vibrateShort({
+                type: 'light'
+              })
             }
           }, 1000)
         },
@@ -280,13 +299,35 @@ Component({
             })
             recorderManager.stop()
           } else {
-            console.log('stopRecord 被忽略，recorderManager:', !!recorderManager, 'isRecording:', this.data.isRecording)
+            console.log('stopRecord 被忽略（录音未启动），手动重置UI')
+            // 如果录音还未启动（空白录音），手动停止录音管理器并重置UI
+            if (recorderManager) {
+              try {
+                recorderManager.stop() // 尝试停止，可能触发 onError
+              } catch (err) {
+                console.log('停止录音失败', err)
+              }
+            }
+            // 手动重置UI
+            this.stopTimer()
+            this.setData({
+              isRecording: false,
+              voiceStatus: '',
+              recordTime: 0,
+              isTouchMoving: false
+            })
+            wx.showToast({
+              title: '录音时间过长',
+              icon: 'none',
+              duration: 1500
+            })
           }
         },
         
         // 手指移动
         onVoiceTouchMove(e) {
-          if (!this.data.isRecording) return
+          // 只要用户正在按住按钮，就处理滑动事件（即使录音还未完全启动）
+          if (!this.isTouching) return
           
           // 获取触摸点相对于页面的位置
           const touch = e.touches[0]
@@ -311,30 +352,37 @@ Component({
           // 标记用户已松开按钮
           this.isTouching = false
           
-          // 如果录音还没开始（异步启动中），标记为取消
-          if (!this.data.isRecording) {
-            console.log('录音还未开始，标记为取消')
-            this.isCancelled = true
-            return
-          }
-          
-          // 如果是取消状态，取消录音
+          // 优先检查：如果是上滑取消状态，标记为取消
           if (this.data.isTouchMoving) {
             console.log('上滑取消录音')
-            // 标记为取消操作
+            // 标记为取消操作（onError 或 onStop 回调会检查此标志）
             this.isCancelled = true
             
             const { recorderManager } = this.data
-            if (recorderManager) {
+            // 如果录音已经开始，停止录音
+            if (recorderManager && this.data.isRecording) {
+              console.log('停止录音，等待 onStop 回调')
               recorderManager.stop()
+            } else {
+              // 如果录音还未开始或正在启动，等待它自动进入 onStart -> onError
+              // 不说话的空白录音会触发 onError，在那里会检查 isCancelled 标志
+              console.log('录音未完全启动，等待自动进入 onError')
             }
-            // 不在这里调用 stopTimer() 和 setData，让 onStop 回调统一处理
-          } else {
-            // 正常结束，清除取消标记
-            console.log('正常结束录音，准备调用 stopRecord')
-            this.isCancelled = false
-            this.stopRecord()
+            return
           }
+          
+          // 如果录音还没开始（快速点击的情况），标记为取消
+          if (!this.data.isRecording) {
+            console.log('录音还未开始，标记为取消，等待自动进入 onError')
+            this.isCancelled = true
+            // 等待录音管理器自动进入 onError（空白录音）
+            return
+          }
+          
+          // 正常结束，清除取消标记
+          console.log('正常结束录音，准备调用 stopRecord')
+          this.isCancelled = false
+          this.stopRecord()
         },
         
         // 记录初始Y坐标

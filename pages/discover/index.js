@@ -192,11 +192,29 @@ Page(
 
     // 搜索
     onSearch() {
+      wx.navigateTo({
+        url: '/pages/discover/search/index'
+      })
+    },
+
+    // 接收搜索结果（从搜索页面返回时调用）
+    onSearchResult(keyword) {
+      console.log('搜索关键词:', keyword)
+      
+      // TODO: 这里可以根据搜索关键词过滤角色列表
       Toast({
         context: this,
         selector: '#t-toast',
-        message: '搜索功能开发中',
+        message: `搜索: ${keyword}`,
       })
+
+      // 重置列表并加载搜索结果
+      this.setData({
+        roleList: [],
+        loadMoreStatus: 0,
+      })
+      this.pageNo = 1
+      this.loadRoleList(true)
     },
 
     // 下拉刷新
