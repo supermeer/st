@@ -1,12 +1,4 @@
-// import { fetchFilePresignedUrl } from '../services/file/index'
-const fetchFilePresignedUrl = () => {
-  return Promise.resolve({
-    data: {
-      uploadUrl: 'https://www.baidu.com',
-      fileKey: '1234567890'
-    }
-  })
-}
+import { fetchFilePresignedUrl } from '../services/file/index'
 
 /**
  * 推断文件内容类型

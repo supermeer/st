@@ -1,0 +1,85 @@
+/* pages/common/cropper/index.wxss */
+page {
+  height: 100vh;
+}
+
+.page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #000;
+}
+
+.cropper-container {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+}
+
+.stage {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.image {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate3d(-50%, -50%, 0);
+  will-change: transform;
+  user-select: none;
+  width: auto;
+  height: auto;
+  max-width: none;
+  max-height: none;
+}
+
+.mask {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.mask-middle {
+  display: flex;
+  align-items: center;
+}
+
+.mask-left,
+.mask-right {
+  height: 100%;
+}
+
+.crop-circle {
+  border-radius: 50%;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6);
+  border: 2rpx solid rgba(255, 255, 255, 0.8);
+}
+
+.toolbar {
+  padding: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24rpx;
+}
+
+.btn {
+  background: #2c2c2c;
+  color: #fff;
+}
+
+.btn.primary {
+  background: #ff5f15;
+  color: #fff;
+}
+
+.preview-canvas {
+  opacity: 0;
+}

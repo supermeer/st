@@ -1,0 +1,39 @@
+<view class="page">
+  <custom-nav
+    class="custom-nav"
+    show-back="{{true}}"
+    show-left-logo="{{false}}"
+    show-home="{{false}}"
+    transparent="{{true}}"
+  />
+  <view class="cropper-container">
+    <canvas type="2d" id="previewCanvas" class="preview-canvas" style="width: 0; height: 0; position: absolute; left: -9999rpx; top: -9999rpx;" />
+
+    <view class="stage" catchtouchstart="onTouchStart" catchtouchmove="onTouchMove" catchtouchend="onTouchEnd">
+      <image
+        id="image"
+        class="image"
+        src="{{imageSrc}}"
+        show-menu-by-longpress
+        mode="aspectFill"
+        style="width: {{displayWidth}}px; height: {{displayHeight}}px; transform: translate3d(-50%, -50%, 0) translate3d({{translateX}}px, {{translateY}}px, 0); transform-origin: 50% 50%;"
+      />
+
+      <view class="mask">
+        <view class="mask-top" style="height: {{maskTop}}px"></view>
+        <view class="mask-middle">
+          <view class="mask-left" style="width: {{maskSide}}px"></view>
+          <view class="crop-circle" style="width: {{cropSize}}px; height: {{cropSize}}px;"></view>
+          <view class="mask-right" style="width: {{maskSide}}px"></view>
+        </view>
+        <view class="mask-bottom" style="height: {{maskBottom}}px"></view>
+      </view>
+    </view>
+  </view>
+
+  <view class="toolbar">
+    <button class="btn" size="mini" bindtap="onChooseImage">选择图片</button>
+    <button class="btn primary" size="mini" bindtap="onConfirm">完成并上传</button>
+  </view>
+
+</view>

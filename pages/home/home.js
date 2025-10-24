@@ -22,6 +22,7 @@ import SystemInfo from '../../utils/system'
 // pages/home/home.js
 Page({
   data: {
+    isLogin: false,
     messageList: [
       {
         senderType: 1,
@@ -96,6 +97,31 @@ Page({
   },
   onShow() {
     this.getTabBar().init()
+    this.getTabBar().setInterceptor(() => {
+      if (!this.data.isLogin) {
+        this.goLogin()
+        return false
+      }
+      return true
+    })
+    const token = wx.getStorageSync('token')
+    if (!token) {
+      this.setData({ isLogin: false })
+      const authRef =
+        this.selectComponent('auth') || this.selectComponent('#auth')
+      authRef && authRef.login()
+      return
+    }
+    this.setData({ isLogin: true })
+  },
+  // 显式点击登录按钮
+  goLogin() {
+    const authRef =
+      this.selectComponent('auth') || this.selectComponent('#auth')
+    authRef && authRef.login()
+  },
+  loginSuccess() {
+    this.setData({ isLogin: true })
   },
   hideTabbar() {
     this.setData({

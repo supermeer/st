@@ -66,7 +66,7 @@ App({
     // 获取系统信息和导航栏高度
     this.getNavHeight()
     // wx.navigateTo({
-    //   url: '/pages/role/role-detail/index',
+    //   url: '/pages/common/cropper/index',
     // })
   },
   onShow: function () {

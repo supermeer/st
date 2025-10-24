@@ -5,6 +5,7 @@
   "enablePullDownRefresh": false,
   "navigationStyle": "custom",
   "usingComponents": {
-    "chat": "/components/chat/index"
+    "chat": "/components/chat/index",
+    "auth": "/components/auth/index"
   }
 }
