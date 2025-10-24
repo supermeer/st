@@ -7,7 +7,7 @@
     show-home="{{false}}"
     transparent="{{true}}"
   >
-    <t-image slot="center" src="/static/discover/discover_nav.png" width="112rpx" height="36rpx" />
+    <t-image slot="center" src="/static/discover/discover_nav.jpg" width="112rpx" height="50rpx" />
   </custom-nav>
 
   <!-- 顶部导航标签 -->
