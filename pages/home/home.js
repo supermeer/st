@@ -123,6 +123,10 @@ Page({
   loginSuccess() {
     this.setData({ isLogin: true })
   },
+  getMessageList() {
+    const messageList = this.data.messageList
+    return messageList
+  },
   hideTabbar() {
     this.setData({
       paddingBtm: 0
