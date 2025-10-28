@@ -59,6 +59,7 @@
   height: 0; /* 配合 flex: 1 使用，确保有明确高度 */
   /* padding: 0 24rpx; */
   box-sizing: border-box;
+  position: relative;
 }
 
 .message-item {
@@ -67,4 +68,59 @@
 
 .input-box {
   flex: none;  /* 等同于 flex: 0 0 auto，不增长也不收缩 */
+}
+
+.loading-more-tip {
+  position: absolute;
+  top: -50px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: #fff;
+  font-size: 24rpx;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tip-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.8;
+}
+
+.tip-icon {
+  font-size: 32rpx;
+  margin-right: 12rpx;
+  transition: transform 0.3s ease;
+}
+
+.tip-icon.release {
+  transform: rotate(180deg);
+}
+
+.tip-text {
+  font-size: 26rpx;
+  line-height: 1.5;
+}
+
+.loading-icon {
+  width: 32rpx;
+  height: 32rpx;
+  border: 4rpx solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  margin-right: 12rpx;
+  animation: rotate 0.8s linear infinite;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

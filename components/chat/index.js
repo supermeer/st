@@ -1,24 +1,12 @@
 import systemInfo from '../../utils/system'
 Component({
-  properties: {
-    messageList: Array
-  },
-  observers: {
-    'messageList': function(newVal) {
-      if (newVal && newVal.length > 0) {
-        // 消息列表更新时，延迟滚动到底部，确保 DOM 已更新
-        setTimeout(() => {
-          this.scrollToBottom()
-        }, 100)
-      }
-    }
-  },
   lifetimes: {
     attached: function () {
       this.getPageInfo()
     }
   },
   data: {
+    msgList: [],
     isLogin: false,
     userInfo: {},
     keyboardHeight: 0,
@@ -27,7 +15,13 @@ Component({
     tabbarHeight: 0,
     intoViewId: 0,
     navHeight: 0,
-    safeAreaTop: 0
+    safeAreaTop: 0,
+    refresherTriggered: false,
+    isLoadingMore: false,
+    topMsg: null,
+    hasMore: true, // 是否还有更多数据
+    pullDownStatus: 'pull', // pull: 下拉加载更多, release: 松开加载更多, loading: 加载中, nomore: 没有更多
+    scrollAnimation: true, // 是否启用滚动动画
   },
   methods: {
     getPageInfo() {
@@ -71,6 +65,12 @@ Component({
         this.setData({ intoViewId: 'bottom-anchor' })
       }, 0)
     },
+    scrollToView(id) {
+      // this.setData({ intoViewId: '' })
+      setTimeout(() => {
+        this.setData({ intoViewId: id })
+      }, 0)
+    },
     hideTabbar() {
       this.triggerEvent('hideTabbar')
     },
@@ -81,6 +81,106 @@ Component({
       wx.navigateTo({
         url: '/pages/role/role-detail/index'
       })
+    },
+    // 监听下拉动作
+    onPulling(e) {
+      // 当下拉距离超过阈值时，显示"松开加载更多"
+      const threshold = 50
+      if (e.detail.dy > threshold && this.data.pullDownStatus === 'pull' && !this.data.isLoadingMore) {
+        this.setData({
+          pullDownStatus: 'release'
+        })
+      } else if (e.detail.dy <= threshold && this.data.pullDownStatus === 'release' && !this.data.isLoadingMore) {
+        this.setData({
+          pullDownStatus: 'pull'
+        })
+      }
+    },
+    // 监听恢复动作（取消下拉）
+    onRestore() {
+      if (!this.data.isLoadingMore && this.data.hasMore) {
+        this.setData({
+          pullDownStatus: 'pull'
+        })
+      }
+    },
+    // 下拉刷新处理
+    onLoadMore() {
+      // 防止重复加载或没有更多数据
+      if (this.data.isLoadingMore || !this.data.hasMore) {
+        return
+      }
+      
+      this.setData({
+        isLoadingMore: true,
+        refresherTriggered: true,
+        pullDownStatus: 'loading',
+        topMsg: this.data.msgList[0]
+      })
+      this.triggerEvent('loadMore', {}, { bubbles: true, composed: true })
+    },
+    // 停止下拉刷新状态（供父组件调用）
+    stopRefresh() {
+      this.setData({
+        refresherTriggered: false,
+        isLoadingMore: false,
+        pullDownStatus: this.data.hasMore ? 'pull' : 'nomore'
+      })
+    },
+    // 没有更多数据处理
+    noMoreHandle() {
+      this.setData({
+        isLoadingMore: false,
+        hasMore: false,
+        pullDownStatus: 'nomore',
+        refresherTriggered: false
+      })
+    },
+    // 加载更多数据成功
+    loadMoreHandle(msgs) {
+      // 禁用滚动动画，避免 refresher 复位动画和 scrollToView 动画冲突
+      this.setData(
+        {
+          scrollAnimation: false
+        },
+        () => {
+          this.setData(
+            {
+              isLoadingMore: false,
+              refresherTriggered: false,
+              pullDownStatus: this.data.hasMore ? 'pull' : 'nomore',
+            },
+            () => {
+              // 滚动完成后延迟恢复动画，确保位置已固定
+              setTimeout(() => {
+                this.setData({
+                  msgList: [...msgs, ...this.data.msgList]
+                })
+                this.scrollToView(`msg-${this.data.topMsg.id}`)
+                setTimeout(() => {
+                  this.setData({ scrollAnimation: true })
+                }, 100)
+              }, 100)
+            }
+          )
+        }
+      )
+    },
+    // 重置加载状态（供父组件调用，例如切换会话时）
+    resetLoadStatus() {
+      this.setData({
+        hasMore: true,
+        pullDownStatus: 'pull',
+        isLoadingMore: false,
+        refresherTriggered: false
+      })
+    },
+    // 加载完消息
+    getMsgListHandle(msgs) {
+      this.setData({
+        msgList: msgs
+      })
+      this.scrollToBottom()
     }
   }
 })

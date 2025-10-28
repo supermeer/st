@@ -9,11 +9,42 @@
       </view>
     </view>
   </view>
-  <scroll-view class="message-list" scroll-y="{{true}}" scroll-into-view="{{intoViewId}}" scroll-with-animation="{{true}}" show-scrollbar="{{false}}">
-    <block wx:for="{{messageList}}" wx:key="index">
+  <scroll-view 
+    class="message-list" 
+    scroll-y="{{true}}" 
+    scroll-into-view="{{intoViewId}}" 
+    scroll-with-animation="{{scrollAnimation}}" 
+    show-scrollbar="{{false}}"
+    refresher-enabled="{{hasMore}}"
+    refresher-triggered="{{refresherTriggered}}"
+    refresher-threshold="{{50}}"
+    refresher-background="transparent"
+    bindrefresherrefresh="onLoadMore"
+    bindrefresherpulling="onPulling"
+    bindrefresherrestore="onRestore"
+    enable-passive="{{true}}"
+  >
+    <!-- 下拉加载提示 -->
+    <view class="loading-more-tip">
+      <view wx:if="{{pullDownStatus === 'pull'}}" class="tip-content">
+        <text class="tip-text">下拉加载更多</text>
+      </view>
+      <view wx:elif="{{pullDownStatus === 'release'}}" class="tip-content">
+        <text class="tip-text">松开加载更多</text>
+      </view>
+      <view wx:elif="{{pullDownStatus === 'loading'}}" class="tip-content">
+        <view class="loading-icon"></view>
+        <text class="tip-text">加载中...</text>
+      </view>
+      <view wx:elif="{{pullDownStatus === 'nomore'}}" class="tip-content">
+        <text class="tip-text">没有更多了</text>
+      </view>
+    </view>
+    
+    <view wx:for="{{msgList}}" wx:key="id" id="msg-{{item.id}}">
       <role-msg wx:if="{{item.senderType === 1}}" class="message-item" message="{{item}}" />
       <user-msg wx:if="{{item.senderType === 2}}" class="message-item" message="{{item}}" />
-    </block>
+    </view>
     <view id="bottom-anchor" style="height: 1rpx;"></view>
   </scroll-view>
   <input-box

@@ -2,9 +2,9 @@
   <view class="home-content" style="padding-bottom: {{paddingBtm}}">
     <chat
       class="chat-container"
-      messageList="{{messageList}}"
       bind:hideTabbar="hideTabbar"
       bind:showTabbar="showTabbar"
+      bind:loadMore="onLoadMore"
     />
   </view>
 </view>
