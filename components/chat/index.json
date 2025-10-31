@@ -4,6 +4,9 @@
     "user-msg": "/components/chat/user-msg/index",
     "role-msg": "/components/chat/role-msg/index",
     "input-box": "/components/chat/input-box/index",
-    "t-image": "tdesign-miniprogram/image/image"
+    "t-image": "tdesign-miniprogram/image/image",
+    "tip-dialog": "/components/tip-dialog/index",
+    "input-sheet": "/components/input-sheet/index",
+    "select-sheet": "/components/select-sheet/index"
   }
 }

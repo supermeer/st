@@ -26,9 +26,8 @@ Page(
       },
       
       // 滚动状态
-      isScrollTop: true, // 是否在顶部
+      isScrollTop: true // 是否在顶部
     },
-    
     onLoad: function () {
       userStore.bind(this)
       
@@ -139,7 +138,7 @@ Page(
             timeText: this.formatTime(new Date().getTime())
           },
           {
-            id: 2,
+            id: 5,
             name: '未命名角色',
             avatar: '/static/chat/default-avatar.png',
             lastMessage: '开始聊天吧',
@@ -147,7 +146,7 @@ Page(
             timeText: this.formatTime(new Date().getTime())
           },
           {
-            id: 3,
+            id: 6,
             name: '未命名角色',
             avatar: '/static/chat/default-avatar.png',
             lastMessage: '开始聊天吧',
@@ -155,7 +154,7 @@ Page(
             timeText: this.formatTime(new Date().getTime())
           },
           {
-            id: 4,
+            id: 7,
             name: '未命名角色',
             avatar: '/static/chat/default-avatar.png',
             lastMessage: '开始聊天吧',
@@ -163,7 +162,7 @@ Page(
             timeText: this.formatTime(new Date().getTime())
           },
           {
-            id: 2,
+            id: 8,
             name: '未命名角色',
             avatar: '/static/chat/default-avatar.png',
             lastMessage: '开始聊天吧',
@@ -171,7 +170,7 @@ Page(
             timeText: this.formatTime(new Date().getTime())
           },
           {
-            id: 3,
+            id: 9,
             name: '未命名角色',
             avatar: '/static/chat/default-avatar.png',
             lastMessage: '开始聊天吧',
@@ -179,7 +178,7 @@ Page(
             timeText: this.formatTime(new Date().getTime())
           },
           {
-            id: 4,
+            id: 10,
             name: '未命名角色',
             avatar: '/static/chat/default-avatar.png',
             lastMessage: '开始聊天吧',
@@ -187,7 +186,7 @@ Page(
             timeText: this.formatTime(new Date().getTime())
           },
           {
-            id: 2,
+            id: 11,
             name: '未命名角色',
             avatar: '/static/chat/default-avatar.png',
             lastMessage: '开始聊天吧',
@@ -195,7 +194,7 @@ Page(
             timeText: this.formatTime(new Date().getTime())
           },
           {
-            id: 3,
+            id: 12,
             name: '未命名角色',
             avatar: '/static/chat/default-avatar.png',
             lastMessage: '开始聊天吧',
@@ -203,7 +202,7 @@ Page(
             timeText: this.formatTime(new Date().getTime())
           },
           {
-            id: 4,
+            id: 13,
             name: '未命名角色',
             avatar: '/static/chat/default-avatar.png',
             lastMessage: '开始聊天吧',
@@ -304,20 +303,20 @@ Page(
     onDeleteChat(e) {
       const { id } = e.currentTarget.dataset
       
-      Dialog.confirm({
-        context: this,
-        selector: '#t-dialog',
-        title: '确认删除',
-        content: '确定要删除这个聊天吗？',
-        confirmBtn: '删除',
-        cancelBtn: '取消',
-      }).then(() => {
-        this.deleteChat(id)
-      }).catch(() => {
-        // 取消删除
+      const tipDialog = this.selectComponent('#tip-dialog')
+      tipDialog.show({
+        content: '删除后，您与该智能体的所有对话将被清除，且不可撤回。',
+        cancelText: '取消',
+        confirmText: '删除',
+        onCancel: () => {
+          // 取消操作，对话框会自动关闭
+        },
+        onConfirm: () => {
+          // 确认删除
+          this.deleteChat(id)
+        }
       })
     },
-    
     /**
      * 执行删除操作
      */

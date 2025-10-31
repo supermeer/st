@@ -12,7 +12,8 @@
     "t-image": "tdesign-miniprogram/image/image",
     "t-fab": "tdesign-miniprogram/fab/fab",
     "custom-nav": "/components/custom-nav/index",
-    "van-swipe-cell": "@vant/weapp/swipe-cell/index"
+    "van-swipe-cell": "@vant/weapp/swipe-cell/index",
+    "tip-dialog": "/components/tip-dialog/index"
   }
 }
 

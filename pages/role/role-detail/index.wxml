@@ -38,7 +38,7 @@
       <view class="tabs blur-glass">
         <text class="tab {{currentTab === '1' ? 'active' : ''}}" bind:tap="onTabChange" data-tab="1">关于TA</text>
         <text class="tab {{currentTab === '2' ? 'active' : ''}}" bind:tap="onTabChange" data-tab="2">记忆</text>
-        <text class="tab {{currentTab === '3' ? 'active' : ''}}" bind:tap="onTabChange" data-tab="3">故事</text>
+        <!-- <text class="tab {{currentTab === '3' ? 'active' : ''}}" bind:tap="onTabChange" data-tab="3">故事</text> -->
       </view>
       
       <!-- 内容区域 -->
@@ -52,6 +52,18 @@
         <view class="section-content blur-glass">
           <text>{{roleInfo.greeting || '你好，很高兴认识你！'}}</text>
         </view>
+
+        <view class="section-title-container">
+          <view class="section-title">对话风格</view>
+          <t-icon name="add-circle-filled" class="section-title-icon" size="18" />
+        </view>
+        <view class="style-content blur-glass">
+          <text>搞笑女没有爱情</text>
+          <view class="style-right-content">
+            <text class="style-right-text">智能体默认设置</text>
+            <t-icon name="chevron-right-s" class="section-title-icon" size="28" />
+          </view>
+        </view>
       </view>
       <view wx:if="{{currentTab === '2'}}" class="content-section">
         <view class="section-title-container">
@@ -62,7 +74,7 @@
           <text>相遇那天</text>
         </view>
         <view class="section-title-container">
-          <view class="section-title">对话设定</view>
+          <view class="section-title">对我的设定</view>
           <t-icon name="chevron-right-s" class="section-title-icon" size="24" />
         </view>
         <view class="setting-container">
@@ -93,18 +105,6 @@
             step="{{0.1}}"
             bind:change="memoryChange"
           />
-        </view>
-
-        <view class="section-title-container">
-          <view class="section-title">对话风格</view>
-          <t-icon name="add-circle-filled" class="section-title-icon" size="18" />
-        </view>
-        <view class="style-content blur-glass">
-          <text>搞笑女没有爱情</text>
-          <view class="style-right-content">
-            <text class="style-right-text">智能体默认设置</text>
-            <t-icon name="chevron-right-s" class="section-title-icon" size="28" />
-          </view>
         </view>
       </view>
     </view>

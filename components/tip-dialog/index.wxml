@@ -1,0 +1,33 @@
+<view class="tip-dialog-mask" wx:if="{{visible}}" bindtap="handleMaskClick" catchtouchmove="{{true}}">
+  <view class="tip-dialog-container" catchtap="">
+    <!-- 顶部图标 -->
+    <view class="tip-dialog-icon">
+      <view class="icon-circle">
+        <view class="icon-checkmark"></view>
+      </view>
+      <!-- 装饰性小圆点和星星 -->
+      <view class="deco-dot dot-1"></view>
+      <view class="deco-dot dot-2"></view>
+      <view class="deco-dot dot-3"></view>
+      <view class="deco-star star-1">✦</view>
+      <view class="deco-star star-2">✦</view>
+      <view class="deco-star star-3">✦</view>
+    </view>
+
+    <!-- 提示文字 -->
+    <view class="tip-dialog-content">
+      {{content}}
+    </view>
+
+    <!-- 按钮组 -->
+    <view class="tip-dialog-buttons">
+      <view class="tip-dialog-btn cancel-btn" bindtap="handleCancel">
+        {{cancelText}}
+      </view>
+      <view class="tip-dialog-btn confirm-btn" bindtap="handleConfirm">
+        {{confirmText}}
+      </view>
+    </view>
+  </view>
+</view>
+

@@ -21,7 +21,7 @@ Component({
     topMsg: null,
     hasMore: true, // 是否还有更多数据
     pullDownStatus: 'pull', // pull: 下拉加载更多, release: 松开加载更多, loading: 加载中, nomore: 没有更多
-    scrollAnimation: true, // 是否启用滚动动画
+    scrollAnimation: true // 是否启用滚动动画
   },
   methods: {
     getPageInfo() {
@@ -181,6 +181,74 @@ Component({
         msgList: msgs
       })
       this.scrollToBottom()
+    },
+    onButtonClick(e) {
+      console.log('点击的按钮:', e);
+      // rollback: 回溯
+      // newPlot: 新剧情
+      // like: 点赞
+      // dislike: 点踩
+      if (e.detail.action === 'rollback') {
+        const currentMsg = e.detail.current;
+        const tipDialog = this.selectComponent('#tip-dialog')
+        tipDialog.show({
+          content: '回溯后，该条消息之后的对话将被清除，且不可撤回。',
+          cancelText: '取消',
+          confirmText: '确认',
+          onCancel: () => {
+            // 取消操作，对话框会自动关闭
+          },
+          onConfirm: () => {
+            // 确认回溯
+            currentMsg.handleRollback();
+          }
+        })
+      } else if (e.detail.action === 'newPlot') {
+        const inputSheet = this.selectComponent('#input-sheet')
+        inputSheet.show({
+          title: '创建新剧情',
+          label: '剧情名称',
+          placeholder: '请输入',
+          cancelText: '取消',
+          confirmText: '保存',
+          value: '',
+          onCancel: () => {
+            // 取消操作，对话框会自动关闭
+          },
+          onConfirm: (inputValue) => {
+            // 处理输入的值
+            console.log('输入框的值:', inputValue)
+            this.triggerEvent('inputSheetConfirm', { value: inputValue })
+          }
+        })
+      } else if (e.detail.action === 'like') {
+        e.detail.current.handleLike();
+      } else if (e.detail.action === 'dislike') {
+        e.detail.current.handleDislike();
+      } else if (e.detail.action === 'play') {
+        e.detail.current.handlePlay();
+      } else if (e.detail.action === 'retry') {
+        // e.detail.current.handleRetry();
+        const selectSheet = this.selectComponent('#select-sheet')
+        selectSheet.show({
+          title: '重说',
+          dataId: 2,
+          pageSize: 4,
+          fetchData: () => {
+            return Promise.resolve({ list: ['重新生成','很长的提示词很长的提示词很长的提示词很长的提示词很长的提示词很长的提示词很长的提示词','2344343', '34444444', '23433'], total: 14 })
+          },
+          onSelect: (item) => {
+            console.log('选择的值:', item)
+          },
+          onClose: () => {
+            console.log('关闭了')
+          }
+        })
+        
+      } else if (e.detail.action === 'continue') {
+        e.detail.current.handleContinue();
+      }
+      // e.detail.current.closeSwipeCell();
     }
   }
 })

@@ -1,5 +1,5 @@
 <view class="btns-container">
-  <image class="btn-image" src="/static/chat/bf.svg" />
-  <image class="btn-image" src="/static/chat/cs.svg" />
-  <image class="btn-image" src="/static/chat/jx.svg" />
+  <!-- <image class="btn-image" src="/static/chat/bf.svg" data-action="play" bind:tap="onBtnClick" /> -->
+  <image class="btn-image" src="/static/chat/cs.svg" data-action="retry" bind:tap="onBtnClick" />
+  <image class="btn-image" src="/static/chat/jx.svg" data-action="continue" bind:tap="onBtnClick" />
 </view>

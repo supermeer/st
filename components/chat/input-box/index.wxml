@@ -99,9 +99,9 @@
       <t-image class="board-box-image" src="/static/chat/fenxiang.png" />
       <text>分享</text>
     </button>
-    <view class="input-box-board-item" bindtap="report">
+    <!-- <view class="input-box-board-item" bindtap="report">
       <t-image class="board-box-image" src="/static/chat/jubao.png" />
       <text>举报</text>
-    </view>
+    </view> -->
   </view>
 </view>

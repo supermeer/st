@@ -1,14 +1,15 @@
 Component({
   properties: {
-    message: Object
+    message: Object,
+    isLatest: Boolean
   },
   data: {},
   swipeCellInstance: null, // 保存侧滑组件实例
   methods: {
     onButtonClick(e) {
-      const action = e.currentTarget.dataset.action;
-      console.log('点击的按钮:', action);
-      
+      const action = e.currentTarget.dataset.action || e.detail.action;
+      this.triggerEvent('buttonClick', { action, current: this });
+      return
       // 根据不同的 action 执行不同的操作
       switch(action) {
         case 'rollback':

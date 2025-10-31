@@ -32,7 +32,7 @@
           <van-swipe-cell
             id="swipeCell-{{item.id}}"
             class="chat-swipe-cell"
-            right-width="{{150}}"
+            right-width="{{120}}"
             async-close
             data-id="{{item.id}}"
           >
@@ -55,11 +55,11 @@
             <!-- 右侧滑出删除按钮 -->
             <view slot="right" class="swipe-actions">
               <view class="swipe-action top-btn" catch:tap="onTopChat" data-id="{{item.id}}">
-                <t-icon name="backtop" size="20px" color="#fff" />
+                <t-icon name="backtop" size="18px" color="#fff" />
                 置顶
               </view>
               <view class="swipe-action delete-btn" catch:tap="onDeleteChat" data-id="{{item.id}}">
-                <t-icon name="delete" size="20px" color="#ee5a6f" />
+                <t-icon name="delete" size="18px" color="#ee5a6f" />
                 删除
               </view>
             </view>
@@ -81,4 +81,5 @@
 
 <t-toast id="t-toast" />
 <t-dialog id="t-dialog" />
+<tip-dialog id="tip-dialog" />
 

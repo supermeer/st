@@ -141,17 +141,20 @@ page {
 /* 侧滑操作按钮 */
 .swipe-actions {
   display: flex;
+  align-items: center;
+  justify-content: center;
   height: 100%;
 }
 
 .swipe-action {
-  width: 70px;
+  width: 54px;
+  height: 54px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   gap: 12rpx;
-  font-size: 28rpx;
+  font-size: 24rpx;
   font-weight: 500;
   background: #ffffff30;
   border-radius: 16rpx;

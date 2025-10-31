@@ -133,13 +133,13 @@
   justify-content: space-between;
   height: 70rpx;
   font-size: 24rpx;
-  padding-top: 16rpx;
+  /* padding-top: 16rpx; */
 }
 .section-title {
   font-size: 24rpx;
   padding-left: 24rpx;
   color: #fff;
-  margin-bottom: 12rpx;
+  margin: 12rpx 0;
 }
 .section-title-icon {
   color: #fff;

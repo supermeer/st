@@ -1,0 +1,180 @@
+/* 遮罩层 */
+.tip-dialog-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+/* 对话框容器 */
+.tip-dialog-container {
+  width: 622rpx;
+  background: #000;
+  border-radius: 32rpx;
+  padding: 80rpx 48rpx 48rpx;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1rpx solid #666;
+}
+
+/* 顶部图标区域 */
+.tip-dialog-icon {
+  position: relative;
+  width: 180rpx;
+  height: 180rpx;
+  margin-bottom: 48rpx;
+}
+
+/* 圆形图标 */
+.icon-circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #7c5aff 0%, #a78bfa 50%, #8b5cf6 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 40rpx rgba(124, 90, 255, 0.5);
+}
+
+.icon-circle::before {
+  content: '';
+  position: absolute;
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #9575ff 0%, #c4b5fd 50%, #a78bfa 100%);
+}
+
+/* 勾选标记 */
+.icon-checkmark {
+  position: relative;
+  z-index: 1;
+  width: 48rpx;
+  height: 32rpx;
+  border-left: 4rpx solid #fff;
+  border-bottom: 4rpx solid #fff;
+  transform: rotate(-45deg);
+  margin-top: -12rpx;
+}
+
+/* 装饰性圆点 */
+.deco-dot {
+  position: absolute;
+  width: 24rpx;
+  height: 24rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #7c5aff 0%, #a78bfa 100%);
+}
+
+.dot-1 {
+  top: 20rpx;
+  left: 20rpx;
+  width: 20rpx;
+  height: 20rpx;
+}
+
+.dot-2 {
+  bottom: 30rpx;
+  left: 10rpx;
+  width: 16rpx;
+  height: 16rpx;
+  opacity: 0.8;
+}
+
+.dot-3 {
+  top: 30rpx;
+  right: 10rpx;
+  width: 28rpx;
+  height: 28rpx;
+}
+
+/* 装饰性星星 */
+.deco-star {
+  position: absolute;
+  color: #7c5aff;
+  font-size: 20rpx;
+}
+
+.star-1 {
+  top: 10rpx;
+  right: 30rpx;
+}
+
+.star-2 {
+  bottom: 20rpx;
+  right: 20rpx;
+}
+
+.star-3 {
+  bottom: 10rpx;
+  left: 35rpx;
+  font-size: 16rpx;
+}
+
+/* 提示文字 */
+.tip-dialog-content {
+  color: #ffffff;
+  font-size: 28rpx;
+  line-height: 44rpx;
+  text-align: center;
+  margin-bottom: 56rpx;
+  padding: 0 20rpx;
+}
+
+/* 按钮组 */
+.tip-dialog-buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  gap: 24rpx;
+}
+
+/* 按钮基础样式 */
+.tip-dialog-btn {
+  flex: 1;
+  height: 88rpx;
+  border-radius: 44rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+
+/* 取消按钮 */
+.cancel-btn {
+  background: transparent;
+  border: 2rpx solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.cancel-btn:active {
+  opacity: 0.7;
+}
+
+/* 确认按钮 */
+.confirm-btn {
+  background: linear-gradient(135deg, #7c5aff 0%, #a78bfa 50%, #8b5cf6 100%);
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 4rpx 20rpx rgba(124, 90, 255, 0.4);
+}
+
+.confirm-btn:active {
+  opacity: 0.8;
+}
+

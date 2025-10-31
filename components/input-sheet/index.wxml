@@ -1,0 +1,34 @@
+<view class="input-sheet-mask" wx:if="{{visible}}" bindtap="handleMaskClick" catchtouchmove="preventMove">
+  <view class="input-sheet-container {{visible ? 'show' : ''}}" catchtap="{{true}}">
+    <!-- 顶部指示条 -->
+    <view class="input-sheet-indicator"></view>
+
+    <!-- 标题 -->
+    <view class="input-sheet-title">{{title}}</view>
+
+    <!-- 输入框区域 -->
+    <view class="input-sheet-form">
+      <view class="form-label">{{label}}</view>
+      <input 
+        class="form-input" 
+        placeholder="{{placeholder}}"
+        placeholder-class="input-placeholder"
+        value="{{inputValue}}"
+        maxlength="{{maxlength}}"
+        bindinput="handleInput"
+        confirm-type="done"
+      />
+    </view>
+
+    <!-- 按钮组 -->
+    <view class="input-sheet-buttons">
+      <view class="input-sheet-btn cancel-btn" bindtap="handleCancel">
+        {{cancelText}}
+      </view>
+      <view class="input-sheet-btn confirm-btn" bindtap="handleConfirm">
+        {{confirmText}}
+      </view>
+    </view>
+  </view>
+</view>
+

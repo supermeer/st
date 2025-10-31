@@ -6,7 +6,8 @@ Component({
   methods: {
     onButtonClick(e) {
       const action = e.currentTarget.dataset.action;
-      
+      this.triggerEvent('buttonClick', { action, current: this });
+      return
       // 根据不同的 action 执行不同的操作
       switch(action) {
         case 'rollback':
