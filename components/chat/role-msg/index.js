@@ -3,9 +3,25 @@ Component({
     message: Object,
     isLatest: Boolean
   },
-  data: {},
+  data: {
+    thinkingExpanded: false  // UI 状态：思考过程是否展开
+  },
   swipeCellInstance: null, // 保存侧滑组件实例
   methods: {
+    // 切换思考过程的展开/收起（纯 UI 逻辑，子组件自己处理）
+    toggleThinking() {
+      this.setData({
+        thinkingExpanded: !this.data.thinkingExpanded
+      })
+    },
+    
+    // 重新发送消息（通知父组件）
+    onRetry() {
+      this.triggerEvent('retry', { 
+        messageId: this.properties.message.id 
+      })
+    },
+    
     onButtonClick(e) {
       const action = e.currentTarget.dataset.action || e.detail.action;
       this.triggerEvent('buttonClick', { action, current: this });

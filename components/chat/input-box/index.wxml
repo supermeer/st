@@ -69,7 +69,7 @@
         <view class="icon-item icon-add-wrapper" style="opacity: {{inputValue && inputValue.length > 0 ? 0 : 1}}; pointer-events: {{inputValue && inputValue.length > 0 ? 'none' : 'auto'}};">
           <t-image class="input-box-image" src="/static/chat/add.png" bindtap="showBoard" />
         </view>
-        <view class="icon-item icon-send-wrapper" style="opacity: {{!inputValue || inputValue.length == 0 ? 0 : 1}}; pointer-events: {{!inputValue || inputValue.length == 0 ? 'none' : 'auto'}};">
+        <view class="icon-item icon-send-wrapper" style="opacity: {{!inputValue || inputValue.length == 0 ? 0 : 1}}; pointer-events: {{!inputValue || inputValue.length == 0 ? 'none' : 'auto'}};" bindtap="onSend">
           <t-image class="input-box-image" src="/static/chat/send.png" />
         </view>
       </view>

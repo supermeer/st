@@ -5,6 +5,7 @@
     "role-msg": "/components/chat/role-msg/index",
     "input-box": "/components/chat/input-box/index",
     "t-image": "tdesign-miniprogram/image/image",
+    "t-icon": "tdesign-miniprogram/icon/icon",
     "tip-dialog": "/components/tip-dialog/index",
     "input-sheet": "/components/input-sheet/index",
     "select-sheet": "/components/select-sheet/index"

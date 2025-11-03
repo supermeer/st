@@ -45,6 +45,12 @@
       <role-msg wx:if="{{item.senderType === 1}}" class="message-item" message="{{item}}" isLatest="{{index === msgList.length - 1}}" bind:buttonClick="onButtonClick" />
       <user-msg wx:if="{{item.senderType === 2}}" class="message-item" message="{{item}}" bind:buttonClick="onButtonClick" />
     </view>
+
+    <view wx:if="{{msgList.length > 0 && msgList[msgList.length - 1].error}}" class="retry-container">
+      <t-icon name="unhappy-1" class="icon-btn" size="18px" />
+      有点迷失啦，请点击
+      <text class="retry-text" bindtap="onRetry">重新尝试</text>
+    </view>
     <view id="bottom-anchor" style="height: 1rpx;"></view>
   </scroll-view>
   <input-box
@@ -53,6 +59,7 @@
     bind:inputLineChange="onInputLineChange"
     bind:hideTabbar="hideTabbar"
     bind:showTabbar="showTabbar"
+    bind:sendMessage="sendMessage"
   />
 </view>
 

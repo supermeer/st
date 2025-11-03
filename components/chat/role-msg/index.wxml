@@ -1,11 +1,40 @@
 <van-swipe-cell id="swipeCell" class="role-swipe-cell" left-width="{{100}}" async-close>
-  <view class="msg-container">
-    <view class="msg-content msg-cell">
-      <text>{{message.content}}</text>
+  <view class="msg-container mes_text">
+    
+    <!-- 加载中显示：只有在 loading 且没有任何内容时显示 -->
+    <view wx:if="{{message.loading && !message.error && !message.content && !message.htmlContent && !message.mainContent && !message.hasThinking && !message.isThinking}}" class="loading-container msg-cell">
+      <t-loading theme="dots" size="40rpx" class="loading-icon" />
     </view>
-    <btns wx:if="{{isLatest}}" btns="{{message.btns}}" bind:buttonClick="onButtonClick" />
+    
+    <!-- 正常消息内容 -->
+    <view wx:else class="msg-content msg-cell">
+      <!-- 思考过程区域（思考中或思考完成都显示） -->
+      <view wx:if="{{message.hasThinking || message.isThinking}}" class="thinking-section {{message.isThinking ? 'thinking-active' : ''}}">
+        <view class="thinking-header" bindtap="toggleThinking">
+          <view class="thinking-title">
+            <t-icon name="lightbulb" size="32rpx" color="#FFA500" class="{{message.isThinking ? 'thinking-icon-pulse' : ''}}" />
+            <text>{{message.isThinking ? '思考中' : '思考过程'}}</text>
+          </view>
+          <text class="thinking-arrow">{{thinkingExpanded ? '▲' : '▼'}}</text>
+        </view>
+        
+        <!-- 思考内容（可展开查看） -->
+        <view wx:if="{{thinkingExpanded && message.thinkContent}}" class="thinking-content">
+          <view wx:if="{{message.thinkHtmlContent}}" class="markdown-body thinking-markdown">
+            <rich-text class="mes_text" nodes="{{message.thinkHtmlContent}}"></rich-text>
+          </view>
+          <text wx:else class="thinking-text">{{message.thinkContent}}</text>
+        </view>
+      </view>
+      <view wx:if="{{message.htmlContent}}" class="markdown-body">
+        <rich-text class="mes_text" nodes="{{message.htmlContent}}"></rich-text>
+      </view>
+      <text wx:else>{{message.content}}</text>
+    </view>
+    
+    <btns wx:if="{{isLatest && !message.loading && !message.error}}" btns="{{message.btns}}" bind:buttonClick="onButtonClick" />
   </view>
-  <view slot="left" class="swipe-cell-btns">
+  <view wx:if="{{!message.loading && !message.error}}" slot="left" class="swipe-cell-btns">
     <view class="swipe-cell-item" bind:tap="onButtonClick" data-action="rollback">
       <t-image class="icon-btn img-icon" src="/static/chat/huisu.png" />
       <text>回溯</text>

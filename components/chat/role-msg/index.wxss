@@ -44,3 +44,189 @@
   width: 28rpx;
   height: 28rpx;
 }
+
+/* 错误状态样式 */
+.error-container {
+  max-width: 80%;
+  background-color: rgba(255, 77, 79, 0.1);
+  border: 1px solid rgba(255, 77, 79, 0.3);
+  border-radius: 24rpx;
+  padding: 24rpx;
+}
+
+.error-content {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  margin-bottom: 20rpx;
+}
+
+.error-icon {
+  flex-shrink: 0;
+}
+
+.error-text {
+  flex: 1;
+  color: #FF4D4F;
+  font-size: 28rpx;
+  line-height: 1.5;
+}
+
+.error-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.retry-btn {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  padding: 12rpx 24rpx;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 16rpx;
+  color: #fff;
+  font-size: 26rpx;
+  transition: all 0.3s;
+}
+
+.retry-btn:active {
+  background-color: rgba(255, 255, 255, 0.3);
+  transform: scale(0.95);
+}
+
+/* 思考过程区域样式 */
+.thinking-section {
+  background-color: rgba(255, 165, 0, 0.15);
+  border-left: 4rpx solid #FFA500;
+  border-radius: 16rpx;
+  margin-bottom: 16rpx;
+  overflow: hidden;
+}
+
+/* 思考中状态样式 */
+.thinking-active {
+  background: linear-gradient(90deg, 
+    rgba(255, 165, 0, 0.15) 0%, 
+    rgba(255, 165, 0, 0.25) 50%, 
+    rgba(255, 165, 0, 0.15) 100%
+  );
+  background-size: 200% 100%;
+  animation: thinkingGradient 2s ease-in-out infinite;
+}
+
+@keyframes thinkingGradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.thinking-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20rpx 24rpx;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.thinking-header:active {
+  background-color: rgba(255, 165, 0, 0.1);
+}
+
+.thinking-title {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #FFA500;
+}
+
+/* 思考时长样式 */
+.thinking-duration {
+  font-size: 24rpx;
+  font-weight: 400;
+  color: #FFA500;
+  opacity: 0.8;
+  margin-left: 8rpx;
+}
+
+/* 思考中图标脉冲动画 */
+.thinking-icon-pulse {
+  animation: iconPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes iconPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.1);
+  }
+}
+
+.thinking-arrow {
+  font-size: 24rpx;
+  color: #FFA500;
+  transition: transform 0.3s ease;
+}
+
+.thinking-content {
+  padding: 0 24rpx 20rpx 24rpx;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 1000rpx;
+  }
+}
+
+.thinking-text {
+  font-size: 26rpx;
+  line-height: 1.6;
+  color: var(--main-color-white);
+  opacity: 0.85;
+  white-space: pre-wrap;
+}
+
+.thinking-markdown {
+  font-size: 26rpx;
+  opacity: 0.85;
+}
+
+/* 加载容器样式 */
+.loading-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24rpx 32rpx;
+}
+
+.loading-icon {
+  color: var(--main-color-white);
+}
+
+/* Markdown 内容样式 */
+.markdown-body {
+  font-size: 28rpx;
+  line-height: 1.6;
+  color: var(--main-color-white);
+}
+
+.msg-cell {
+  padding: 24rpx 32rpx;
+}

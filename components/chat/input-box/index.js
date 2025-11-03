@@ -390,7 +390,23 @@ Component({
           this.startY = e.touches[0].clientY
           this.onVoiceTouchStart(e)
         },
-        
+        onSend() {
+          if (!this.data.inputValue || this.data.inputValue.length == 0) {
+            wx.showToast({
+              title: '请输入内容',
+              icon: 'none',
+              duration: 2000
+            })
+            return
+          }
+          this.triggerEvent('sendMessage', {
+            content: this.data.inputValue
+          })
+          this.setData({
+            inputValue: ''
+          })
+          this.triggerEvent('keyboardHeightChange', 0)
+        },
         // 显示错误提示
         showError(message) {
           // 清除所有录音相关状态

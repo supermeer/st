@@ -1,4 +1,6 @@
 import systemInfo from '../../utils/system'
+import ChatService from '../../services/ai/chat'
+const { formatMessage } = require('../../utils/msgHandler')
 Component({
   lifetimes: {
     attached: function () {
@@ -21,7 +23,11 @@ Component({
     topMsg: null,
     hasMore: true, // 是否还有更多数据
     pullDownStatus: 'pull', // pull: 下拉加载更多, release: 松开加载更多, loading: 加载中, nomore: 没有更多
-    scrollAnimation: true // 是否启用滚动动画
+    scrollAnimation: true, // 是否启用滚动动画
+    operatingForm: {
+      operate: '',
+      msg: null
+    }
   },
   methods: {
     getPageInfo() {
@@ -32,6 +38,75 @@ Component({
         safeAreaBottom: pageInfo.safeAreaBottom,
         tabbarHeight: pageInfo.tabbarHeight
       })
+    },
+    sendMessage(e) {
+      const msg = this.addUserMessage(e.detail.content)
+      this.setData({
+        operatingForm: {
+          operate: 'sendMessage',
+          msg: msg
+        }
+      })
+      ChatService.sendMessage(
+        {
+          chatId: this.data.sessionId,
+          content: e.detail.content
+        },
+        (eventData) => {
+        const msg = eventData.payload.msg
+        const url = eventData.payload.url
+        const latestMessage =
+          this.data.messageList[this.data.messageList.length - 1]
+        if (!latestMessage.loading) {
+          const newMessage = {
+            senderType: 2,
+            content: msg || '',
+            htmlContent: marked(msg || ''),
+            url: url,
+            loading: true
+          }
+          this.setData({
+            messageList: [...this.data.messageList, newMessage]
+          })
+        } else {
+          latestMessage.content += msg || ''
+          latestMessage.htmlContent = marked(latestMessage.content || '')
+          latestMessage.url = url
+          this.setData({
+            messageList: this.data.messageList
+          })
+        }
+        // this.scrollToBottom()
+      })
+        .then((res) => {
+          this.setData({
+            inputValue: '',
+            operatingForm: {
+              operate: '',
+              msg: null
+            }
+          })
+
+        })
+        .catch((err) => {
+          // const latestMessage =
+          //   this.data.messageList[this.data.messageList.length - 1]
+          // latestMessage.error = true
+          // latestMessage.content = err.msg
+          // latestMessage.htmlContent = marked(err.msg)
+          // latestMessage.errorCode = err.code
+          this.setData({
+            messageList: [...this.data.messageList.slice(0, -1)],
+            operatingForm: {
+              operate: '',
+              msg: {
+                ...this.data.operatingForm.msg,
+                error: true,
+                errorMsg: err.msg
+              }
+            }
+          })
+        })
     },
     goLogin() {
       this.setData({ isLogin: true })
@@ -182,12 +257,201 @@ Component({
       })
       this.scrollToBottom()
     },
+    /**
+     * 解析消息内容，提取思考过程和正式内容
+     * @param {string} content - 原始消息内容
+     * @returns {object} - { thinkContent: string, mainContent: string, hasThinking: boolean }
+     */
+    parseThinkingContent(content) {
+      // 先尝试匹配完整的 <think>...</think>
+      const thinkRegex = /<think>([\s\S]*?)<\/think>/
+      const match = content.match(thinkRegex)
+      
+      if (match) {
+        // 思考已完成
+        const thinkContent = match[1].trim()
+        const mainContent = content.replace(thinkRegex, '').trim()
+        return {
+          thinkContent,
+          mainContent,
+          hasThinking: true
+        }
+      }
+      
+      // 如果没有完整匹配，检查是否有未闭合的 <think> 标签（思考中）
+      const openThinkRegex = /<think>([\s\S]*?)$/
+      const openMatch = content.match(openThinkRegex)
+      
+      if (openMatch) {
+        // 思考中，提取已有的思考内容
+        const thinkContent = openMatch[1].trim()
+        return {
+          thinkContent,
+          mainContent: '', // 思考中时还没有正式内容
+          hasThinking: false // 还未完成，所以 hasThinking 为 false
+        }
+      }
+      
+      return {
+        thinkContent: '',
+        mainContent: content,
+        hasThinking: false
+      }
+    },
+
+    /**
+     * 添加用户消息
+     * @param {string} userMessage - 用户消息内容
+     */
+    addUserMessage(userMessage) {
+      const userMsg = {
+        id: Date.now(),
+        senderType: 2,  // 用户消息
+        content: userMessage,
+        time: Date.now()
+      }
+      
+      this.setData({
+        msgList: [...this.data.msgList, userMsg]
+      })
+
+      this.scrollToBottom()
+      return userMsg
+    },
+
+    /**
+     * 添加 AI 消息（初始为 loading 状态）
+     */
+    addAIMessage() {
+      const aiMsg = {
+        id: Date.now(),
+        senderType: 1,  // AI/角色消息
+        content: '',
+        htmlContent: '',
+        rawContent: '', // 原始内容（包含 <think> 标签）
+        thinkContent: '', // 思考过程内容
+        thinkHtmlContent: '', // 思考过程 HTML
+        mainContent: '', // 正式回复内容
+        hasThinking: false, // 是否有思考过程
+        isThinking: false, // 是否正在思考中
+        loading: true,
+        time: Date.now()
+      }
+      
+      this.setData({
+        msgList: [...this.data.msgList, aiMsg]
+      })
+      
+      this.scrollToBottom()
+    },
+    /**
+     * 流式更新消息内容（会自动解析 <think> 标签）
+     * @param {string} chunk - 新增的内容片段
+     */
+    updateStreamMessage(chunk) {
+      const msgList = this.data.msgList
+      const lastMsg = msgList[msgList.length - 1]
+      
+      if (lastMsg && lastMsg.senderType === 1) {  // AI消息
+        // 累加原始内容
+        lastMsg.rawContent = (lastMsg.rawContent || '') + chunk
+        
+        // 检测思考开始
+        if (!lastMsg.isThinking && lastMsg.rawContent.includes('<think>')) {
+          lastMsg.isThinking = true
+        }
+        
+        // 解析思考过程和正式内容
+        const parsed = this.parseThinkingContent(lastMsg.rawContent)
+        lastMsg.hasThinking = parsed.hasThinking
+        lastMsg.thinkContent = parsed.thinkContent
+        lastMsg.mainContent = parsed.mainContent
+        
+        // 检测思考结束
+        if (lastMsg.isThinking && lastMsg.rawContent.includes('</think>')) {
+          lastMsg.isThinking = false
+        }
+        
+        // 转换为 HTML
+        // 思考中或思考完成都需要转换 HTML
+        if (parsed.thinkContent) {
+          lastMsg.thinkHtmlContent = formatMessage(parsed.thinkContent)
+        }
+        if (parsed.mainContent) {
+          lastMsg.htmlContent = formatMessage(parsed.mainContent)
+        }
+        
+        this.setData({ msgList })
+      }
+    },
+
+    /**
+     * 完成消息接收
+     */
+    finishMessage() {
+      const msgList = this.data.msgList
+      const lastMsg = msgList[msgList.length - 1]
+      
+      if (lastMsg && lastMsg.senderType === 1) {  // AI消息
+        lastMsg.loading = false
+        // 最终内容设置
+        lastMsg.content = lastMsg.mainContent || lastMsg.rawContent || ''
+        this.setData({ msgList })
+        this.scrollToBottom()
+      }
+    },
+
+    /**
+     * 消息发送失败处理
+     * @param {string} errorMsg - 错误信息
+     */
+    messageError(errorMsg) {
+      const msgList = this.data.msgList
+      if (msgList.length > 0) {
+        const lastMsg = msgList[msgList.length - 1]
+        
+        // 如果最后一条是 AI 消息，标记为错误状态
+        if (lastMsg.senderType === 1) {
+          lastMsg.loading = false
+          lastMsg.error = true
+        }
+        // 如果最后一条是用户消息，也标记错误（向后兼容）
+        else if (lastMsg.senderType === 2) {
+          lastMsg.error = true
+        }
+        
+        this.setData({ msgList })
+      }
+    },
+    /**
+     * 处理重新发送消息
+     * @param {object} e - 事件对象
+     */
+    onRetry(e) {
+      const messageId = e.detail.messageId
+      const msgList = this.data.msgList
+      const msgIndex = msgList.findIndex(m => m.id === messageId)
+      
+      if (msgIndex !== -1) {
+        const errorMsg = msgList[msgIndex]
+        
+        // 重置错误消息的状态
+        errorMsg.error = false
+        errorMsg.errorMsg = ''
+        errorMsg.loading = true
+        errorMsg.content = ''
+        errorMsg.htmlContent = ''
+        errorMsg.mainContent = ''
+        errorMsg.rawContent = ''
+        
+        this.setData({ msgList })
+        
+        // 通知父组件（页面）重新发送
+        this.triggerEvent('retryMessage', { messageId })
+      }
+    },
+    
     onButtonClick(e) {
-      console.log('点击的按钮:', e);
-      // rollback: 回溯
-      // newPlot: 新剧情
-      // like: 点赞
-      // dislike: 点踩
       if (e.detail.action === 'rollback') {
         const currentMsg = e.detail.current;
         const tipDialog = this.selectComponent('#tip-dialog')
@@ -229,6 +493,12 @@ Component({
         e.detail.current.handlePlay();
       } else if (e.detail.action === 'retry') {
         // e.detail.current.handleRetry();
+        this.setData({
+          operatingForm: {
+            operate: 'retry',
+            msg: e.detail.current
+          }
+        })
         const selectSheet = this.selectComponent('#select-sheet')
         selectSheet.show({
           title: '重说',
@@ -247,6 +517,12 @@ Component({
         
       } else if (e.detail.action === 'continue') {
         e.detail.current.handleContinue();
+        this.setData({
+          operatingForm: {
+            operate: 'continue',
+            msg: e.detail.current
+          }
+        })
       }
       // e.detail.current.closeSwipeCell();
     }

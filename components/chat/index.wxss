@@ -66,6 +66,27 @@
   margin-bottom: 24rpx;
 }
 
+.icon-btn {
+  margin-right: 8rpx;
+  color: #aaa;
+}
+
+.retry-container {
+  margin-bottom: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #aaa;
+  font-size: 24rpx;
+}
+
+.retry-text {
+  color: var(--theme-color);
+  font-size: 24rpx;
+  text-decoration: underline;
+  margin-left: 12rpx;
+}
+
 .input-box {
   flex: none;  /* 等同于 flex: 0 0 auto，不增长也不收缩 */
 }

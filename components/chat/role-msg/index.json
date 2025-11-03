@@ -5,6 +5,7 @@
     "btns": "./btns/index",
     "van-swipe-cell": "@vant/weapp/swipe-cell/index",
     "t-icon": "tdesign-miniprogram/icon/icon",
-    "t-image": "tdesign-miniprogram/image/image"
+    "t-image": "tdesign-miniprogram/image/image",
+    "t-loading": "tdesign-miniprogram/loading/loading"
   }
 }
