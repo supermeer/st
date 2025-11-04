@@ -73,8 +73,8 @@
         <view class="memory-content blur-glass">
           <text>相遇那天</text>
         </view>
-        <view class="section-title-container">
-          <view class="section-title">对我的设定</view>
+        <view class="section-title-container" bind:tap="onMySetting">
+          <view class="section-title">我的设定</view>
           <t-icon name="chevron-right-s" class="section-title-icon" size="24" />
         </view>
         <view class="setting-container">
@@ -96,13 +96,16 @@
           <t-icon name="chevron-right-s" class="section-title-icon" size="24" />
         </view>
         <view class="memory-content blur-glass">
-          <text>记忆</text>
+          <view class="memory-header">
+            <text class="memory-label">记忆</text>
+            <text class="memory-value">{{memoryValue}}%</text>
+          </view>
           <t-slider
             class="memory-slider"
             default-value="{{23}}"
             value="{{memoryValue}}"
-            label="{{true}}"
-            step="{{0.1}}"
+            label="{{false}}"
+            step="{{1}}"
             bind:change="memoryChange"
           />
         </view>

@@ -65,6 +65,11 @@ Page({
     wx.navigateTo({
       url: '/pages/role/chat-setting/index'
     })
+  },
+  onMySetting() {
+    wx.navigateTo({
+      url: '/pages/role/my-setting/index'
+    })
   }
 })
 

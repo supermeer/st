@@ -149,8 +149,27 @@
   color: #fff;
   line-height: 2.5;
   text-align: justify;
-  padding: 12rpx 24rpx;
+  padding: 24rpx;
   border-radius: 16rpx;
+}
+
+.memory-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16rpx;
+}
+
+.memory-label {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #fff;
+}
+
+.memory-value {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #fff;
 }
 .setting-container {
   display: flex;

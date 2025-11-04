@@ -30,7 +30,7 @@
   left: 32rpx;
   right: 32rpx;
   z-index: 10;
-  padding: 32rpx;
+  padding: 24rpx 32rpx;
   border-radius: 24rpx;
   display: flex;
   align-items: center;
@@ -38,153 +38,180 @@
   color: #fff;
 }
 
-.chat-title {
-  font-size: 32rpx;
-  font-weight: bold;
-  margin-left: 12rpx;
-}
-
 .chat-avatar {
-  width: 120rpx;
-  height: 120rpx;
-  border-radius: 60rpx;
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 48rpx;
   border: 4rpx solid rgba(255, 255, 255, 0.3);
   flex-shrink: 0;
 }
 
-.chat-info {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 12rpx;
-}
-
 .chat-name {
-  font-size: 40rpx;
+  font-size: 36rpx;
   font-weight: bold;
   color: #fff;
+  flex: 1;
 }
 
-.chat-desc {
-  font-size: 26rpx;
-  color: rgba(255, 255, 255, 0.7);
+/* 设置内容 */
+.settings-content {
+  padding: 180rpx 32rpx 32rpx;
 }
 
-/* 设置表单 */
-.settings-form {
-  padding: 232rpx 32rpx 32rpx;
-}
-
-/* 表单项 */
-.form-item {
+/* 设置区块 */
+.setting-section {
   margin-bottom: 24rpx;
   padding: 32rpx;
   border-radius: 24rpx;
   color: #fff;
 }
 
-.form-label {
+/* 区块标题 */
+.section-title {
   font-size: 28rpx;
   font-weight: bold;
   color: #fff;
   margin-bottom: 24rpx;
 }
 
-/* 输入框 */
-.form-input {
-  width: 100%;
-  height: 80rpx;
-  padding: 0 24rpx;
-  background: rgba(255, 255, 255, 0.1);
-  border: 2rpx solid rgba(255, 255, 255, 0.2);
-  border-radius: 16rpx;
-  font-size: 28rpx;
-  color: #fff;
-}
-
-.input-placeholder {
-  color: rgba(255, 255, 255, 0.5);
-}
-
-/* 性别选项 */
-.gender-options {
+/* 区块头部（带右侧操作） */
+.section-header {
   display: flex;
-  gap: 20rpx;
-}
-
-.gender-option {
-  flex: 1;
-  height: 120rpx;
-  display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 12rpx;
-  background: rgba(255, 255, 255, 0.1);
-  border: 2rpx solid rgba(255, 255, 255, 0.2);
-  border-radius: 16rpx;
-  font-size: 28rpx;
-  color: rgba(255, 255, 255, 0.7);
-  transition: all 0.3s ease;
+  justify-content: space-between;
+  margin-bottom: 24rpx;
 }
 
-.gender-option.active {
-  background: rgba(108, 92, 231, 0.6);
-  border-color: var(--theme-color-purple);
+.upgrade-btn {
+  font-size: 26rpx;
   color: #fff;
+  padding: 8rpx 16rpx;
+  cursor: pointer;
 }
 
-.gender-option:active {
-  transform: scale(0.95);
-}
-
-/* 文本域 */
-.form-textarea {
-  min-height: 200rpx;
-  padding: 24rpx;
-  background: rgba(255, 255, 255, 0.1);
-  border: 2rpx solid rgba(255, 255, 255, 0.2);
-  border-radius: 16rpx;
-  font-size: 28rpx;
+.memory-link {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  font-size: 26rpx;
   color: #fff;
-  line-height: 1.6;
+  padding: 8rpx;
+  cursor: pointer;
 }
 
-.textarea-counter {
-  text-align: right;
-  font-size: 24rpx;
+/* 今日对话配额 */
+.chat-quota {
+  display: flex;
+  align-items: baseline;
+  font-size: 48rpx;
+  font-weight: bold;
+  margin-top: 16rpx;
+}
+
+.quota-used {
+  color: #fff;
+  font-size: 60rpx;
+}
+
+.quota-separator {
   color: rgba(255, 255, 255, 0.5);
-  margin-top: 12rpx;
+  font-size: 48rpx;
+  margin: 0 8rpx;
 }
 
-/* 提交按钮容器 */
-.submit-container {
-  position: fixed;
-  left: 32rpx;
-  right: 32rpx;
-  z-index: 10;
+.quota-total {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 48rpx;
+}
+
+/* 模式项 */
+.mode-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: 24rpx 0;
+  border-bottom: 1rpx solid rgba(255, 255, 255, 0.1);
 }
 
-.submit-btn {
-  width: 100%;
-  height: 96rpx;
-  line-height: 96rpx;
-  border-radius: 48rpx;
-  font-size: 32rpx;
+.mode-item:last-child {
+  border-bottom: none;
+}
+
+.mode-content {
+  flex: 1;
+}
+
+.mode-title {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #fff;
+  margin-bottom: 8rpx;
+}
+
+.mode-desc {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.mode-check {
+  flex-shrink: 0;
+  margin-left: 24rpx;
+}
+
+.mode-switch {
+  transform: scale(0.75);
+}
+
+/* 记忆项 */
+.memory-item {
+  padding: 16rpx 0;
+}
+
+.memory-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16rpx;
+}
+
+.memory-label {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #fff;
+}
+
+.memory-value {
+  font-size: 28rpx;
   font-weight: bold;
   color: #fff;
-  text-align: center;
-  border: 2rpx solid rgba(255, 255, 255, 0.3);
-  transition: all 0.3s ease;
 }
 
-.submit-btn:active {
-  transform: scale(0.98);
-  opacity: 0.9;
+.memory-slider {
+  margin-bottom: 12rpx;
+  --td-slider-bar-height: 24rpx;
+  --td-slider-default-color: rgba(0, 0, 0, 0.3);
+  --td-slider-active-color: rgba(255,255,255, 0.5);
+  --td-slider-text-color: #fff;
 }
 
-.submit-btn::after {
-  border: none;
+/* 设置项 */
+.setting-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx 0;
+  cursor: pointer;
+}
+
+.setting-label {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #fff;
+}
+
+.setting-action {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
 }
 

@@ -27,7 +27,39 @@ Page({
     pageInfo: {},
     paddingBtm: 0,
     loadMoreCount: 0, // 记录加载次数
-    maxLoadCount: 3 // 最多加载3次，之后显示没有更多
+    maxLoadCount: 3, // 最多加载3次，之后显示没有更多
+    backgrounds: [
+      {
+        id: 1,
+        name: '背景1',
+        image: 'https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/order_bg.png'
+      },
+      {
+        id: 2,
+        name: '背景2',
+        image: 'https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/order_bg.png'
+      },
+      {
+        id: 3,
+        name: '背景3',
+        image: 'https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/order_bg.png'
+      },
+      {
+        id: 4,
+        name: '背景4',
+        image: 'https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/order_bg.png'
+      },
+      {
+        id: 5,
+        name: '背景5',
+        image: 'https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/order_bg.png'
+      },
+      {
+        id: 6,
+        name: '背景6',
+        image: 'https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/order_bg.png'
+      },
+    ]
   },
   onLoad() {
     this.setData({
@@ -71,7 +103,7 @@ Page({
     const messageList = [
       
       {
-        senderType: 1,
+        senderType: 2,
         id: 1,
         content:
           '咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟',
@@ -80,7 +112,7 @@ Page({
           'https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/order_bg.png'
         ]
       },{
-        senderType: 1,
+        senderType: 2,
         id: 2,
         content:
           '咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟',
@@ -89,7 +121,7 @@ Page({
           'https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/order_bg.png'
         ]
       },{
-        senderType: 1,
+        senderType: 2,
         id: 3,
         content:
           '咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟',
@@ -98,7 +130,7 @@ Page({
           'https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/order_bg.png'
         ]
       },{
-        senderType: 1,
+        senderType: 2,
         id: 4,
         content:
           '咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟',
@@ -107,7 +139,7 @@ Page({
           'https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/order_bg.png'
         ]
       },{
-        senderType: 1,
+        senderType: 2,
         id: 5,
         content:
           '咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟',
@@ -116,7 +148,7 @@ Page({
           'https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/order_bg.png'
         ]
       },{
-        senderType: 1,
+        senderType: 2,
         id: 6,
         content:
           '咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟',
@@ -126,7 +158,7 @@ Page({
         ]
       },
       {
-        senderType: 2,
+        senderType: 1,
         id: 7,
         content:
           '咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟',
@@ -136,7 +168,7 @@ Page({
         ]
       },
       {
-        senderType: 1,
+        senderType: 2,
         id: 8,
         content:
           '咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟咿呀咿呀哟',
@@ -166,39 +198,6 @@ Page({
     })
     this.getTabBar().show()
   },
-  /**
-   * 处理重新发送消息
-   * @param {object} e - 事件对象
-   */
-  onRetryMessage(e) {
-    const messageId = e.detail.messageId
-    console.log('重新发送消息:', messageId)
-    
-    // 这里应该调用你的 API 重新发送消息
-    // 示例：重新发起网络请求
-    const chatComponent = this.selectComponent('.chat-container')
-    if (!chatComponent) return
-    
-    // 模拟网络请求
-    setTimeout(() => {
-      // 模拟成功返回数据
-      const mockResponse = `<think>
-让我思考一下这个问题...
-- 首先分析用户的需求
-- 然后制定解决方案
-- 最后给出建议
-</think>
-
-这是重新获取的消息内容，经过深思熟虑后的回答。`
-      
-      chatComponent.updateStreamMessage(mockResponse)
-      chatComponent.finishMessage()
-      
-      // 如果需要处理错误，可以调用：
-      // chatComponent.messageError('网络连接失败，请稍后重试')
-    }, 1000)
-  },
-  
   onLoadMore() {
     console.log('加载更多消息')
     const chatComponent = this.selectComponent('.chat-container')
@@ -219,7 +218,7 @@ Page({
       // 每次加载2条历史消息
       for (let i = 0; i < 2; i++) {
         newMsgs.push({
-          senderType: 1,
+          senderType: 2,
           id: new Date().getTime() + i,
           content: `这是第${this.data.loadMoreCount + 1}次加载的历史消息 ${i + 1}：` + new Date().toLocaleTimeString()
         })
@@ -242,6 +241,30 @@ Page({
   
   // 测试思考过程功能
   testThinkingProcess() {
+    
+    // const backgroundSheet = this.selectComponent('#backgroundSheet')
+    
+    // backgroundSheet.show({
+    //   title: '聊天背景',
+    //   backgrounds: this.data.backgrounds,
+    //   selectedId: this.data.currentBackgroundId,
+    //   cancelText: '创建专属背景',
+    //   confirmText: '设为背景',
+    //   onCancel: () => {
+    //     console.log('用户取消选择')
+    //   },
+    //   onConfirm: (selectedBackground) => {
+    //     if (selectedBackground) {
+    //       console.log('选中的背景:', selectedBackground)
+    //       this.setData({
+    //         currentBackgroundId: selectedBackground.id
+    //       })
+    //       // 保存到本地存储或服务器
+    //       wx.setStorageSync('chatBackground', selectedBackground.id)
+    //     }
+    //   }
+    // })
+    // return
     const chatComponent = this.selectComponent('.chat-container')
     // chatComponent.messageError('网络连接失败，请稍后重试')
     // console.log(this.data.messageList, 'messageList..................')

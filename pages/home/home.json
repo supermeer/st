@@ -6,6 +6,7 @@
   "navigationStyle": "custom",
   "usingComponents": {
     "chat": "/components/chat/index",
-    "auth": "/components/auth/index"
+    "auth": "/components/auth/index",
+    "background-sheet": "/components/background-sheet/index"
   }
 }

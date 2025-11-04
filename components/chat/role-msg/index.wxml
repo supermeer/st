@@ -3,7 +3,7 @@
     
     <!-- 加载中显示：只有在 loading 且没有任何内容时显示 -->
     <view wx:if="{{message.loading && !message.error && !message.content && !message.htmlContent && !message.mainContent && !message.hasThinking && !message.isThinking}}" class="loading-container msg-cell">
-      <t-loading theme="dots" size="40rpx" class="loading-icon" />
+      <t-loading theme="dots" size="30px" class="loading-icon" />
     </view>
     
     <!-- 正常消息内容 -->

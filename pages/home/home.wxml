@@ -16,4 +16,6 @@
   </view>
 </view>
 
+<background-sheet id="backgroundSheet" />
+
 <!-- <auth id="auth" check-phone="{{false}}" bind:loginSuccess="loginSuccess" /> -->

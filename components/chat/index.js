@@ -26,7 +26,7 @@ Component({
     scrollAnimation: true, // 是否启用滚动动画
     operatingForm: {
       operate: '',
-      msg: null
+      msgId: null // 只存储消息 ID，不存储引用
     }
   },
   methods: {
@@ -44,70 +44,70 @@ Component({
       this.setData({
         operatingForm: {
           operate: 'sendMessage',
-          msg: msg
+          msgId: msg.id
         }
       })
+      this.generateRequest('sendMessage', msg.content)
+    },
+    
+    generateRequest(type, content, id) {
+      this.addAIMessage()
       ChatService.sendMessage(
         {
-          chatId: this.data.sessionId,
-          content: e.detail.content
+          content: content
         },
         (eventData) => {
         const msg = eventData.payload.msg
         const url = eventData.payload.url
         const latestMessage =
-          this.data.messageList[this.data.messageList.length - 1]
+          this.data.msgList[this.data.msgList.length - 1]
         if (!latestMessage.loading) {
-          const newMessage = {
-            senderType: 2,
-            content: msg || '',
-            htmlContent: marked(msg || ''),
-            url: url,
-            loading: true
-          }
-          this.setData({
-            messageList: [...this.data.messageList, newMessage]
-          })
+          this.addAIMessage()
         } else {
           latestMessage.content += msg || ''
           latestMessage.htmlContent = marked(latestMessage.content || '')
           latestMessage.url = url
           this.setData({
-            messageList: this.data.messageList
+            msgList: this.data.msgList
           })
         }
         // this.scrollToBottom()
       })
         .then((res) => {
           this.setData({
-            inputValue: '',
             operatingForm: {
               operate: '',
-              msg: null
-            }
+              msgId: null
+            },
+            // 最后一条消息loading为false
+            msgList: [...this.data.msgList.slice(0, -1)]
+            })
+            const lastMsg = this.data.msgList[this.data.msgList.length - 1]
+            lastMsg.loading = false
+            this.setData({
+              msgList: [...this.data.msgList]
           })
-
         })
         .catch((err) => {
-          // const latestMessage =
-          //   this.data.messageList[this.data.messageList.length - 1]
-          // latestMessage.error = true
-          // latestMessage.content = err.msg
-          // latestMessage.htmlContent = marked(err.msg)
-          // latestMessage.errorCode = err.code
-          this.setData({
-            messageList: [...this.data.messageList.slice(0, -1)],
-            operatingForm: {
-              operate: '',
-              msg: {
-                ...this.data.operatingForm.msg,
-                error: true,
-                errorMsg: err.msg
-              }
-            }
-          })
+          // 找到要标记错误的消息
+          const msgIndex = this.data.msgList.findIndex(m => m.id === this.data.operatingForm.msgId)
+          if (msgIndex !== -1) {
+            // 更新该消息的 error 状态
+            const updatedMsgList = [...this.data.msgList]
+            updatedMsgList[msgIndex].error = true
+            this.setData({
+              msgList: [...updatedMsgList.slice(0, -1)] // 删除最后一条 AI 消息
+            })
+          } else {
+            // 如果找不到，只删除最后一条消息
+            this.setData({
+              msgList: [...this.data.msgList.slice(0, -1)]
+            })
+          }
         })
+
     },
+    
     goLogin() {
       this.setData({ isLogin: true })
     },
@@ -306,7 +306,7 @@ Component({
     addUserMessage(userMessage) {
       const userMsg = {
         id: Date.now(),
-        senderType: 2,  // 用户消息
+        senderType: 1,  // 用户消息
         content: userMessage,
         time: Date.now()
       }
@@ -325,7 +325,7 @@ Component({
     addAIMessage() {
       const aiMsg = {
         id: Date.now(),
-        senderType: 1,  // AI/角色消息
+        senderType: 2,  // AI/角色消息
         content: '',
         htmlContent: '',
         rawContent: '', // 原始内容（包含 <think> 标签）
@@ -341,8 +341,6 @@ Component({
       this.setData({
         msgList: [...this.data.msgList, aiMsg]
       })
-      
-      this.scrollToBottom()
     },
     /**
      * 流式更新消息内容（会自动解析 <think> 标签）
@@ -352,7 +350,7 @@ Component({
       const msgList = this.data.msgList
       const lastMsg = msgList[msgList.length - 1]
       
-      if (lastMsg && lastMsg.senderType === 1) {  // AI消息
+      if (lastMsg && lastMsg.senderType === 2) {  // AI消息
         // 累加原始内容
         lastMsg.rawContent = (lastMsg.rawContent || '') + chunk
         
@@ -392,7 +390,7 @@ Component({
       const msgList = this.data.msgList
       const lastMsg = msgList[msgList.length - 1]
       
-      if (lastMsg && lastMsg.senderType === 1) {  // AI消息
+      if (lastMsg && lastMsg.senderType === 2) {  // AI消息
         lastMsg.loading = false
         // 最终内容设置
         lastMsg.content = lastMsg.mainContent || lastMsg.rawContent || ''
@@ -411,12 +409,12 @@ Component({
         const lastMsg = msgList[msgList.length - 1]
         
         // 如果最后一条是 AI 消息，标记为错误状态
-        if (lastMsg.senderType === 1) {
+        if (lastMsg.senderType === 2) {
           lastMsg.loading = false
           lastMsg.error = true
         }
         // 如果最后一条是用户消息，也标记错误（向后兼容）
-        else if (lastMsg.senderType === 2) {
+        else if (lastMsg.senderType === 1) {
           lastMsg.error = true
         }
         
@@ -428,26 +426,26 @@ Component({
      * @param {object} e - 事件对象
      */
     onRetry(e) {
-      const messageId = e.detail.messageId
-      const msgList = this.data.msgList
-      const msgIndex = msgList.findIndex(m => m.id === messageId)
-      
-      if (msgIndex !== -1) {
-        const errorMsg = msgList[msgIndex]
-        
-        // 重置错误消息的状态
-        errorMsg.error = false
-        errorMsg.errorMsg = ''
-        errorMsg.loading = true
-        errorMsg.content = ''
-        errorMsg.htmlContent = ''
-        errorMsg.mainContent = ''
-        errorMsg.rawContent = ''
-        
-        this.setData({ msgList })
-        
-        // 通知父组件（页面）重新发送
-        this.triggerEvent('retryMessage', { messageId })
+      const { operate, msgId } = this.data.operatingForm
+      const msg = this.data.msgList.find(m => m.id === msgId)
+      switch (operate) {
+        case 'sendMessage':
+          this.generateRequest('sendMessage', msg.content)
+          // 重置最后一条消息的error状态
+          msg.error = false
+          this.setData({
+            msgList: this.data.msgList
+          })
+          break;
+        case 'continue':
+          this.generateRequest('continue', '', msgId)
+          msg.error = false
+          this.setData({
+            msgList: this.data.msgList
+          })
+          break;
+        default:
+          break;
       }
     },
     
@@ -496,7 +494,7 @@ Component({
         this.setData({
           operatingForm: {
             operate: 'retry',
-            msg: e.detail.current
+            msgId: e.detail.current.id
           }
         })
         const selectSheet = this.selectComponent('#select-sheet')
@@ -516,13 +514,14 @@ Component({
         })
         
       } else if (e.detail.action === 'continue') {
-        e.detail.current.handleContinue();
+        // e.detail.current.handleContinue();
         this.setData({
           operatingForm: {
             operate: 'continue',
-            msg: e.detail.current
+            msgId: e.detail.messageId
           }
         })
+        this.generateRequest('continue', '', e.detail.current.id)
       }
       // e.detail.current.closeSwipeCell();
     }

@@ -212,12 +212,11 @@
 .loading-container {
   display: flex;
   align-items: center;
-  justify-content: center;
   padding: 24rpx 32rpx;
 }
 
 .loading-icon {
-  color: var(--main-color-white);
+  --td-loading-color: var(--main-color-white);
 }
 
 /* Markdown 内容样式 */

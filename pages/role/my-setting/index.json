@@ -3,9 +3,7 @@
   "navigationStyle": "custom",
   "usingComponents": {
     "custom-nav": "/components/custom-nav/index",
-    "t-icon": "tdesign-miniprogram/icon/icon",
-    "t-slider": "tdesign-miniprogram/slider/slider",
-    "background-sheet": "/components/background-sheet/index"
+    "t-icon": "tdesign-miniprogram/icon/icon"
   },
   "navigationBarTitleText": "对话设定"
 }

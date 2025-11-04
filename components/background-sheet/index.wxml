@@ -1,0 +1,46 @@
+<view class="background-sheet-mask" wx:if="{{visible}}" bindtap="handleMaskClick" catchtouchmove="preventMove">
+  <view class="background-sheet-container {{visible ? 'show' : ''}}" catchtap="{{true}}">
+    <!-- 顶部指示条 -->
+    <view class="background-sheet-indicator"></view>
+
+    <!-- 标题 -->
+    <view class="background-sheet-title">{{title}}</view>
+
+    <!-- 背景列表区域 -->
+    <scroll-view class="background-list" scroll-y>
+      <view class="background-grid">
+        <view 
+          class="background-item {{selectedBackground && selectedBackground.id === item.id ? 'selected' : ''}}"
+          wx:for="{{backgrounds}}"
+          wx:key="id"
+          data-index="{{index}}"
+          bindtap="handleSelectBackground"
+        >
+          <!-- 背景图片 -->
+          <view class="background-image-wrapper" style="padding-bottom: {{aspectRatio * 100}}%;">
+            <image 
+              class="background-image" 
+              src="{{item.image}}" 
+              mode="aspectFill"
+            />
+            <!-- 选中标记 -->
+            <view class="selected-mark" wx:if="{{selectedBackground && selectedBackground.id === item.id}}">
+              <view class="check-icon">✓</view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+
+    <!-- 按钮组 -->
+    <view class="background-sheet-buttons">
+      <view class="background-sheet-btn cancel-btn" bindtap="handleCancel">
+        {{cancelText}}
+      </view>
+      <view class="background-sheet-btn confirm-btn" bindtap="handleConfirm">
+        {{confirmText}}
+      </view>
+    </view>
+  </view>
+</view>
+

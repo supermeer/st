@@ -24,7 +24,7 @@ Component({
     
     onButtonClick(e) {
       const action = e.currentTarget.dataset.action || e.detail.action;
-      this.triggerEvent('buttonClick', { action, current: this });
+      this.triggerEvent('buttonClick', { action, current: this, messageId: this.properties.message.id });
       return
       // 根据不同的 action 执行不同的操作
       switch(action) {

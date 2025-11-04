@@ -8,10 +8,6 @@
     <view wx:if="{{message.content}}" class="msg-content msg-cell" bindtap="userMsgClick">
       <text class="message-content">{{message.content}}</text>
     </view>
-    <view wx:if="{{message.error}}" class="btn-container" data-index="{{index}}" bindtap="resend">
-      <t-icon name="refresh" class="icon-btn" size="24rpx" />
-      重新发送
-    </view>
   </view>
   <view slot="right" class="swipe-cell-btns">
     <view class="swipe-cell-item" bind:tap="onButtonClick" data-action="rollback">
