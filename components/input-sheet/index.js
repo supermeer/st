@@ -9,7 +9,8 @@ Component({
     cancelText: '取消',
     confirmText: '保存',
     inputValue: '',
-    maxlength: 50
+    maxlength: 50,
+    inputType: 'input' // input 或 textarea
   },
 
   methods: {
@@ -23,6 +24,7 @@ Component({
      * @param {String} options.confirmText 确认按钮文字
      * @param {String} options.value 输入框默认值
      * @param {Number} options.maxlength 最大输入长度
+     * @param {String} options.inputType 输入框类型 input 或 textarea
      * @param {Function} options.onCancel 取消回调
      * @param {Function} options.onConfirm 确认回调，参数为输入的值
      */
@@ -35,6 +37,7 @@ Component({
         confirmText = '保存',
         value = '',
         maxlength = 50,
+        inputType = 'input',
         onCancel,
         onConfirm
       } = options
@@ -51,7 +54,8 @@ Component({
         cancelText,
         confirmText,
         inputValue: value,
-        maxlength
+        maxlength,
+        inputType
       })
     },
 

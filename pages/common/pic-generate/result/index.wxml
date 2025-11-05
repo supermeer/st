@@ -1,0 +1,108 @@
+<view class="result-page">
+  <!-- 固定顶部导航栏 -->
+  <custom-nav title="生成图片" showBack="{{status === 'success' || status === 'failed'}}" showHome="{{false}}" transparent="{{true}}" />
+
+  <!-- 生成中状态 -->
+  <view class="generating-container" wx:if="{{status === 'generating'}}">
+    <!-- 卡片容器 -->
+    <view class="card-container">
+      <view class="progress-card blur-glass">
+        <!-- 加载动画 -->
+        <view class="loading-circle">
+          <view class="circle-inner"></view>
+        </view>
+
+        <!-- 进度文字 -->
+        <view class="progress-text">
+          <view class="status-text">生成中</view>
+          <view class="percent-text">{{progress}}%</view>
+        </view>
+
+        <!-- 预估时间 -->
+        <view class="estimated-time">大概需要{{estimatedTime}}</view>
+      </view>
+
+      <!-- 底部提示 -->
+      <view class="bottom-tip">请勿退出</view>
+    </view>
+  </view>
+
+  <!-- 生成成功状态 -->
+  <view class="success-container" wx:if="{{status === 'success'}}">
+    <!-- 头像展示区域 -->
+    <view class="avatar-section">
+      <view class="avatar-card blur-glass">
+        <view class="avatar-wrapper" bindtap="onSetAvatar">
+          <image 
+            class="avatar-image" 
+            src="{{avatarUrl || imageUrl}}" 
+            mode="aspectFill"
+          />
+          <view class="avatar-overlay">
+            <text class="avatar-icon">📷</text>
+            <text class="avatar-text">设置头像</text>
+          </view>
+        </view>
+        <view class="avatar-tip">点击设置</view>
+      </view>
+    </view>
+
+    <!-- 图片展示区域 -->
+    <view class="image-container">
+      <view class="image-card" style="{{imageCardStyle}}">
+        <t-image 
+          class="generated-image" 
+          src="{{imageUrl}}" 
+          mode="aspectFill"
+          bindlongpress="onSaveImage"
+        />
+      </view>
+    </view>
+
+    <!-- 底部操作按钮 -->
+    <view class="action-footer" style="padding-bottom: calc({{pageInfo.safeAreaBottom}}px + 20rpx);">
+      <view class="action-buttons">
+        <view class="action-btn secondary" bindtap="onBackToChat">
+          返回
+        </view>
+        <view class="action-btn primary" bindtap="onUseAsBackground">
+          使用该图片作为背景
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 生成失败状态 -->
+  <view class="failed-container" wx:if="{{status === 'failed'}}">
+    <!-- 卡片容器 -->
+    <view class="card-container">
+      <view class="failed-card blur-glass">
+        <!-- 失败图标 -->
+        <view class="failed-icon">
+          <view class="icon-circle">
+            <text class="icon-text">✕</text>
+          </view>
+        </view>
+
+        <!-- 失败提示 -->
+        <view class="failed-text">
+          <view class="status-text">生成失败</view>
+          <view class="error-message">{{errorMessage}}</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 底部操作按钮 -->
+    <view class="action-footer" style="padding-bottom: calc({{pageInfo.safeAreaBottom}}px + 20rpx);">
+      <view class="action-buttons">
+        <view class="action-btn secondary" bindtap="onBackToChat">
+          返回
+        </view>
+        <view class="action-btn primary" bindtap="onRegenerate">
+          重新生成
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
+

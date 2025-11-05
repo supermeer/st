@@ -1,25 +1,35 @@
-// pages/role/add/index.js
+import SystemInfo from '../../../utils/system'
+
 Page({
   /**
    * 页面的初始数据
    */
   data: {
+    pageInfo: {
+      safeAreaBottom: 0,
+      navHeight: 0
+    },
     formData: {
       name: '',
+      gender: '',
       description: '',
       avatar: '',
-      personality: '',
-      tags: []
+      storyIntro: '',
+      openingLine: '',
+      userSettings: '',
+      chatStyle: '',
+      chatBackground: ''
     },
-    tagList: ['热情', '温柔', '幽默', '理性', '感性', '活泼', '沉稳'],
-    selectedTags: []
+    genderList: ['男', '女', '其他']
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-
+    this.setData({
+      pageInfo: { ...this.data.pageInfo, ...SystemInfo.getPageInfo() }
+    })
   },
 
   /**
@@ -34,22 +44,13 @@ Page({
   },
 
   /**
-   * 标签选择
+   * 文本域变化
    */
-  onTagClick(e) {
-    const { tag } = e.currentTarget.dataset
-    const selectedTags = [...this.data.selectedTags]
-    const index = selectedTags.indexOf(tag)
-    
-    if (index > -1) {
-      selectedTags.splice(index, 1)
-    } else {
-      selectedTags.push(tag)
-    }
-    
+  onTextareaChange(e) {
+    const { field } = e.currentTarget.dataset
+    const { value } = e.detail.value
     this.setData({
-      selectedTags,
-      'formData.tags': selectedTags
+      [`formData.${field}`]: value
     })
   },
 
@@ -72,6 +73,73 @@ Page({
   },
 
   /**
+   * 选择性别
+   */
+  onSelectGender() {
+    
+    wx.showActionSheet({
+      itemList: this.data.genderList,
+      success: (res) => {
+        this.setData({
+          'formData.gender': this.data.genderList[res.tapIndex]
+        })
+      }
+    })
+  },
+
+  /**
+   * 对我的设定
+   */
+  onUserSettings() {
+    wx.navigateTo({
+      url: '/pages/role/my-setting/index'
+    })
+  },
+
+  /**
+   * 对话风格
+   */
+  onChatStyle() {
+    wx.navigateTo({
+      url: '/pages/role/chat-style/index'
+    })
+  },
+
+  /**
+   * 聊天背景
+   */
+  onChatBackground() {
+    const backgroundSheet = this.selectComponent('#backgroundSheet')
+    if (backgroundSheet) {
+      backgroundSheet.show({
+        title: '聊天背景',
+        cancelText: '创建专属背景',
+        confirmText: '设为背景',
+        backgrounds: [
+          {
+            id: 'default',
+            name: '默认背景',
+            image: 'https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/chat_bg.png'
+          }
+        ],
+        selectedId: this.data.formData.chatBackground,
+        onConfirm: (background) => {
+          if (background) {
+            this.setData({
+              'formData.chatBackground': background.id
+            })
+          }
+        },
+        onCancel: () => {
+          wx.navigateTo({
+            url: '/pages/common/pic-generate/index'
+          })
+        }
+      })
+    }
+  },
+
+  /**
    * 提交表单
    */
   onSubmit() {
@@ -80,7 +148,7 @@ Page({
     // 表单验证
     if (!formData.name) {
       wx.showToast({
-        title: '请输入角色名称',
+        title: '请输入名称',
         icon: 'none'
       })
       return
@@ -95,46 +163,27 @@ Page({
     }
     
     // TODO: 调用接口保存角色信息
-    console.log('提交角色信息:', formData)
+    console.log('提交智能体信息:', formData)
     
-    wx.showToast({
-      title: '创建成功',
-      icon: 'success',
-      duration: 2000,
-      success: () => {
-        setTimeout(() => {
-          wx.navigateBack()
-        }, 2000)
-      }
+    wx.showLoading({
+      title: '创建中...',
+      mask: true
     })
-  },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload() {
-
+    
+    // 模拟异步请求
+    setTimeout(() => {
+      wx.hideLoading()
+      wx.showToast({
+        title: '创建成功',
+        icon: 'success',
+        duration: 2000,
+        success: () => {
+          setTimeout(() => {
+            wx.navigateBack()
+          }, 2000)
+        }
+      })
+    }, 1000)
   }
 })
 

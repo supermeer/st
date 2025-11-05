@@ -11,6 +11,7 @@
   --main-color-white: #fff;
   /* 主题紫色 */
   --theme-color-purple: #6c5ce7;
+  --magic-color: rgb(91, 0, 255);
 }
 
 .cell--noborder .t-cell::after {
@@ -24,6 +25,7 @@ page {
   --main-color-white: #fff;
   background-color: var(--theme-color-black);
   --theme-color-purple: #6c5ce7;
+  --magic-color: rgb(91, 0, 255);
 }
 .page-content {
   flex: 1;

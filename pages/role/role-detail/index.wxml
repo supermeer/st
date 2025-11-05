@@ -53,11 +53,11 @@
           <text>{{roleInfo.greeting || '你好，很高兴认识你！'}}</text>
         </view>
 
-        <view class="section-title-container">
+        <view class="section-title-container" bind:tap="onNewChatStyle">
           <view class="section-title">对话风格</view>
           <t-icon name="add-circle-filled" class="section-title-icon" size="18" />
         </view>
-        <view class="style-content blur-glass">
+        <view class="style-content blur-glass" bind:tap="onChatStyle">
           <text>搞笑女没有爱情</text>
           <view class="style-right-content">
             <text class="style-right-text">智能体默认设置</text>
@@ -66,7 +66,7 @@
         </view>
       </view>
       <view wx:if="{{currentTab === '2'}}" class="content-section">
-        <view class="section-title-container">
+        <view class="section-title-container" bind:tap="onPlotSelect">
           <view class="section-title">当前剧情</view>
           <t-icon name="chevron-right-s" class="section-title-icon" size="24" />
         </view>

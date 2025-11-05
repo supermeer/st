@@ -1,79 +1,169 @@
-<!--pages/role/add/index.wxml-->
-<view class="role-add-container">
-  <!-- 自定义导航栏 -->
-  <custom-nav title="新增角色" showBack="{{true}}" showHome="{{false}}" transparent="{{false}}" />
+<view class="role-add-page">
+  <!-- 固定背景图 -->
+  <!-- <image class="page-bg" src="https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/chat_bg.png" mode="aspectFill"></image> -->
+  
+  <!-- 固定顶部导航栏 -->
+  <custom-nav title="" showBack="{{true}}" showHome="{{false}}" transparent="{{true}}" />
 
-  <view class="form-container">
-    <!-- 头像 -->
-    <view class="form-item avatar-item">
-      <view class="form-label">角色头像</view>
-      <view class="avatar-upload" bindtap="onChooseAvatar">
-        <image wx:if="{{formData.avatar}}" src="{{formData.avatar}}" mode="aspectFill" class="avatar-image" />
-        <view wx:else class="avatar-placeholder">
-          <t-icon name="add" size="64rpx" color="#999" />
-          <text class="placeholder-text">点击上传</text>
+  <!-- 可滚动内容区域 -->
+  <scroll-view
+    class="scroll-content"
+    scroll-y
+    enhanced
+    show-scrollbar="{{false}}"
+    style="height: calc(100vh - {{ pageInfo.navHeight }}px);"
+  >
+    <!-- 表单内容 -->
+    <view class="form-content" style="padding-bottom: calc({{ pageInfo.safeAreaBottom}}px + 100rpx);">
+      
+      <!-- 头像上传 -->
+      <view class="avatar-section">
+        <view class="avatar-upload" bindtap="onChooseAvatar">
+          <image wx:if="{{formData.avatar}}" src="{{formData.avatar}}" mode="aspectFill" class="avatar-image" />
+          <view wx:else class="avatar-placeholder">
+            <t-icon name="add" size="80rpx" color="#fff" />
+          </view>
+        </view>
+        <view class="header-title">创建专属智能体</view>
+      </view>
+
+      <!-- 智能体人设 -->
+      <view class="form-section blur-glass">
+        <view class="section-title">智能体人设</view>
+        
+        <!-- 名称 -->
+        <view class="form-item form-item-row">
+          <view class="form-label">
+            <text class="label-required">*</text>
+            <text>名称</text>
+          </view>
+          <input 
+            class="form-input form-input-inline" 
+            placeholder="请输入" 
+            placeholder-class="input-placeholder"
+            value="{{formData.name}}"
+            data-field="name"
+            bindinput="onInputChange"
+            maxlength="20"
+          />
+        </view>
+
+        <!-- 性别 -->
+        <view class="form-item form-item-row" bindtap="onSelectGender">
+          <view class="form-label">
+            <text class="label-required">*</text>
+            <text>性别</text>
+          </view>
+          <view class="form-select form-select-inline">
+            <view class="{{formData.gender ? 'select-text' : 'select-placeholder'}}">
+              {{formData.gender || '请选择（不可更改）'}}
+            </view>
+            <t-icon name="chevron-right" size="40rpx" color="rgba(255,255,255,0.6)" />
+          </view>
+        </view>
+
+        <!-- 角色描述 -->
+        <view class="form-item textarea-item">
+          <view class="form-label">
+            <text class="label-required">*</text>
+            <text>角色描述</text>
+          </view>
+          <view class="textarea-counter">{{formData.description.length}}/2000</view>
+          <textarea 
+            class="form-textarea" 
+            placeholder="主要包含但不限于智能体的人设、性格、身份、背景、经历、聊天风格、与用户的关系等。" 
+            placeholder-class="textarea-placeholder"
+            value="{{formData.description}}"
+            data-field="description"
+            bindinput="onTextareaChange"
+            maxlength="2000"
+          />
         </view>
       </view>
-    </view>
 
-    <!-- 角色名称 -->
-    <view class="form-item">
-      <view class="form-label required">角色名称</view>
-      <t-input
-        value="{{formData.name}}"
-        placeholder="请输入角色名称"
-        data-field="name"
-        bind:change="onInputChange"
-        maxlength="20"
-      />
-    </view>
+      <!-- 故事剧情设定 -->
+      <view class="form-section blur-glass">
+        <view class="section-title">故事剧情设定</view>
+        
+        <!-- 剧情介绍 -->
+        <view class="form-item textarea-item">
+          <view class="form-label">
+            <text>剧情介绍</text>
+          </view>
+          <view class="textarea-counter">{{formData.storyIntro.length}}/1000</view>
+          <textarea 
+            class="form-textarea" 
+            placeholder="用于了解智能体的基本信息、如背景、身份、当前对话场景等。" 
+            placeholder-class="textarea-placeholder"
+            value="{{formData.storyIntro}}"
+            data-field="storyIntro"
+            bindinput="onTextareaChange"
+            maxlength="1000"
+          />
+        </view>
 
-    <!-- 角色描述 -->
-    <view class="form-item">
-      <view class="form-label required">角色描述</view>
-      <t-textarea
-        value="{{formData.description}}"
-        placeholder="请输入角色描述"
-        data-field="description"
-        bind:change="onInputChange"
-        maxlength="200"
-        indicator
-      />
-    </view>
-
-    <!-- 性格特征 -->
-    <view class="form-item">
-      <view class="form-label">性格特征</view>
-      <t-textarea
-        value="{{formData.personality}}"
-        placeholder="请输入性格特征"
-        data-field="personality"
-        bind:change="onInputChange"
-        maxlength="500"
-        indicator
-      />
-    </view>
-
-    <!-- 标签 -->
-    <view class="form-item">
-      <view class="form-label">角色标签</view>
-      <view class="tag-list">
-        <view 
-          class="tag-item {{selectedTags.indexOf(item) > -1 ? 'active' : ''}}"
-          wx:for="{{tagList}}"
-          wx:key="index"
-          data-tag="{{item}}"
-          bindtap="onTagClick"
-        >
-          {{item}}
+        <!-- 开场白 -->
+        <view class="form-item textarea-item">
+          <view class="form-label">
+            <text>开场白</text>
+          </view>
+          <view class="textarea-counter">{{formData.openingLine.length}}/500</view>
+          <textarea 
+            class="form-textarea" 
+            placeholder="与用户开启聊天的第一句话。" 
+            placeholder-class="textarea-placeholder"
+            value="{{formData.openingLine}}"
+            data-field="openingLine"
+            bindinput="onTextareaChange"
+            maxlength="500"
+          />
         </view>
       </view>
-    </view>
 
-    <!-- 提交按钮 -->
-    <view class="submit-btn-wrapper">
-      <t-button theme="primary" size="large" bind:tap="onSubmit">创建角色</t-button>
+      <!-- 其他设置 -->
+      <view class="form-section blur-glass">
+        <view class="section-title">其他设置</view>
+        
+        <!-- 对我的设定 -->
+        <view class="setting-item" bindtap="onUserSettings">
+          <view class="setting-label">对我的设定</view>
+          <view class="setting-action">
+            <text class="setting-value">请设置</text>
+            <t-icon name="chevron-right" size="40rpx" color="rgba(255,255,255,0.6)" />
+          </view>
+        </view>
+
+        <!-- 对话风格 -->
+        <view class="setting-item" bindtap="onChatStyle">
+          <view class="setting-label">对话风格</view>
+          <view class="setting-action">
+            <text class="setting-value">请设置</text>
+            <t-icon name="chevron-right" size="40rpx" color="rgba(255,255,255,0.6)" />
+          </view>
+        </view>
+
+        <!-- 聊天背景 -->
+        <view class="setting-item" bindtap="onChatBackground">
+          <view class="setting-label">聊天背景</view>
+          <view class="setting-action">
+            <text class="setting-value">请设置</text>
+            <t-icon name="chevron-right" size="40rpx" color="rgba(255,255,255,0.6)" />
+          </view>
+        </view>
+      </view>
+
     </view>
+  </scroll-view>
+
+  <!-- 固定底部提交按钮 -->
+  <view class="submit-footer" style="padding-bottom: {{ pageInfo.safeAreaBottom }}px;">
+    <view class="submit-btn" bindtap="onSubmit">创建智能体</view>
   </view>
+
+  <!-- 输入弹窗 -->
+  <input-sheet id="inputSheet" />
+  
+  <!-- 背景选择弹窗 -->
+  <background-sheet id="backgroundSheet" />
 </view>
 

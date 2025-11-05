@@ -1,0 +1,86 @@
+<view class="chat-style-add-page">
+  <!-- 固定背景图 -->
+  <image class="page-bg" src="https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/chat_bg.png" mode="aspectFill"></image>
+  
+  <!-- 固定顶部导航栏 -->
+  <custom-nav title="" showBack="{{true}}" showHome="{{false}}" transparent="{{true}}" />
+  
+  <!-- 固定角色信息卡片 -->
+  <view class="chat-header blur-glass" style="top: {{ pageInfo.navHeight }}px">
+    <image class="chat-avatar" src="{{chatInfo.avatar}}" mode="aspectFill"></image>
+    <view class="chat-title">设置该智能体的对话风格</view>
+  </view>
+
+  <!-- 可滚动内容区域 -->
+  <scroll-view
+    class="scroll-content"
+    scroll-y
+    enhanced
+    show-scrollbar="{{false}}"
+    style="height: calc(100% - {{ pageInfo.navHeight}}px);"
+  >
+    
+    <!-- 设置表单 -->
+    <view class="settings-form" style="padding-bottom: {{ pageInfo.safeAreaBottom + 120}}px;">
+      
+      <!-- 风格标题 -->
+      <view class="form-item blur-glass">
+        <view class="form-label">
+          <text class="required-star">*</text>风格标题
+        </view>
+        <input 
+          class="form-input" 
+          type="text" 
+          placeholder="请输入"
+          placeholder-class="input-placeholder"
+          value="{{formData.title}}"
+          bindinput="onTitleInput"
+        />
+      </view>
+
+      <!-- 风格描述 -->
+      <view class="form-item blur-glass">
+        <view class="form-label">风格描述</view>
+        <textarea 
+          class="form-textarea style-textarea" 
+          placeholder="请输入"
+          placeholder-class="input-placeholder"
+          value="{{formData.description}}"
+          bindinput="onDescriptionInput"
+          maxlength="500"
+          auto-height
+        />
+        <view class="textarea-counter">{{formData.description.length}}/500</view>
+      </view>
+
+      <!-- 对话示例 -->
+      <view class="form-item blur-glass">
+        <view class="form-label">对话示例</view>
+        <view class="textarea-wrapper">
+          <textarea 
+            class="form-textarea" 
+            placeholder=" "
+            placeholder-class="input-placeholder"
+            value="{{formData.example}}"
+            bindinput="onExampleInput"
+            maxlength="1000"
+            auto-height
+          />
+          <!-- 自定义多行 placeholder -->
+          <view class="custom-placeholder" wx:if="{{!formData.example}}">
+            <text>情景可用（）；单轮对话请用""，如：\n"我妈非要我去相亲，怎么办？"\n"相亲？你要去相亲？（一脸诧异）"\n"对啊，我也不想啊・・・・（满脸无奈）"</text>
+          </view>
+        </view>
+        <view class="textarea-counter">{{formData.example.length}}/1000</view>
+      </view>
+
+    </view>
+    
+  </scroll-view>
+
+  <!-- 固定底部提交按钮 -->
+  <view class="submit-container" style="bottom: {{ pageInfo.safeAreaBottom }}px">
+    <button class="submit-btn" bindtap="onSubmit">保存</button>
+  </view>
+</view>
+

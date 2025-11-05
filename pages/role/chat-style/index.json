@@ -4,8 +4,7 @@
   "usingComponents": {
     "custom-nav": "/components/custom-nav/index",
     "t-icon": "tdesign-miniprogram/icon/icon",
-    "input-sheet": "/components/input-sheet/index",
-    "background-sheet": "/components/background-sheet/index"
+    "t-image": "tdesign-miniprogram/image/image"
   },
   "navigationBarTitleText": ""
 }

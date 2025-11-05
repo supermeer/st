@@ -1,0 +1,74 @@
+<view class="pic-generate-page">
+  <!-- 固定顶部导航栏 -->
+  <custom-nav title="" showBack="{{true}}" showHome="{{false}}" transparent="{{true}}" />
+
+  <!-- 可滚动内容区域 -->
+  <scroll-view
+    class="scroll-content"
+    scroll-y
+    enhanced
+    show-scrollbar="{{false}}"
+    style="height: calc(100vh - {{ pageInfo.navHeight }}px);"
+  >
+    <!-- 内容区域 -->
+    <view class="page-content" style="padding-bottom: calc({{ pageInfo.safeAreaBottom}}px + 120rpx);">
+      
+      <!-- 图片风格选择 -->
+      <view class="section">
+        <view class="section-title">图片风格</view>
+        <scroll-view class="style-scroll" scroll-x show-scrollbar="{{false}}">
+          <view class="style-list">
+            <view 
+              class="style-item {{selectedStyle === item.id ? 'active' : ''}}" 
+              wx:for="{{styleList}}" 
+              wx:key="id"
+              data-id="{{item.id}}"
+              bindtap="onSelectStyle"
+            >
+              <view class="style-image-wrapper">
+                <image class="style-image" src="{{item.image}}" mode="aspectFill" />
+                <view class="style-mask"></view>
+              </view>
+              <view class="style-name">{{item.name}}</view>
+            </view>
+          </view>
+        </scroll-view>
+      </view>
+
+      <!-- 文字描述 -->
+      <view class="section">
+        <view class="section-title">文字描述</view>
+        <view class="description-wrapper blur-glass">
+          <textarea 
+            class="description-input" 
+            placeholder="工作于便利店的店员。在便利店工作时化名山田，工作精神格满、穿着便利店工作服，身着黑色皮发箍皮衣……" 
+            placeholder-class="textarea-placeholder"
+            value="{{description}}"
+            bindinput="onDescriptionInput"
+            maxlength="{{maxLength}}"
+            auto-height
+          />
+          <view class="bottom-line">
+            <!-- 优化提示词 -->
+            <optimize-btn bind:optimize="onOptimizeBtnTap" />
+            <view class="char-count">{{description.length}}/{{maxLength}}</view>
+          </view>
+        </view>
+
+      </view>
+
+    </view>
+  </scroll-view>
+
+  <!-- 固定底部生成按钮 -->
+  <view class="generate-footer" style="padding-bottom: {{ pageInfo.safeAreaBottom }}px;">
+    <view class="generate-btn" bindtap="onGenerate">立即生成</view>
+  </view>
+</view>
+
+<text-optimizer
+  visible="{{optimizeForm.visible}}"
+  originalText="{{description}}"
+  bind:confirm="onOptimizeConfirm"
+  bind:close="onOptimizeCancel"
+/>

@@ -1,0 +1,11 @@
+{
+  "enablePullDownRefresh": false,
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "custom-nav": "/components/custom-nav/index",
+    "optimize-btn": "/components/optimize-btn/index",
+    "text-optimizer": "/components/text-optimizer/index"
+  },
+  "navigationBarTitleText": "图片生成"
+}
+

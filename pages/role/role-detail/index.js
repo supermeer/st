@@ -66,9 +66,24 @@ Page({
       url: '/pages/role/chat-setting/index'
     })
   },
+  onNewChatStyle() {
+    wx.navigateTo({
+      url: '/pages/role/chat-style/add/index'
+    })
+  },
+  onChatStyle() {
+    wx.navigateTo({
+      url: '/pages/role/chat-style/index'
+    })
+  },
   onMySetting() {
     wx.navigateTo({
       url: '/pages/role/my-setting/index'
+    })
+  },
+  onPlotSelect() {
+    wx.navigateTo({
+      url: '/pages/role/story/index'
     })
   }
 })

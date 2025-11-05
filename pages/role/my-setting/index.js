@@ -18,7 +18,9 @@ Page({
       nickname: '',
       gender: '',
       description: ''
-    }
+    },
+    isGlobal: false,
+    globalDesc: '对已设置好的智能体不作变更，仅对后续新聊天的智能体作默认设置。'
   },
 
   /**
@@ -28,6 +30,11 @@ Page({
     // 获取传递的参数
     if (options.chatId) {
       this.loadChatSettings(options.chatId)
+    }
+    if (options.isGlobal) {
+      this.setData({
+        isGlobal: true
+      })
     }
     this.setData({
       pageInfo: { ...this.data.pageInfo, ...SystemInfo.getPageInfo() }

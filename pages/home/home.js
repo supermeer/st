@@ -59,7 +59,7 @@ Page({
         name: '背景6',
         image: 'https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/order_bg.png'
       },
-    ]
+    ] 
   },
   onLoad() {
     this.setData({
@@ -72,6 +72,9 @@ Page({
     this.getMessageList()
   },
   onShow() {
+    // wx.navigateTo({
+    //   url: '/pages/common/pic-generate/index',
+    // })
     this.getTabBar().init()
     this.getTabBar().setInterceptor(() => {
       if (!this.data.isLogin) {

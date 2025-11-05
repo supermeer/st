@@ -8,6 +8,12 @@ Component({
     }
   },
   data: {
+    roleInfo: {
+      name: '张三',
+      job: '便利店店员',
+      isNewPlot: true,
+      plotText: '外貌：长发，呆呆的盯着前方。服装：黑色皮夹克、白色包臀裙。身体状态：坐在椅子上抽着烟。身体香味：淡淡的烟味。地点：便利店后门吸烟处。对佐佐木的感情：佐佐木是可以至于自己的木头大叔。'
+    },
     msgList: [],
     isLogin: false,
     userInfo: {},

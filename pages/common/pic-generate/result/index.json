@@ -1,0 +1,10 @@
+{
+  "enablePullDownRefresh": false,
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "custom-nav": "/components/custom-nav/index",
+    "t-image": "tdesign-miniprogram/image/image"
+  },
+  "navigationBarTitleText": "生成图片"
+}
+

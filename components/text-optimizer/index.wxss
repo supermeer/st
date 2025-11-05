@@ -1,0 +1,194 @@
+.text-optimizer-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 600rpx;
+  background: #000;
+  border-radius: 24rpx;
+  box-shadow: 0 8rpx 40rpx rgba(0, 0, 0, 0.12);
+  z-index: 11501;
+}
+
+.text-optimizer-content {
+  padding: 40rpx;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+/* 标题栏 */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10rpx;
+  padding-bottom: 20rpx;
+}
+
+.title {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #fff;
+}
+
+.close-btn {
+  padding: 10rpx;
+  cursor: pointer;
+}
+
+/* 输入区域 */
+.input-section {
+  margin-bottom: 40rpx;
+}
+
+.section-title {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #fff;
+  margin-bottom: 20rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* 结果区域 */
+.result-section {
+  margin-bottom: 40rpx;
+}
+
+.loading-container {
+  height: 400rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60rpx 20rpx;
+  border-radius: 24rpx;
+  box-sizing: border-box;
+}
+
+.t-loading__spinner--dots .t-loading__dot {
+  background-color: var(--magic-color) !important;
+}
+
+.custom-loading {
+  --td-loading-color: var(--magic-color) !important;
+}
+/* TDesign Loading 组件自定义样式类 */
+.custom-loading-text {
+  font-size: 28rpx !important;
+  color: var(--magic-color) !important;
+  font-weight: bold !important;
+}
+
+.result-textarea {
+  height: 400rpx;
+  padding: 20rpx;
+  border-radius: 24rpx;
+  line-height: 1.6;
+  overflow: auto;
+}
+
+.result-text {
+  font-size: 28rpx;
+  color: #fff;
+  display: block;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.empty-result {
+  height: 400rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12rpx;
+}
+
+.empty-text {
+  font-size: 26rpx;
+  color: #fff;
+}
+
+/* 错误状态 */
+.error-container {
+  height: 400rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 24rpx;
+  padding: 40rpx;
+  gap: 20rpx;
+}
+
+.error-text {
+  font-size: 28rpx;
+  color: #ff4d4f;
+  text-align: center;
+  margin-top: 20rpx;
+}
+
+.retry-btn {
+  margin-top: 20rpx;
+  padding: 16rpx 40rpx;
+  background: #fff;
+  border-radius: 48rpx;
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  font-size: 28rpx;
+  color: var(--magic-color);
+  font-weight: 500;
+}
+
+/* 底部按钮 */
+.footer {
+  display: flex;
+  justify-content: center;
+  margin-top: 20rpx;
+  text-align: center;
+}
+
+.footer-btn {
+  height: 80rpx;
+  background: var(--magic-color);
+  width: 70%;
+  display: flex ;
+  flex-direction: row ;
+  align-items: center ;
+  justify-content: center ;
+  color: #fff;
+  border-radius: 24rpx;
+  font-weight: bold;
+  font-size: 24rpx;
+}
+
+.disabled {
+  background: #aaa;
+}
+
+/* 响应式适配 */
+@media (max-width: 400px) {
+  .text-optimizer-container {
+    width: 95%;
+  }
+  
+  .text-optimizer-content {
+    padding: 30rpx;
+  }
+  
+  .title {
+    font-size: 32rpx;
+  }
+  
+  .section-title {
+    font-size: 26rpx;
+  }
+  
+  .input-textarea,
+  .result-text {
+    font-size: 26rpx;
+  }
+} 

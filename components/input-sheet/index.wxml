@@ -8,8 +8,9 @@
 
     <!-- 输入框区域 -->
     <view class="input-sheet-form">
-      <view class="form-label">{{label}}</view>
+      <view class="form-label" wx:if="{{label}}">{{label}}</view>
       <input 
+        wx:if="{{inputType === 'input'}}"
         class="form-input" 
         placeholder="{{placeholder}}"
         placeholder-class="input-placeholder"
@@ -17,6 +18,16 @@
         maxlength="{{maxlength}}"
         bindinput="handleInput"
         confirm-type="done"
+      />
+      <textarea 
+        wx:else
+        class="form-textarea" 
+        placeholder="{{placeholder}}"
+        placeholder-class="input-placeholder"
+        value="{{inputValue}}"
+        maxlength="{{maxlength}}"
+        bindinput="handleInput"
+        auto-height
       />
     </view>
 

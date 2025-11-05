@@ -1,0 +1,7 @@
+<view
+  class="optimize-btn"
+  bindtap="onOptimizeBtnTap"
+>
+  <t-image src="/static/pic-generate/magic.png" class="optimize-btn__icon" />
+  智能扩写
+</view>

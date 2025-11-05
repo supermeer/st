@@ -83,6 +83,21 @@
   border: 1rpx solid rgba(255, 255, 255, 0.1);
 }
 
+/* 文本域 */
+.form-textarea {
+  width: 100%;
+  min-height: 200rpx;
+  max-height: 400rpx;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16rpx;
+  padding: 24rpx;
+  box-sizing: border-box;
+  color: #ffffff;
+  font-size: 28rpx;
+  border: 1rpx solid rgba(255, 255, 255, 0.1);
+  line-height: 1.6;
+}
+
 .input-placeholder {
   color: rgba(255, 255, 255, 0.3);
 }

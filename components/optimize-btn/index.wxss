@@ -1,0 +1,22 @@
+
+.optimize-btn {
+    font-size: 24rpx;
+    color: rgba(0, 0, 0, 0.6);
+    font-weight: normal;
+    margin-left: auto;
+    background: rgb(224, 198, 255);
+    color: rgb(91, 0, 255);
+    padding: 8rpx 12rpx;
+    height: 48rpx;
+    box-sizing: border-box;
+    border-radius: 24rpx;
+    margin-right: 16rpx;
+    display: inline-flex;
+    align-items: center;
+}
+  
+  .optimize-btn__icon {
+    width: 42rpx;
+    height: 42rpx;
+    margin-right: 8rpx;
+  }

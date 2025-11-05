@@ -224,7 +224,9 @@ Page({
     const backgroundSheet = this.selectComponent('#backgroundSheet')
     if (backgroundSheet) {
       backgroundSheet.show({
-        title: '选择聊天背景',
+        title: '聊天背景',
+        cancelText: '创建专属背景',
+        confirmText: '设为背景',
         backgrounds: this.data.backgroundList,
         selectedId: this.data.chatBackground.id,
         onConfirm: (background) => {
@@ -234,6 +236,11 @@ Page({
             })
             this.saveChatSettings()
           }
+        },
+        onCancel: () => {
+          wx.navigateTo({
+            url: '/pages/common/pic-generate/index'
+          })
         }
       })
     }
@@ -261,9 +268,9 @@ Page({
       await new Promise(resolve => setTimeout(resolve, 300))
       
       // 模拟可能的失败情况（实际使用时删除这段）
-      // if (Math.random() > 0.8) {
-      //   throw new Error('网络错误')
-      // }
+      if (Math.random() > 0.8) {
+        throw new Error('网络错误')
+      }
       
       wx.hideLoading()
       wx.showToast({

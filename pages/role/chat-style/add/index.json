@@ -1,0 +1,9 @@
+{
+  "enablePullDownRefresh": false,
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "custom-nav": "/components/custom-nav/index"
+  },
+  "navigationBarTitleText": "创建对话风格"
+}
+

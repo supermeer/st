@@ -40,7 +40,13 @@
         <text class="tip-text">没有更多了</text>
       </view>
     </view>
-    
+    <view wx:if="{{roleInfo.isNewPlot}}" class="plot-box blur-glass">
+      <view class="plot-title">
+        <t-image class="plot-icon" src="/static/chat/juqing.png" />
+        <text>剧情</text>
+      </view>
+      <text>{{roleInfo.plotText}}</text>
+    </view>
     <view wx:for="{{msgList}}" wx:key="id" id="msg-{{item.id}}">
       <role-msg wx:if="{{item.senderType === 2}}" class="message-item" message="{{item}}" isLatest="{{index === msgList.length - 1}}" bind:buttonClick="onButtonClick" />
       <user-msg wx:if="{{item.senderType === 1}}" class="message-item" message="{{item}}" bind:buttonClick="onButtonClick" />

@@ -1,5 +1,5 @@
 <view class="background-sheet-mask" wx:if="{{visible}}" bindtap="handleMaskClick" catchtouchmove="preventMove">
-  <view class="background-sheet-container {{visible ? 'show' : ''}}" catchtap="{{true}}">
+  <view class="background-sheet-container {{visible ? 'show' : ''}}" catchtap="">
     <!-- 顶部指示条 -->
     <view class="background-sheet-indicator"></view>
 
