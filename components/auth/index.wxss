@@ -48,11 +48,12 @@ view {
   font-weight: bold;
   text-align: center;
   margin-top: 40rpx;
+  color: #fff;
 }
 
 .auth-subtitle {
   font-size: 34rpx;
-  color: rgba(0, 0, 0, 0.8);
+  color: rgba(255, 255, 255, 0.8);
   /* text-align: center; */
   margin-top: 84rpx;
 }
@@ -63,28 +64,28 @@ view {
   width: 100%;
 }
 .auth-btn {
+  margin-top: 64rpx;
   width: 60%;
-  height: 72rpx;
-  line-height: 72rpx;
-  border-radius: 36rpx;
+  height: 96rpx;
+  line-height: 96rpx;
+  border-radius: 48rpx;
   font-size: 34rpx;
   display: flex;
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
-  background: linear-gradient(112deg, #63B4FF 0%, #174DFF 44%, #6B63FF 90%);
+  /* background: linear-gradient(135deg, #7c5aff 0%, #a78bfa 50%, #8b5cf6 100%); */
   color: #fff;
 }
 
 .cancel-btn {
-  height: 72rpx;
-  line-height: 72rpx;
-  border-radius: 36rpx;
+  height: 96rpx;
+  line-height: 96rpx;
+  border-radius: 48rpx;
   font-size: 34rpx;
   display: flex;
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
-  background: #fff;
-  color: #000;
+  color: #fff;
 }

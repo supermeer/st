@@ -28,3 +28,6 @@
   width: 18rpx;
   height: 14rpx;
 } 
+.t-grid {
+  background-color: transparent !important;
+}

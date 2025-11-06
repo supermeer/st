@@ -18,4 +18,4 @@
 
 <background-sheet id="backgroundSheet" />
 
-<!-- <auth id="auth" check-phone="{{false}}" bind:loginSuccess="loginSuccess" /> -->
+<auth id="auth" check-phone="{{false}}" bind:loginSuccess="loginSuccess" />

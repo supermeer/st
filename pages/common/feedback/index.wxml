@@ -1,0 +1,58 @@
+<view class="feedback-page">
+  <!-- 固定背景图 -->
+  <!-- <image class="page-bg" src="https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/chat_bg.png" mode="aspectFill"></image> -->
+  
+  <!-- 固定顶部导航栏 -->
+  <custom-nav title="" showBack="{{true}}" showHome="{{false}}" transparent="{{true}}" />
+
+  <!-- 可滚动内容区域 -->
+  <scroll-view
+    class="scroll-content"
+    scroll-y
+    enhanced
+    show-scrollbar="{{false}}"
+    style="height: calc(100% - {{ pageInfo.navHeight}}px);"
+  >
+    
+    <!-- 反馈表单 -->
+    <view class="feedback-form" style="padding-bottom: {{ pageInfo.safeAreaBottom + 120}}px;">
+      
+      <!-- 反馈内容 -->
+      <view class="form-item blur-glass">
+        <view class="form-label">您的反馈</view>
+        <textarea 
+          class="form-textarea" 
+          placeholder="请填写您的反馈意见或建议，我们期待听到您的声音！您的反馈对我们而言至关重要！"
+          placeholder-class="input-placeholder"
+          value="{{formData.content}}"
+          bindinput="onContentInput"
+          maxlength="{{maxLength}}"
+          auto-height
+        />
+        <view class="textarea-counter">{{formData.content.length}}/{{maxLength}}</view>
+      </view>
+
+      <!-- 上传图片 -->
+      <view class="form-item blur-glass">
+        <view class="form-label">上传图片</view>
+        <uploader
+          files="{{imageFiles}}"
+          max="{{3}}"
+          bind:success="onImageSuccess"
+          bind:change="onImageChange"
+          bind:remove="onImageRemove"
+        />
+      </view>
+
+    </view>
+    
+  </scroll-view>
+
+  <!-- 固定底部提交按钮 -->
+  <view class="submit-container" style="bottom: {{ pageInfo.safeAreaBottom }}px">
+    <button class="submit-btn" bindtap="onSubmit" disabled="{{isSubmitting}}">
+      {{isSubmitting ? '提交中...' : '提交'}}
+    </button>
+  </view>
+</view>
+

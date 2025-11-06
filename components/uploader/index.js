@@ -2,6 +2,9 @@ import { fetchFilePresignedUrl, uploadConfirm } from '../../services/file/index'
 import userStore from '../../store/user'
 
 Component({
+  options: {
+    styleIsolation: 'shared'
+  },
   properties: {
     mediaType: {
       type: Array,
@@ -25,7 +28,6 @@ Component({
     }
   },
   data: {
-    showWarnConfirm: false
   },
   lifetimes: {
     attached() {
@@ -34,24 +36,6 @@ Component({
     }
   },
   methods: {
-    onUploadTap() {
-      this.setData({
-        showWarnConfirm: true
-      })
-    },
-    onOpenVip() {
-      wx.navigateTo({
-        url: '/pages/vip/packages/index'
-      })
-      this.setData({
-        showWarnConfirm: false
-      })
-    },
-    onCancel() {
-      this.setData({
-        showWarnConfirm: false
-      })
-    },
     onRemove(e) {
       // 由父级决定删除逻辑，但为了保证 files 与 t-upload 同步，这里直接透传
       this.triggerEvent('remove', e.detail)

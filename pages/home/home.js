@@ -73,8 +73,9 @@ Page({
   },
   onShow() {
     // wx.navigateTo({
-    //   url: '/pages/common/pic-generate/index',
+    //   url: '/pages/common/feedback/index',
     // })
+    // return
     this.getTabBar().init()
     this.getTabBar().setInterceptor(() => {
       if (!this.data.isLogin) {

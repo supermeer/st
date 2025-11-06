@@ -18,16 +18,16 @@
         <view class="auth-title">登录失败</view>
         <view class="auth-subtitle">请检查您的网络连接，或稍后重试</view>
         <view 
-            class="auth-btn primary" 
+            class="auth-btn primary blur-glass" 
             bindtap="login">重新登录</view>
     </view>
     <view wx:if="{{phoneLogin}}" class="auth-container">
         <view class="auth-title">快捷登录</view>
         <view class="auth-subtitle">为了给您提供更好的服务，请使用手机号登录</view>
         <view class="auth-btn-container">
-          <button class="cancel-btn primary" bindtap="close">取消</button>
+          <button class="cancel-btn primary blur-glass" bindtap="close">取消</button>
           <button 
-              class="auth-btn primary" 
+              class="auth-btn primary blur-glass" 
               open-type="getPhoneNumber" 
               bindgetphonenumber="onGetPhoneNumber">手机号登录</button>
         </view>

@@ -1,6 +1,7 @@
 import userStore from '../../store/user'
 import SystemInfo from '../../utils/system'
 import Toast from 'tdesign-miniprogram/toast/index'
+import { getCharacterType, getCharacterTag, getCharacterList } from '../../services/role/index'
 
 Page(
   Object.assign({}, userStore.data, {
@@ -13,22 +14,12 @@ Page(
       scrollHeight: 0,
 
       // 导航标签
-      navList: [
-        { label: '新朋友', value: 'new' },
-        { label: '古今对话', value: 'history' },
-        { label: '亲果朋友', value: 'friend' },
-        { label: '回到从前', value: 'back' },
-      ],
-      activeNav: 'new',
+      navList: [],
+      activeNav: '',
       navScrollLeft: 0,
 
       // 筛选标签
-      tagList: [
-        { label: '#每次喜欢喵', value: 'like' },
-        { label: '#情绪价值', value: 'emotion' },
-        { label: '#家门生活', value: 'life' },
-        { label: '#超理想', value: 'ideal' },
-      ],
+      tagList: [],
       activeTag: '',
       tagScrollLeft: 0,
 
@@ -47,12 +38,12 @@ Page(
 
       // 滚动状态
       isScrollTop: true, // 是否在顶部
+      // 分页参数
+      pageNo: 1,
+      pageSize: 10,
+      totalCount: 0,
     },
 
-    // 分页参数
-    pageNo: 1,
-    pageSize: 10,
-    totalCount: 0,
 
     onLoad: function () {
       userStore.bind(this)
@@ -65,7 +56,8 @@ Page(
         pageInfo,
         scrollHeight
       })
-
+      this.getCharacterType()
+      this.getCharacterTag()
       // 加载数据
       this.loadRoleList(true)
     },
@@ -75,6 +67,19 @@ Page(
       if (typeof this.getTabBar === 'function' && this.getTabBar()) {
         this.getTabBar().init()
       }
+    },
+
+    async getCharacterType() {
+      const res = await getCharacterType()
+      this.setData({
+        navList: res
+      })
+    },
+    async getCharacterTag() {
+      const res = await getCharacterTag()
+      this.setData({
+        tagList: res
+      })
     },
 
     // 导航标签切换
@@ -88,7 +93,7 @@ Page(
         roleList: [],
         loadMoreStatus: 0,
       })
-      this.pageNo = 1
+      this.data.pageNo = 1
       this.loadRoleList(true)
       
       // 滚动到选中标签的中间位置
@@ -137,7 +142,7 @@ Page(
         roleList: [],
         loadMoreStatus: 0,
       })
-      this.pageNo = 1
+      this.data.pageNo = 1
       this.loadRoleList(true)
       
       // 滚动到选中标签的中间位置
@@ -213,7 +218,7 @@ Page(
         roleList: [],
         loadMoreStatus: 0,
       })
-      this.pageNo = 1
+      this.data.pageNo = 1
       this.loadRoleList(true)
     },
 
@@ -225,7 +230,7 @@ Page(
         refreshing: true,
       })
 
-      this.pageNo = 1
+      this.data.pageNo = 1
       this.loadRoleList(true)
     },
 
@@ -244,9 +249,9 @@ Page(
 
     // 上拉加载更多
     onLoadMore() {
-      const { roleList, loadMoreStatus } = this.data
+      const { roleList, loadMoreStatus, totalCount } = this.data
       
-      if (roleList.length >= this.totalCount) {
+      if (roleList.length >= totalCount) {
         this.setData({
           loadMoreStatus: 2, // 已全部加载
         })
@@ -268,9 +273,9 @@ Page(
     // 加载角色列表
     async loadRoleList(isRefresh = false) {
       if (isRefresh) {
-        this.pageNo = 1
+        this.data.pageNo = 1
       } else {
-        this.pageNo += 1
+        this.data.pageNo += 1
       }
 
       // 设置加载状态
@@ -279,18 +284,21 @@ Page(
       })
 
       try {
-        // 模拟数据
-        const mockData = this.getMockData()
-        
-        // 模拟延迟
-        await new Promise(resolve => setTimeout(resolve, 800))
-
-        const newList = isRefresh ? mockData : [...this.data.roleList, ...mockData]
-        this.totalCount = 30 // 模拟总数
+        const res = await getCharacterList({
+          current: this.data.pageNo,
+          size: this.data.pageSize,
+          ifSystem: true,
+          characterTypeId: this.data.activeNav,
+          characterTagId: this.data.activeTag,
+        })
+        const newList = isRefresh ? [...res.records] : [...this.data.roleList, ...res.records]
+        this.setData({
+          totalCount: res.total || 0,
+        })
 
         this.setData({
           roleList: newList,
-          loadMoreStatus: newList.length >= this.totalCount ? 2 : 0,
+          loadMoreStatus: newList.length >= this.data.totalCount ? 2 : 0,
           listIsEmpty: newList.length === 0,
           refreshing: false,
         })
@@ -322,8 +330,8 @@ Page(
       ]
 
       const list = []
-      for (let i = 0; i < this.pageSize; i++) {
-        const index = (this.pageNo - 1) * this.pageSize + i
+      for (let i = 0; i < this.data.pageSize; i++) {
+        const index = (this.data.pageNo - 1) * this.data.pageSize + i
         if (index >= 30) break // 模拟最多30条数据
 
         list.push({

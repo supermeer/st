@@ -49,7 +49,7 @@
     {
       "root": "pages/common",
       "name": "common",
-      "pages": ["aboutus/index", "agreement/index", "cropper/index", "pic-generate/index", "pic-generate/result/index"]
+      "pages": ["aboutus/index", "agreement/index", "cropper/index", "pic-generate/index", "pic-generate/result/index", "feedback/index"]
     }
   ],
   "tabBar": {

@@ -1,0 +1,10 @@
+{
+  "enablePullDownRefresh": false,
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "custom-nav": "/components/custom-nav/index",
+    "uploader": "/components/uploader/index"
+  },
+  "navigationBarTitleText": "意见反馈"
+}
+

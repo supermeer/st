@@ -15,16 +15,16 @@
     <scroll-view class="nav-scroll" scroll-x enable-flex show-scrollbar="{{false}}" scroll-left="{{navScrollLeft}}" scroll-with-animation>
       <view class="nav-tabs">
         <view 
-          class="nav-tab {{activeNav === item.value ? 'active' : ''}}" 
+          class="nav-tab {{activeNav === item.id ? 'active' : ''}}" 
           wx:for="{{navList}}" 
-          wx:key="value"
+          wx:key="id"
           bindtap="onNavChange"
-          data-value="{{item.value}}"
+          data-value="{{item.id}}"
           data-index="{{index}}"
           id="nav-tab-{{index}}"
         >
-          {{item.label}}
-          <view class="nav-underline" wx:if="{{activeNav === item.value}}"></view>
+          {{item.name}}
+          <view class="nav-underline" wx:if="{{activeNav === item.id}}"></view>
         </view>
       </view>
     </scroll-view>
@@ -36,15 +36,15 @@
   <!-- 筛选标签 -->
   <view class="filter-tags">
     <scroll-view class="tags-scroll" scroll-x show-scrollbar="{{false}}" scroll-left="{{tagScrollLeft}}" scroll-with-animation>
-      <view class="tag-item {{activeTag === item.value ? 'active' : ''}}" 
+      <view class="tag-item {{activeTag === item.id ? 'active' : ''}}" 
         wx:for="{{tagList}}" 
-        wx:key="value"
+        wx:key="id"
         bindtap="onTagChange"
-        data-value="{{item.value}}"
+        data-value="{{item.id}}"
         data-index="{{index}}"
         id="tag-item-{{index}}"
       >
-        {{item.label}}
+        #{{item.name}}
       </view>
     </scroll-view>
   </view>
@@ -88,7 +88,8 @@
       </view>
 
       <!-- 加载更多组件 -->
-      <load-more 
+      <load-more
+        wx:if="{{pageNo > 1}}"
         status="{{loadMoreStatus}}" 
         list-is-empty="{{listIsEmpty}}"
         bind:retry="onRetryLoad"
