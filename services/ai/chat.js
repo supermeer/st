@@ -9,7 +9,7 @@ const ChatService = {
    * @returns {Promise} - 返回Promise对象
    */
   sendMessage(data, onChunk) {
-    return request.post('/api/v1/server/chat/generateContent', data, {
+    return request.post('/api/v1/server/plot/generateContent', data, {
       enableChunked: true,
       onChunk
     })
@@ -66,6 +66,10 @@ export function getBloggerType() {
 
 export function getCommentCategory(params) {
   return request.get('/api/v1/server/menu/getCommentCategory', params)
+}
+
+export function getHomePlotMessage() {
+  return request.get('/api/v1/server/plot/getDefaultPlotMessage')
 }
 
 export default ChatService

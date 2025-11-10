@@ -90,13 +90,13 @@
           <view class="form-label">
             <text>剧情介绍</text>
           </view>
-          <view class="textarea-counter">{{formData.storyIntro.length}}/1000</view>
+          <view class="textarea-counter">{{formData.scene.length}}/1000</view>
           <textarea 
             class="form-textarea" 
             placeholder="用于了解智能体的基本信息、如背景、身份、当前对话场景等。" 
             placeholder-class="textarea-placeholder"
-            value="{{formData.storyIntro}}"
-            data-field="storyIntro"
+            value="{{formData.scene}}"
+            data-field="scene"
             bindinput="onTextareaChange"
             maxlength="1000"
           />
@@ -107,13 +107,13 @@
           <view class="form-label">
             <text>开场白</text>
           </view>
-          <view class="textarea-counter">{{formData.openingLine.length}}/500</view>
+          <view class="textarea-counter">{{formData.prologue.length}}/500</view>
           <textarea 
             class="form-textarea" 
             placeholder="与用户开启聊天的第一句话。" 
             placeholder-class="textarea-placeholder"
-            value="{{formData.openingLine}}"
-            data-field="openingLine"
+            value="{{formData.prologue}}"
+            data-field="prologue"
             bindinput="onTextareaChange"
             maxlength="500"
           />
@@ -128,7 +128,7 @@
         <view class="setting-item" bindtap="onUserSettings">
           <view class="setting-label">对我的设定</view>
           <view class="setting-action">
-            <text class="setting-value">请设置</text>
+            <text class="setting-value">{{formData.userAddressedAs ? '修改设置' : '请设置'}}</text>
             <t-icon name="chevron-right" size="40rpx" color="rgba(255,255,255,0.6)" />
           </view>
         </view>

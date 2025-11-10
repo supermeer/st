@@ -10,7 +10,7 @@
     <image wx:if="{{!isGlobal}}" class="chat-avatar" src="{{chatInfo.avatar}}" mode="aspectFill"></image>
     <!-- <view class="chat-info">
       <view class="chat-name">{{chatInfo.name}}</view>
-      <view class="chat-desc">{{chatInfo.description}}</view>
+      <view class="chat-desc">{{chatInfo.identity}}</view>
     </view> -->
     <view class="right-content">
       <view class="chat-title">{{isGlobal ? '全局人设' : '设置该角色与你之间的关系'}}</view>
@@ -38,8 +38,8 @@
           type="text" 
           placeholder="请输入称呼"
           placeholder-class="input-placeholder"
-          value="{{formData.nickname}}"
-          bindinput="onNicknameInput"
+          value="{{formData.userAddressedAs}}"
+          bindinput="onUserAddressedAsInput"
         />
       </view>
 
@@ -48,7 +48,7 @@
         <view class="form-label">我的性别</view>
         <view class="gender-options">
           <view 
-            class="gender-option {{formData.gender === 'male' ? 'active' : ''}}"
+            class="gender-option {{formData.personaGender === 'male' ? 'active' : ''}}"
             bindtap="onGenderChange"
             data-gender="male"
           >
@@ -56,7 +56,7 @@
             <text>男</text>
           </view>
           <view 
-            class="gender-option {{formData.gender === 'female' ? 'active' : ''}}"
+            class="gender-option {{formData.personaGender === 'female' ? 'active' : ''}}"
             bindtap="onGenderChange"
             data-gender="female"
           >
@@ -64,7 +64,7 @@
             <text>女</text>
           </view>
           <view 
-            class="gender-option {{formData.gender === 'other' ? 'active' : ''}}"
+            class="gender-option {{formData.personaGender === 'other' ? 'active' : ''}}"
             bindtap="onGenderChange"
             data-gender="other"
           >
@@ -81,12 +81,12 @@
           class="form-textarea" 
           placeholder="请描述一下自己..."
           placeholder-class="input-placeholder"
-          value="{{formData.description}}"
-          bindinput="onDescriptionInput"
+          value="{{formData.identity}}"
+          bindinput="onIdentityInput"
           maxlength="500"
           auto-height
         />
-        <view class="textarea-counter">{{formData.description.length}}/500</view>
+        <view class="textarea-counter">{{formData.identity.length}}/500</view>
       </view>
 
     </view>

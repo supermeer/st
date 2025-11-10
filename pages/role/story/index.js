@@ -1,5 +1,5 @@
 import SystemInfo from '../../../utils/system'
-
+import { getPlotListByCharacterId } from '../../../services/role/index'
 Page({
   /**
    * 页面的初始数据
@@ -11,6 +11,7 @@ Page({
       navHeight: 0
     },
     roleInfo: {
+      id: null,
       name: '沈川寒',
       avatar: 'https://img.zcool.cn/community/01c8b25e8f8f8da801219c779e8c95.jpg@1280w_1l_2o_100sh.jpg',
       description: '便利店的温柔店员'
@@ -56,6 +57,12 @@ Page({
   onLoad(options) {
     // 获取传递的参数
     if (options.roleId) {
+      this.setData({
+        roleInfo: {
+          ...this.data.roleInfo,
+          id: options.roleId
+        }
+      })
       this.loadStoryList(options.roleId)
     }
     this.setData({
@@ -67,8 +74,9 @@ Page({
    * 加载故事列表
    */
   loadStoryList(roleId) {
-    // TODO: 调用接口获取故事列表
-    console.log('加载故事列表:', roleId)
+    getPlotListByCharacterId(roleId).then(res => {
+      console.log(res, '----------')
+    })
   },
 
   /**

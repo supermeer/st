@@ -1,18 +1,38 @@
 import systemInfo from '../../utils/system'
 import ChatService from '../../services/ai/chat'
+import { getCharacterDetail } from '../../services/role/index'
 const { formatMessage } = require('../../utils/msgHandler')
 Component({
+  properties: {
+    roleInfo: {
+      type: Object,
+      value: {}
+    }
+  },
   lifetimes: {
     attached: function () {
       this.getPageInfo()
     }
   },
+  // 监听roleInfo变化
+  observers: {
+    'roleInfo.id': function (newVal) {
+      if (newVal) {
+        this.getRoleInfo()
+      }
+    }
+  },
   data: {
-    roleInfo: {
-      name: '张三',
-      job: '便利店店员',
-      isNewPlot: true,
-      plotText: '外貌：长发，呆呆的盯着前方。服装：黑色皮夹克、白色包臀裙。身体状态：坐在椅子上抽着烟。身体香味：淡淡的烟味。地点：便利店后门吸烟处。对佐佐木的感情：佐佐木是可以至于自己的木头大叔。'
+    roleDetail: {
+      name: '',
+      avatarUrl: '',
+      description: '',
+      plotText: ''
+    },
+    defaultStoryDetail: {
+      prologue: null,
+      scene: null,
+      defaultBackgroundImage: null,
     },
     msgList: [],
     isLogin: false,
@@ -43,6 +63,23 @@ Component({
         navHeight: pageInfo.navHeight,
         safeAreaBottom: pageInfo.safeAreaBottom,
         tabbarHeight: pageInfo.tabbarHeight
+      })
+    },
+    getRoleInfo() {
+      getCharacterDetail(this.properties.roleInfo.id).then(res => {
+        this.setData({
+          roleDetail: {
+            ...this.data.roleDetail,
+            ...res
+          },
+          defaultStoryDetail: {
+            ...this.data.defaultStoryDetail,
+            ...res.defaultStoryDetail
+          }
+        })
+        if (this.properties.roleInfo.type === 'recommend') {
+          this.addAIMessage(res.defaultStoryDetail.prologue)
+        }
       })
     },
     sendMessage(e) {
@@ -160,7 +197,7 @@ Component({
     },
     goRoleInfo() {
       wx.navigateTo({
-        url: '/pages/role/role-detail/index'
+        url: `/pages/role/role-detail/index?id=1`
       })
     },
     // 监听下拉动作

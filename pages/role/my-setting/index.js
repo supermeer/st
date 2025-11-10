@@ -9,15 +9,16 @@ Page({
       safeAreaBottom: 0,
       navHeight: 0
     },
+    roleId: null,
     chatInfo: {
       name: '沈川寒',
       avatar: 'https://img.zcool.cn/community/01c8b25e8f8f8da801219c779e8c95.jpg@1280w_1l_2o_100sh.jpg',
-      description: '便利店的温柔店员'
+      identity: '便利店的温柔店员'
     },
     formData: {
-      nickname: '',
-      gender: '',
-      description: ''
+      userAddressedAs: '',
+      personaGender: '',
+      identity: ''
     },
     isGlobal: false,
     globalDesc: '对已设置好的智能体不作变更，仅对后续新聊天的智能体作默认设置。'
@@ -36,6 +37,11 @@ Page({
         isGlobal: true
       })
     }
+    if (options.roleId) {
+      this.setData({
+        roleId: options.roleId
+      })
+    }
     this.setData({
       pageInfo: { ...this.data.pageInfo, ...SystemInfo.getPageInfo() }
     })
@@ -52,9 +58,9 @@ Page({
   /**
    * 称呼输入
    */
-  onNicknameInput(event) {
+  onUserAddressedAsInput(event) {
     this.setData({
-      'formData.nickname': event.detail.value
+      'formData.userAddressedAs': event.detail.value
     })
   },
 
@@ -64,16 +70,16 @@ Page({
   onGenderChange(event) {
     const gender = event.currentTarget.dataset.gender
     this.setData({
-      'formData.gender': gender
+      'formData.personaGender': gender
     })
   },
 
   /**
    * 描述输入
    */
-  onDescriptionInput(event) {
+  onIdentityInput(event) {
     this.setData({
-      'formData.description': event.detail.value
+      'formData.identity': event.detail.value
     })
   },
 
@@ -81,10 +87,10 @@ Page({
    * 提交表单
    */
   onSubmit() {
-    const { nickname, gender, description } = this.data.formData
+    const { userAddressedAs, personaGender, identity } = this.data.formData
 
     // 验证必填项
-    if (!nickname.trim()) {
+    if (!userAddressedAs.trim()) {
       wx.showToast({
         title: '请输入称呼',
         icon: 'none'
@@ -92,7 +98,7 @@ Page({
       return
     }
 
-    if (!gender) {
+    if (!personaGender) {
       wx.showToast({
         title: '请选择性别',
         icon: 'none'
@@ -100,11 +106,24 @@ Page({
       return
     }
 
-    if (!description.trim()) {
+    if (!identity.trim()) {
       wx.showToast({
         title: '请描述一下自己',
         icon: 'none'
       })
+      return
+    }
+
+    if (!this.data.roleId) {
+      // 直接调用上一页面传递的回调函数
+      const prevPage = getCurrentPages()[getCurrentPages().length - 2]
+      const { callback } = prevPage.data
+      prevPage.confirmUserSettings({
+        userAddressedAs: userAddressedAs,
+        identity: identity,
+        personaGender: personaGender
+      })
+      wx.navigateBack()
       return
     }
 

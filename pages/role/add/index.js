@@ -13,13 +13,26 @@ Page({
       name: '',
       gender: '',
       description: '',
-      avatar: '',
-      storyIntro: '',
-      openingLine: '',
-      userSettings: '',
-      chatStyle: '',
-      chatBackground: ''
+      descriptionPrompt: '',
+      avatarUrl: '',
+      scene: '',
+      prologue: '',
+      styleId: null,
+      userAddressedAs: '',
+      identity: '',
+      personaGender: null,
+      defaultBackgroundImage: null
     },
+    personForm: {
+      userAddressedAs: '',
+      identity: '',
+      personaGender: null,
+    },
+    styleForm: {
+      id: null,
+      name: ''
+    },
+    // {<br/>    "name" : "角色卡1",<br/>    "gender": "男",<br/>    "description":"角色描述（展示用）",<br/>    "descriptionPrompt":"角色描述（提示词用）",<br/>    // 故事相关<br/>    "storyTitle":"故事标题",<br/>    "scene":"故事场景",<br/>    "prologue":"故事开场白",<br/>    //对话风格相关<br/>    "styleTitle":"风格标题",<br/>    "styleDescription":"风格描述",<br/>    "chatExample":"大模型回复示例",<br/>    //对我的设定相关<br/>    "userAddressedAs":"哥哥",<br/>    "identity":"用户是一个996社畜",<br/>    "personaGender":"男",<br/>    "defaultBackgroundImage":"默认背景图片"<br/>}
     genderList: ['男', '女', '其他']
   },
 
@@ -95,7 +108,14 @@ Page({
       url: '/pages/role/my-setting/index'
     })
   },
-
+  confirmUserSettings(e) {
+    const { userAddressedAs, identity, personaGender } = e
+    this.setData({
+      'formData.userAddressedAs': userAddressedAs,
+      'formData.identity': identity,
+      'formData.personaGender': personaGender
+    })
+  },
   /**
    * 对话风格
    */

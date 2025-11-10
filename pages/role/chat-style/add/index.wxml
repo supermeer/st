@@ -61,17 +61,17 @@
             class="form-textarea" 
             placeholder=" "
             placeholder-class="input-placeholder"
-            value="{{formData.example}}"
-            bindinput="onExampleInput"
+            value="{{formData.chatExample}}"
+            bindinput="onChatExampleInput"
             maxlength="1000"
             auto-height
           />
           <!-- 自定义多行 placeholder -->
-          <view class="custom-placeholder" wx:if="{{!formData.example}}">
+          <view class="custom-placeholder" wx:if="{{!formData.chatExample}}">
             <text>情景可用（）；单轮对话请用""，如：\n"我妈非要我去相亲，怎么办？"\n"相亲？你要去相亲？（一脸诧异）"\n"对啊，我也不想啊・・・・（满脸无奈）"</text>
           </view>
         </view>
-        <view class="textarea-counter">{{formData.example.length}}/1000</view>
+        <view class="textarea-counter">{{formData.chatExample.length}}/1000</view>
       </view>
 
     </view>

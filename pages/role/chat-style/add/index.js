@@ -1,4 +1,5 @@
 import SystemInfo from '../../../../utils/system'
+import { createChatStyle } from '../../../../services/role/index'
 
 Page({
   /**
@@ -17,7 +18,7 @@ Page({
     formData: {
       title: '',
       description: '',
-      example: ''
+      chatExample: ''
     }
   },
 
@@ -63,9 +64,9 @@ Page({
   /**
    * 对话示例输入
    */
-  onExampleInput(event) {
+  onChatExampleInput(event) {
     this.setData({
-      'formData.example': event.detail.value
+      'formData.chatExample': event.detail.value
     })
   },
 
@@ -73,7 +74,7 @@ Page({
    * 提交表单
    */
   onSubmit() {
-    const { title, description, example } = this.data.formData
+    const { title, description, chatExample } = this.data.formData
 
     // 验证必填项
     if (!title.trim()) {
@@ -92,7 +93,7 @@ Page({
       return
     }
 
-    if (!example.trim()) {
+    if (!chatExample.trim()) {
       wx.showToast({
         title: '请输入对话示例',
         icon: 'none'
@@ -100,18 +101,18 @@ Page({
       return
     }
 
-    // TODO: 调用接口保存对话风格
-    console.log('保存对话风格:', this.data.formData)
-
-    wx.showToast({
-      title: '保存成功',
-      icon: 'success',
-      duration: 2000,
-      success: () => {
-        setTimeout(() => {
-          wx.navigateBack()
-        }, 2000)
-      }
+    createChatStyle(this.data.formData).then(res => {
+      console.log(res, '----------')
+      wx.showToast({
+        title: '保存成功',
+        icon: 'success',
+        duration: 2000,
+        success: () => {
+          setTimeout(() => {
+            wx.navigateBack()
+          }, 2000)
+        }
+      })
     })
   }
 })

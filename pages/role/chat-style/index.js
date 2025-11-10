@@ -1,4 +1,5 @@
 import SystemInfo from '../../../utils/system'
+import { getChatStyleList } from '../../../services/role/index'
 
 Page({
   /**
@@ -132,7 +133,15 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
-
+    getChatStyleList().then(res => {
+      console.log(res, '----------')
+    })
+  },
+  // 进入页面(包括返回到当前页面)时获取风格列表
+  onEnterPage() {
+    getChatStyleList().then(res => {
+      console.log(res, '----------')
+    })
   }
 })
 

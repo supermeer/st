@@ -5,6 +5,7 @@ Page({
    */
   data: {
     roleInfo: {
+      id: null,
       name: '沈川寒',
       gender: '♂',
       avatar: 'https://img.zcool.cn/community/01c8b25e8f8f8da801219c779e8c95.jpg@1280w_1l_2o_100sh.jpg',
@@ -28,6 +29,12 @@ Page({
   onLoad(options) {
     // 获取传递的参数
     if (options.id) {
+      this.setData({
+        roleInfo: {
+          ...this.data.roleInfo,
+          id: options.id
+        }
+      })
       this.loadRoleDetail(options.id)
     }
     this.setData({
@@ -48,7 +55,7 @@ Page({
     const tab = event.currentTarget.dataset.tab
     if (tab == 3) {
       wx.navigateTo({
-        url: '/pages/role/story/index'
+        url: `/pages/role/story/index?roleId=${this.data.roleInfo.id}`
       })
       return
     }
@@ -83,7 +90,7 @@ Page({
   },
   onPlotSelect() {
     wx.navigateTo({
-      url: '/pages/role/story/index'
+      url: `/pages/role/story/index?roleId=${this.data.roleInfo.id}`
     })
   }
 })

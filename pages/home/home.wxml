@@ -6,13 +6,8 @@
       bind:showTabbar="showTabbar"
       bind:loadMore="onLoadMore"
       bind:retryMessage="onRetryMessage"
+      roleInfo="{{roleForm}}"
     />
-    
-    <!-- 测试思考过程功能的按钮 -->
-    <view class="test-thinking-btn" bindtap="testThinkingProcess">
-      <t-icon name="chat" size="32rpx" />
-      <text>测试思考过程</text>
-    </view>
   </view>
 </view>
 

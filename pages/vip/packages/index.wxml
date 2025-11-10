@@ -1,97 +1,99 @@
-<view class="packages-container" style="background-image: url('https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/page_bg_1.png'); background-size: 100% 100%; background-repeat: no-repeat; background-position: center;">
-  <!-- 自定义导航栏 -->
-  <custom-nav
-    class="nav-container"
-    title="套餐选择" 
-    showBack="{{true}}"
-    showHome="{{false}}"
-    transparent="{{true}}"
-    bgColor="#ffffff"
+<!--pages/vip/packages/index.wxml-->
+<view class="packages-page">
+  <!-- 固定背景图 -->
+  <!-- <image class="page-bg" src="https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/chat_bg.png" mode="aspectFill"></image> -->
+  
+  <!-- 固定顶部导航栏 -->
+  <custom-nav 
+    title="" 
+    showBack="{{true}}" 
+    showHome="{{false}}" 
+    transparent="{{true}}" 
     bind:back="onBackClick"
   />
-
-  <!-- 内容区域 -->
-  <view class="content-container">
-
-    <view class="vip-card" style="background-image: url('https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/vip.png');">
-      <view class="vip-card-header">
-        <t-image class="vip-card-header-icon" src="{{vipInfo.ifVip ? '/static/vip_icon.png' : '/static/vip_no_icon.png'}}" />
-        <text class="vip-card-header-text {{vipInfo.ifVip ? 'vip-card-header-text-vip' : 'vip-card-header-text-no-vip'}}">{{vipInfo.ifVip ? 'VIP' : '暂未开通VIP'}}</text>
-        <view
-          wx:if="{{vipInfo.ifVip}}"
-          class="vip-card-header-remain">本月剩余<view class="vip-card-header-remain-time">{{vipInfo.monthlyRemaining || 0}}</view>次
-        </view>
+  
+  <!-- 可滚动内容区域 -->
+  <scroll-view
+    class="scroll-content"
+    scroll-y
+    enhanced
+    show-scrollbar="{{false}}"
+    scroll-top="{{scrollTop}}"
+    style="height: calc(100% - {{ pageInfo.navHeight + pageInfo.safeAreaBottom}}px - 320rpx)"
+  >
+    
+    <!-- 会员权益卡片 -->
+    <view class="benefits-card blur-glass">
+      <view class="benefits-title">开通会员，解锁高级权益</view>
+      <view class="benefits-list">
+        <view class="benefit-item">无限畅聊</view>
+        <view class="benefit-item">记忆增强</view>
+        <view class="benefit-item">更多沉浸式体验</view>
       </view>
-      <view wx:if="{{vipInfo.ifVip}}" class="vip-card-bottom">
-        <view class="deadline-time">{{vipInfo.formattedMonthlyExpireTime}} 到期</view>
-        <view wx:if="{{vipInfo.monthlyRemainingDays > 0 && vipInfo.monthlyRemainingDays <= 5}}" class="deadline-time-countdown">过期将自动清零</view>
-      </view>
-      <view wx:else class="vip-card-bottom">
-        开启专属于你的AI旅程
-      </view>
-      <!-- <view class="vip-renew" catchtap="onVipRenewClick">{{ vipInfo.ifVip ? '立即续费' : '开通VIP' }}</view> -->
     </view>
 
-    <!-- VIP卡片 -->
-    <!-- <view class="vip-card" style="background-image: url('https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/vip.png');">
-      <view class="vip-card-header">
-        <t-image class="vip-card-header-icon" src="/static/vip_no_icon.png" />
-        <text class="vip-card-header-text">开通VIP</text>
+    <!-- 功能对比表格 -->
+    <view class="comparison-table blur-glass">
+      <view class="member-bg blur-glass" />
+      <view class="table-header">
+        <view class="header-cell header-label">权益</view>
+        <view class="header-cell header-current">
+          <text class="header-text">当前</text>
+        </view>
+        <view class="header-cell header-member">
+          <text class="header-text">会员</text>
+        </view>
       </view>
-      <text class="vip-card-bottom">开启专属于你的AI旅程</text>
-      <view class="vip-card-noop">暂未开通</view>
-    </view> -->
+      <view class="table-body">
+        <view class="table-row">
+          <view class="table-cell cell-label">图片生成</view>
+          <view class="table-cell cell-value">{{quotaInfo.imageGenCurrent || 40}}</view>
+          <view class="table-cell cell-value cell-member">{{quotaInfo.imageGenMember || 80}}</view>
+        </view>
+        <view class="table-row">
+          <view class="table-cell cell-label">视频1.0生成</view>
+          <view class="table-cell cell-value">{{quotaInfo.video1Current || 10}}</view>
+          <view class="table-cell cell-value cell-member">{{quotaInfo.video1Member || 20}}</view>
+        </view>
+        <view class="table-row">
+          <view class="table-cell cell-label">视频2.0生成</view>
+          <view class="table-cell cell-value">{{quotaInfo.video2Current || 5}}</view>
+          <view class="table-cell cell-value cell-member">{{quotaInfo.video2Member || 7}}</view>
+        </view>
+        <view class="table-row">
+          <view class="table-cell cell-label">无水印下载</view>
+          <view class="table-cell cell-value">-</view>
+          <view class="table-cell cell-value cell-member">{{quotaInfo.downloadMember || 4}}</view>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
 
-    <!-- 会员套餐选择 -->
-    <view class="package-title section-title">加入VIP</view>
-    <view class="package-list">
-      <view wx:for="{{packages}}" wx:key="index" class="package-item {{selectedPackage.id === item.id ? 'package-item-active' : ''}}" 
+  <view class="bottom-container">
+    <!-- 套餐选择 -->
+    <view class="package-selection">
+      <view 
+        wx:for="{{packages}}" 
+        wx:key="id" 
+        class="package-card blur-glass {{selectedPackage && selectedPackage.id === item.id ? 'package-card-selected' : ''}}" 
         bindtap="onSelectPackage" 
-        data-id="{{item.id}}">
-        <view class="package-name">{{item.title}}</view>
-        <view class="package-price">
-          <view class="price-unit">¥</view>
-          {{item.amountInYuan}}
-        </view>
-        <view class="package-original">¥{{item.originAmountInYuan}}</view>
-        <view wx:if="{{item.discountInfo}}" class="package-tag">{{item.discountInfo}}</view>
+        data-id="{{item.id}}"
+      >
+        <view class="package-price-text">¥{{item.amountInYuan}}</view>
+        <view class="package-name-text">{{item.title}}</view>
       </view>
     </view>
-
-    <!-- 会员权益 -->
-    <view class="benefit-title section-title">会员权益</view>
-    <view class="benefit-list">
-      <view wx:for="{{selectedPackage.benefitInfoArr}}" wx:key="index" class="benefit-item">
-        <t-icon class="benefit-icon" name="check-circle-filled" color="#FF5C8A" size="48rpx" />
-        <view class="benefit-content">
-          <rich-text class="benefit-name" nodes="{{item}}"></rich-text>
-          <view class="benefit-desc">过期将自动清零</view>
-        </view>
-      </view>
-    </view>
-
-    <!-- 规则说明 -->
-    <view class="rules-title section-title">规则说明</view>
-    <view class="rules-content">
-      <view class="rule-item">1.会员卡的使用额度，到期将自动清零。</view>
-      <view class="rule-item">2.会员卡有效期为一个自然月。</view>
-      <view class="rule-item">3.一次可购买多张会员卡，有限期自动顺延。</view>
-      <view class="rule-item">4.会员卡与加油包可叠加购买，优先使用会员卡次数。</view>
-      <view class="rule-item">5.VIP次数为0时，可叠加购买加油包，立即生效。</view>
-      <view class="rule-item">6.支付成功后，不支持退款。</view>
-    </view>
-
-    <!-- 更多特权提示 -->
-    <view class="more-privilege">更多权益敬请期待！</view>
 
     <!-- 购买按钮 -->
-    <view class="purchase-button" bindtap="onPurchase">立即开通</view>
+    <view class="purchase-button" bindtap="onPurchase">
+      <text class="purchase-price">¥{{selectedPackage ? selectedPackage.amountInYuan : '0'}}</text>
+      <text class="purchase-text">立即购买</text>
+    </view>
 
-    <!-- 用户协议 -->
-    <view class="agreement">
-      <!-- 开通前阅读 <text class="agreement-link" bindtap="serviceTap">《Yours X用户服务协议》</text> 与 <text class="agreement-link" bindtap="renewTap">《自动续费服务规则》</text> -->
-      开通前阅读 <text class="agreement-link" bindtap="serviceTap">《Yours X用户服务协议》</text>
-      <view class="agreement-subtitle">确认购买并付款后即代表已同意</view>
+    <!-- 协议文本 -->
+    <view class="agreement-text">
+      <text>开通,即表示阅读并同意</text>
+      <text class="agreement-link" bindtap="serviceTap">《会员服务协议》</text>
     </view>
   </view>
 </view>

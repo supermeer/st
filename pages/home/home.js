@@ -1,4 +1,5 @@
 import SystemInfo from '../../utils/system'
+import { getHomePlotMessage } from '../../services/ai/chat'
 // "plugins": {
 //   "WechatSI": {
 //     "version": "0.3.1",
@@ -59,7 +60,11 @@ Page({
         name: '背景6',
         image: 'https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/order_bg.png'
       },
-    ] 
+    ],
+    roleForm: {
+      id: null,
+      type: ''
+    } 
   },
   onLoad() {
     this.setData({
@@ -76,6 +81,7 @@ Page({
     //   url: '/pages/common/feedback/index',
     // })
     // return
+    this.getHomePlotMessage()
     this.getTabBar().init()
     this.getTabBar().setInterceptor(() => {
       if (!this.data.isLogin) {
@@ -93,6 +99,20 @@ Page({
       return
     }
     this.setData({ isLogin: true })
+  },
+  getHomePlotMessage() {
+    getHomePlotMessage().then(res => {
+      if (res.type === 'recommend') {
+        
+      }
+      this.setData({
+        roleForm: {
+          type: res.type,
+          id: res.characterId
+        }
+      })
+
+    })
   },
   // 显式点击登录按钮
   goLogin() {

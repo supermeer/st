@@ -18,3 +18,19 @@ export function getCharacterList(params) {
     // characterTagId
     return request.get('/api/v1/server/character/getCharacterList', params)
 }
+
+export function createChatStyle(data) {
+    return request.post('/api/v1/server/story/createChatStyle', data)
+}
+
+export function getChatStyleList(params) {
+    return request.get('/api/v1/server/story/getChatStyleList', params)
+}
+
+export function getPlotListByCharacterId(characterId) {
+    return request.get(`/api/v1/server/plot/getPlotListByCharacterId?characterId=${characterId}`)
+}
+
+export function getCharacterDetail(characterId) {
+    return request.get(`/api/v1/server/character/getCharacterDetail?characterId=${characterId}`)
+}

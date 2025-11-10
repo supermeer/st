@@ -52,6 +52,13 @@
 
 .role-job {
   font-size: 20rpx;
+  /* 不换行，超出省略号 */
+  width: 100%;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .message-list {
