@@ -23,6 +23,10 @@ const ChatService = {
     return request.post('/api/v1/server/chat/createChat', data)
   },
 
+  createPlot(data) {
+    return request.post('/api/v1/server/plot/createPlot', data)
+  },
+
   /**
    * 获取历史会话列表
    * @param {number} page - 页码

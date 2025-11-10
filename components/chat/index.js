@@ -7,6 +7,10 @@ Component({
     roleInfo: {
       type: Object,
       value: {}
+    },
+    chatInfo: {
+      type: Object,
+      value: {}
     }
   },
   lifetimes: {
@@ -19,6 +23,16 @@ Component({
     'roleInfo.id': function (newVal) {
       if (newVal) {
         this.getRoleInfo()
+      }
+    },
+    'chatInfo.plotId': function (newVal) {
+      if (newVal) {
+        this.setData({
+          chatDetail: {
+            ...this.data.chatDetail,
+            plotId: newVal
+          }
+        })
       }
     }
   },
@@ -33,6 +47,9 @@ Component({
       prologue: null,
       scene: null,
       defaultBackgroundImage: null,
+    },
+    chatDetail: {
+      plotId: null,
     },
     msgList: [],
     isLogin: false,
@@ -78,11 +95,33 @@ Component({
           }
         })
         if (this.properties.roleInfo.type === 'recommend') {
-          this.addAIMessage(res.defaultStoryDetail.prologue)
+          const defaultMsg = {
+            senderType: 2,  // AI/角色消息
+            content: this.data.defaultStoryDetail.prologue,  
+            htmlContent: formatMessage(this.data.defaultStoryDetail.prologue),
+            loading: false,
+            time: Date.now()
+          }
+          
+          this.setData({
+            msgList: [...this.data.msgList, defaultMsg]
+          })
         }
       })
     },
-    sendMessage(e) {
+    async sendMessage(e) {
+      if (this.properties.roleInfo.type === 'recommend' && !this.data.defaultStoryDetail.id) {
+        return
+      }
+      if (!this.data.chatDetail.plotId) {
+        const plotId = await ChatService.createPlot({ characterId: this.properties.roleInfo.id})
+        this.setData({
+          chatDetail: {
+            ...this.data.chatDetail,
+            plotId: plotId
+          }
+        })
+      }
       const msg = this.addUserMessage(e.detail.content)
       this.setData({
         operatingForm: {
@@ -97,7 +136,8 @@ Component({
       this.addAIMessage()
       ChatService.sendMessage(
         {
-          content: content
+          userMessage: content,
+          plotId: this.data.chatDetail.plotId
         },
         (eventData) => {
         const msg = eventData.payload.msg
@@ -108,7 +148,7 @@ Component({
           this.addAIMessage()
         } else {
           latestMessage.content += msg || ''
-          latestMessage.htmlContent = marked(latestMessage.content || '')
+          latestMessage.htmlContent = formatMessage(latestMessage.content || '')
           latestMessage.url = url
           this.setData({
             msgList: this.data.msgList

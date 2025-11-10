@@ -32,16 +32,16 @@
       <text wx:else>{{message.content}}</text>
     </view>
     
-    <btns wx:if="{{isLatest && !message.loading && !message.error}}" btns="{{message.btns}}" bind:buttonClick="onButtonClick" />
+    <btns wx:if="{{isLatest && !message.loading && !message.error && message.id}}" btns="{{message.btns}}" bind:buttonClick="onButtonClick" />
   </view>
-  <view wx:if="{{!message.loading && !message.error}}" slot="left" class="swipe-cell-btns">
+  <view wx:if="{{!message.loading && !message.error && message.id}}" slot="left" class="swipe-cell-btns">
     <view class="swipe-cell-item" bind:tap="onButtonClick" data-action="rollback">
       <t-image class="icon-btn img-icon" src="/static/chat/huisu.png" />
       <text>回溯</text>
     </view>
     <view class="swipe-cell-item" bind:tap="onButtonClick" data-action="newPlot">
       <t-image class="icon-btn img-icon" src="/static/chat/juqing.png" />
-      <text>新剧情</text>
+      <text>新剧情</text> 
     </view>
     <view class="swipe-cell-item" bind:tap="onButtonClick" data-action="like">
       <t-image class="icon-btn img-icon" src="/static/chat/zan.png" />
