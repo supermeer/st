@@ -205,8 +205,11 @@
 }
 
 .thinking-markdown {
-  font-size: 26rpx;
-  opacity: 0.85;
+  font-size: 24rpx !important;
+  line-height: 1.2 !important;
+  opacity: 0.85 !important;
+  font-weight: normal !important;
+  color: #aaa !important;
 }
 
 /* 加载容器样式 */

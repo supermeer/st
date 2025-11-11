@@ -23,11 +23,6 @@ Page({
       personaGender: null,
       defaultBackgroundImage: null
     },
-    personForm: {
-      userAddressedAs: '',
-      identity: '',
-      personaGender: null,
-    },
     styleForm: {
       id: null,
       name: ''
@@ -124,7 +119,18 @@ Page({
       url: '/pages/role/chat-style/index'
     })
   },
-
+  confirmChatStyle(e) {
+    this.setData({
+      styleForm: {
+        ...styleForm,
+        ...e
+      },
+      formData: {
+        ...this.data.formData,
+        styleId: e.id
+      }
+    })
+  },
   /**
    * 聊天背景
    */

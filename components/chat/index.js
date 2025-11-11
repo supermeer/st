@@ -7,10 +7,6 @@ Component({
     roleInfo: {
       type: Object,
       value: {}
-    },
-    chatInfo: {
-      type: Object,
-      value: {}
     }
   },
   lifetimes: {
@@ -25,7 +21,7 @@ Component({
         this.getRoleInfo()
       }
     },
-    'chatInfo.plotId': function (newVal) {
+    'roleInfo.plotId': function (newVal) {
       if (newVal) {
         this.setData({
           chatDetail: {
@@ -142,14 +138,24 @@ Component({
         (eventData) => {
         const msg = eventData.payload.msg
         const url = eventData.payload.url
+        const type = eventData.payload.type
         const latestMessage =
           this.data.msgList[this.data.msgList.length - 1]
         if (!latestMessage.loading) {
           this.addAIMessage()
         } else {
-          latestMessage.content += msg || ''
-          latestMessage.htmlContent = formatMessage(latestMessage.content || '')
-          latestMessage.url = url
+          if (type === 'text') {
+            latestMessage.content += msg || ''
+            latestMessage.htmlContent = formatMessage(latestMessage.content || '')
+            latestMessage.url = url
+            latestMessage.isThinking = false
+          } 
+          if (type === 'thinking') {
+            latestMessage.thinkContent += msg || ''
+            latestMessage.thinkHtmlContent = formatMessage(latestMessage.thinkContent || '')
+            latestMessage.isThinking = true
+            latestMessage.hasThinking = true
+          }
           this.setData({
             msgList: this.data.msgList
           })
@@ -162,12 +168,10 @@ Component({
               operate: '',
               msgId: null
             },
-            // 最后一条消息loading为false
-            msgList: [...this.data.msgList.slice(0, -1)]
-            })
-            const lastMsg = this.data.msgList[this.data.msgList.length - 1]
-            lastMsg.loading = false
-            this.setData({
+          })
+          const lastMsg = this.data.msgList[this.data.msgList.length - 1]
+          lastMsg.loading = false
+          this.setData({
               msgList: [...this.data.msgList]
           })
         })
@@ -341,48 +345,6 @@ Component({
       this.scrollToBottom()
     },
     /**
-     * 解析消息内容，提取思考过程和正式内容
-     * @param {string} content - 原始消息内容
-     * @returns {object} - { thinkContent: string, mainContent: string, hasThinking: boolean }
-     */
-    parseThinkingContent(content) {
-      // 先尝试匹配完整的 <think>...</think>
-      const thinkRegex = /<think>([\s\S]*?)<\/think>/
-      const match = content.match(thinkRegex)
-      
-      if (match) {
-        // 思考已完成
-        const thinkContent = match[1].trim()
-        const mainContent = content.replace(thinkRegex, '').trim()
-        return {
-          thinkContent,
-          mainContent,
-          hasThinking: true
-        }
-      }
-      
-      // 如果没有完整匹配，检查是否有未闭合的 <think> 标签（思考中）
-      const openThinkRegex = /<think>([\s\S]*?)$/
-      const openMatch = content.match(openThinkRegex)
-      
-      if (openMatch) {
-        // 思考中，提取已有的思考内容
-        const thinkContent = openMatch[1].trim()
-        return {
-          thinkContent,
-          mainContent: '', // 思考中时还没有正式内容
-          hasThinking: false // 还未完成，所以 hasThinking 为 false
-        }
-      }
-      
-      return {
-        thinkContent: '',
-        mainContent: content,
-        hasThinking: false
-      }
-    },
-
-    /**
      * 添加用户消息
      * @param {string} userMessage - 用户消息内容
      */
@@ -425,85 +387,7 @@ Component({
         msgList: [...this.data.msgList, aiMsg]
       })
     },
-    /**
-     * 流式更新消息内容（会自动解析 <think> 标签）
-     * @param {string} chunk - 新增的内容片段
-     */
-    updateStreamMessage(chunk) {
-      const msgList = this.data.msgList
-      const lastMsg = msgList[msgList.length - 1]
-      
-      if (lastMsg && lastMsg.senderType === 2) {  // AI消息
-        // 累加原始内容
-        lastMsg.rawContent = (lastMsg.rawContent || '') + chunk
-        
-        // 检测思考开始
-        if (!lastMsg.isThinking && lastMsg.rawContent.includes('<think>')) {
-          lastMsg.isThinking = true
-        }
-        
-        // 解析思考过程和正式内容
-        const parsed = this.parseThinkingContent(lastMsg.rawContent)
-        lastMsg.hasThinking = parsed.hasThinking
-        lastMsg.thinkContent = parsed.thinkContent
-        lastMsg.mainContent = parsed.mainContent
-        
-        // 检测思考结束
-        if (lastMsg.isThinking && lastMsg.rawContent.includes('</think>')) {
-          lastMsg.isThinking = false
-        }
-        
-        // 转换为 HTML
-        // 思考中或思考完成都需要转换 HTML
-        if (parsed.thinkContent) {
-          lastMsg.thinkHtmlContent = formatMessage(parsed.thinkContent)
-        }
-        if (parsed.mainContent) {
-          lastMsg.htmlContent = formatMessage(parsed.mainContent)
-        }
-        
-        this.setData({ msgList })
-      }
-    },
 
-    /**
-     * 完成消息接收
-     */
-    finishMessage() {
-      const msgList = this.data.msgList
-      const lastMsg = msgList[msgList.length - 1]
-      
-      if (lastMsg && lastMsg.senderType === 2) {  // AI消息
-        lastMsg.loading = false
-        // 最终内容设置
-        lastMsg.content = lastMsg.mainContent || lastMsg.rawContent || ''
-        this.setData({ msgList })
-        this.scrollToBottom()
-      }
-    },
-
-    /**
-     * 消息发送失败处理
-     * @param {string} errorMsg - 错误信息
-     */
-    messageError(errorMsg) {
-      const msgList = this.data.msgList
-      if (msgList.length > 0) {
-        const lastMsg = msgList[msgList.length - 1]
-        
-        // 如果最后一条是 AI 消息，标记为错误状态
-        if (lastMsg.senderType === 2) {
-          lastMsg.loading = false
-          lastMsg.error = true
-        }
-        // 如果最后一条是用户消息，也标记错误（向后兼容）
-        else if (lastMsg.senderType === 1) {
-          lastMsg.error = true
-        }
-        
-        this.setData({ msgList })
-      }
-    },
     /**
      * 处理重新发送消息
      * @param {object} e - 事件对象

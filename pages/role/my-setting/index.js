@@ -117,7 +117,6 @@ Page({
     if (!this.data.roleId) {
       // 直接调用上一页面传递的回调函数
       const prevPage = getCurrentPages()[getCurrentPages().length - 2]
-      const { callback } = prevPage.data
       prevPage.confirmUserSettings({
         userAddressedAs: userAddressedAs,
         identity: identity,

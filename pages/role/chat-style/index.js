@@ -14,58 +14,7 @@ Page({
     // 当前选中的tab: 0-模版, 1-我创建的
     activeTab: 0,
     // 模版列表
-    templateList: [
-      {
-        id: 1,
-        name: '风格名称',
-        dialogCount: 12
-      },
-      {
-        id: 2,
-        name: '风格名称',
-        dialogCount: 12
-      },
-      {
-        id: 3,
-        name: '风格名称',
-        dialogCount: 12
-      },
-      {
-        id: 4,
-        name: '风格名称',
-        dialogCount: 12
-      },
-      {
-        id: 5,
-        name: '风格名称',
-        dialogCount: 12
-      },
-      {
-        id: 6,
-        name: '风格名称',
-        dialogCount: 12
-      },
-      {
-        id: 7,
-        name: '风格名称',
-        dialogCount: 12
-      },
-      {
-        id: 8,
-        name: '风格名称',
-        dialogCount: 12
-      },
-      {
-        id: 9,
-        name: '风格名称',
-        dialogCount: 12
-      },
-      {
-        id: 10,
-        name: '风格名称',
-        dialogCount: 12
-      }
-    ],
+    templateList: [],
     // 我创建的列表
     myStyleList: []
   },
@@ -87,23 +36,26 @@ Page({
     this.setData({
       activeTab: index
     })
+    this.getStyleList()
   },
 
   /**
    * 导入风格
    */
   onImportStyle(event) {
-    const id = event.currentTarget.dataset.id
-    console.log('导入风格:', id)
-    wx.showToast({
-      title: '导入成功',
-      icon: 'success'
+    console.log(event, '=====')
+    const prevPage = getCurrentPages()[getCurrentPages().length - 2]
+    prevPage.confirmUserSettings({
+      userAddressedAs: userAddressedAs,
+      identity: identity,
+      personaGender: personaGender
     })
+    wx.navigateBack()
   },
 
   /**
    * 还原设置
-   */
+   */ 
   onResetSettings() {
     wx.showModal({
       title: '提示',
@@ -133,14 +85,16 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
-    getChatStyleList().then(res => {
-      console.log(res, '----------')
-    })
+    this.getStyleList()
   },
-  // 进入页面(包括返回到当前页面)时获取风格列表
-  onEnterPage() {
-    getChatStyleList().then(res => {
-      console.log(res, '----------')
+  getStyleList() {
+    getChatStyleList({
+      ifSystem: this.data.activeTab === 0
+    }).then(res => {
+      const key = this.data.activeTab === 0 ? 'templateList' : 'myStyleList'
+      this.setData({
+        [key]: [...res]
+      })
     })
   }
 })

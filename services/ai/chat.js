@@ -76,4 +76,8 @@ export function getHomePlotMessage() {
   return request.get('/api/v1/server/plot/getDefaultPlotMessage')
 }
 
+export function getPlotMessage(params) {
+  return request.get('/api/v1/server/plot/getPlotMessage')
+}
+
 export default ChatService

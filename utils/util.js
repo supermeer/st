@@ -131,3 +131,49 @@ module.exports = {
   phoneEncryption,
   phoneRegCheck
 }
+
+
+
+
+
+/**
+ * 解析消息内容，提取思考过程和正式内容
+ * @param {string} content - 原始消息内容
+ * @returns {object} - { thinkContent: string, mainContent: string, hasThinking: boolean }
+ */
+const parseThinkingContent = (content) => {
+  // 先尝试匹配完整的 <think>...</think>
+  const thinkRegex = /<think>([\s\S]*?)<\/think>/
+  const match = content.match(thinkRegex)
+  
+  if (match) {
+    // 思考已完成
+    const thinkContent = match[1].trim()
+    const mainContent = content.replace(thinkRegex, '').trim()
+    return {
+      thinkContent,
+      mainContent,
+      hasThinking: true
+    }
+  }
+  
+  // 如果没有完整匹配，检查是否有未闭合的 <think> 标签（思考中）
+  const openThinkRegex = /<think>([\s\S]*?)$/
+  const openMatch = content.match(openThinkRegex)
+  
+  if (openMatch) {
+    // 思考中，提取已有的思考内容
+    const thinkContent = openMatch[1].trim()
+    return {
+      thinkContent,
+      mainContent: '', // 思考中时还没有正式内容
+      hasThinking: false // 还未完成，所以 hasThinking 为 false
+    }
+  }
+  
+  return {
+    thinkContent: '',
+    mainContent: content,
+    hasThinking: false
+  }
+}

@@ -14,7 +14,8 @@ export const DEFAULT_CONFIG = {
   encodeTags: false,
   colors: {
     em: "rgb(145, 145, 145)",
-    quote: "rgb(225, 138, 36)",
+    // quote: "rgb(225, 138, 36)",
+    quote: "rgb(255, 255, 255)",
     underline: "rgb(188, 231, 207)",
   },
 };
