@@ -1,11 +1,12 @@
 import SystemInfo from '../../../utils/system'
-import { getChatStyleList } from '../../../services/role/index'
+import { getChatStyleList, restorePlotChatStyle } from '../../../services/role/index'
 
 Page({
   /**
    * 页面的初始数据
    */
   data: {
+    plotId: null,
     scrollTop: 0,
     pageInfo: {
       safeAreaBottom: 0,
@@ -24,6 +25,7 @@ Page({
    */
   onLoad(options) {
     this.setData({
+      plotId: options.plotId,
       pageInfo: { ...this.data.pageInfo, ...SystemInfo.getPageInfo() }
     })
   },
@@ -43,12 +45,12 @@ Page({
    * 导入风格
    */
   onImportStyle(event) {
-    console.log(event, '=====')
+    const { id } = event.currentTarget.dataset
+    const list = this.data.activeTab === 0 ? this.data.templateList : this.data.myStyleList
+    const styleInfo = list.find(item => item.id === id)
     const prevPage = getCurrentPages()[getCurrentPages().length - 2]
-    prevPage.confirmUserSettings({
-      userAddressedAs: userAddressedAs,
-      identity: identity,
-      personaGender: personaGender
+    prevPage.confirmChatStyle({
+      ...styleInfo
     })
     wx.navigateBack()
   },
@@ -61,12 +63,14 @@ Page({
       title: '提示',
       content: '确定要还原设置吗？',
       success: (res) => {
-        if (res.confirm) {
+        restorePlotChatStyle({
+          plotId: this.data.plotId
+        }).then(res => {
           wx.showToast({
             title: '已还原',
             icon: 'success'
           })
-        }
+        })
       }
     })
   },

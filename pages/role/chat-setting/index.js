@@ -1,5 +1,5 @@
 import SystemInfo from '../../../utils/system'
-
+import { getPlotDetail, updatePlot } from '../../../services/ai/chat'
 Page({
   /**
    * 页面的初始数据
@@ -9,9 +9,18 @@ Page({
       safeAreaBottom: 0,
       navHeight: 0
     },
-    chatInfo: {
+    roleInfo: {
+      id: null,
       name: '沈川寒',
       avatar: 'https://img.zcool.cn/community/01c8b25e8f8f8da801219c779e8c95.jpg@1280w_1l_2o_100sh.jpg'
+    },
+    plotInfo: {
+      totalMemory: 30,
+      name: '沈川寒',
+      avatar: 'https://img.zcool.cn/community/01c8b25e8f8f8da801219c779e8c95.jpg@1280w_1l_2o_100sh.jpg',
+      id: null,
+      ifReasoning: false,
+      memoryCount: 0
     },
     // 今日对话
     todayChat: {
@@ -67,6 +76,15 @@ Page({
     if (options.roleId) {
       this.loadChatSettings(options.roleId)
     }
+    if (options.plotId) {
+      this.setData({
+        plotInfo: {
+          ...this.data.plotInfo,
+          id: options.plotId
+        }
+      })
+      this.getPlotInfo(options.plotId)
+    }
     this.setData({
       pageInfo: { ...this.data.pageInfo, ...SystemInfo.getPageInfo() }
     })
@@ -80,6 +98,16 @@ Page({
     console.log('加载对话设定:', roleId)
   },
 
+  getPlotInfo(plotId) {
+    getPlotDetail(plotId).then(res => {
+      this.setData({
+        plotInfo: {
+          ...this.data.plotInfo,
+          ...res
+        }
+      })
+    })
+  },
   /**
    * 提升对话上限
    */
@@ -107,17 +135,17 @@ Page({
    */
   async onDeepThinkingChange(event) {
     const newValue = event.detail.value
-    const oldValue = this.data.chatMode.deepThinking
+    const oldValue = this.data.plotInfo.ifReasoning
     
     this.setData({
-      'chatMode.deepThinking': newValue
+      'plotInfo.ifReasoning': newValue
     })
     
     const success = await this.saveChatSettings()
     if (!success) {
       // 请求失败，回滚状态
       this.setData({
-        'chatMode.deepThinking': oldValue
+        'plotInfo.ifReasoning': oldValue
       })
     }
   },
@@ -150,11 +178,11 @@ Page({
     
     // 如果是第一次滑动，保存原始值
     if (this.memoryOriginalValue === null) {
-      this.memoryOriginalValue = this.data.memory.general
+      this.memoryOriginalValue = this.data.plotInfo.memoryCount
     }
     
     this.setData({
-      'memory.general': value
+      'plotInfo.memoryCount': value
     })
     
     // 清除之前的定时器
@@ -168,7 +196,7 @@ Page({
       if (!success && this.memoryOriginalValue !== null) {
         // 请求失败，回滚到原始状态
         this.setData({
-          'memory.general': this.memoryOriginalValue
+          'plotInfo.memoryCount': this.memoryOriginalValue
         })
       }
       // 重置原始值
@@ -192,7 +220,7 @@ Page({
       // 请求失败，回滚到原始值
       if (this.memoryOriginalValue !== null) {
         this.setData({
-          'memory.general': this.memoryOriginalValue
+          'plotInfo.memoryCount': this.memoryOriginalValue
         })
       }
       wx.showModal({
@@ -256,21 +284,12 @@ Page({
         title: '保存中...',
         mask: true
       })
-      
-      // TODO: 调用接口保存设置
-      console.log('保存设置:', {
-        chatMode: this.data.chatMode,
-        memory: this.data.memory,
-        chatBackground: this.data.chatBackground
+
+      await updatePlot({
+        id: this.data.plotInfo.id,
+        ifReasoning: this.data.plotInfo.ifReasoning,
+        memoryCount: this.data.plotInfo.memoryCount
       })
-      
-      // 模拟异步请求
-      await new Promise(resolve => setTimeout(resolve, 300))
-      
-      // 模拟可能的失败情况（实际使用时删除这段）
-      if (Math.random() > 0.8) {
-        throw new Error('网络错误')
-      }
       
       wx.hideLoading()
       wx.showToast({

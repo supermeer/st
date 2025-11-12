@@ -48,25 +48,25 @@
         <view class="form-label">我的性别</view>
         <view class="gender-options">
           <view 
-            class="gender-option {{formData.personaGender === 'male' ? 'active' : ''}}"
+            class="gender-option {{formData.personaGender === '男' ? 'active' : ''}}"
             bindtap="onGenderChange"
-            data-gender="male"
+            data-gender="男"
           >
             <t-icon name="gender-male" size="40rpx" />
             <text>男</text>
           </view>
           <view 
-            class="gender-option {{formData.personaGender === 'female' ? 'active' : ''}}"
+            class="gender-option {{formData.personaGender === '女' ? 'active' : ''}}"
             bindtap="onGenderChange"
-            data-gender="female"
+            data-gender="女"
           >
             <t-icon name="gender-female" size="40rpx" />
             <text>女</text>
           </view>
           <view 
-            class="gender-option {{formData.personaGender === 'other' ? 'active' : ''}}"
+            class="gender-option {{formData.personaGender === '其他' ? 'active' : ''}}"
             bindtap="onGenderChange"
-            data-gender="other"
+            data-gender="其他"
           >
             <t-icon name="user" size="40rpx" />
             <text>其他</text>

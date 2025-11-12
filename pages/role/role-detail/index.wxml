@@ -21,15 +21,10 @@
       <view class="role-name-section">
         <text class="role-name">{{roleInfo.name || '角色名称'}}</text>
         <text class="role-gender">{{roleInfo.gender || '♂'}}</text>
-        <view class="chat-setting" bind:tap="onDialogSetting">对话设定</view>
+        <view wx:if="{{plotInfo.id}}" class="chat-setting" bind:tap="onDialogSetting">对话设定</view>
       </view>
       <view class="role-tags">
-        <text class="tag">#角色扮演</text>
-        <text class="tag">#聊天</text>
-        <text class="tag">#娱乐</text>        
-        <text class="tag">#角色扮演</text>
-        <text class="tag">#聊天</text>
-        <text class="tag">#娱乐</text>
+        <text class="tag" wx:for="{{roleInfo.tags}}" wx:key="index">#{{item.name}}</text>
       </view>
     </view>
 
@@ -45,22 +40,28 @@
       <view wx:if="{{currentTab === '1'}}" class="content-section">
         <view class="section-title">TA的设定</view>
         <view class="section-content blur-glass">
-          <text>{{roleInfo.description || '暂无描述'}}</text>
+          <text>{{descriptionDisplay || roleInfo.description || '暂无描述'}}</text>
+          <text wx:if="{{descriptionNeedFold}}" class="fold-toggle" bind:tap="toggleDescription">
+            {{descriptionExpanded ? '收起 ▴' : '展开 ▾'}}
+          </text>
         </view>
         
         <view class="section-title">开场白</view>
         <view class="section-content blur-glass">
-          <text>{{roleInfo.greeting || '你好，很高兴认识你！'}}</text>
+          <text>{{prologueDisplay || storyInfo.prologue || '你好，很高兴认识你！'}}</text>
+          <text wx:if="{{prologueNeedFold}}" class="fold-toggle" bind:tap="togglePrologue">
+            {{prologueExpanded ? '收起 ▴' : '展开 ▾'}}
+          </text>
         </view>
 
         <view class="section-title-container" bind:tap="onNewChatStyle">
           <view class="section-title">对话风格</view>
-          <t-icon name="add-circle-filled" class="section-title-icon" size="18" />
+          <t-icon wx:if="{{plotInfo.id}}" name="add-circle-filled" class="section-title-icon" size="18" />
         </view>
         <view class="style-content blur-glass" bind:tap="onChatStyle">
-          <text>搞笑女没有爱情</text>
-          <view class="style-right-content">
-            <text class="style-right-text">智能体默认设置</text>
+          <text>{{plotInfo.chatStyle.title || ''}}</text>
+          <view wx:if="{{plotInfo.id}}" class="style-right-content">
+            <text class="style-right-text">选择风格</text>
             <t-icon name="chevron-right-s" class="section-title-icon" size="28" />
           </view>
         </view>
@@ -71,7 +72,7 @@
           <t-icon name="chevron-right-s" class="section-title-icon" size="24" />
         </view>
         <view class="memory-content blur-glass">
-          <text>相遇那天</text>
+          <text>{{plotInfo.title || '暂无'}}</text>
         </view>
         <view class="section-title-container" bind:tap="onMySetting">
           <view class="section-title">我的设定</view>
@@ -80,15 +81,15 @@
         <view class="setting-container">
           <view class="setting-item blur-glass">
             <text class="setting-item-title">对我的称呼</text>
-            <text class="setting-item-value">暂无</text>
+            <text class="setting-item-value">{{plotInfo.persona.userAddressedAs || '暂无'}}</text>
           </view>
           <view class="setting-item blur-glass">
             <text class="setting-item-title">性别</text>
-            <text class="setting-item-value">暂无</text>
+            <text class="setting-item-value">{{plotInfo.persona.gender || '暂无'}}</text>
           </view>
           <view class="setting-item blur-glass">
             <text class="setting-item-title">我是谁</text>
-            <text class="setting-item-value">暂无</text>
+            <text class="setting-item-value">{{plotInfo.persona.identity || '暂无'}}</text>
           </view>
         </view>
         <view class="section-title-container">
@@ -98,12 +99,12 @@
         <view class="memory-content blur-glass">
           <view class="memory-header">
             <text class="memory-label">记忆</text>
-            <text class="memory-value">{{memoryValue}}%</text>
+            <text class="memory-value">{{plotInfo.memoryCount}}条</text>
           </view>
           <t-slider
             class="memory-slider"
-            default-value="{{23}}"
-            value="{{memoryValue}}"
+            default-value="{{plotInfo.memoryCount}}"
+            value="{{plotInfo.memoryCount}}"
             label="{{false}}"
             step="{{1}}"
             bind:change="memoryChange"

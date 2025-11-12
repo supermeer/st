@@ -12,10 +12,11 @@ export function createCharacter(data) {
     return request.post('/api/v1/server/character/createCharacter', data)
 }
 
+export function createPersona(data) {
+    return request.post('/api/v1/server/story/createPersona', data)
+}
+
 export function getCharacterList(params) {
-    // ifSystem
-    // characterTypeId
-    // characterTagId
     return request.get('/api/v1/server/character/getCharacterList', params)
 }
 
@@ -33,4 +34,16 @@ export function getPlotListByCharacterId(characterId) {
 
 export function getCharacterDetail(characterId) {
     return request.get(`/api/v1/server/character/getCharacterDetail?characterId=${characterId}`)
+}
+
+export function restorePlotChatStyle(data) {
+    return request.post('/api/v1/server/plot/restorePlotChatStyle', data)
+}
+
+export function getStoryDetail(storyId) {
+    return request.get(`/api/v1/server/story/getStoryDetail?storyId=${storyId}`)
+}
+
+export function getPlotDetail(plotId) {
+    return request.get(`/api/v1/server/plot/getPlotDetail?plotId=${plotId}`)
 }

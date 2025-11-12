@@ -18,8 +18,9 @@
     loadingTexts="{{['下拉刷新', '松手刷新', '正在刷新', '刷新完成']}}"
     bind:refresh="onRefresh"
     bind:timeout="onTimeout"
-    disabled="{{!isScrollTop}}"
+    disabled="{{true}}"
   >
+    <!-- disabled="{{!isScrollTop}}" -->
     <scroll-view 
       class="chat-content" 
       scroll-y
@@ -28,37 +29,37 @@
     >
       <!-- 聊天列表 -->
       <view class="chat-list" wx:if="{{chatList.length > 0}}">
-        <view class="chat-item-wrapper" wx:for="{{chatList}}" wx:key="id">
+        <view class="chat-item-wrapper" wx:for="{{chatList}}" wx:key="plotId">
           <van-swipe-cell
-            id="swipeCell-{{item.id}}"
+            id="swipeCell-{{item.plotId}}"
             class="chat-swipe-cell"
-            right-width="{{120}}"
+            right-width="{{140}}"
             async-close
-            data-id="{{item.id}}"
+            data-id="{{item.plotId}}"
           >
             <view
               class="chat-item {{item.isTop ? 'top-chat-item' : ''}}"
-              data-id="{{item.id}}"
+              data-id="{{item.plotId}}"
               bindtap="onChatItemClick"
             >
               <view class="chat-avatar">
-                <image src="{{item.avatar || '/static/chat/default-avatar.png'}}" mode="aspectFill" />
+                <image src="{{item.avatarUrl || '/static/chat/default-avatar.png'}}" mode="aspectFill" />
               </view>
               <view class="chat-info">
                 <view class="chat-header">
                   <view class="chat-name">{{item.name}}</view>
                   <view class="chat-time">{{item.timeText}}</view>
                 </view>
-                <view class="chat-last-msg">{{item.lastMessage}}</view>
+                <view class="chat-last-msg">{{item.description}}</view>
               </view>
             </view>
             <!-- 右侧滑出删除按钮 -->
             <view slot="right" class="swipe-actions">
-              <view class="swipe-action top-btn" catch:tap="onTopChat" data-id="{{item.id}}">
+              <view class="swipe-action top-btn" catch:tap="onTopChat" data-id="{{item.plotId}}">
                 <t-icon name="backtop" size="18px" color="#fff" />
-                置顶
+                {{item.isTop ? '取消置顶' : '置顶'}}
               </view>
-              <view class="swipe-action delete-btn" catch:tap="onDeleteChat" data-id="{{item.id}}">
+              <view class="swipe-action delete-btn" catch:tap="onDeleteChat" data-id="{{item.plotId}}">
                 <t-icon name="delete" size="18px" color="#ee5a6f" />
                 删除
               </view>

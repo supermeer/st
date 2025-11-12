@@ -7,8 +7,8 @@
   
   <!-- 固定角色信息卡片 -->
   <view class="chat-header blur-glass" style="top: {{ pageInfo.navHeight }}px">
-    <image class="chat-avatar" src="{{chatInfo.avatar}}" mode="aspectFill"></image>
-    <view class="chat-name">{{chatInfo.name}}</view>
+    <image class="chat-avatar" src="{{roleInfo.avatar}}" mode="aspectFill"></image>
+    <view class="chat-name">{{roleInfo.name}}</view>
   </view>
 
   <!-- 可滚动内容区域 -->
@@ -62,7 +62,7 @@
           </view>
           <switch 
             class="mode-switch" 
-            checked="{{chatMode.deepThinking}}"
+            checked="{{plotInfo.ifReasoning}}"
             bindchange="onDeepThinkingChange"
             color="#6C5CE7"
           />
@@ -96,13 +96,13 @@
         <!-- 一般记忆 -->
         <view class="memory-item">
           <view class="memory-header">
-            <text class="memory-label">一般记忆</text>
-            <text class="memory-value">{{memory.general}}%</text>
+            <text class="memory-label">记忆容量</text>
+            <text class="memory-value">{{plotInfo.memoryCount}}条</text>
           </view>
           <t-slider
             class="memory-slider"
-            default-value="{{32}}"
-            value="{{memory.general}}"
+            default-value="{{plotInfo.memoryCount}}"
+            value="{{plotInfo.memoryCount}}"
             label="{{false}}"
             step="{{1}}"
             bind:change="onMemoryChange"

@@ -147,8 +147,8 @@ page {
 }
 
 .swipe-action {
-  width: 54px;
-  height: 54px;
+  width: 64px;
+  height: 64px;
   display: flex;
   align-items: center;
   justify-content: center;

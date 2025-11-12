@@ -1,5 +1,6 @@
 import systemInfo from '../../utils/system'
 import ChatService from '../../services/ai/chat'
+import { getPlotMessage } from '../../services/ai/chat'
 import { getCharacterDetail } from '../../services/role/index'
 const { formatMessage } = require('../../utils/msgHandler')
 Component({
@@ -12,6 +13,17 @@ Component({
   lifetimes: {
     attached: function () {
       this.getPageInfo()
+      // 如果roleInfo已经有plotId，初始化分页信息
+      if (this.properties.roleInfo && this.properties.roleInfo.plotId) {
+        this.setData({
+          'pagination.plotId': this.properties.roleInfo.plotId,
+          'chatDetail.plotId': this.properties.roleInfo.plotId
+        })
+        // 如果是历史记录类型，加载消息列表
+        if (this.properties.roleInfo.type === 'history') {
+          this.getMessageList()
+        }
+      }
     }
   },
   // 监听roleInfo变化
@@ -27,6 +39,34 @@ Component({
           chatDetail: {
             ...this.data.chatDetail,
             plotId: newVal
+          },
+          'pagination.plotId': newVal
+        })
+        if (this.properties.roleInfo.type !== 'recommend') {
+          this.resetPagination()
+          this.getMessageList()
+        }
+      } else {
+        this.setData({
+          'pagination': {
+            size: 10,
+            current: 1,
+            plotId: null
+          },
+          'chatDetail': {
+            ...this.data.chatDetail,
+            plotId: null
+          },
+          msgList: []
+        })
+      }
+    },
+    'roleInfo.storyId': function (newVal) {
+      if (newVal) {
+        this.setData({
+          chatDetail: {
+            ...this.data.chatDetail,
+            storyId: newVal
           }
         })
       }
@@ -36,8 +76,7 @@ Component({
     roleDetail: {
       name: '',
       avatarUrl: '',
-      description: '',
-      plotText: ''
+      description: ''
     },
     defaultStoryDetail: {
       prologue: null,
@@ -46,6 +85,7 @@ Component({
     },
     chatDetail: {
       plotId: null,
+      storyId: null
     },
     msgList: [],
     isLogin: false,
@@ -66,6 +106,12 @@ Component({
     operatingForm: {
       operate: '',
       msgId: null // 只存储消息 ID，不存储引用
+    },
+    // 分页相关
+    pagination: {
+      size: 10, // 每页数量
+      current: 1, // 当前页码
+      plotId: null // 剧情ID
     }
   },
   methods: {
@@ -80,6 +126,7 @@ Component({
     },
     getRoleInfo() {
       getCharacterDetail(this.properties.roleInfo.id).then(res => {
+        const storyId = this.data.chatDetail.storyId
         this.setData({
           roleDetail: {
             ...this.data.roleDetail,
@@ -88,6 +135,10 @@ Component({
           defaultStoryDetail: {
             ...this.data.defaultStoryDetail,
             ...res.defaultStoryDetail
+          },
+          chatDetail: {
+            ...this.data.chatDetail,
+            storyId: storyId ? storyId : res.defaultStoryId
           }
         })
         if (this.properties.roleInfo.type === 'recommend') {
@@ -115,7 +166,8 @@ Component({
           chatDetail: {
             ...this.data.chatDetail,
             plotId: plotId
-          }
+          },
+          'pagination.plotId': plotId
         })
       }
       const msg = this.addUserMessage(e.detail.content)
@@ -155,6 +207,9 @@ Component({
             latestMessage.thinkHtmlContent = formatMessage(latestMessage.thinkContent || '')
             latestMessage.isThinking = true
             latestMessage.hasThinking = true
+          }
+          if (type === 'messageId') {
+            latestMessage.id = msg
           }
           this.setData({
             msgList: this.data.msgList
@@ -241,7 +296,7 @@ Component({
     },
     goRoleInfo() {
       wx.navigateTo({
-        url: `/pages/role/role-detail/index?id=1`
+        url: `/pages/role/role-detail/index?characterId=${this.properties.roleInfo.id}&storyId=${this.data.chatDetail.storyId}&plotId=${this.data.chatDetail.plotId}`
       })
     },
     // 监听下拉动作
@@ -273,13 +328,21 @@ Component({
         return
       }
       
+      // 如果没有plotId，无法加载消息
+      if (!this.data.pagination.plotId) {
+        this.noMoreHandle()
+        return
+      }
+      
       this.setData({
         isLoadingMore: true,
         refresherTriggered: true,
         pullDownStatus: 'loading',
         topMsg: this.data.msgList[0]
       })
-      this.triggerEvent('loadMore', {}, { bubbles: true, composed: true })
+      
+      // 加载下一页数据
+      this.loadMoreMessages()
     },
     // 停止下拉刷新状态（供父组件调用）
     stopRefresh() {
@@ -343,6 +406,138 @@ Component({
         msgList: msgs
       })
       this.scrollToBottom()
+    },
+    // 获取消息列表
+    getMessageList() {
+      if (!this.data.pagination.plotId) {
+        this.setData({
+          msgList: []
+        })
+        return
+      }
+      
+      // 重置分页
+      this.resetPagination()
+      getPlotMessage({
+        size: this.data.pagination.size,
+        current: this.data.pagination.current,
+        plotId: this.data.pagination.plotId
+      }).then(res => {
+        let messageList = []
+        if (res && res.records && Array.isArray(res.records)) {
+          messageList = res.records
+        } else if (Array.isArray(res)) {
+          messageList = res
+        }
+        
+        // 格式化消息内容
+        const formattedMessages = messageList.map(msg => {
+          if (msg.senderType === 2 && msg.content) {
+            return {
+              ...msg,
+              thinkContent: msg.reasoningContent || '',
+              thinkHtmlContent: formatMessage(msg.reasoningContent || ''),
+              htmlContent: formatMessage(msg.content),
+              mainContent: msg.content,
+              hasThinking: !!msg.reasoningContent
+            }
+          }
+          return msg
+        })
+        
+        // 更新分页状态
+        const pagination = {
+          current: res.current || this.data.pagination.current,
+          size: res.size || this.data.pagination.size,
+          plotId: this.data.pagination.plotId
+        }
+        
+        // 判断是否还有更多数据：current < pages
+        const hasMore = res.current && res.pages ? res.current < res.pages : messageList.length >= pagination.size
+        
+        this.setData({
+          msgList: formattedMessages,
+          pagination: pagination,
+          hasMore: hasMore
+        })
+        
+        this.scrollToBottom()
+      }).catch(err => {
+        console.error('获取消息列表失败:', err)
+        this.setData({
+          msgList: []
+        })
+      })
+    },
+    // 加载更多消息
+    loadMoreMessages() {
+      if (!this.data.pagination.plotId) {
+        this.noMoreHandle()
+        return
+      }
+      
+      const nextPage = this.data.pagination.current + 1
+      
+      getPlotMessage({
+        size: this.data.pagination.size,
+        current: nextPage,
+        plotId: this.data.pagination.plotId
+      }).then(res => {
+        // 根据返回格式获取消息列表：res.records
+        let newMessages = []
+        if (res && res.records && Array.isArray(res.records)) {
+          newMessages = res.records
+        } else if (Array.isArray(res)) {
+          newMessages = res
+        }
+        
+        // 格式化消息内容
+        const formattedMessages = newMessages.map(msg => {
+          if (msg.senderType === 2 && msg.content) {
+            return {
+              ...msg,
+              htmlContent: formatMessage(msg.content)
+            }
+          }
+          return msg
+        })
+        
+        if (formattedMessages.length === 0) {
+          // 没有更多数据
+          this.noMoreHandle()
+        } else {
+          // 更新分页信息
+          const pagination = {
+            ...this.data.pagination,
+            current: res.current || nextPage,
+            size: res.size || this.data.pagination.size
+          }
+          
+          // 判断是否还有更多数据：current < pages
+          const hasMore = res.current && res.pages ? res.current < res.pages : formattedMessages.length >= pagination.size
+          
+          this.setData({
+            pagination: pagination,
+            hasMore: hasMore
+          })
+          
+          // 将新消息插入到列表前面
+          this.loadMoreHandle(formattedMessages)
+        }
+      }).catch(err => {
+        console.error('加载更多消息失败:', err)
+        this.stopRefresh()
+      })
+    },
+    // 重置分页
+    resetPagination() {
+      this.setData({
+        'pagination.current': 1,
+        hasMore: true,
+        pullDownStatus: 'pull',
+        isLoadingMore: false,
+        refresherTriggered: false
+      })
     },
     /**
      * 添加用户消息

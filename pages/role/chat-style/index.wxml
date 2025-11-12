@@ -80,7 +80,7 @@
 
   <!-- 底部操作按钮 -->
   <view class="bottom-actions" style="padding-bottom: {{ pageInfo.safeAreaBottom }}px;">
-    <view class="action-btn outline-btn" bind:tap="onResetSettings">
+    <view wx:if="{{plotId}}" class="action-btn outline-btn" bind:tap="onResetSettings">
       <text class="btn-text">还原设置</text>
     </view>
     <view class="action-btn primary-btn" bind:tap="onCreateTemplate">

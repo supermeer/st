@@ -1,5 +1,5 @@
 import SystemInfo from '../../../utils/system'
-
+import { createPersona } from '../../../services/role/index'
 Page({
   /**
    * 页面的初始数据
@@ -9,7 +9,7 @@ Page({
       safeAreaBottom: 0,
       navHeight: 0
     },
-    roleId: null,
+    storyId: null,
     chatInfo: {
       name: '沈川寒',
       avatar: 'https://img.zcool.cn/community/01c8b25e8f8f8da801219c779e8c95.jpg@1280w_1l_2o_100sh.jpg',
@@ -37,9 +37,9 @@ Page({
         isGlobal: true
       })
     }
-    if (options.roleId) {
+    if (options.storyId) {
       this.setData({
-        roleId: options.roleId
+        storyId: options.storyId
       })
     }
     this.setData({
@@ -114,7 +114,7 @@ Page({
       return
     }
 
-    if (!this.data.roleId) {
+    if (!this.data.storyId) {
       // 直接调用上一页面传递的回调函数
       const prevPage = getCurrentPages()[getCurrentPages().length - 2]
       prevPage.confirmUserSettings({
@@ -126,18 +126,17 @@ Page({
       return
     }
 
-    // TODO: 调用接口保存对话设定
-    console.log('保存对话设定:', this.data.formData)
-
-    wx.showToast({
-      title: '保存成功',
-      icon: 'success',
-      duration: 2000,
-      success: () => {
-        setTimeout(() => {
-          wx.navigateBack()
-        }, 2000)
-      }
+    createPersona({
+      ...this.data.formData,
+      storyId: this.data.storyId
+    })
+    .then(res => {
+      wx.showToast({
+        title: '保存成功',
+        icon: 'success',
+        duration: 1000
+      })
+      wx.navigateBack()
     })
   }
 })

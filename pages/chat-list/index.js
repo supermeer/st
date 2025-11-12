@@ -1,8 +1,7 @@
 import userStore from '../../store/user'
 import SystemInfo from '../../utils/system'
 import Toast from 'tdesign-miniprogram/toast/index'
-import Dialog from 'tdesign-miniprogram/dialog/index'
-import ChatService from '../../services/ai/chat'
+import { getChatList, deletePlot, topPlot } from '../../services/ai/chat'
 import dayjs from 'dayjs'
 
 Page(
@@ -102,137 +101,18 @@ Page(
           pageNo: 1,
           pageSize: 100
         }
-        // mock假数据
-        const chatList = [
-          {
-            id: 1,
-            name: '未命名角色',
-            avatar: '/static/chat/default-avatar.png',
-            lastMessage: '开始聊天吧',
-            time: new Date().getTime(),
-            isTop: true,
-            timeText: this.formatTime(new Date().getTime())
-          },
-          {
-            id: 2,
-            name: '未命名角色',
-            avatar: '/static/chat/default-avatar.png',
-            lastMessage: '开始聊天吧',
-            time: new Date().getTime(),
-            timeText: this.formatTime(new Date().getTime())
-          },
-          {
-            id: 3,
-            name: '未命名角色',
-            avatar: '/static/chat/default-avatar.png',
-            lastMessage: '开始聊天吧开始聊天吧开始聊天吧开始聊天吧开始聊天吧开始聊天吧开始聊天吧开始聊天吧开始聊天吧',
-            time: new Date().getTime(),
-            timeText: this.formatTime(new Date().getTime())
-          },
-          {
-            id: 4,
-            name: '未命名角色',
-            avatar: '/static/chat/default-avatar.png',
-            lastMessage: '开始聊天吧',
-            time: new Date().getTime(),
-            timeText: this.formatTime(new Date().getTime())
-          },
-          {
-            id: 5,
-            name: '未命名角色',
-            avatar: '/static/chat/default-avatar.png',
-            lastMessage: '开始聊天吧',
-            time: new Date().getTime(),
-            timeText: this.formatTime(new Date().getTime())
-          },
-          {
-            id: 6,
-            name: '未命名角色',
-            avatar: '/static/chat/default-avatar.png',
-            lastMessage: '开始聊天吧',
-            time: new Date().getTime(),
-            timeText: this.formatTime(new Date().getTime())
-          },
-          {
-            id: 7,
-            name: '未命名角色',
-            avatar: '/static/chat/default-avatar.png',
-            lastMessage: '开始聊天吧',
-            time: new Date().getTime(),
-            timeText: this.formatTime(new Date().getTime())
-          },
-          {
-            id: 8,
-            name: '未命名角色',
-            avatar: '/static/chat/default-avatar.png',
-            lastMessage: '开始聊天吧',
-            time: new Date().getTime(),
-            timeText: this.formatTime(new Date().getTime())
-          },
-          {
-            id: 9,
-            name: '未命名角色',
-            avatar: '/static/chat/default-avatar.png',
-            lastMessage: '开始聊天吧',
-            time: new Date().getTime(),
-            timeText: this.formatTime(new Date().getTime())
-          },
-          {
-            id: 10,
-            name: '未命名角色',
-            avatar: '/static/chat/default-avatar.png',
-            lastMessage: '开始聊天吧',
-            time: new Date().getTime(),
-            timeText: this.formatTime(new Date().getTime())
-          },
-          {
-            id: 11,
-            name: '未命名角色',
-            avatar: '/static/chat/default-avatar.png',
-            lastMessage: '开始聊天吧',
-            time: new Date().getTime(),
-            timeText: this.formatTime(new Date().getTime())
-          },
-          {
-            id: 12,
-            name: '未命名角色',
-            avatar: '/static/chat/default-avatar.png',
-            lastMessage: '开始聊天吧',
-            time: new Date().getTime(),
-            timeText: this.formatTime(new Date().getTime())
-          },
-          {
-            id: 13,
-            name: '未命名角色',
-            avatar: '/static/chat/default-avatar.png',
-            lastMessage: '开始聊天吧',
-            time: new Date().getTime(),
-            timeText: this.formatTime(new Date().getTime())
-          },
-        ]
+        const res = await getChatList(params)
+        // 格式化时间
+        const chatList = res.map(item => {
+          return {
+            ...item,
+            timeText: this.formatTime(item.createTime)
+          }
+        })
         this.setData({
           chatList,
           refreshing: false
         })
-        // const res = await ChatService.getSessionList(params)
-        
-        // if (res.code === 200 && res.data) {
-        //   const chatList = (res.data.records || []).map(item => ({
-        //     id: item.id,
-        //     name: item.roleName || '未命名角色',
-        //     avatar: item.roleAvatar || '/static/chat/default-avatar.png',
-        //     lastMessage: item.lastMessage || '开始聊天吧',
-        //     time: item.updateTime || item.createTime,
-        //     timeText: this.formatTime(item.updateTime || item.createTime)
-        //   }))
-          
-        //   this.setData({
-        //     chatList,
-        //     refreshing: false
-        //   })
-        // } else {
-        //   throw new Error(res.msg || '获取聊天列表失败')
-        // }
       } catch (error) {
         console.error('加载聊天列表失败:', error)
         
@@ -257,7 +137,6 @@ Page(
       const now = dayjs()
       const time = dayjs(timestamp)
       const diffDays = now.diff(time, 'day')
-      
       if (diffDays === 0) {
         // 今天，显示时:分
         return time.format('HH:mm')
@@ -288,14 +167,9 @@ Page(
     },
     onTopChat(e) {
       const { id } = e.currentTarget.dataset
-      console.log(id)
-      Toast({
-        context: this,
-        selector: '#t-toast',
-        message: '置顶成功',
-      })
-      const chatList = this.data.chatList.filter(item => item.id !== id)
-      this.setData({ chatList })
+      const plot = this.data.chatList.find(item => item.plotId === id)
+      const isTop = !plot.isTop
+      this.topChat(id, isTop)
     },
     /**
      * 删除聊天
@@ -322,18 +196,14 @@ Page(
      */
     async deleteChat(id) {
       try {
-        // 调用删除接口
-        // const res = await ChatService.deleteSession(id)
-        
-        // 暂时直接从列表中移除
-        const chatList = this.data.chatList.filter(item => item.id !== id)
-        this.setData({ chatList })
-        
+        await deletePlot({ id })
         Toast({
           context: this,
           selector: '#t-toast',
           message: '删除成功',
         })
+        this.loadChatList()
+        
       } catch (error) {
         console.error('删除聊天失败:', error)
         
@@ -342,6 +212,32 @@ Page(
           selector: '#t-toast',
           message: '删除失败，请重试',
         })
+      }
+    },
+    // 置顶
+    async topChat(id, isTop) {
+      try {
+        await topPlot({ id, isTop })
+        Toast({
+          context: this,
+          selector: '#t-toast',
+          message: isTop ? '置顶成功' : '取消置顶成功',
+        })
+        this.loadChatList()
+        // 右滑关闭
+        this.closeSwipeCell(id)
+      } catch (error) {
+        Toast({
+          context: this,
+          selector: '#t-toast',
+          message: isTop ? '置顶失败，请重试' : '取消置顶失败，请重试',
+        })
+      }
+    },
+    closeSwipeCell(id) {
+      const swipeCell = this.selectComponent(`#swipeCell-${id}`)
+      if (swipeCell) {
+        swipeCell.close()
       }
     }
   })

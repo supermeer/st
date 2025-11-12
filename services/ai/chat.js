@@ -77,7 +77,23 @@ export function getHomePlotMessage() {
 }
 
 export function getPlotMessage(params) {
-  return request.get('/api/v1/server/plot/getPlotMessage')
+  return request.get('/api/v1/server/plot/getPlotMessage', params)
+}
+
+export function getChatList(params) {
+  return request.get('/api/v1/server/plot/getChatList', params)
+}
+export function deletePlot(data) {
+  return request.post('/api/v1/server/plot/deletePlot', data)
+}
+export function topPlot(data) {
+  return request.post('/api/v1/server/plot/topPlot', data)
+}
+export function getPlotDetail(plotId) {
+  return request.get(`/api/v1/server/plot/getPlotDetail?plotId=${plotId}`)
+}
+export function updatePlot(data) {
+  return request.post('/api/v1/server/plot/updatePlot', data)
 }
 
 export default ChatService

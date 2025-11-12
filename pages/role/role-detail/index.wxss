@@ -125,8 +125,18 @@
   letter-spacing: 0.8rpx;
   padding: 12rpx;
   border-radius: 16rpx;
+  position: relative;
+  padding-bottom: 56rpx; /* 给右下角按钮留出空间 */
 }
 
+.fold-toggle {
+  position: absolute;
+  right: 16rpx;
+  bottom: 12rpx;
+  font-size: 24rpx;
+  color: #ddd;
+  padding: 8rpx 16rpx;
+}
 .section-title-container {
   display: flex;
   align-items: center;

@@ -1,5 +1,5 @@
 import SystemInfo from '../../utils/system'
-import { getHomePlotMessage, getPlotMessage } from '../../services/ai/chat'
+import { getHomePlotMessage } from '../../services/ai/chat'
 // "plugins": {
 //   "WechatSI": {
 //     "version": "0.3.1",
@@ -24,11 +24,8 @@ import { getHomePlotMessage, getPlotMessage } from '../../services/ai/chat'
 Page({
   data: {
     isLogin: false,
-    messageList: [],
     pageInfo: {},
     paddingBtm: 0,
-    loadMoreCount: 0, // 记录加载次数
-    maxLoadCount: 3, // 最多加载3次，之后显示没有更多
     backgrounds: [
       {
         id: 1,
@@ -75,14 +72,8 @@ Page({
     this.setData({
       paddingBtm: `calc(${this.data.pageInfo.safeAreaBottom}px + ${this.data.pageInfo.tabbarHeight}rpx)`
     })
-    this.getMessageList()
   },
   onShow() {
-    // wx.navigateTo({
-    //   url: '/pages/common/feedback/index',
-    // })
-    // return
-    this.getHomePlotMessage()
     this.getTabBar().init()
     this.getTabBar().setInterceptor(() => {
       if (!this.data.isLogin) {
@@ -100,6 +91,7 @@ Page({
       return
     }
     this.setData({ isLogin: true })
+    this.getHomePlotMessage()
   },
   getHomePlotMessage() {
     getHomePlotMessage().then(res => {
@@ -110,10 +102,6 @@ Page({
           plotId: res.plotId || null
         }
       })
-      
-      if (res.type === 'history') {
-        this.getMessageList()
-      }
     })
   },
   // 显式点击登录按钮
@@ -124,17 +112,7 @@ Page({
   },
   loginSuccess() {
     this.setData({ isLogin: true })
-  },
-  getMessageList() {
-    const messageList = []
-
-    this.setData({
-      messageList
-    })
-    const chatComponent = this.selectComponent('.chat-container')
-    if (chatComponent && chatComponent.getMsgListHandle) {
-      chatComponent.getMsgListHandle(messageList)
-    }
+    this.getHomePlotMessage()
   },
   hideTabbar() {
     this.setData({
@@ -147,44 +125,5 @@ Page({
       paddingBtm: `calc(${this.data.pageInfo.safeAreaBottom}px + ${this.data.pageInfo.tabbarHeight}rpx)`
     })
     this.getTabBar().show()
-  },
-  onLoadMore() {
-    const chatComponent = this.selectComponent('.chat-container')
-    
-    // 检查是否还有更多数据
-    if (this.data.loadMoreCount >= this.data.maxLoadCount) {
-      // 没有更多数据了
-      if (chatComponent && chatComponent.noMoreHandle) {
-        chatComponent.noMoreHandle()
-      }
-      return
-    }
-    
-    // 模拟异步加载历史消息
-    setTimeout(() => {
-      // 在消息列表前面插入历史消息（旧消息）
-      const newMsgs = []
-      // 每次加载2条历史消息
-      for (let i = 0; i < 2; i++) {
-        newMsgs.push({
-          senderType: 2,
-          id: new Date().getTime() + i,
-          content: `这是第${this.data.loadMoreCount + 1}次加载的历史消息 ${i + 1}：` + new Date().toLocaleTimeString()
-        })
-      }
-      
-      this.setData({
-        messageList: [
-          ...newMsgs,
-          ...this.data.messageList
-        ],
-        loadMoreCount: this.data.loadMoreCount + 1
-      })
-      
-      // 加载完成后，通知组件更新
-      if (chatComponent && chatComponent.loadMoreHandle) {
-        chatComponent.loadMoreHandle(newMsgs)
-      }
-    }, 1500) // 模拟网络延迟
   }
 })

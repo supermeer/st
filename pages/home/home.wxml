@@ -4,7 +4,6 @@
       class="chat-container"
       bind:hideTabbar="hideTabbar"
       bind:showTabbar="showTabbar"
-      bind:loadMore="onLoadMore"
       bind:retryMessage="onRetryMessage"
       roleInfo="{{roleForm}}"
     />

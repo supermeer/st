@@ -1,5 +1,5 @@
 import SystemInfo from '../../../utils/system'
-
+import { createCharacter } from '../../../services/role/index'
 Page({
   /**
    * 页面的初始数据
@@ -27,7 +27,6 @@ Page({
       id: null,
       name: ''
     },
-    // {<br/>    "name" : "角色卡1",<br/>    "gender": "男",<br/>    "description":"角色描述（展示用）",<br/>    "descriptionPrompt":"角色描述（提示词用）",<br/>    // 故事相关<br/>    "storyTitle":"故事标题",<br/>    "scene":"故事场景",<br/>    "prologue":"故事开场白",<br/>    //对话风格相关<br/>    "styleTitle":"风格标题",<br/>    "styleDescription":"风格描述",<br/>    "chatExample":"大模型回复示例",<br/>    //对我的设定相关<br/>    "userAddressedAs":"哥哥",<br/>    "identity":"用户是一个996社畜",<br/>    "personaGender":"男",<br/>    "defaultBackgroundImage":"默认背景图片"<br/>}
     genderList: ['男', '女', '其他']
   },
 
@@ -45,7 +44,7 @@ Page({
    */
   onInputChange(e) {
     const { field } = e.currentTarget.dataset
-    const { value } = e.detail
+    const value = e.detail.value || ''
     this.setData({
       [`formData.${field}`]: value
     })
@@ -56,7 +55,7 @@ Page({
    */
   onTextareaChange(e) {
     const { field } = e.currentTarget.dataset
-    const { value } = e.detail.value
+    const value = e.detail.value || ''
     this.setData({
       [`formData.${field}`]: value
     })
@@ -122,7 +121,7 @@ Page({
   confirmChatStyle(e) {
     this.setData({
       styleForm: {
-        ...styleForm,
+        ...this.data.styleForm,
         ...e
       },
       formData: {
@@ -188,28 +187,21 @@ Page({
       return
     }
     
-    // TODO: 调用接口保存角色信息
-    console.log('提交智能体信息:', formData)
-    
     wx.showLoading({
       title: '创建中...',
       mask: true
     })
     
-    // 模拟异步请求
-    setTimeout(() => {
+    createCharacter(formData).then(res => {
+      console.log(res, 'res----------')
       wx.hideLoading()
       wx.showToast({
         title: '创建成功',
         icon: 'success',
-        duration: 2000,
-        success: () => {
-          setTimeout(() => {
-            wx.navigateBack()
-          }, 2000)
-        }
+        duration: 1000
       })
-    }, 1000)
+      wx.navigateBack()
+    })
   }
 })
 
