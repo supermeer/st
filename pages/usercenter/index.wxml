@@ -2,10 +2,12 @@
   <custom-nav
     class="custom-nav"
     show-back="{{false}}"
-    show-left-logo="{{true}}"
+    show-left-logo="{{false}}"
     show-home="{{false}}"
     transparent="{{true}}"
-  />
+  >
+    <t-image slot="center" src="/static/usercenter/mine_nav.jpg" width="112rpx" height="44rpx" />
+  </custom-nav>
   <view class="usercenter-content">
     <view class="user-info">
       <t-image class="user-info-avatar" src="/static/avatar.jpg" />
@@ -41,6 +43,7 @@
       </view>
       <view class="vip-renew" catchtap="onVipRenewClick">{{ vipInfo.ifVip ? '立即续费' : '开通VIP' }}</view>
     </view>
+    <view class="points-recharge-btn" bindtap="onPointsRechargeClick">积分充值</view>
     <view class="user-center-items">
       <view wx:for="{{userCenterItems}}" wx:key="index" class="user-center-item" bindtap="onClickCell" data-url="{{item.url}}">
         <t-image class="user-center-item-icon" src="{{item.icon}}" />
@@ -51,5 +54,15 @@
     </view>                                                           
   </view>
 </view>
+
+<points-recharge-dialog
+  id="pointsRechargeDialog"
+  userAvatar="{{userInfo.avatar}}"
+  userName="{{userInfo.nickname || '小柚子'}}"
+  userLevel="{{vipInfo.level}}"
+  bind:recharge="onRecharge"
+  bind:close="onRechargeClose"
+  bind:agreement="onRechargeAgreement"
+/>
 
 <t-toast id="t-toast" />

@@ -1,4 +1,4 @@
-<view class="home-page-container" style="background: url('https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/chat_bg.png') no-repeat center center; background-size: cover;">
+<view class="home-page-container" style="background-image: url('{{currentBg}}'); background-repeat: no-repeat; background-position: center center; background-size: cover;">
   <view class="home-content" style="padding-bottom: {{paddingBtm}}">
     <chat
       class="chat-container"
@@ -6,6 +6,7 @@
       bind:showTabbar="showTabbar"
       bind:retryMessage="onRetryMessage"
       roleInfo="{{roleForm}}"
+      id="chat"
     />
   </view>
 </view>

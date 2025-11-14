@@ -23,14 +23,14 @@
     <view class="cancel-btn" bindtap="onCancel">取消</view>
   </view>
 
-  <!-- 内容区域 -->
+  <!-- 默认状态：历史搜索和热门搜索 -->
   <scroll-view
+    wx:if="{{searchStatus === 'default'}}"
     class="content-scroll"
     scroll-y
     style="height: calc(100vh - {{pageInfo.navHeight}}px - 100rpx);"
   >
-    <!-- 默认状态：历史搜索和热门搜索 -->
-    <view class="default-content" wx:if="{{searchStatus === 'default'}}">
+    <view class="default-content">
       <!-- 历史搜索 -->
       <view class="history-section" wx:if="{{historyList.length > 0}}">
         <view class="section-header">
@@ -72,8 +72,26 @@
       </view>
     </view>
 
-    <!-- 搜索结果状态 -->
-    <view class="result-content" wx:if="{{searchStatus === 'result'}}">
+    <view style="height: {{pageInfo.safeAreaBottom}}px;"></view>
+  </scroll-view>
+
+  <!-- 搜索结果状态 -->
+  <t-pull-down-refresh
+    wx:if="{{searchStatus === 'result'}}"
+    value="{{refreshing}}"
+    loadingProps="{{loadingProps}}"
+    loadingTexts="{{['下拉刷新', '松手刷新', '正在刷新', '刷新完成']}}"
+    bind:refresh="onRefresh"
+    bind:timeout="onTimeout"
+    disabled="{{!isScrollTop}}"
+  >
+    <scroll-view
+      class="content-scroll"
+      scroll-y
+      bindscrolltolower="onLoadMore"
+      bindscroll="onScroll"
+      style="height: calc(100vh - {{pageInfo.navHeight}}px - 100rpx);"
+    >
       <!-- 搜索加载中 -->
       <view class="searching-content" wx:if="{{searching}}">
         <view class="loading-container">
@@ -83,18 +101,18 @@
       </view>
 
       <!-- 搜索结果列表 -->
-      <view class="search-results" wx:if="{{!searching && searchResults.length > 0}}">
+      <view class="search-results" wx:if="{{!searching && roleList.length > 0}}">
         <view class="result-header">
-          <text class="result-count">找到 {{searchResults.length}} 个相关结果</text>
+          <text class="result-count">找到 {{totalCount}} 个相关结果</text>
         </view>
         <view class="role-list">
           <view 
             class="role-card" 
-            wx:for="{{searchResults}}" 
+            wx:for="{{roleList}}" 
             wx:key="id"
             bindtap="onRoleClick"
             data-id="{{item.id}}"
-            style="background-image: url('{{item.image}}');"
+            style="background-image: url('{{item.backgroundImage}}');"
           >
             <view class="role-info">
               <view class="role-name-row">
@@ -109,16 +127,30 @@
         </view>
       </view>
 
+      <!-- 加载更多组件 -->
+      <load-more
+        wx:if="{{pageNo > 1}}"
+        status="{{loadMoreStatus}}" 
+        list-is-empty="{{listIsEmpty}}"
+        bind:retry="onRetryLoad"
+      >
+        <view slot="empty" class="empty-container">
+          <t-icon name="search" size="120rpx" color="#666666" />
+          <text class="empty-text">未找到"{{currentSearchKeyword}}"相关内容</text>
+          <text class="empty-tip">换个关键词试试吧</text>
+        </view>
+      </load-more>
+
       <!-- 空态 -->
-      <view class="empty-container" wx:if="{{!searching && searchIsEmpty}}">
+      <view class="empty-container" wx:if="{{!searching && listIsEmpty && pageNo === 1}}">
         <t-icon name="search" size="120rpx" color="#666666" />
         <text class="empty-text">未找到"{{currentSearchKeyword}}"相关内容</text>
         <text class="empty-tip">换个关键词试试吧</text>
       </view>
-    </view>
 
-    <view style="height: {{pageInfo.safeAreaBottom}}px;"></view>
-  </scroll-view>
+      <view style="height: {{pageInfo.safeAreaBottom}}px;"></view>
+    </scroll-view>
+  </t-pull-down-refresh>
 </view>
 
 <t-toast id="t-toast" />

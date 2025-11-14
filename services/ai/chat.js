@@ -95,5 +95,20 @@ export function getPlotDetail(plotId) {
 export function updatePlot(data) {
   return request.post('/api/v1/server/plot/updatePlot', data)
 }
+export function setCurrentPlot(data) {
+  return request.post('/api/v1/server/plot/setCurrentPlot', data)
+}
+
+export function createPlot(data) {
+  return request.post('/api/v1/server/plot/createPlot', data)
+}
+
+export function forkPlotFromMessage(data) {
+  return request.post('/api/v1/server/plot/forkPlotFromMessage', data)
+}
+
+export function rollbackPlotMessage(data) {
+  return request.post('/api/v1/server/plot/rollbackPlotMessage', data)
+}
 
 export default ChatService

@@ -1,0 +1,53 @@
+<t-overlay
+  visible="{{ visible }}"
+  bindclose="close"
+  class="points-recharge-dialog"
+>
+  <common-dialog-content
+    class="dialog-content"
+    cancelTitle=""
+    confirmTitle=""
+  >
+    <view class="points-dialog">
+      <view class="points-header">
+        <view class="user-info">
+          <t-image class="avatar" src="{{userAvatar}}" mode="aspectFill"></t-image>
+          <view class="user-meta">
+            <view class="user-name">{{userName}}</view>
+            <view class="user-level">
+              <text class="level-icon">★</text>
+              <text class="level-text">{{userLevel}}</text>
+            </view>
+          </view>
+        </view>
+        <view class="close-icon" bindtap="close">✕</view>
+      </view>
+
+      <view class="tips-text">积分不足，请尽快充值！</view>
+
+      <view class="plan-grid">
+        <view
+          wx:for="{{plans}}"
+          wx:key="index"
+          class="plan-item {{index === selectedIndex ? 'active' : ''}}"
+          bindtap="selectPlan"
+          data-index="{{index}}"
+        >
+          <view class="plan-points">
+            <text class="plan-points-icon">★</text>
+            <text class="plan-points-num">{{item.points}}</text>
+          </view>
+          <view class="plan-price">￥{{item.price}}</view>
+        </view>
+      </view>
+
+      <view class="footer">
+        <view class="recharge-btn" bindtap="handleRecharge">立即充值</view>
+        <view class="agreement" bindtap="handleAgreementTap">
+          支付代表同意
+          <text class="agreement-link">《会员服务协议》</text>
+        </view>
+      </view>
+    </view>
+  </common-dialog-content>
+</t-overlay>

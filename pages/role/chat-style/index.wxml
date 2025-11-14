@@ -1,7 +1,7 @@
 <!--pages/role/style/index.wxml-->
 <view class="style-page">
   <!-- 固定背景图 -->
-  <image class="page-bg" src="https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/chat_bg.png" mode="aspectFill"></image>
+  <image class="page-bg" src="{{currentBg}}" mode="aspectFill"></image>
   
   <custom-nav title="" showBack="{{true}}" showHome="{{false}}" transparent="{{true}}" />
   <!-- 顶部Tab切换 -->

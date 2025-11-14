@@ -19,7 +19,8 @@ Page({
       title: '',
       description: '',
       chatExample: ''
-    }
+    },
+    currentBg: ''
   },
 
   /**
@@ -29,6 +30,11 @@ Page({
     // 获取传递的参数（角色ID等）
     if (options.roleId) {
       this.loadRoleInfo(options.roleId)
+    }
+    if (options.currentBg) {
+      this.setData({
+        currentBg: options.currentBg
+      })
     }
     this.setData({
       pageInfo: { ...this.data.pageInfo, ...SystemInfo.getPageInfo() }

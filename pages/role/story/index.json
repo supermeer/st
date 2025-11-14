@@ -4,7 +4,10 @@
   "usingComponents": {
     "custom-nav": "/components/custom-nav/index",
     "t-icon": "tdesign-miniprogram/icon/icon",
-    "t-image": "tdesign-miniprogram/image/image"
+    "t-image": "tdesign-miniprogram/image/image",
+    "van-swipe-cell": "@vant/weapp/swipe-cell/index",
+    "t-toast": "tdesign-miniprogram/toast/toast",
+    "tip-dialog": "/components/tip-dialog/index"
   },
   "navigationBarTitleText": "故事剧情"
 }

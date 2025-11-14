@@ -1,5 +1,8 @@
 import SystemInfo from '../../../utils/system'
-import { getPlotListByCharacterId } from '../../../services/role/index'
+import { getPlotListByCharacterId, getCharacterDetail } from '../../../services/role/index'
+import { deletePlot, setCurrentPlot } from '../../../services/ai/chat'
+import Toast from 'tdesign-miniprogram/toast/index'
+import dayjs from 'dayjs'
 Page({
   /**
    * 页面的初始数据
@@ -12,43 +15,13 @@ Page({
     },
     roleInfo: {
       id: null,
-      name: '沈川寒',
-      avatar: 'https://img.zcool.cn/community/01c8b25e8f8f8da801219c779e8c95.jpg@1280w_1l_2o_100sh.jpg',
-      description: '便利店的温柔店员'
+      name: '',
+      avatar: '',
+      description: ''
     },
-    storyList: [
-      {
-        id: 1,
-        title: '相遇那天',
-        description: '这是你们第一次相遇的故事，一个平凡却又特别的下午...',
-        time: '2024-01-15'
-      },
-      {
-        id: 2,
-        title: '深夜的便利店',
-        description: '夜深了，便利店里只有你们两个人，温暖的灯光照亮了这个寂静的夜晚...',
-        time: '2024-01-20',
-        active: true
-      },
-      {
-        id: 3,
-        title: '雨天的约定',
-        description: '突如其来的大雨，让你们躲在了同一个屋檐下...',
-        time: '2024-01-25'
-      },
-      {
-        id: 4,
-        title: '未知的冒险',
-        description: '解锁条件：完成前面的故事章节',
-        time: '2024-02-01'
-      },
-      {
-        id: 5,
-        title: '神秘的礼物',
-        description: '解锁条件：达成特殊成就',
-        time: '2024-02-10'
-      }
-    ]
+    plotList: [],
+    currentPlotId: null,
+    currentBg: ''
   },
 
   /**
@@ -63,42 +36,155 @@ Page({
           id: options.roleId
         }
       })
-      this.loadStoryList(options.roleId)
+      this.loadPlotList(options.roleId)
+      this.loadCharacterInfo(options.roleId)
     }
     this.setData({
       pageInfo: { ...this.data.pageInfo, ...SystemInfo.getPageInfo() }
     })
   },
 
+  loadCharacterInfo(roleId) {
+    getCharacterDetail(roleId).then(res => {
+      let currentBg = res.backgroundImage
+      if (res.currentPlotId) {
+        currentBg = res.plotDetailVO.backgroundImage
+      }
+      this.setData({
+        roleInfo: { ...this.data.roleInfo, ...res },
+        currentPlotId: res.currentPlotId || null,
+        currentBg: currentBg || ''
+      })
+    })
+  },
   /**
-   * 加载故事列表
+   * 加载剧情列表
    */
-  loadStoryList(roleId) {
+  loadPlotList(roleId) {
     getPlotListByCharacterId(roleId).then(res => {
-      console.log(res, '----------')
+      this.setData({
+        plotList: [...res.list || []].map(item => ({
+          ...item,
+          time: this.formatTime(item.updateTime)
+        })),
+        currentPlotId: res.currentPlotId || null
+      })
     })
   },
 
-  /**
-   * 点击故事项
-   */
-  onStoryTap(event) {
+  formatTime(timestamp) {
+    if (!timestamp) return ''
+    
+    const now = dayjs()
+    const time = dayjs(timestamp)
+    const diffDays = now.diff(time, 'day')
+    if (diffDays === 0) {
+      // 今天，显示时:分
+      return time.format('HH:mm')
+    } else if (diffDays === 1) {
+      // 昨天
+      return '昨天'
+    } else if (diffDays < 7) {
+      // 一周内，显示星期
+      const weekdays = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六']
+      return weekdays[time.day()]
+    } else if (now.year() === time.year()) {
+      // 今年，显示月-日
+      return time.format('MM-DD')
+    } else {
+      // 往年，显示年-月-日
+      return time.format('YYYY-MM-DD')
+    }
+  },
+  async onPlotTap(event) {
     const id = event.currentTarget.dataset.id
-    const story = this.data.storyList.find(item => item.id === id)
-
-    // TODO: 跳转到故事详情页
-    console.log('查看故事:', id)
-    wx.showToast({
-      title: '故事详情页开发中',
-      icon: 'none'
+    const plot = this.data.plotList.find(item => item.id === id)
+    if (plot.ifCurrent) {
+      return
+    }
+    try {
+      await setCurrentPlot({ plotId: id, characterId: this.data.roleInfo.id })
+      Toast({
+        context: this,
+        selector: '#t-toast',
+        message: '剧情切换成功',
+      })
+      wx.navigateTo({
+        url: `/pages/chat/index?plotId=${id}&characterId=${this.data.roleInfo.id}`
+      })
+    } catch (error) {
+      console.error('设置当前剧情失败:', error)
+      Toast({
+        context: this,
+        selector: '#t-toast',
+        message: error.message || '设置当前剧情失败，请重试',
+      })
+    }
+  },
+  
+  /**
+   * 删除故事
+   */
+  onDeletePlot(e) {
+    const { id } = e.currentTarget.dataset
+    
+    const tipDialog = this.selectComponent('#tip-dialog')
+    tipDialog.show({
+      content: '删除后，该剧情的所有对话将被清除，且不可撤回。',
+      cancelText: '取消',
+      confirmText: '删除',
+      onCancel: () => {
+        // 取消操作，对话框会自动关闭
+      },
+      onConfirm: () => {
+        // 确认删除
+        this.deletePlot(id)
+      }
     })
   },
-
+  
   /**
-   * 生命周期函数--监听页面显示
+   * 执行删除操作
    */
+  async deletePlot(id) {
+    try {
+      await deletePlot({ id })
+      Toast({
+        context: this,
+        selector: '#t-toast',
+        message: '删除成功',
+      })
+      // 重新加载剧情列表
+      if (this.data.roleInfo.id) {
+        this.loadPlotList(this.data.roleInfo.id)
+      }
+      // 关闭滑动
+      this.closeSwipeCell(id)
+    } catch (error) {
+      console.error('删除剧情失败:', error)
+      
+      Toast({
+        context: this,
+        selector: '#t-toast',
+        message: error.message || '删除失败，请重试',
+      })
+    }
+  },
+  
+  /**
+   * 关闭滑动单元格
+   */
+  closeSwipeCell(id) {
+    const swipeCell = this.selectComponent(`#swipeCell-${id}`)
+    if (swipeCell) {
+      swipeCell.close()
+    }
+  },
+  
   onShow() {
-
+    if (this.data.roleInfo.id) {
+      this.loadPlotList(this.data.roleInfo.id)
+    }
   }
 })
 

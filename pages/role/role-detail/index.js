@@ -44,7 +44,8 @@ Page({
     descriptionDisplay: '',
     prologueExpanded: false,
     prologueNeedFold: false,
-    prologueDisplay: ''
+    prologueDisplay: '',
+    currentBg: ''
   },
 
   // 防抖定时器（记忆力滑块）
@@ -65,22 +66,6 @@ Page({
         }
       })
     }
-    if (options.storyId) {
-      this.setData({
-        storyInfo: {
-          ...this.data.storyInfo,
-          id: options.storyId
-        }
-      })
-    }
-    if (options.plotId) {
-      this.setData({
-        plotInfo: {
-          ...this.data.plotInfo,
-          id: options.plotId
-        }
-      })
-    }
     this.setData({
       pageInfo: { ...this.data.pageInfo, ...SystemInfo.getPageInfo() }
     })
@@ -89,12 +74,6 @@ Page({
   onShow() {
     if (this.data.roleInfo.id) {
       this.loadRoleDetail(this.data.roleInfo.id)
-    }
-    if (this.data.storyInfo.id) {
-      this.loadStoryDetail(this.data.storyInfo.id)
-    }
-    if (this.data.plotInfo.id) {
-      this.loadPlotDetail(this.data.plotInfo.id)
     }
   },
   loadRoleDetail(id) {
@@ -109,43 +88,38 @@ Page({
       this.setData({
         roleInfo: merged,
         descriptionNeedFold: needFold,
-        descriptionDisplay: display
+        descriptionDisplay: display 
       })
-      if (!this.data.plotInfo.id) {
+      const plotId = res.currentPlotId
+      if (!res.currentPlotId) {
+        this.setData({
+          currentBg: res.backgroundImage,
+          plotInfo: {
+            ...this.data.plotInfo,
+            chatStyle: res.defaultChatStyleDetail,
+            memoryCount: 0,
+            id: null,
+            persona: {}
+          },
+          storyInfo: {
+            ...this.data.storyInfo,
+            ...res.defaultStoryDetail
+          }
+        })
+      } else {
         this.setData({
           plotInfo: {
             ...this.data.plotInfo,
-            ...res.defaultChatStyleDetail,
-            id: null
-          }
+            ...res.plotDetailVO,
+            id: plotId
+          },
+          storyInfo: {
+            ...this.data.storyInfo,
+            ...res.plotDetailVO.story
+          },
+          currentBg: res.plotDetailVO.backgroundImage
         })
       }
-    })
-  },
-  loadStoryDetail(id) {
-    getStoryDetail(id).then(res => {
-      const merged = {
-        ...this.data.storyInfo,
-        ...res
-      }
-      const pro = merged.prologue || ''
-      const needFold = pro.length > 120
-      const display = needFold && !this.data.prologueExpanded ? pro.slice(0, 120) + '…' : pro
-      this.setData({
-        storyInfo: merged,
-        prologueNeedFold: needFold,
-        prologueDisplay: display
-      })
-    })
-  },
-  loadPlotDetail(id) {
-    getPlotDetail(id).then(res => {
-      this.setData({
-        plotInfo: {
-          ...this.data.plotInfo,
-          ...res
-        }
-      })
     })
   },
   onTabChange(event) {
@@ -193,12 +167,9 @@ Page({
         })
       } catch (error) {
         wx.hideLoading()
-        // 回滚到原始值
-        if (this.memoryOriginalValue !== null) {
-          this.setData({
-            'plotInfo.memoryCount': this.memoryOriginalValue
-          })
-        }
+        this.setData({
+          'plotInfo.memoryCount': this.memoryOriginalValue || 0
+        })
         wx.showToast({
           title: '保存失败',
           icon: 'error',
@@ -213,7 +184,7 @@ Page({
   },
   onDialogSetting() {
     wx.navigateTo({
-      url: `/pages/role/chat-setting/index?plotId=${this.data.plotInfo.id}`
+      url: `/pages/role/chat-setting/index?plotId=${this.data.plotInfo.id}&roleName=${this.data.roleInfo.name}`
     })
   },
   onNewChatStyle() {
@@ -221,17 +192,20 @@ Page({
       return
     }
     wx.navigateTo({
-      url: '/pages/role/chat-style/add/index'
+      url: `/pages/role/chat-style/add/index?currentBg=${this.data.currentBg}`
     })
   },
   onChatStyle() {
     wx.navigateTo({
-      url: '/pages/role/chat-style/index'
+      url: `/pages/role/chat-style/index?currentBg=${this.data.currentBg}`
     })
   },
   onMySetting() {
+    if (!this.data.plotInfo.id) {
+      return
+    }
     wx.navigateTo({
-      url: '/pages/role/my-setting/index'
+      url: `/pages/role/my-setting/index?personaId=${this.data.plotInfo.persona.id}&storyId=${this.data.storyInfo.id}&avatarUrl=${this.data.currentBg}`
     })
   },
   onPlotSelect() {

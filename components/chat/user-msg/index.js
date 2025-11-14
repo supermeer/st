@@ -6,22 +6,7 @@ Component({
   methods: {
     onButtonClick(e) {
       const action = e.currentTarget.dataset.action;
-      this.triggerEvent('buttonClick', { action, current: this });
-      return
-      // 根据不同的 action 执行不同的操作
-      switch(action) {
-        case 'rollback':
-          this.handleRollback();
-          break;
-        // case 'edit':
-        //   this.handleEdit();
-        //   break;
-        default:
-          console.log('未知操作:', action);
-      }
-      
-      // 关闭侧滑
-      this.closeSwipeCell();
+      this.triggerEvent('buttonClick', { action, current: this, messageId: this.properties.message.id, include: true });
     },
     closeSwipeCell() {
       // 通过 id 获取侧滑组件实例

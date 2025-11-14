@@ -50,6 +50,11 @@
       "root": "pages/common",
       "name": "common",
       "pages": ["aboutus/index", "agreement/index", "cropper/index", "pic-generate/index", "pic-generate/result/index", "feedback/index"]
+    },
+    {
+      "root": "pages/chat",
+      "name": "chat",
+      "pages": ["index", "history/index", "session/index"]
     }
   ],
   "tabBar": {

@@ -81,5 +81,32 @@ Page({
     wx.navigateTo({
       url: '/pages/vip/packages/index'
     })
+  },
+
+  // 积分充值按钮
+  onPointsRechargeClick() {
+    const dialog = this.selectComponent('#pointsRechargeDialog')
+    if (dialog) {
+      dialog.show()
+    }
+  },
+
+  // 充值确认
+  onRecharge(e) {
+    const { plan } = e.detail || {}
+    if (!plan) return
+    // TODO: 在这里发起积分充值请求
+  },
+
+  // 弹窗关闭
+  onRechargeClose() {
+    // 需要时可做埋点或刷新积分
+  },
+
+  // 协议点击
+  onRechargeAgreement() {
+    wx.navigateTo({
+      url: '/pages/common/agreement/index'
+    })
   }
 })

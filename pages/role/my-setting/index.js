@@ -1,5 +1,5 @@
 import SystemInfo from '../../../utils/system'
-import { createPersona } from '../../../services/role/index'
+import { createPersona, getPersonaDetail, updatePersona } from '../../../services/role/index'
 Page({
   /**
    * 页面的初始数据
@@ -10,15 +10,12 @@ Page({
       navHeight: 0
     },
     storyId: null,
-    chatInfo: {
-      name: '沈川寒',
-      avatar: 'https://img.zcool.cn/community/01c8b25e8f8f8da801219c779e8c95.jpg@1280w_1l_2o_100sh.jpg',
-      identity: '便利店的温柔店员'
-    },
+    avatarUrl: null,
     formData: {
       userAddressedAs: '',
-      personaGender: '',
-      identity: ''
+      gender: '',
+      identity: '',
+      id: null
     },
     isGlobal: false,
     globalDesc: '对已设置好的智能体不作变更，仅对后续新聊天的智能体作默认设置。'
@@ -29,8 +26,19 @@ Page({
    */
   onLoad(options) {
     // 获取传递的参数
-    if (options.chatId) {
-      this.loadChatSettings(options.chatId)
+    if (options.personaId) {
+      this.setData({
+        formData: {
+          ...this.data.formData,
+          id: options.personaId
+        }
+      })
+      this.loadChatSettings()
+    }
+    if (options.avatarUrl) {
+      this.setData({
+        avatarUrl: options.avatarUrl
+      })
     }
     if (options.isGlobal) {
       this.setData({
@@ -47,12 +55,16 @@ Page({
     })
   },
 
-  /**
-   * 加载对话设定
-   */
-  loadChatSettings(chatId) {
-    // TODO: 调用接口获取已保存的对话设定
-    console.log('加载对话设定:', chatId)
+  loadChatSettings() {
+    getPersonaDetail(this.data.formData.id)
+    .then(res => {
+      this.setData({
+        formData: {
+          ...this.data.formData,
+          ...res
+        }
+      })
+    })
   },
 
   /**
@@ -70,7 +82,7 @@ Page({
   onGenderChange(event) {
     const gender = event.currentTarget.dataset.gender
     this.setData({
-      'formData.personaGender': gender
+      'formData.gender': gender
     })
   },
 
@@ -87,7 +99,7 @@ Page({
    * 提交表单
    */
   onSubmit() {
-    const { userAddressedAs, personaGender, identity } = this.data.formData
+    const { userAddressedAs, gender, identity } = this.data.formData
 
     // 验证必填项
     if (!userAddressedAs.trim()) {
@@ -98,7 +110,7 @@ Page({
       return
     }
 
-    if (!personaGender) {
+    if (!gender) {
       wx.showToast({
         title: '请选择性别',
         icon: 'none'
@@ -113,6 +125,21 @@ Page({
       })
       return
     }
+    
+    if (this.data.formData.id) {
+      updatePersona({
+        ...this.data.formData,
+      })
+      .then(res => {
+        wx.showToast({
+          title: '更新成功',
+          icon: 'success',
+          duration: 1000
+        })  
+        wx.navigateBack()
+      })
+      return
+    }
 
     if (!this.data.storyId) {
       // 直接调用上一页面传递的回调函数
@@ -120,7 +147,7 @@ Page({
       prevPage.confirmUserSettings({
         userAddressedAs: userAddressedAs,
         identity: identity,
-        personaGender: personaGender
+        personaGender: gender
       })
       wx.navigateBack()
       return

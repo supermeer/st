@@ -1,3 +1,4 @@
+<wxs module="utils" src="./utils.wxs"></wxs>
 <view class="discover-page">
   <!-- 自定义导航栏 -->
   <custom-nav
@@ -36,7 +37,7 @@
   <!-- 筛选标签 -->
   <view class="filter-tags">
     <scroll-view class="tags-scroll" scroll-x show-scrollbar="{{false}}" scroll-left="{{tagScrollLeft}}" scroll-with-animation>
-      <view class="tag-item {{activeTag === item.id ? 'active' : ''}}" 
+      <view class="tag-item {{utils.includes(activeTags, item.id) ? 'active' : ''}}" 
         wx:for="{{tagList}}" 
         wx:key="id"
         bindtap="onTagChange"
@@ -73,7 +74,7 @@
           wx:key="id"
           bindtap="onRoleClick"
           data-id="{{item.id}}"
-          style="background-image: url('{{item.image}}');"
+          style="background-image: url('{{item.backgroundImage}}');"
         >
           <view class="role-info">
             <view class="role-name-row">
@@ -81,7 +82,7 @@
               <t-icon name="check-circle-filled" size="32rpx" color="#4A9EFF" wx:if="{{item.verified}}" />
             </view>
             <view class="role-tags">
-              <text class="role-tag" wx:for="{{item.tags}}" wx:key="index" wx:for-item="tag">{{tag}}</text>
+              <text class="role-tag blur-glass" wx:for="{{item.tagNames}}" wx:key="index" wx:for-item="tag">#{{tag}}</text>
             </view>
           </view>
         </view>

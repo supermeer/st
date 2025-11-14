@@ -7,11 +7,7 @@
   
   <!-- 固定角色信息卡片 -->
   <view class="chat-header blur-glass" style="top: {{ pageInfo.navHeight }}px">
-    <image wx:if="{{!isGlobal}}" class="chat-avatar" src="{{chatInfo.avatar}}" mode="aspectFill"></image>
-    <!-- <view class="chat-info">
-      <view class="chat-name">{{chatInfo.name}}</view>
-      <view class="chat-desc">{{chatInfo.identity}}</view>
-    </view> -->
+    <image wx:if="{{!isGlobal}}" class="chat-avatar" src="{{avatarUrl}}" mode="aspectFill"></image>
     <view class="right-content">
       <view class="chat-title">{{isGlobal ? '全局人设' : '设置该角色与你之间的关系'}}</view>
       <view wx:if="{{isGlobal}}" class="chat-desc">{{globalDesc}}</view>
@@ -48,7 +44,7 @@
         <view class="form-label">我的性别</view>
         <view class="gender-options">
           <view 
-            class="gender-option {{formData.personaGender === '男' ? 'active' : ''}}"
+            class="gender-option {{formData.gender === '男' ? 'active' : ''}}"
             bindtap="onGenderChange"
             data-gender="男"
           >
@@ -56,7 +52,7 @@
             <text>男</text>
           </view>
           <view 
-            class="gender-option {{formData.personaGender === '女' ? 'active' : ''}}"
+            class="gender-option {{formData.gender === '女' ? 'active' : ''}}"
             bindtap="onGenderChange"
             data-gender="女"
           >
@@ -64,7 +60,7 @@
             <text>女</text>
           </view>
           <view 
-            class="gender-option {{formData.personaGender === '其他' ? 'active' : ''}}"
+            class="gender-option {{formData.gender === '其他' ? 'active' : ''}}"
             bindtap="onGenderChange"
             data-gender="其他"
           >

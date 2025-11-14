@@ -1,7 +1,7 @@
 import userStore from '../../store/user'
 import SystemInfo from '../../utils/system'
 import Toast from 'tdesign-miniprogram/toast/index'
-import { getCharacterType, getCharacterTag, getCharacterList } from '../../services/role/index'
+import { getCharacterType, getCharacterTag, getCharacterList, getCurrentPlotByCharacterId } from '../../services/role/index'
 
 Page(
   Object.assign({}, userStore.data, {
@@ -20,7 +20,7 @@ Page(
 
       // 筛选标签
       tagList: [],
-      activeTag: '',
+      activeTags: [], // 改为数组支持多选
       tagScrollLeft: 0,
 
       // 角色列表
@@ -58,8 +58,7 @@ Page(
       })
       this.getCharacterType()
       this.getCharacterTag()
-      // 加载数据
-      this.loadRoleList(true)
+      // 注意：loadRoleList会在getCharacterType中设置第一个nav后自动调用
     },
 
     onShow: function () {
@@ -74,6 +73,15 @@ Page(
       this.setData({
         navList: res
       })
+      // 默认选中第一个
+      if (res && res.length > 0 && !this.data.activeNav) {
+        this.setData({
+          activeNav: res[0].id
+        })
+        // 重新加载列表
+        this.data.pageNo = 1
+        this.loadRoleList(true)
+      }
     },
     async getCharacterTag() {
       const res = await getCharacterTag()
@@ -131,14 +139,24 @@ Page(
       })
     },
 
-    // 筛选标签切换
+    // 筛选标签切换（多选）
     onTagChange(e) {
       const value = e.currentTarget.dataset.value
       const index = e.currentTarget.dataset.index
-      const activeTag = value === this.data.activeTag ? '' : value
+      const activeTags = [...this.data.activeTags]
+      
+      // 查找当前tag是否已选中
+      const tagIndex = activeTags.indexOf(value)
+      if (tagIndex > -1) {
+        // 已选中，则移除
+        activeTags.splice(tagIndex, 1)
+      } else {
+        // 未选中，则添加
+        activeTags.push(value)
+      }
 
       this.setData({
-        activeTag,
+        activeTags,
         roleList: [],
         loadMoreStatus: 0,
       })
@@ -146,7 +164,7 @@ Page(
       this.loadRoleList(true)
       
       // 滚动到选中标签的中间位置
-      if (activeTag) {
+      if (activeTags.length > 0 && activeTags.includes(value)) {
         this.scrollToTag(index)
       }
     },
@@ -284,13 +302,15 @@ Page(
       })
 
       try {
-        const res = await getCharacterList({
+        // 构建请求参数
+        const params = {
           current: this.data.pageNo,
           size: this.data.pageSize,
           ifSystem: true,
-          characterTypeId: this.data.activeNav,
-          characterTagId: this.data.activeTag,
-        })
+          characterTypeIds: this.data.activeNav,
+          characterTagIds: this.data.activeTags.join(','),
+        }
+        const res = await getCharacterList(params)
         const newList = isRefresh ? [...res.records] : [...this.data.roleList, ...res.records]
         this.setData({
           totalCount: res.total || 0,
@@ -318,48 +338,12 @@ Page(
       }
     },
 
-    // 获取模拟数据
-    getMockData() {
-      const names = ['沈川爱', '程野', '校园白月光', '吸血鬼男友', '霸道总裁', '温柔医生', '神秘侦探', '古风公子', '现代王子', '运动少年']
-      const tags = ['#都市豪婿幡', '#鸟啥竹号', '#喵适合线', '#情绪价值', '#每次喜欢', '#家门生活']
-      const images = [
-        'https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/chat_bg.png',
-        'https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/chat_bg.png',
-        'https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/chat_bg.png',
-        'https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/chat_bg.png',
-      ]
-
-      const list = []
-      for (let i = 0; i < this.data.pageSize; i++) {
-        const index = (this.data.pageNo - 1) * this.data.pageSize + i
-        if (index >= 30) break // 模拟最多30条数据
-
-        list.push({
-          id: index + 1,
-          name: names[index % names.length],
-          image: images[index % images.length],
-          verified: Math.random() > 0.5,
-          tags: [
-            tags[Math.floor(Math.random() * tags.length)],
-            tags[Math.floor(Math.random() * tags.length)],
-            tags[Math.floor(Math.random() * tags.length)],
-          ].slice(0, 3),
-        })
-      }
-
-      return list
-    },
-
     // 点击角色卡片
-    onRoleClick(e) {
+    async onRoleClick(e) {
       const id = e.currentTarget.dataset.id
-      console.log('点击角色:', id)
-      
-      // TODO: 跳转到角色详情页
-      Toast({
-        context: this,
-        selector: '#t-toast',
-        message: '角色详情页开发中',
+      const res = await getCurrentPlotByCharacterId(id)
+      wx.navigateTo({
+        url: `/pages/chat/index?plotId=${ res && res.plotId ? res.plotId : ''}&characterId=${id}`
       })
     },
   })

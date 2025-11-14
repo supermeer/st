@@ -1,13 +1,13 @@
 <view class="chat-setting-page">
   <!-- 固定背景图 -->
-  <image class="page-bg" src="https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/chat_bg.png" mode="aspectFill"></image>
+  <image class="page-bg" src="{{currentBg}}" mode="aspectFill"></image>
   
   <!-- 固定顶部导航栏 -->
   <custom-nav title="" showBack="{{true}}" showHome="{{false}}" transparent="{{true}}" />
   
   <!-- 固定角色信息卡片 -->
   <view class="chat-header blur-glass" style="top: {{ pageInfo.navHeight }}px">
-    <image class="chat-avatar" src="{{roleInfo.avatar}}" mode="aspectFill"></image>
+    <image class="chat-avatar" src="{{currentBg}}" mode="aspectFill"></image>
     <view class="chat-name">{{roleInfo.name}}</view>
   </view>
 

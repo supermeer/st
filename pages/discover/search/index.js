@@ -1,5 +1,6 @@
 import SystemInfo from '../../../utils/system'
 import Toast from 'tdesign-miniprogram/toast/index'
+import { getCharacterList, getCurrentPlotByCharacterId } from '../../../services/role/index'
 
 const HISTORY_KEY = 'search_history'
 const MAX_HISTORY = 10 // 最多保存10条历史记录
@@ -40,16 +41,33 @@ Page({
     searchStatus: 'default',
 
     // 搜索结果
-    searchResults: [],
+    roleList: [],
     
     // 搜索结果是否为空
-    searchIsEmpty: false,
+    listIsEmpty: false,
 
     // 搜索加载中
     searching: false,
 
     // 当前搜索的关键词
     currentSearchKeyword: '',
+
+    // 下拉刷新
+    refreshing: false,
+    loadingProps: {
+      size: '50rpx',
+    },
+
+    // 加载状态
+    loadMoreStatus: 0, // 0-加载前，1-加载中，2-加载完成，3-加载失败
+
+    // 滚动状态
+    isScrollTop: true, // 是否在顶部
+
+    // 分页参数
+    pageNo: 1,
+    pageSize: 10,
+    totalCount: 0,
   },
 
   onLoad: function (options) {
@@ -154,72 +172,16 @@ Page({
       searching: true,
       searchStatus: 'result',
       currentSearchKeyword: keyword,
-      searchResults: [],
-      searchIsEmpty: false
+      roleList: [],
+      listIsEmpty: false,
+      loadMoreStatus: 0,
     })
 
-    try {
-      // TODO: 调用实际的搜索接口
-      // const results = await searchAPI(keyword)
-      
-      // 模拟搜索延迟
-      await new Promise(resolve => setTimeout(resolve, 800))
-      
-      // 模拟搜索结果
-      const results = this.getMockSearchResults(keyword)
+    // 重置分页
+    this.data.pageNo = 1
 
-      this.setData({
-        searching: false,
-        searchResults: results,
-        searchIsEmpty: results.length === 0
-      })
-
-    } catch (error) {
-      console.error('搜索失败:', error)
-      
-      this.setData({
-        searching: false,
-        searchIsEmpty: true
-      })
-
-      Toast({
-        context: this,
-        selector: '#t-toast',
-        message: '搜索失败，请重试',
-      })
-    }
-  },
-
-  // 获取模拟搜索结果
-  getMockSearchResults(keyword) {
-    const names = ['沈川爱', '程野', '校园白月光', '吸血鬼男友', '霸道总裁', '温柔医生', '神秘侦探', '古风公子', '现代王子', '运动少年']
-    const tags = ['#都市豪婿', '#情绪价值', '#每次喜欢', '#家门生活', '#超理想']
-    const images = [
-      'https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/chat_bg.png',
-      'https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/chat_bg.png',
-      'https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/chat_bg.png',
-      'https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/chat_bg.png',
-    ]
-
-    // 模拟搜索：根据关键词返回匹配的结果
-    const results = []
-    const matchCount = Math.floor(Math.random() * 8) + 3 // 3-10个结果
-
-    for (let i = 0; i < matchCount; i++) {
-      results.push({
-        id: i + 1,
-        name: names[i % names.length] + (keyword.includes(names[i % names.length].slice(0, 2)) ? '' : ` - ${keyword}`),
-        image: images[i % images.length],
-        verified: Math.random() > 0.5,
-        tags: [
-          tags[Math.floor(Math.random() * tags.length)],
-          tags[Math.floor(Math.random() * tags.length)],
-          tags[Math.floor(Math.random() * tags.length)],
-        ].slice(0, 3),
-      })
-    }
-
-    return results
+    // 加载搜索结果
+    await this.loadRoleList(true)
   },
 
   // 点击历史记录项
@@ -245,10 +207,12 @@ Page({
     this.setData({
       keyword: '',
       searchStatus: 'default',
-      searchResults: [],
-      searchIsEmpty: false,
-      currentSearchKeyword: ''
+      roleList: [],
+      listIsEmpty: false,
+      currentSearchKeyword: '',
+      loadMoreStatus: 0,
     })
+    this.data.pageNo = 1
   },
 
   // 显示清空历史确认弹窗
@@ -289,17 +253,135 @@ Page({
     }
   },
 
-  // 点击角色卡片
-  onRoleClick(e) {
-    const id = e.currentTarget.dataset.id
-    console.log('点击角色:', id)
+  // 监听滚动
+  onScroll(e) {
+    const scrollTop = e.detail.scrollTop
+    const isScrollTop = scrollTop <= 10 // 容忍10px的误差
     
-    // TODO: 跳转到角色详情页
+    // 只在状态改变时更新，避免频繁setData
+    if (this.data.isScrollTop !== isScrollTop) {
+      this.setData({
+        isScrollTop
+      })
+    }
+  },
+
+  // 下拉刷新
+  onRefresh() {
+    if (this.data.refreshing) return
+
+    this.setData({
+      refreshing: true,
+    })
+
+    this.data.pageNo = 1
+    this.loadRoleList(true)
+  },
+
+  // 刷新超时
+  onTimeout() {
     Toast({
       context: this,
       selector: '#t-toast',
-      message: '角色详情页开发中',
+      message: '刷新超时',
     })
+
+    this.setData({
+      refreshing: false,
+    })
+  },
+
+  // 上拉加载更多
+  onLoadMore() {
+    const { roleList, loadMoreStatus, totalCount } = this.data
+    
+    if (roleList.length >= totalCount) {
+      this.setData({
+        loadMoreStatus: 2, // 已全部加载
+      })
+      return
+    }
+
+    if (loadMoreStatus !== 0) return
+
+    this.loadRoleList(false)
+  },
+
+  // 重试加载
+  onRetryLoad() {
+    if (this.data.loadMoreStatus === 3) {
+      this.loadRoleList(false)
+    }
+  },
+
+  // 加载角色列表
+  async loadRoleList(isRefresh = false) {
+    if (isRefresh) {
+      this.data.pageNo = 1
+    } else {
+      this.data.pageNo += 1
+    }
+
+    // 设置加载状态
+    this.setData({
+      loadMoreStatus: 1,
+      searching: isRefresh && this.data.searchStatus === 'result',
+    })
+
+    try {
+      // 构建请求参数
+      const params = {
+        current: this.data.pageNo,
+        size: this.data.pageSize,
+        ifSystem: true,
+        characterName: this.data.currentSearchKeyword || '', // 搜索关键词
+      }
+      const res = await getCharacterList(params)
+      const newList = isRefresh ? [...res.records] : [...this.data.roleList, ...res.records]
+      this.setData({
+        totalCount: res.total || 0,
+      })
+
+      this.setData({
+        roleList: newList,
+        loadMoreStatus: newList.length >= this.data.totalCount ? 2 : 0,
+        listIsEmpty: newList.length === 0,
+        refreshing: false,
+        searching: false,
+      })
+    } catch (error) {
+      console.error('加载角色列表失败:', error)
+      
+      this.setData({
+        loadMoreStatus: 3,
+        refreshing: false,
+        searching: false,
+      })
+
+      Toast({
+        context: this,
+        selector: '#t-toast',
+        message: '加载失败，请重试',
+      })
+    }
+  },
+
+  // 点击角色卡片
+  async onRoleClick(e) {
+    const id = e.currentTarget.dataset.id
+    try {
+      const res = await getCurrentPlotByCharacterId(id)
+      wx.navigateTo({
+        url: `/pages/chat/index?plotId=${res && res.plotId ? res.plotId : ''}&characterId=${id}`
+      })
+    } catch (error) {
+      console.error('获取角色信息失败:', error)
+      Toast({
+        context: this,
+        selector: '#t-toast',
+        message: '加载失败，请重试',
+      })
+    }
   },
 
   // 取消搜索，返回上一页

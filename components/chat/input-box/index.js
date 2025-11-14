@@ -502,6 +502,7 @@ Component({
             showInspiration: false
           })
           this.triggerEvent('showTabbar')
+          this.triggerEvent('buttonClick', { action: 'restart' });
         },
         uploadImage() {
           this.setData({

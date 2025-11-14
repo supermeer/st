@@ -38,12 +38,12 @@
             data-id="{{item.plotId}}"
           >
             <view
-              class="chat-item {{item.isTop ? 'top-chat-item' : ''}}"
+              class="chat-item {{item.isTop ? 'top-chat-item' : ''}} blur-glass"
               data-id="{{item.plotId}}"
               bindtap="onChatItemClick"
             >
               <view class="chat-avatar">
-                <image src="{{item.avatarUrl || '/static/chat/default-avatar.png'}}" mode="aspectFill" />
+                <image src="{{item.backgroundImage || '/static/chat/default-avatar.png'}}" mode="aspectFill" />
               </view>
               <view class="chat-info">
                 <view class="chat-header">

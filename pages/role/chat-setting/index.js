@@ -11,17 +11,18 @@ Page({
     },
     roleInfo: {
       id: null,
-      name: '沈川寒',
-      avatar: 'https://img.zcool.cn/community/01c8b25e8f8f8da801219c779e8c95.jpg@1280w_1l_2o_100sh.jpg'
+      name: '',
+      avatar: ''
     },
     plotInfo: {
       totalMemory: 30,
-      name: '沈川寒',
-      avatar: 'https://img.zcool.cn/community/01c8b25e8f8f8da801219c779e8c95.jpg@1280w_1l_2o_100sh.jpg',
+      name: '',
+      avatar: '',
       id: null,
       ifReasoning: false,
       memoryCount: 0
     },
+    currentBg: '',
     // 今日对话
     todayChat: {
       used: 0,
@@ -72,10 +73,6 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-    // 获取传递的参数
-    if (options.roleId) {
-      this.loadChatSettings(options.roleId)
-    }
     if (options.plotId) {
       this.setData({
         plotInfo: {
@@ -85,17 +82,17 @@ Page({
       })
       this.getPlotInfo(options.plotId)
     }
+    if (options.roleName) {
+      this.setData({
+        roleInfo: {
+          ...this.data.roleInfo,
+          name: options.roleName
+        }
+      })
+    }
     this.setData({
       pageInfo: { ...this.data.pageInfo, ...SystemInfo.getPageInfo() }
     })
-  },
-
-  /**
-   * 加载对话设定
-   */
-  loadChatSettings(roleId) {
-    // TODO: 调用接口获取已保存的对话设定
-    console.log('加载对话设定:', roleId)
   },
 
   getPlotInfo(plotId) {
@@ -104,7 +101,8 @@ Page({
         plotInfo: {
           ...this.data.plotInfo,
           ...res
-        }
+        },
+        currentBg: res.backgroundImage
       })
     })
   },

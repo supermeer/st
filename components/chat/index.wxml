@@ -1,8 +1,11 @@
-<view class="chat-container" style="height: {{contentHeight}};padding-top: {{safeAreaTop}}px;">
+<view class="chat-container" style="height: {{contentHeight}};padding-top: {{safeAreaTop}}px; padding-bottom: {{ keyboardHeight <= 0 && showBack ? safeAreaBottom : 0 }}px;">
   <!-- <t-image class="bg-image" src="/static/home/bg.png" mode="aspectFill" /> -->
   <view class="role-info-container">
+    <view wx:if="{{showBack}}" bindtap="onBack">
+      <t-icon name="chevron-left" class="back-icon" size="26" color="#fff" />
+    </view>
     <view class="role-info" bindtap="goRoleInfo">
-      <t-image class="role-avatar" src="{{roleDetail.avatarUrl}}" mode="aspectFill" />
+      <t-image class="role-avatar" src="{{avatarUrl}}" mode="aspectFill" />
       <view class="role-msg">
         <text class="role-name">{{roleDetail.name}}</text>
         <!-- <text class="role-job">{{roleDetail.description}}</text> -->
@@ -40,12 +43,12 @@
         <text class="tip-text">没有更多了</text>
       </view>
     </view>
-    <view wx:if="{{roleInfo.type === 'recommend'}}" class="plot-box blur-glass">
+    <view class="plot-box blur-glass">
       <view class="plot-title">
         <t-image class="plot-icon" src="/static/chat/juqing.png" />
         <text>剧情</text>
       </view>
-      <text>{{defaultStoryDetail.scene}}</text>
+      <text>{{currentStoryDetail.scene}}</text>
     </view>
     <view wx:for="{{msgList}}" wx:key="id" id="msg-{{item.id}}">
       <role-msg wx:if="{{item.senderType === 2}}" class="message-item" message="{{item}}" isLatest="{{index === msgList.length - 1}}" bind:buttonClick="onButtonClick" />
@@ -66,6 +69,7 @@
     bind:hideTabbar="hideTabbar"
     bind:showTabbar="showTabbar"
     bind:sendMessage="sendMessage"
+    bind:buttonClick="onButtonClick"
   />
 </view>
 

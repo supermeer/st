@@ -62,7 +62,8 @@ Page({
       id: null,
       type: '',
       plotId: null
-    } 
+    },
+    currentBg: null
   },
   onLoad() {
     this.setData({
@@ -95,6 +96,9 @@ Page({
   },
   getHomePlotMessage() {
     getHomePlotMessage().then(res => {
+      if (res.plotId && this.data.roleForm.plotId === res.plotId) {
+        return
+      }
       this.setData({
         roleForm: {
           type: res.type,
@@ -125,5 +129,21 @@ Page({
       paddingBtm: `calc(${this.data.pageInfo.safeAreaBottom}px + ${this.data.pageInfo.tabbarHeight}rpx)`
     })
     this.getTabBar().show()
-  }
+  },
+  changePlot(event) {
+    const { plotId, type, characterId } = event
+    this.setData({
+      roleForm: {
+        ...this.data.roleForm,
+        plotId: plotId,
+        type: type,
+        id: characterId
+      }
+    })
+  },
+  setCurrentBg(e) {
+    this.setData({
+      currentBg: e
+    })
+  },
 })

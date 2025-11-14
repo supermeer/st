@@ -1,0 +1,8 @@
+{
+  "component": true,
+  "usingComponents": {
+    "t-overlay": "tdesign-miniprogram/overlay/overlay",
+    "t-image": "tdesign-miniprogram/image/image",
+    "common-dialog-content": "/components/common-dialog-content/index"
+  }
+}

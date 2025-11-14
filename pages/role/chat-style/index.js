@@ -17,7 +17,8 @@ Page({
     // 模版列表
     templateList: [],
     // 我创建的列表
-    myStyleList: []
+    myStyleList: [],
+    currentBg: ''
   },
 
   /**
@@ -26,6 +27,7 @@ Page({
   onLoad(options) {
     this.setData({
       plotId: options.plotId,
+      currentBg: options.currentBg || '',
       pageInfo: { ...this.data.pageInfo, ...SystemInfo.getPageInfo() }
     })
   },

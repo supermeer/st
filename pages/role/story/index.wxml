@@ -1,14 +1,13 @@
-<!--pages/role/story/index.wxml-->
-<view class="story-page">
+<view class="plot-page">
   <!-- 固定背景图 -->
-  <image class="page-bg" src="https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/chat_bg.png" mode="aspectFill"></image>
+  <image class="page-bg" src="{{currentBg}}" mode="aspectFill"></image>
   
   <!-- 固定顶部导航栏 -->
   <custom-nav title="故事剧情" showBack="{{true}}" showHome="{{false}}" transparent="{{true}}" />
   
   <!-- 固定角色信息卡片 -->
   <view class="role-header blur-glass" style="top: {{ pageInfo.navHeight }}px">
-    <image class="role-avatar" src="{{roleInfo.avatar}}" mode="aspectFill"></image>
+    <image class="role-avatar" src="{{currentBg}}" mode="aspectFill"></image>
     <view class="role-info">
       <view class="role-name">{{roleInfo.name}}</view>
       <view class="role-desc">{{roleInfo.description}}</view>
@@ -22,33 +21,54 @@
     enhanced
     show-scrollbar="{{false}}"
     scroll-top="{{scrollTop}}"
-    id="storyScrollView"
+    id="plotScrollView"
     style="height: calc(100% - {{ pageInfo.navHeight}}px);"
   >
     
     <!-- 故事列表 -->
-    <view class="story-list" style="padding-bottom: {{ pageInfo.safeAreaBottom}}px;">
-      <view class="story-item blur-glass" wx:for="{{storyList}}" wx:key="id" bind:tap="onStoryTap" data-id="{{item.id}}">
-        <view class="story-header">
-          <t-image
-          class="story-status-icon"
-          src="/static/role/story_s.png"
-          mode="aspectFill"
-          wx:if="{{item.active}}"
-          />
-          <view class="story-title">{{item.title}}</view>
-        </view>
-        <view class="story-desc">{{item.description}}</view>
-        <view class="story-footer">
-          <text class="story-time">{{item.time}}</text>
-          <view class="footer-right-content" wx:if="{{!item.active}}">
-            <view class="footer-right-text">进入剧情</view>
-            <t-icon name="chevron-right-s" class="story-footer-icon" size="24" />
+    <view class="plot-list" style="padding-bottom: {{ pageInfo.safeAreaBottom}}px;">
+      <view class="plot-item-wrapper" wx:for="{{plotList}}" wx:key="id">
+        <van-swipe-cell
+          id="swipeCell-{{item.id}}"
+          class="plot-swipe-cell"
+          right-width="{{70}}"
+          async-close
+          data-id="{{item.id}}"
+        >
+          <view class="plot-item blur-glass" bind:tap="onPlotTap" data-id="{{item.id}}">
+            <view class="plot-header">
+              <t-image
+              class="plot-status-icon"
+              src="/static/role/story_s.png"
+              mode="aspectFill"
+              wx:if="{{item.id === currentPlotId}}"
+              />
+              <view class="plot-title">{{item.title}}</view>
+              <text class="plot-time">{{item.time}}</text>
+            </view>
+            <!-- <view class="plot-desc">{{item.description}}111</view> -->
+            <view class="plot-footer">
+              <text class="chat-count">本地对话数：{{item.messageCount}}</text>
+              <view class="footer-right-content" wx:if="{{item.id !== currentPlotId}}">
+                <view class="footer-right-text">进入剧情</view>
+                <t-icon name="chevron-right-s" class="plot-footer-icon" size="24" />
+              </view>
+            </view>
           </view>
-        </view>
+          <!-- 右侧滑出删除按钮 -->
+          <view slot="right" class="swipe-actions">
+            <view class="swipe-action delete-btn" catch:tap="onDeletePlot" data-id="{{item.id}}">
+              <t-icon name="delete" size="18px" color="#ee5a6f" />
+              删除
+            </view>
+          </view>
+        </van-swipe-cell>
       </view>
     </view>
     
   </scroll-view>
 </view>
+
+ <t-toast id="t-toast" />
+<tip-dialog id="tip-dialog" />
 

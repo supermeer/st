@@ -1,6 +1,6 @@
 import systemInfo from '../../utils/system'
 import ChatService from '../../services/ai/chat'
-import { getPlotMessage } from '../../services/ai/chat'
+import { getPlotMessage, createPlot, forkPlotFromMessage, rollbackPlotMessage } from '../../services/ai/chat'
 import { getCharacterDetail } from '../../services/role/index'
 const { formatMessage } = require('../../utils/msgHandler')
 Component({
@@ -8,22 +8,16 @@ Component({
     roleInfo: {
       type: Object,
       value: {}
+    },
+    showBack: {
+      type: Boolean,
+      value: false
     }
   },
   lifetimes: {
     attached: function () {
       this.getPageInfo()
-      // 如果roleInfo已经有plotId，初始化分页信息
-      if (this.properties.roleInfo && this.properties.roleInfo.plotId) {
-        this.setData({
-          'pagination.plotId': this.properties.roleInfo.plotId,
-          'chatDetail.plotId': this.properties.roleInfo.plotId
-        })
-        // 如果是历史记录类型，加载消息列表
-        if (this.properties.roleInfo.type === 'history') {
-          this.getMessageList()
-        }
-      }
+      this.getRoleInfo()
     }
   },
   // 监听roleInfo变化
@@ -42,10 +36,8 @@ Component({
           },
           'pagination.plotId': newVal
         })
-        if (this.properties.roleInfo.type !== 'recommend') {
-          this.resetPagination()
-          this.getMessageList()
-        }
+        this.resetPagination()
+        this.getMessageList()
       } else {
         this.setData({
           'pagination': {
@@ -60,16 +52,6 @@ Component({
           msgList: []
         })
       }
-    },
-    'roleInfo.storyId': function (newVal) {
-      if (newVal) {
-        this.setData({
-          chatDetail: {
-            ...this.data.chatDetail,
-            storyId: newVal
-          }
-        })
-      }
     }
   },
   data: {
@@ -78,14 +60,13 @@ Component({
       avatarUrl: '',
       description: ''
     },
-    defaultStoryDetail: {
-      prologue: null,
-      scene: null,
-      defaultBackgroundImage: null,
+    avatarUrl: null,
+    currentStoryDetail: {
+
     },
     chatDetail: {
       plotId: null,
-      storyId: null
+      updateTime: null
     },
     msgList: [],
     isLogin: false,
@@ -115,6 +96,9 @@ Component({
     }
   },
   methods: {
+    onBack() {
+      wx.navigateBack()
+    },
     getPageInfo() {
       const pageInfo = systemInfo.getPageInfo()
       this.setData({
@@ -125,27 +109,26 @@ Component({
       })
     },
     getRoleInfo() {
+      if (!this.properties.roleInfo.id) {
+        return
+      }
       getCharacterDetail(this.properties.roleInfo.id).then(res => {
-        const storyId = this.data.chatDetail.storyId
         this.setData({
           roleDetail: {
             ...this.data.roleDetail,
             ...res
           },
-          defaultStoryDetail: {
-            ...this.data.defaultStoryDetail,
+          currentStoryDetail: {
+            ...this.data.currentStoryDetail,
             ...res.defaultStoryDetail
-          },
-          chatDetail: {
-            ...this.data.chatDetail,
-            storyId: storyId ? storyId : res.defaultStoryId
           }
         })
-        if (this.properties.roleInfo.type === 'recommend') {
+        let bg = res.backgroundImage
+        if (!res.currentPlotId) {
           const defaultMsg = {
             senderType: 2,  // AI/角色消息
-            content: this.data.defaultStoryDetail.prologue,  
-            htmlContent: formatMessage(this.data.defaultStoryDetail.prologue),
+            content: this.data.currentStoryDetail.prologue,  
+            htmlContent: formatMessage(this.data.currentStoryDetail.prologue),
             loading: false,
             time: Date.now()
           }
@@ -153,13 +136,42 @@ Component({
           this.setData({
             msgList: [...this.data.msgList, defaultMsg]
           })
+        } else {
+          if (res.currentPlotId === this.data.chatDetail.plotId && res.plotDetailVO.updateTime > this.data.chatDetail.updateTime) {
+            this.setData({
+              'pagination.current': 1
+            })
+            this.getMessageList()
+          }
+          bg = res.plotDetailVO.backgroundImage
+          this.setData({
+            chatDetail: {
+              ...this.data.chatDetail,
+              updateTime: res.plotDetailVO.updateTime
+            },
+            currentStoryDetail: {
+              ...this.data.currentStoryDetail,
+              ...res.plotDetailVO
+            },
+          })
+
         }
+        const currentPage = getCurrentPages()[getCurrentPages().length - 1]
+        currentPage.setCurrentBg(bg)
+        this.setData({
+          avatarUrl: bg
+        })
       })
     },
+    getNewMessage() {
+      // 重新加载数据 从第一页开始
+      this.setData({
+        msgList: [],
+        'pagination.current': 1
+      })
+      this.getMessageList()
+    },
     async sendMessage(e) {
-      if (this.properties.roleInfo.type === 'recommend' && !this.data.defaultStoryDetail.id) {
-        return
-      }
       if (!this.data.chatDetail.plotId) {
         const plotId = await ChatService.createPlot({ characterId: this.properties.roleInfo.id})
         this.setData({
@@ -208,14 +220,18 @@ Component({
             latestMessage.isThinking = true
             latestMessage.hasThinking = true
           }
-          if (type === 'messageId') {
+          if (type === 'aiMessageId') {
             latestMessage.id = msg
+          }
+          if (type === 'userMessageId' && this.data.msgList.length >= 2) {
+            const userMsg = this.data.msgList[this.data.msgList.length - 2]
+            userMsg.id = msg
           }
           this.setData({
             msgList: this.data.msgList
           })
         }
-        // this.scrollToBottom()
+        this.scrollToBottom()
       })
         .then((res) => {
           this.setData({
@@ -296,7 +312,7 @@ Component({
     },
     goRoleInfo() {
       wx.navigateTo({
-        url: `/pages/role/role-detail/index?characterId=${this.properties.roleInfo.id}&storyId=${this.data.chatDetail.storyId}&plotId=${this.data.chatDetail.plotId}`
+        url: `/pages/role/role-detail/index?characterId=${this.properties.roleInfo.id}&plotId=${this.data.chatDetail.plotId || ''}`
       })
     },
     // 监听下拉动作
@@ -460,8 +476,9 @@ Component({
           pagination: pagination,
           hasMore: hasMore
         })
-        
-        this.scrollToBottom()
+        setTimeout(() => {
+          this.scrollToBottom()
+        }, 100)
       }).catch(err => {
         console.error('获取消息列表失败:', err)
         this.setData({
@@ -613,20 +630,28 @@ Component({
     
     onButtonClick(e) {
       if (e.detail.action === 'rollback') {
-        const currentMsg = e.detail.current;
-        const tipDialog = this.selectComponent('#tip-dialog')
-        tipDialog.show({
-          content: '回溯后，该条消息之后的对话将被清除，且不可撤回。',
-          cancelText: '取消',
-          confirmText: '确认',
-          onCancel: () => {
-            // 取消操作，对话框会自动关闭
-          },
-          onConfirm: () => {
-            // 确认回溯
-            currentMsg.handleRollback();
-          }
-        })
+        const include = e.detail.include
+        const rollbackRequest = () => {
+          rollbackPlotMessage({
+            includeCurrent: include,
+            messageId: e.detail.messageId
+          }).then(() => {
+            this.getNewMessage()
+          })
+        }
+        if (!include) {
+          const tipDialog = this.selectComponent('#tip-dialog')
+          tipDialog.show({
+            content: '回溯后，该条消息之后的对话将被清除，且不可撤回。',
+            cancelText: '取消',
+            confirmText: '确认',
+            onConfirm: () => {
+              rollbackRequest()
+            }
+          })
+        } else {
+          rollbackRequest()
+        }
       } else if (e.detail.action === 'newPlot') {
         const inputSheet = this.selectComponent('#input-sheet')
         inputSheet.show({
@@ -640,9 +665,17 @@ Component({
             // 取消操作，对话框会自动关闭
           },
           onConfirm: (inputValue) => {
-            // 处理输入的值
-            console.log('输入框的值:', inputValue)
-            this.triggerEvent('inputSheetConfirm', { value: inputValue })
+            forkPlotFromMessage ({
+              title: inputValue,
+              messageId: e.detail.messageId
+            }).then(res => {              
+              const currentPage = getCurrentPages()[getCurrentPages().length - 1]
+              currentPage.changePlot({
+                characterId: this.properties.roleInfo.id,
+                plotId: res,
+                type: 'history'
+              })
+            })
           }
         })
       } else if (e.detail.action === 'like') {
@@ -676,7 +709,6 @@ Component({
         })
         
       } else if (e.detail.action === 'continue') {
-        // e.detail.current.handleContinue();
         this.setData({
           operatingForm: {
             operate: 'continue',
@@ -684,6 +716,33 @@ Component({
           }
         })
         this.generateRequest('continue', '', e.detail.current.id)
+      } else if (e.detail.action === 'restart') {
+        const inputSheet = this.selectComponent('#input-sheet')
+        inputSheet.show({
+          title: '创建新剧情',
+          label: '剧情名称',
+          placeholder: '请输入',
+          cancelText: '取消',
+          confirmText: '保存',
+          value: '',
+          onCancel: () => {
+            // 取消操作，对话框会自动关闭
+          },
+          onConfirm: (inputValue) => {
+            const characterId = this.properties.roleInfo.id
+            createPlot ({
+              title: inputValue,
+              characterId: characterId
+            }).then(res => {              
+              const currentPage = getCurrentPages()[getCurrentPages().length - 1]
+              currentPage.changePlot({
+                characterId: characterId,
+                plotId: res,
+                type: 'new'
+              })
+            })
+          }
+        })
       }
       // e.detail.current.closeSwipeCell();
     }

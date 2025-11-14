@@ -1,0 +1,159 @@
+view {
+  letter-spacing: 0.8rpx;
+}
+
+.points-recharge-dialog {
+  width: 100%;
+  height: 100%;
+  background: rgba(6, 6, 6, 0.6);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  padding: 0 64rpx 80rpx;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.dialog-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.points-dialog {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  color: #fff;
+}
+
+.points-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+}
+
+.avatar {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 24rpx;
+}
+
+.user-meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-size: 30rpx;
+  font-weight: 600;
+}
+
+.user-level {
+  margin-top: 8rpx;
+  display: flex;
+  align-items: center;
+  font-size: 24rpx;
+  color: #a5b4fc;
+}
+
+.level-icon {
+  margin-right: 8rpx;
+}
+
+.close-icon {
+  font-size: 32rpx;
+  color: #9ca3af;
+}
+
+.tips-text {
+  margin-top: 40rpx;
+  margin-bottom: 32rpx;
+  font-size: 26rpx;
+}
+
+.plan-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-row-gap: 24rpx;
+  grid-column-gap: 24rpx;
+}
+
+.plan-item {
+  background: #f4f4ff;
+  border-radius: 24rpx;
+  padding: 24rpx 16rpx;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #111827;
+}
+
+.plan-item.active {
+  background: #8b5cf6;
+  color: #fff;
+}
+
+.plan-points {
+  display: flex;
+  align-items: center;
+  font-size: 24rpx;
+  font-weight: 600;
+  margin-bottom: 16rpx;
+}
+
+.plan-points-icon {
+  margin-right: 6rpx;
+}
+
+.plan-points-num {
+}
+
+.plan-price {
+  font-size: 28rpx;
+}
+
+.footer {
+  margin-top: 48rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.recharge-btn {
+  width: 100%;
+  height: 88rpx;
+  border-radius: 44rpx;
+  background: linear-gradient(135deg, #7c5aff 0%, #a78bfa 50%, #8b5cf6 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  font-weight: 600;
+  box-shadow: 0 4rpx 20rpx rgba(124, 90, 255, 0.6);
+}
+
+.agreement {
+  margin-top: 24rpx;
+  font-size: 22rpx;
+  color: #9ca3af;
+}
+
+.agreement-link {
+  color: #e5e7eb;
+}

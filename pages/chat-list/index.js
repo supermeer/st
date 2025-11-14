@@ -161,8 +161,9 @@ Page(
      */
     onChatItemClick(e) {
       const { id } = e.currentTarget.dataset
+      const plot = this.data.chatList.find(item => item.plotId === id)
       wx.navigateTo({
-        url: `/pages/chat/session/index?id=${id}`
+        url: `/pages/chat/index?plotId=${id}&characterId=${plot.characterId}`
       })
     },
     onTopChat(e) {

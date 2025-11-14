@@ -1,0 +1,12 @@
+{
+  "navigationBarTitleText": "聊天",
+  "onReachBottomDistance": 10,
+  "backgroundTextStyle": "light",
+  "enablePullDownRefresh": false,
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "chat": "/components/chat/index",
+    "auth": "/components/auth/index"
+  }
+}
+

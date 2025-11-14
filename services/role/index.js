@@ -16,6 +16,10 @@ export function createPersona(data) {
     return request.post('/api/v1/server/story/createPersona', data)
 }
 
+export function updatePersona(data) {
+    return request.post('/api/v1/server/story/updatePersona', data)
+}
+
 export function getCharacterList(params) {
     return request.get('/api/v1/server/character/getCharacterList', params)
 }
@@ -46,4 +50,12 @@ export function getStoryDetail(storyId) {
 
 export function getPlotDetail(plotId) {
     return request.get(`/api/v1/server/plot/getPlotDetail?plotId=${plotId}`)
+}
+
+export function getCurrentPlotByCharacterId(characterId) {
+    return request.get(`/api/v1/server/plot/getCurrentPlotByCharacterId?characterId=${characterId}`)
+}
+
+export function getPersonaDetail(id) {
+    return request.get(`/api/v1/server/story/getPersonaDetail?personaId=${id}`)
 }
