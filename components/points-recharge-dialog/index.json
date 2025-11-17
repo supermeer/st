@@ -1,8 +1,7 @@
 {
   "component": true,
   "usingComponents": {
-    "t-overlay": "tdesign-miniprogram/overlay/overlay",
     "t-image": "tdesign-miniprogram/image/image",
-    "common-dialog-content": "/components/common-dialog-content/index"
+    "recharge-result-dialog": "/components/recharge-result-dialog/index"
   }
 }

@@ -1,3 +1,5 @@
+import { createOrderAndPrepay } from '../../services/order/index'
+
 Component({
   properties: {
     userAvatar: {
@@ -8,7 +10,7 @@ Component({
       type: String,
       value: ''
     },
-    userLevel: {
+    remainPoints: {
       type: String,
       value: ''
     }
@@ -47,10 +49,67 @@ Component({
     handleRecharge() {
       const { plans, selectedIndex } = this.data
       const plan = plans[selectedIndex]
-      this.triggerEvent('recharge', { plan })
+
+      if (!plan) {
+        wx.showToast({
+          title: '请选择充值方案',
+          icon: 'none'
+        })
+        return
+      }
+
+      wx.showLoading({
+        title: '处理中...',
+        mask: true
+      })
+
+      createOrderAndPrepay({
+        openId: wx.getStorageSync('openId'),
+        orderType: 1,
+        // 按当前约定不对 price 做额外处理
+        count: 1
+      })
+        .then((res) => {
+          wx.requestPayment({
+            ...res,
+            success: () => {
+              wx.hideLoading()
+              this.hide()
+
+              const resultDialog = this.selectComponent('#rechargeResultDialog')
+              if (resultDialog && res.orderNumber) {
+                resultDialog.show({
+                  orderNumber: res.orderNumber,
+                  points: plan.points
+                })
+              }
+            },
+            fail: () => {
+              wx.hideLoading()
+              wx.showToast({
+                title: '支付失败',
+                icon: 'none'
+              })
+            }
+          })
+        })
+        .catch(() => {
+          wx.hideLoading()
+          wx.showToast({
+            title: '下单失败',
+            icon: 'none'
+          })
+        })
+    },
+    onRechargeResultClose() {
+      // 目前仅关闭结果弹窗，必要时可以在这里补充刷新积分等逻辑
     },
     handleAgreementTap() {
       this.triggerEvent('agreement')
+    },
+
+    handleMaskClick() {
+      // this.close()
     }
   }
 })

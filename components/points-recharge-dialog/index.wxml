@@ -1,22 +1,19 @@
-<t-overlay
-  visible="{{ visible }}"
-  bindclose="close"
-  class="points-recharge-dialog"
+<view
+  class="points-dialog-mask"
+  wx:if="{{visible}}"
+  bindtap="handleMaskClick"
+  catchtouchmove="{{true}}"
 >
-  <common-dialog-content
-    class="dialog-content"
-    cancelTitle=""
-    confirmTitle=""
-  >
+  <view class="points-dialog-container" catchtap="">
     <view class="points-dialog">
       <view class="points-header">
         <view class="user-info">
           <t-image class="avatar" src="{{userAvatar}}" mode="aspectFill"></t-image>
           <view class="user-meta">
             <view class="user-name">{{userName}}</view>
-            <view class="user-level">
-              <text class="level-icon">★</text>
-              <text class="level-text">{{userLevel}}</text>
+            <view class="user-score">
+              <t-image class="points-icon" src="/static/vip/score.png"></t-image>
+              <text class="points-text">{{remainPoints || 0}}</text>
             </view>
           </view>
         </view>
@@ -34,7 +31,7 @@
           data-index="{{index}}"
         >
           <view class="plan-points">
-            <text class="plan-points-icon">★</text>
+            <t-image class="points-icon" src="{{index === selectedIndex ? '/static/vip/score_s.png' : '/static/vip/score.png'}}"></t-image>
             <text class="plan-points-num">{{item.points}}</text>
           </view>
           <view class="plan-price">￥{{item.price}}</view>
@@ -49,5 +46,10 @@
         </view>
       </view>
     </view>
-  </common-dialog-content>
-</t-overlay>
+  </view>
+</view>
+
+<recharge-result-dialog
+  id="rechargeResultDialog"
+  bind:close="onRechargeResultClose"
+/>

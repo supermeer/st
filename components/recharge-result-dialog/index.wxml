@@ -1,0 +1,32 @@
+<view class="recharge-result-mask" wx:if="{{visible}}" bindtap="handleMaskClick" catchtouchmove="{{true}}">
+  <view class="recharge-result-container" catchtap="">
+    <view class="recharge-result-icon">
+      <view class="icon-circle">
+        <view class="icon-checkmark" wx:if="{{status === 1}}"></view>
+        <view class="icon-loading" wx:if="{{status === 0}}"></view>
+        <view class="icon-fail" wx:if="{{status === 2}}">!</view>
+      </view>
+      <view class="deco-dot dot-1"></view>
+      <view class="deco-dot dot-2"></view>
+      <view class="deco-dot dot-3"></view>
+      <view class="deco-star star-1">✦</view>
+      <view class="deco-star star-2">✦</view>
+      <view class="deco-star star-3">✦</view>
+    </view>
+
+    <view class="recharge-result-text" wx:if="{{status === 0}}">
+      正在确认充值结果...
+    </view>
+    <view class="recharge-result-text" wx:if="{{status === 1}}">
+      <t-image class="points-icon" src="/static/vip/score.png"></t-image>
+      {{points}} 积分已到账！
+    </view>
+    <view class="recharge-result-text" wx:if="{{status === 2}}">
+      充值失败，请稍后重试
+    </view>
+
+    <view class="recharge-result-btn" bindtap="handleConfirm">
+      {{status === 1 ? '继续体验' : '我知道了'}}
+    </view>
+  </view>
+</view>

@@ -2,26 +2,31 @@ view {
   letter-spacing: 0.8rpx;
 }
 
-.points-recharge-dialog {
-  width: 100%;
-  height: 100%;
-  background: rgba(6, 6, 6, 0.6);
+/* 遮罩层，参照 tip-dialog 设计 */
+.points-dialog-mask {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 999;
-  padding: 0 64rpx 80rpx;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+/* 对话框容器：包裹积分内容区域 */
+.points-dialog-container {
+  width: 622rpx;
+  background: #000;
+  border-radius: 32rpx;
+  padding: 48rpx;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-}
-
-.dialog-content {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
+  align-items: stretch;
+  border: 1rpx solid #666;
 }
 
 .points-dialog {
@@ -62,15 +67,29 @@ view {
   font-weight: 600;
 }
 
-.user-level {
+.user-score {
+  display: flex;
+  align-items: center;
+}
+
+.user-score .points-icon {
+  margin-right: 8rpx;
+}
+
+.user-score .points-text {
+  font-size: 24rpx;
+  color: #fff;
+}
+
+.user-info {
   margin-top: 8rpx;
   display: flex;
   align-items: center;
   font-size: 24rpx;
-  color: #a5b4fc;
+  color: #fff;
 }
 
-.level-icon {
+.-icon {
   margin-right: 8rpx;
 }
 
@@ -117,11 +136,18 @@ view {
   margin-bottom: 16rpx;
 }
 
-.plan-points-icon {
-  margin-right: 6rpx;
+.points-icon {
+  width: 32rpx;
+  height: 32rpx;
+  margin-right: 8rpx;
 }
 
 .plan-points-num {
+  color: var(--theme-color-purple);
+}
+
+.plan-item.active .plan-points-num {
+  color: #fff;
 }
 
 .plan-price {
