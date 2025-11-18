@@ -1,5 +1,5 @@
 <view class="background-sheet-mask" wx:if="{{visible}}" bindtap="handleMaskClick" catchtouchmove="preventMove">
-  <view class="background-sheet-container {{visible ? 'show' : ''}}" catchtap="">
+  <view class="background-sheet-container {{visible ? 'show' : ''}}" catchtap="true">
     <!-- 顶部指示条 -->
     <view class="background-sheet-indicator"></view>
 
@@ -29,6 +29,9 @@
             </view>
           </view>
         </view>
+      </view>
+      <view wx:if="{{backgrounds.length === 0}}" class="empty-container">
+        <text class="empty-text">暂无背景</text>
       </view>
     </scroll-view>
 

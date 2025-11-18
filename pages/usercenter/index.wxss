@@ -1,6 +1,13 @@
 page {
   background-color: #121212;
-  background: linear-gradient(345deg, #1e1e1e 4%, #121212 69%, #0a0a0a 96%);
+  background-color: ;
+  background: linear-gradient(
+    180deg,
+    rgb(153, 140, 215) 0%,
+    rgb(104, 122, 209) 15%,
+    #121212 30%,
+    #121212 100%
+  );
   overflow: hidden;
 }
 .usercenter-page-container {
@@ -20,6 +27,8 @@ page {
   padding-bottom: 32rpx;
   overflow: auto;
   height: calc(100vh - 44px - env(safe-area-inset-bottom) - env(safe-area-inset-top) - 172rpx);
+  display: flex;
+  flex-direction: column;
 }
 
 /* 自定义logo样式 */
@@ -38,8 +47,8 @@ page {
   color: #fff;
 }
 .user-info-avatar {
-  width: 136rpx;
-  height: 136rpx;
+  width: 120rpx;
+  height: 120rpx;
   border-radius: 50%;
   overflow: hidden;
   border: 2px solid #fff;
@@ -53,152 +62,153 @@ page {
   font-size: 24rpx;
   font-weight: normal;
   margin-top: 24rpx;
-  color: #aaa;
+  color: #ddd;
 }
 
 .user-info-arr {
   margin-left: auto;
 }
 
-.vip-card {
+.score-box {
   width: 100%;
-  height: 180rpx;
+  padding: 32rpx 24rpx;
+  margin-top: 30rpx;
   background-size: 100% 100%;
   background-repeat: no-repeat;
-  margin-top: 52rpx;
-  padding: 36rpx 46rpx 26rpx;
-  box-sizing: border-box;
-  position: relative;
-}
-.vip-card-header {
   display: flex;
   align-items: center;
-  font-size: 32rpx;
-  font-weight: bold;
-  color: #fff;
+  border-radius: 24rpx;
 }
-.vip-card-header-icon {
-  width: 36rpx;
-  height: 32rpx;
-  margin-right: 16rpx;
+.score-box-icon {
+  width: 60rpx;
+  height: 60rpx;
+  margin-right: 12rpx;
 }
-.vip-card-header-text {
-  font-size: 32rpx;
-  color: #fff;
-}
-.vip-card-header-text-vip {
-  font-weight: bold;
-}
-.vip-card-header-remain {
-  font-size: 26rpx;
-  color: #fff;
-  font-weight: normal;
-  margin-left: 46rpx;
-  display: flex;
-  align-items: center;
-  font-weight: bold;
-}
-.vip-card-header-remain-time {
+.score-box-text {
   font-size: 48rpx;
-  padding: 0 8rpx;
-  height: 40rpx;
-  line-height: 40rpx;
   font-weight: bold;
-  background: linear-gradient(180deg, #FF5D4B 0%, #FF53B3 98%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--magic-color);
 }
-.vip-card-bottom {
+.score-box-desc {
   font-size: 24rpx;
-  position: absolute;
-  bottom: 20rpx;
-  left: 46rpx;
-  right: 32rpx;
-  display: flex;
-  align-items: center;
-  letter-spacing: 0.8rpx;
-  color: #fff;
-}
-.deadline-time {
-  color: #fff;
-}
-.deadline-time-countdown {
-  color: #ffce5e;
-  margin-left: 20rpx;
-}
-
-.times-detail {
-  color: #fff;
-  padding: 20rpx;
+  color: #bbb;
+  justify-self: flex-end;
   margin-left: auto;
 }
-
-.vip-renew {
-  font-size: 24rpx;
-  font-weight: bold;
-  color: #fff;
-  position: absolute;
-  right: 32rpx;
-  bottom: 40rpx;
-  padding: 12rpx 32rpx;
-  border-radius: 40rpx;
-  background: linear-gradient(135deg, #7c5aff 0%, #a78bfa 50%, #8b5cf6 100%);
-  color: #ffffff;
-  font-size: 26rpx;
-  font-weight: 600;
+.score-box-arr {
+  font-size: 18px;
+  color: #ddd;
+  margin-left: 12rpx;
 }
 
-.points-recharge-btn {
-  margin-top: 32rpx;
+.vip-box {
   width: 100%;
-  height: 80rpx;
-  border-radius: 40rpx;
-  background: rgba(139, 92, 246, 0.16);
-  color: #c4b5fd;
-  font-size: 28rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.user-center-items {
-  width: 100%;
-  box-sizing: border-box;
-}
-.user-center-item {
-  width: 100%;
-  height: 110rpx;
-  background-color: #fff;
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  margin-top: 20rpx;
+  margin-top: 12rpx;
+  padding: 32rpx;
   border-radius: 24rpx;
-  padding: 0 32rpx;
-}
-.user-center-item:active {
-  background-color: #f5f5f5;
+  background: rgb(79, 80, 87);
+  display: flex;
+  justify-content: space-bettwen;
+  align-items: center;
 }
 
-.user-center-item-icon {
+.vip-box-left-content {
+  flex: 1;
+}
+
+.vip-box-header {
+  display: flex;
+  align-items: center;
+}
+
+.vip-box-header-icon {
   width: 40rpx;
   height: 40rpx;
 }
-.user-center-item-title {
-  font-size: 28rpx;
-  font-weight: bold;
-  margin-left: 32rpx;
-  background: transparent;
-}
-.user-center-item-desc {
-  font-size: 24rpx;
-  color: #999;
-  margin-left: auto;
-  background: transparent;
-  height: 36rpx;
-}
-.user-center-item-arr {
+
+.vip-box-header-text {
   margin-left: 12rpx;
-  background: transparent;
+  font-weight: bold;
+  font-size: 32rpx;
+  color: var(--magic-color);
+}
+
+.open-vip-btn {
+  margin-left: auto;
+  padding: 12rpx 16rpx;
+  background: rgb(214, 190, 217);
+  color: var(--magic-color);
+  border-radius: 16rpx;
+}
+
+.open-vip-btm-line {
+  color: 24rpx;
+  color: #fff;
+  font-weight: bold;
+  margin-top: 24rpx;
+}
+
+.vip-box-icon {
+  margin-left: auto;
+  width: 80rpx;
+  height: 80rpx;
+}
+
+.roles-title {
+  color: #ddd;
+  font-size: 24rpx;
+  padding: 24rpx 12rpx;
+}
+
+.role-list {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 16rpx 0;
+  gap: 16rpx;
+  height: calc(100% - 560rpx);
+  overflow-y: auto;
+}
+
+.role-card {
+  width: calc(33.333% - 12rpx);
+  aspect-ratio: 0.618;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 16rpx;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.role-card:active {
+  transform: scale(0.95);
+  opacity: 0.8;
+}
+
+.role-info {
+  padding: 16rpx;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 50%, transparent 100%);
+  position: relative;
+  z-index: 1;
+}
+
+.role-name-row {
+  display: flex;
+  align-items: center;
+}
+
+.role-name {
+  flex: 1;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #ffffff;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

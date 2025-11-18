@@ -17,45 +17,40 @@
       </view>
       <t-icon class="user-info-arr" name="chevron-right" size="32" color="#fff" />
     </view>
-    <view class="score-box"></view>
-    <view class="vip-box"></view>
-    <view class="vip-card" style="background-image: url('https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/vip.png');">
-      <view class="vip-card-header">
-        <t-image class="vip-card-header-icon" src="{{vipInfo.ifVip ? '/static/vip_icon.png' : '/static/vip_no_icon.png'}}" />
-        <text class="vip-card-header-text {{vipInfo.ifVip ? 'vip-card-header-text-vip' : 'vip-card-header-text-no-vip'}}">{{vipInfo.ifVip ? 'VIP' : '暂未开通VIP'}}</text>
-        <view
-          wx:if="{{vipInfo.ifVip}}"
-          class="vip-card-header-remain">本月剩余<view class="vip-card-header-remain-time">{{vipInfo.monthlyRemaining || 0}}</view>次
-        </view>
-        <view
-          wx:if="{{!vipInfo.ifVip && vipInfo.giftRemaining > 0}}"
-          class="vip-card-header-remain">赠送次数剩余<view class="vip-card-header-remain-time">{{vipInfo.giftRemaining}}</view>次
-        </view>
-      </view>
-      <view wx:if="{{vipInfo.ifVip}}" class="vip-card-bottom">
-        <view class="deadline-time">{{vipInfo.formattedMonthlyExpireTime}} 到期</view>
-        <view wx:if="{{vipInfo.monthlyRemainingDays > 0 && vipInfo.monthlyRemainingDays <= 5}}" class="deadline-time-countdown">过期将自动清零</view>
-        <view class="times-detail" bindtap="onTimesDetailClick">
-          详情
-        </view>
-      </view>
-      <view wx:else class="vip-card-bottom">
-        <view wx:if="{{vipInfo.giftRemaining > 0}}" class="times-detail" bindtap="onTimesDetailClick">
-          详情
-        </view>
-        <view wx:else class="vip-card-bottom-text">开启专属于你的AI旅程</view>
-      </view>
-      <view class="vip-renew" catchtap="onVipRenewClick">{{ vipInfo.ifVip ? '立即续费' : '开通VIP' }}</view>
+    <view class="score-box">
+      <t-image class="score-box-icon" src="/static/vip/score.png" />
+      <text class="score-box-text">123321</text>
+      <text class="score-box-desc">有300积分3天后过期</text>
+      <t-icon class="score-box-arr" name="chevron-right" size="18" />
     </view>
-    <view class="points-recharge-btn" bindtap="onPointsRechargeClick">积分充值</view>
-    <view class="user-center-items">
-      <view wx:for="{{userCenterItems}}" wx:key="index" class="user-center-item" bindtap="onClickCell" data-url="{{item.url}}">
-        <t-image class="user-center-item-icon" src="{{item.icon}}" />
-        <view class="user-center-item-title">{{item.title}}</view>
-        <view class="user-center-item-desc">{{item.desc}}</view>
-        <t-icon wx:if="{{!item.hideArr}}" class="user-center-item-arr" name="chevron-right" size="18" color="#999" />
+    <view class="vip-box">
+      <view class="vip-box-left-content">
+        <view class="vip-box-header">
+          <t-image class="vip-box-header-icon" src="/static/vip/vip.png"/>
+          <text class="vip-box-header-text">开通会员</text>
+          <t-button class="open-vip-btn" bind:click="onVipRenewClick">立即开通</t-button>
+        </view>
+        <view class="open-vip-btm-line">无线畅聊 记忆增强 更多灵感回复</view>
       </view>
-    </view>                                                           
+      <t-image class="vip-box-icon" src="/static/vip/vip.png"/>
+    </view>                                                        
+    <view class="roles-title">智能体</view>
+    <view class="role-list">
+      <view 
+        class="role-card" 
+        wx:for="{{roleList}}" 
+        wx:key="id"
+        style="background-image: url('{{item.backgroundImage || item.avatar}}');"
+        bind:tap="onRoleClick"
+        data-id="{{item.id}}"
+      >
+        <view class="role-info">
+          <view class="role-name-row">
+            <text class="role-name">{{item.name}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
   </view>
 </view>
 

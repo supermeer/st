@@ -84,6 +84,13 @@ Component({
     
     // 确认按钮回调
     handleConfirm() {
+      if (!this.data.selectedBackground) {
+        wx.showToast({
+          title: '请选择背景',
+          icon: 'none'
+        })
+        return
+      }
       if (typeof this._onConfirm === 'function') {
         this._onConfirm(this.data.selectedBackground)
       }

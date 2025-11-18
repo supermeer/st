@@ -140,13 +140,7 @@ Page({
         title: '聊天背景',
         cancelText: '创建专属背景',
         confirmText: '设为背景',
-        backgrounds: [
-          {
-            id: 'default',
-            name: '默认背景',
-            image: 'https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/chat_bg.png'
-          }
-        ],
+        backgrounds: [],
         selectedId: this.data.formData.chatBackground,
         onConfirm: (background) => {
           if (background) {
@@ -156,9 +150,9 @@ Page({
           }
         },
         onCancel: () => {
-          wx.navigateTo({
-            url: '/pages/common/pic-generate/index'
-          })
+          // wx.navigateTo({
+          //   url: '/pages/common/pic-generate/index'
+          // })
         }
       })
     }

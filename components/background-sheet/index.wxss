@@ -74,6 +74,18 @@
   gap: 16rpx;
 }
 
+.empty-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80rpx 0;
+}
+
+.empty-text {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 28rpx;
+}
+
 /* 背景项 */
 .background-item {
   width: calc((100% - 32rpx) / 3);
