@@ -111,4 +111,8 @@ export function rollbackPlotMessage(data) {
   return request.post('/api/v1/server/plot/rollbackPlotMessage', data)
 }
 
+export function inspirationReply(data) {
+  return request.post('/api/v1/server/plot/inspirationReply', data)
+}
+
 export default ChatService

@@ -62,6 +62,7 @@
       adjust-position="{{false}}"
       bind:line-change="onInputLineChange"
       bind:keyboardheightchange="onKeyboardHeightChange"
+      bind:enter="onSend"
     />
     <view class="bottom-line">
       <t-image class="input-box-image" src="/static/chat/linggan.png" bindtap="showInspiration" />
@@ -76,10 +77,26 @@
     </view>
   </view>
   <view wx:if="{{showInspiration}}" class="input-box-inspiration">
-    <view class="input-box-inspiration-title">灵感对话</view>
-    <view wx:for="{{inspirationList}}" wx:key="index" class="input-box-inspiration-item">
-      {{item}}
-      <t-icon name="edit-2-filled" class="icon-btn" size="28rpx" data-index="{{index}}" bindtap="editInspiration" />
+    <view class="input-box-inspiration-title">
+      灵感对话
+      <t-icon name="refresh" class="icon-btn" size="18px" bindtap="refreshInspiration" />
+    </view>
+    <!-- 加载中状态 -->
+    <view wx:if="{{inspirationLoading}}" class="input-box-inspiration-loading">
+      <view class="loading-dot"></view>
+      <view class="loading-dot"></view>
+      <view class="loading-dot"></view>
+    </view>
+    <!-- 空状态 -->
+    <view wx:elif="{{inspirationEmpty}}" class="input-box-inspiration-empty">
+      <text>暂时没有灵感，尝试换一句话或多聊几句吧～</text>
+    </view>
+    <!-- 正常列表 -->
+    <view wx:else>
+      <view wx:for="{{inspirationList}}" wx:key="index" class="input-box-inspiration-item" data-item="{{item}}" bindtap="onInspirationTap">
+        {{item}}
+        <t-icon name="edit-2-filled" class="icon-btn" size="28rpx" data-item="{{item}}" catchtap="editInspiration" />
+      </view>
     </view>
   </view>
   <view wx:if="{{showBoard}}" class="input-box-board">
@@ -105,3 +122,10 @@
     </view> -->
   </view>
 </view>
+
+<image-uploader
+  visible="{{showUploader}}"
+  bind:success="onUploadSuccess"
+  bind:fail="onUploadFail"
+  bind:cancel="onUploadCancel"
+/>

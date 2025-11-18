@@ -3,6 +3,7 @@
     "usingComponents": {
       "t-icon": "tdesign-miniprogram/icon/icon",
       "t-image": "tdesign-miniprogram/image/image",
-      "t-textarea": "tdesign-miniprogram/textarea/textarea"
+      "t-textarea": "tdesign-miniprogram/textarea/textarea",
+      "image-uploader": "/components/image-uploader/index"
     }
   }

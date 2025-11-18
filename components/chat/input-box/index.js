@@ -1,23 +1,16 @@
+import { inspirationReply } from '../../../services/ai/chat'
 Component({
     properties: {
-      messageList: Array,
-      isLogin: Boolean,
-      userInfo: Object
+      plotId: {
+        type: String
+      },
     },
     data: {
         inputType: 0, // 0： 默认 1: 文本, 2: 语音
         showInspiration: false, // 是否显示灵感
-        inspirationList: [
-          "你是谁？我是谁？我在哪？你要干什么？",
-          "你是谁？我是谁？我在哪？你要干什么？",
-          "你是谁？我是谁？我在哪？你要干什么？",
-          "你是谁？我是谁？我在哪？你要干什么？",
-          "你是谁？我是谁？我在哪？你要干什么？",
-          "你是谁？我是谁？我在哪？你要干什么？",
-          "你是谁？我是谁？我在哪？你要干什么？",
-          "你是谁？我是谁？我在哪？你要干什么？",
-          "你是谁？我是谁？我在哪？你要干什么？"
-        ], // 灵感列表
+        inspirationList: [], // 灵感列表
+        inspirationLoading: false, // 灵感加载中
+        inspirationEmpty: false, // 灵感为空状态
         showBoard: false,
         inputConfig: {
           maxHeight: 150
@@ -33,6 +26,8 @@ Component({
         recordTime: 0, // 录音时长
         isTouchMoving: false, // 是否正在移动（取消录音）
         recorderManager: null, // 录音管理器
+        showUploader: false,
+        imageList: []
     },
     lifetimes: {
       attached() {
@@ -390,8 +385,9 @@ Component({
           this.startY = e.touches[0].clientY
           this.onVoiceTouchStart(e)
         },
-        onSend() {
-          if (!this.data.inputValue || this.data.inputValue.length == 0) {
+        onSend(ctx) {
+          let content = this.data.inputValue || ctx
+          if (!content || content.length == 0) {
             wx.showToast({
               title: '请输入内容',
               icon: 'none',
@@ -400,7 +396,7 @@ Component({
             return
           }
           this.triggerEvent('sendMessage', {
-            content: this.data.inputValue
+            content: content
           })
           this.setData({
             inputValue: ''
@@ -426,17 +422,19 @@ Component({
         
         changeInputType(e) {
           const type = e.currentTarget.dataset.type
-          this.setData({
-            focus: type == 1, // 切换到输入模式时拉起键盘
-            showBoard: false,
-            showInspiration: false
-          })
-          this.triggerEvent('showTabbar')
-          setTimeout(() => {
-            this.setData({
-              inputType: type
-            })
-          }, 13)
+          this.setData(
+            {
+              inputType: type,
+              showBoard: false,
+              showInspiration: false
+            },
+            () => {
+              this.triggerEvent('showTabbar')
+              this.setData({
+                focus: type == 1 // 切换到输入模式时拉起键盘
+              })
+            }
+          )
         },
         onInputBlur() {
           this.setData({
@@ -468,19 +466,75 @@ Component({
             this.triggerEvent('showTabbar')
             return
           }
+          // 打开灵感面板，先进入加载状态
           this.setData({
             showInspiration: true,
-            showBoard: false
+            showBoard: false,
+            inspirationLoading: true,
+            inspirationEmpty: false,
+            inspirationList: []
           })
+          this.getInspiration()
           this.triggerEvent('hideTabbar')
         },
-        editInspiration(e) {
-          const index = e.currentTarget.dataset.index
+        refreshInspiration() {
           this.setData({
-            showInspiration: false,
-            inputValue: this.data.inspirationList[index]
+            inspirationLoading: true,
+            inspirationEmpty: false,
+            inspirationList: []
+          })
+          this.getInspiration()
+        },
+        getInspiration() {
+          inspirationReply({
+            plotId: this.properties.plotId
+          }).then(res => {
+            if (!res) {
+              this.setData({
+                inspirationLoading: false,
+                inspirationEmpty: true,
+                inspirationList: []
+              })
+              return
+            }
+            const arr = JSON.parse(res)
+            this.setData({
+              inspirationList: arr,
+              inspirationLoading: false,
+              inspirationEmpty: !arr || arr.length === 0
+            })
+          }).catch(() => {
+            this.setData({
+              inspirationLoading: false,
+              inspirationEmpty: true,
+              inspirationList: []
+            })
+          })
+        },
+        onInspirationTap(e) {
+          const item = e.currentTarget.dataset.item
+          this.onSend(item)
+          this.setData({
+            showInspiration: false
           })
           this.triggerEvent('showTabbar')
+        },
+        
+        editInspiration(e) {
+          const item = e.currentTarget.dataset.item
+          this.setData(
+            {
+              inputType: 1,
+              showInspiration: false,
+              inputValue: item
+            },
+            () => {
+              this.triggerEvent('showTabbar')
+              this.setData({
+                focus: true
+              })
+            }
+          )
         },
         showBoard() {
           if (this.data.showBoard) {
@@ -505,12 +559,40 @@ Component({
           this.triggerEvent('buttonClick', { action: 'restart' });
         },
         uploadImage() {
-          this.setData({
-            showBoard: false,
-            showInspiration: false
-          })
-          this.triggerEvent('showTabbar')
+          // this.setData({
+          //   showBoard: false,
+          //   showInspiration: false
+          // })
+          // this.triggerEvent('showTabbar')
+          this.onUpload()
         },
+
+        onUpload() {
+          if (this.properties.disabled) return
+          this.setData({ showUploader: true, imageList: [] })
+        },
+        onUploadSuccess(e) {
+          const { remoteUrl, tempFilePath, signature } = e.detail
+          this.setData({ showUploader: false })
+          this.triggerEvent('success', {
+            remoteUrl,
+            tempFilePath,
+            signature,
+            imageList: this.data.imageList
+          })
+        },
+
+        onUploadFail(e) {
+          const { message } = e
+          wx.showToast({ title: message, icon: 'none' })
+          this.setData({ showUploader: false })
+        },
+
+        onUploadCancel() {
+          this.setData({ showUploader: false })
+        },
+        
+
         storyList() {
           this.setData({
             showBoard: false,

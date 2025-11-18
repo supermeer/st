@@ -13,7 +13,7 @@
         <view class="thinking-header" bindtap="toggleThinking">
           <view class="thinking-title">
             <t-icon name="lightbulb" size="32rpx" color="#FFA500" class="{{message.isThinking ? 'thinking-icon-pulse' : ''}}" />
-            <text>{{message.isThinking ? '思考中' : '思考过程'}}</text>
+            <text>{{message.isThinking ? '思考中' : '心理活动'}}</text>
           </view>
           <text class="thinking-arrow">{{thinkingExpanded ? '▲' : '▼'}}</text>
         </view>

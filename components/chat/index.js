@@ -52,6 +52,13 @@ Component({
           msgList: []
         })
       }
+    },
+    'msgList': function (newVal) {
+      if (newVal.length > 0) {
+        this.setData({
+          latestMsgId: newVal[newVal.length - 1].id
+        })
+      }
     }
   },
   data: {
@@ -69,6 +76,7 @@ Component({
       updateTime: null
     },
     msgList: [],
+    latestMsgId: null,
     isLogin: false,
     userInfo: {},
     keyboardHeight: 0,
@@ -268,6 +276,16 @@ Component({
     
     goLogin() {
       this.setData({ isLogin: true })
+    },
+    getLatestMsgId() {
+      if (this.data.msgList.length === 0) {
+        return null
+      }
+      const latestMsg = this.data.msgList[this.data.msgList.length - 1]
+      if (latestMsg.senderType === 2) {
+        return latestMsg.id
+      }
+      return null
     },
     onKeyboardHeightChange(e) {
       const keyboardHeight = typeof e.detail === 'number' ? e.detail : (e.detail.keyboardHeight || 0)

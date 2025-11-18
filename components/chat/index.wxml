@@ -64,6 +64,7 @@
   </scroll-view>
   <input-box
     class="input-box"
+    plotId="{{chatDetail.plotId}}"
     bind:keyboardHeightChange="onKeyboardHeightChange"
     bind:inputLineChange="onInputLineChange"
     bind:hideTabbar="hideTabbar"

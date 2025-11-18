@@ -13,8 +13,12 @@
       <t-image class="user-info-avatar" src="/static/avatar.jpg" />
       <view class="user-info-name">
         <text>{{userInfo.nickname || '小柚子'}}</text>
+        <view class="user-info-uid">UID:123321</view>
       </view>
+      <t-icon class="user-info-arr" name="chevron-right" size="32" color="#fff" />
     </view>
+    <view class="score-box"></view>
+    <view class="vip-box"></view>
     <view class="vip-card" style="background-image: url('https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/vip.png');">
       <view class="vip-card-header">
         <t-image class="vip-card-header-icon" src="{{vipInfo.ifVip ? '/static/vip_icon.png' : '/static/vip_no_icon.png'}}" />
