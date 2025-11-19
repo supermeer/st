@@ -9,6 +9,7 @@ view {
   height: 100vh;
   display: flex;
   flex-direction: column;
+  background: #000;
 }
 
 .nav-container {
@@ -25,7 +26,6 @@ view {
 /* 支付状态卡片 */
 .payment-card {
   width: 100%;
-  background-color: #FFFFFF;
   border-radius: 24rpx;
   margin-top: 16rpx;
   box-sizing: border-box;
@@ -34,6 +34,7 @@ view {
   flex-direction: column;
   align-items: center;
   box-shadow: 0px 2px 6px 2px rgba(23, 77, 255, 0.08);
+  color: #fff;
 }
 
 /* 图标样式 */
@@ -41,6 +42,7 @@ view {
   width: 148rpx;
   height: 148rpx;
   margin-top: 56rpx;
+  --td-loading-color: var(--magic-color);
 }
 
 /* 标题样式 */
@@ -49,7 +51,7 @@ view {
   height: 40rpx;
   line-height: 40rpx;
   font-weight: bold;
-  color: rgba(0, 0, 0, 0.8);
+  color: #fff;
   margin-top: 10rpx;
 }
 
@@ -59,7 +61,7 @@ view {
   height: 40rpx;
   line-height: 40rpx;
   font-weight: bold;
-  color: var(--theme-color);
+  color: var(--magic-color);
   text-align: center;
   margin-top: 68rpx;
 }
@@ -70,7 +72,7 @@ view {
   height: 40rpx;
   line-height: 40rpx;
   text-align: center;
-  color: rgba(0, 0, 0, 0.8);
+  color: #fff;
   margin-top: 40rpx;
 }
 
@@ -88,7 +90,7 @@ view {
   height: 92rpx;
   line-height: 92rpx;
   text-align: center;
-  background: linear-gradient(100deg, #63B4FF 16%, #174DFF 89%);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: #FFFFFF;
   font-size: 32rpx;
   font-weight: bold;
@@ -102,12 +104,9 @@ view {
   height: 92rpx;
   line-height: 92rpx;
   text-align: center;
-  background-color: #F5F5F5;
-  /* #174DFF 60% */
-  color: #174dff98;
   font-size: 32rpx;
   font-weight: bold;
   border-radius: 24rpx;
-  border: 1px solid #6D8FFF;
+  color: #fff;
   margin-top: 32rpx;
 } 

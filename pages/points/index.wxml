@@ -1,0 +1,72 @@
+<view class="points-page">
+  <custom-nav
+    class="points-custom-nav"
+    show-back="{{true}}"
+    show-left-logo="{{false}}"
+    show-home="{{false}}"
+    transparent="{{true}}"
+  >
+    <text slot="center">我的积分</text>
+  </custom-nav>
+  <view class="points-content">
+    <view class="points-header">
+      <view class="points-header-title">我的积分</view>
+      <view class="points-header-link" bindtap="goDetail">
+        <text>收支明细</text>
+        <t-icon name="chevron-right" size="20" />
+      </view>
+    </view>
+
+    <view class="points-summary-card">
+      <view class="points-summary-left">
+        <t-image class="points-summary-icon" src="/static/vip/score.png" mode="aspectFit" />
+        <view class="points-summary-info">
+          <view class="points-summary-value">{{currentPoints || 0}}</view>
+          <view class="points-summary-expire">积分将于 {{expireDate}} 到期</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="section-title">购买积分</view>
+
+    <view class="plan-grid">
+      <view
+        wx:for="{{plans}}"
+        wx:key="index"
+        class="plan-item {{index === selectedIndex ? 'active' : ''}}"
+        bindtap="selectPlan"
+        data-index="{{index}}"
+      >
+        <view class="plan-points">
+          <t-image
+            class="points-icon"
+            src="{{index === selectedIndex ? '/static/vip/score_s.png' : '/static/vip/score.png'}}"
+            mode="aspectFit"
+          />
+          <text class="plan-points-num">{{item.points}}</text>
+        </view>
+        <view class="plan-price">￥{{item.price}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="points-footer">
+    <view class="points-tips">
+      <view class="points-tip-line">提示：</view>
+      <view class="points-tip-line">
+        1、积分的使用期限为
+        <text class="points-tip-em">自购买日起30个自然日</text>
+        。过期未使用的积分，将自动清零，不可再使用。
+      </view>
+      <view class="points-tip-line">
+        2、已购买的积分，将自动按照购买时间先后消耗，即先购买的积分先消耗。
+      </view>
+    </view>
+
+    <view class="recharge-btn" bindtap="handleRecharge">立即充值</view>
+    <view class="agreement" bindtap="handleAgreementTap">
+      支付代表同意 
+      <text class="agreement-link">《会员服务协议》</text>
+    </view>
+  </view>
+</view>

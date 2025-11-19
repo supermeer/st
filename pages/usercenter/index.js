@@ -37,6 +37,19 @@ Page({
     })
   },
 
+  onVipRenewClick() {
+    console.log(111222333)
+    wx.navigateTo({
+      url: '/pages/vip/packages/index'
+    })
+  },
+
+  onScoreClick() {
+    wx.navigateTo({
+      url: '/pages/points/index'
+    })
+  },
+
   // 积分充值按钮
   onPointsRechargeClick() {
     const dialog = this.selectComponent('#pointsRechargeDialog')

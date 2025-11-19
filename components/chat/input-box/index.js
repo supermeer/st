@@ -4,6 +4,9 @@ Component({
       plotId: {
         type: String
       },
+      roleInfo: {
+        type: Object
+      }
     },
     data: {
         inputType: 0, // 0： 默认 1: 文本, 2: 语音
@@ -597,6 +600,9 @@ Component({
           this.setData({
             showBoard: false,
             showInspiration: false
+          })
+          wx.navigateTo({
+            url: `/pages/role/story/index?roleId=${this.properties.roleInfo.id}`
           })
           this.triggerEvent('showTabbar')
         },

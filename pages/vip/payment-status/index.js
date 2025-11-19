@@ -110,10 +110,8 @@ Page({
   },
 
   // 返回主页
-  goToHome: function () {
-    wx.switchTab({
-      url: '/pages/home/home'
-    })
+  goBack: function () {
+    wx.navigateBack()
   },
 
   // 添加客服微信

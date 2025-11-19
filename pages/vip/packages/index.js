@@ -138,6 +138,11 @@ Page({
 
   // 立即开通
   onPurchase: function () {
+
+    wx.redirectTo({
+      url: '/pages/vip/payment-status/index'
+    })
+    return
     const selectedPackage = this.data.selectedPackage
 
     if (!selectedPackage) {

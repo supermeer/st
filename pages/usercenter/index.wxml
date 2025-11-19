@@ -17,7 +17,7 @@
       </view>
       <t-icon class="user-info-arr" name="chevron-right" size="32" color="#fff" />
     </view>
-    <view class="score-box">
+    <view class="score-box" bind:tap="onScoreClick">
       <t-image class="score-box-icon" src="/static/vip/score.png" />
       <text class="score-box-text">123321</text>
       <text class="score-box-desc">有300积分3天后过期</text>
@@ -28,7 +28,7 @@
         <view class="vip-box-header">
           <t-image class="vip-box-header-icon" src="/static/vip/vip.png"/>
           <text class="vip-box-header-text">开通会员</text>
-          <t-button class="open-vip-btn" bind:click="onVipRenewClick">立即开通</t-button>
+          <t-button class="open-vip-btn" bind:tap="onVipRenewClick">立即开通</t-button>
         </view>
         <view class="open-vip-btm-line">无线畅聊 记忆增强 更多灵感回复</view>
       </view>

@@ -4,7 +4,8 @@
     "pages/discover/index",
     "pages/discover/search/index",
     "pages/chat-list/index",
-    "pages/usercenter/index"
+    "pages/usercenter/index",
+    "pages/points/index"
   ],
   "subpackages": [
     {

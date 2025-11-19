@@ -1,20 +1,18 @@
-<view class="payment-container" style="background-image: url('https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/page_bg_1.png'); background-size: 100% 100%; background-repeat: no-repeat; background-position: center;">
+<view class="payment-container">
   <!-- 自定义导航栏 -->
-  <custom-nav
-    class="nav-container"
+  <custom-nav 
     title="" 
-    showBack="{{true}}"
-    showHome="{{false}}"
-    bgColor="#ffffff"
-    transparent="{{true}}"
+    showBack="{{true}}" 
+    showHome="{{false}}" 
+    transparent="{{true}}" 
     bind:back="onBackClick"
   />
 
   <!-- 内容区域 -->
   <view class="content-container">
     <!-- 支付状态卡片 -->
-    <view class="payment-card">
-      <t-loading wx:if="{{paymentInfo.status === 0}}" class="payment-icon" theme="spinner" size="80rpx" />
+    <view class="payment-card blur-glass">
+      <t-loading wx:if="{{paymentInfo.status === 0}}" color="var(--magic-color)" class="payment-icon" theme="spinner" size="80rpx" />
       <t-image wx:if="{{paymentInfo.status === 1}}" class="payment-icon" src="/static/payment/pay_success.png" mode="aspectFit"></t-image>
       
       <!-- 标题 -->
@@ -22,16 +20,16 @@
 
       
       <!-- 消息 -->
-      <view wx:if="{{paymentInfo.status === 1}}" class="payment-message">恭喜您！成为Yours X尊贵的VIP</view>
+      <view wx:if="{{paymentInfo.status === 1}}" class="payment-message">恭喜您！成为尊贵的会员</view>
 
       
       <!-- 提示信息 -->
       <view class="payment-tips">过程中，有任何问题，可添联系客服。</view>
     </view>
-    <view class="home-button" bindtap="goToHome">返回主页</view>
+    <view wx:if="{{paymentInfo.status === 1}}" class="home-button" bindtap="goBack">继续体验</view>
     
     <!-- 添加客服微信按钮 -->
-    <view class="contact-button" bindtap="contactCustomerService">联系客服</view>
+    <view class="contact-button blur-glass" bindtap="contactCustomerService">联系客服</view>
   </view>
 </view>
 
