@@ -21,7 +21,8 @@ Page({
       userAddressedAs: '',
       identity: '',
       personaGender: null,
-      defaultBackgroundImage: null
+      defaultBackgroundImage: null,
+      isDev: false
     },
     styleForm: {
       id: null,
@@ -34,6 +35,14 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
+
+    const ev = wx.getStorageSync('aE')
+    if (ev == '0') {
+      this.setData({
+        isDev: true
+      })
+    }
+
     this.setData({
       pageInfo: { ...this.data.pageInfo, ...SystemInfo.getPageInfo() }
     })
@@ -99,7 +108,7 @@ Page({
    */
   onUserSettings() {
     wx.navigateTo({
-      url: '/pages/role/my-setting/index'
+      url: `/pages/role/my-setting/index?gender=${this.data.formData.personaGender}&userAddressedAs=${this.data.formData.userAddressedAs}&identity=${this.data.formData.identity}`
     })
   },
   confirmUserSettings(e) {
@@ -162,7 +171,7 @@ Page({
    * 提交表单
    */
   onSubmit() {
-    const { formData } = this.data
+    const { formData, isDev } = this.data
     
     // 表单验证
     if (!formData.name) {
@@ -173,9 +182,17 @@ Page({
       return
     }
     
-    if (!formData.description) {
+    if (!formData.descriptionPrompt) {
       wx.showToast({
         title: '请输入角色描述',
+        icon: 'none'
+      })
+      return
+    }
+
+    if (isDev && !formData.description) {
+      wx.showToast({
+        title: '请输入角色概述',
         icon: 'none'
       })
       return
@@ -186,8 +203,7 @@ Page({
       mask: true
     })
     
-    createCharacter(formData).then(res => {
-      console.log(res, 'res----------')
+    createCharacter({...formData, description: formData.description || formData.descriptionPrompt}).then(res => {
       wx.hideLoading()
       wx.showToast({
         title: '创建成功',

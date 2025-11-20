@@ -43,13 +43,13 @@
       <t-image class="icon-btn img-icon" src="/static/chat/juqing.png" />
       <text>新剧情</text> 
     </view>
-    <view class="swipe-cell-item" bind:tap="onButtonClick" data-action="like">
+    <!-- <view class="swipe-cell-item" bind:tap="onButtonClick" data-action="like">
       <t-image class="icon-btn img-icon" src="/static/chat/zan.png" />
       <text>点赞</text>
     </view>
     <view class="swipe-cell-item" bind:tap="onButtonClick" data-action="dislike">
       <t-image class="icon-btn img-icon" src="/static/chat/cai.png" />
       <text>点踩</text>
-    </view>
+    </view> -->
   </view>
 </van-swipe-cell>

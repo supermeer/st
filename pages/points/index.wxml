@@ -54,12 +54,10 @@
     <view class="points-tips">
       <view class="points-tip-line">提示：</view>
       <view class="points-tip-line">
-        1、积分的使用期限为
-        <text class="points-tip-em">自购买日起30个自然日</text>
-        。过期未使用的积分，将自动清零，不可再使用。
+        1、积分的使用期限为永久有效，不限制有效使用时间。
       </view>
       <view class="points-tip-line">
-        2、已购买的积分，将自动按照购买时间先后消耗，即先购买的积分先消耗。
+        2、多次购买积分，将自动累加。
       </view>
     </view>
 

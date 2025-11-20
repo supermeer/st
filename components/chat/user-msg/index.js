@@ -18,6 +18,14 @@ Component({
     handleRollback() {
       console.log('执行撤回操作');
       // 实现撤回逻辑
-    }
+    },
+    previewImage(e) {
+      const { current } = e.currentTarget.dataset
+      const urls = this.properties.message.images.map((img) => (typeof img === 'string' ? img : img.url))
+      wx.previewImage({
+        urls: urls,
+        current: current
+      })
+    },
   }
 })

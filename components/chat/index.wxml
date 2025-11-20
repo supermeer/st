@@ -13,7 +13,7 @@
     </view>
   </view>
   <scroll-view 
-    class="message-list" 
+    class="message-list"
     scroll-y="{{true}}" 
     scroll-into-view="{{intoViewId}}" 
     scroll-with-animation="{{scrollAnimation}}" 

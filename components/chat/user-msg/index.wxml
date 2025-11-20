@@ -2,7 +2,13 @@
   <view class="msg-container">
     <view wx:if="{{message.images && message.images.length > 0}}" class="images-container">
       <view wx:for="{{message.images}}" wx:key="index" class="image-item-container">
-        <t-image class="image-item" src="{{item}}" mode="widthFix" />
+        <t-image
+          class="image-item"
+          src="{{item || item.url}}"
+          mode="widthFix"
+          bindtap="previewImage"
+          data-current="{{item || item.url}}"
+        />
       </view>
     </view>
     <view wx:if="{{message.content}}" class="msg-content msg-cell" bindtap="userMsgClick">

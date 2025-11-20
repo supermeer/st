@@ -50,6 +50,16 @@ Page({
         storyId: options.storyId
       })
     }
+    if (options.gender || options.userAddressedAs || options.identity) {
+      this.setData({
+        formData: {
+          ...this.data.formData,
+          gender: options.gender || this.data.formData.gender,
+          userAddressedAs: options.userAddressedAs || this.data.formData.userAddressedAs,
+          identity: options.identity || this.data.formData.identity
+        }
+      })
+    }
     this.setData({
       pageInfo: { ...this.data.pageInfo, ...SystemInfo.getPageInfo() }
     })

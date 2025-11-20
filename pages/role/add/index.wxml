@@ -61,20 +61,37 @@
             <t-icon name="chevron-right" size="40rpx" color="rgba(255,255,255,0.6)" />
           </view>
         </view>
-
-        <!-- 角色描述 -->
+        
         <view class="form-item textarea-item">
           <view class="form-label">
             <text class="label-required">*</text>
-            <text>角色描述</text>
+            <text>角色概述</text>
           </view>
           <view class="textarea-counter">{{formData.description.length}}/2000</view>
           <textarea 
             class="form-textarea" 
-            placeholder="主要包含但不限于智能体的人设、性格、身份、背景、经历、聊天风格、与用户的关系等。" 
+            placeholder="角色概述" 
             placeholder-class="textarea-placeholder"
             value="{{formData.description}}"
             data-field="description"
+            bindinput="onTextareaChange"
+            maxlength="2000"
+          />
+        </view>
+
+        <!-- 角色描述 -->
+        <view wx:if="{{isDev}}" class="form-item textarea-item">
+          <view class="form-label">
+            <text class="label-required">*</text>
+            <text>角色描述</text>
+          </view>
+          <view class="textarea-counter">{{formData.descriptionPrompt.length}}/2000</view>
+          <textarea 
+            class="form-textarea" 
+            placeholder="主要包含但不限于智能体的人设、性格、身份、背景、经历、聊天风格、与用户的关系等。" 
+            placeholder-class="textarea-placeholder"
+            value="{{formData.descriptionPrompt}}"
+            data-field="descriptionPrompt"
             bindinput="onTextareaChange"
             maxlength="2000"
           />

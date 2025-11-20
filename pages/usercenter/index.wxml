@@ -26,13 +26,14 @@
     <view class="vip-box">
       <view class="vip-box-left-content">
         <view class="vip-box-header">
-          <t-image class="vip-box-header-icon" src="/static/vip/vip.png"/>
-          <text class="vip-box-header-text">开通会员</text>
-          <t-button class="open-vip-btn" bind:tap="onVipRenewClick">立即开通</t-button>
+          <t-image wx:if="{{!vipInfo.ifVip}}" class="vip-box-header-icon" src="/static/vip/vip.png"/>
+          <text class="vip-box-header-text">{{vipInfo.ifVip ? '星柚会员' : '开通会员'}}</text>
+          <t-button wx:if="{{!vipInfo.ifVip}}" class="open-vip-btn" bind:tap="onVipRenewClick">立即开通</t-button>
         </view>
-        <view class="open-vip-btm-line">无线畅聊 记忆增强 更多灵感回复</view>
+        <view wx:if="{{vipInfo.ifVip}}" class="open-vip-btm-line">{{}}2026.10.12到期</view>
+        <view wx:else class="open-vip-btm-line">无线畅聊 记忆增强 更多灵感回复</view>
       </view>
-      <t-image class="vip-box-icon" src="/static/vip/vip.png"/>
+      <t-image wx:if="{{vipInfo.ifVip}}" class="vip-box-icon" src="/static/vip/vip.png"/>
     </view>                                                        
     <view class="roles-title">智能体</view>
     <view class="role-list">

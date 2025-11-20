@@ -388,9 +388,9 @@ Component({
           this.startY = e.touches[0].clientY
           this.onVoiceTouchStart(e)
         },
-        onSend(ctx) {
+        onSend(ctx, imgList) {
           let content = this.data.inputValue || ctx
-          if (!content || content.length == 0) {
+          if ((!content || content.length == 0) && (!imgList || imgList.length == 0)) {
             wx.showToast({
               title: '请输入内容',
               icon: 'none',
@@ -399,7 +399,8 @@ Component({
             return
           }
           this.triggerEvent('sendMessage', {
-            content: content
+            content: content,
+            imageList: imgList || []
           })
           this.setData({
             inputValue: ''
@@ -451,7 +452,7 @@ Component({
           const keyboardHeight = e.detail.height || 0
           setTimeout(() => {
             this.triggerEvent('keyboardHeightChange', keyboardHeight)
-          }, e.detail.duration || 0)
+          }, e.detail.duration || 13)
         },
         onInput(e) {
           this.setData({
@@ -575,14 +576,13 @@ Component({
           this.setData({ showUploader: true, imageList: [] })
         },
         onUploadSuccess(e) {
-          const { remoteUrl, tempFilePath, signature } = e.detail
+          const { tempFilePath, signature } = e.detail
           this.setData({ showUploader: false })
-          this.triggerEvent('success', {
-            remoteUrl,
-            tempFilePath,
-            signature,
-            imageList: this.data.imageList
-          })
+          this.triggerEvent('hideTabbar')
+          this.onSend(null, [{
+            localUrl: tempFilePath,
+            fileKey: signature.fileKey
+          }])
         },
 
         onUploadFail(e) {

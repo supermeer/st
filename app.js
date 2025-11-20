@@ -65,9 +65,9 @@ App({
     userStore.initFromLocal()
     // 获取系统信息和导航栏高度
     this.getNavHeight()
-    // wx.navigateTo({
-    //   url: '/pages/common/cropper/index',
-    // })
+
+    const accountInfo = wx.getAccountInfoSync();
+    wx.setStorageSync('aE', accountInfo.miniProgram.envVersion === 'release' ? '1' : '0')
   },
   onShow: function () {
     updateManager()

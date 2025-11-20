@@ -67,7 +67,6 @@ Component({
       wx.getFileInfo({
         filePath: tempFilePath,
         success: (fileInfo) => {
-          console.log(333)
           const fileName = `image_${Date.now()}.jpg`
           const file = {
             name: fileName,
@@ -84,7 +83,6 @@ Component({
               fileType: file.type
             }
           ]
-          console.log(8888)
           fetchFilePresignedUrl(signedList)
             .then((signatureResp) => {
               const signatureList = Array.isArray(signatureResp)
@@ -115,8 +113,6 @@ Component({
       })
 
       const fs = wx.getFileSystemManager()
-      const doConfirm = (ok) =>
-        uploadConfirm([{ fileKey: signature?.fileKey, uploadSuccess: ok }])
 
       const putByWxRequest = (data) =>
         new Promise((resolve, reject) => {
@@ -137,10 +133,9 @@ Component({
 
       const uploadRequest = (data) => {
         putByWxRequest(data)
-          .then(() => doConfirm(true))
-          .then((confirmRes) => {
+          .then(() => {
             const remoteUrl =
-              confirmRes?.url || confirmRes?.data?.url || signature?.fileUrl
+              signature?.url || signature?.data?.url || signature?.fileUrl
 
             this.setData({
               loading: false
@@ -154,8 +149,7 @@ Component({
               tempFilePath: file.url
             })
           })
-          .catch((error) => {
-            doConfirm(false)
+          .catch(() => {
             this.handleUploadError('上传失败')
           })
       }

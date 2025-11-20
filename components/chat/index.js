@@ -190,21 +190,31 @@ Component({
           'pagination.plotId': plotId
         })
       }
-      const msg = this.addUserMessage(e.detail.content)
+      const { content, imageList = [] } = e.detail;
+      const msg = this.addUserMessage(content, imageList)
       this.setData({
         operatingForm: {
           operate: 'sendMessage',
           msgId: msg.id
         }
       })
-      this.generateRequest('sendMessage', msg.content)
+      this.generateRequest('sendMessage', {
+        content: content,
+        imageList: imageList
+      })
     },
     
-    generateRequest(type, content, id) {
+    generateRequest(type, requestData) {
+      const { content, imageList } = requestData;
+      let fileKeys = [];
+      if (imageList && imageList.length > 0) {
+        fileKeys = imageList.map(item => item.fileKey);
+      }
       this.addAIMessage()
       ChatService.sendMessage(
         {
-          userMessage: content,
+          userMessage: content || '',
+          imageList: fileKeys,
           plotId: this.data.chatDetail.plotId
         },
         (eventData) => {
@@ -577,12 +587,19 @@ Component({
     /**
      * 添加用户消息
      * @param {string} userMessage - 用户消息内容
+     * @param {Array} imageList - 图片列表
      */
-    addUserMessage(userMessage) {
+    addUserMessage(userMessage, imageList = []) {
+      let images = []
+      if (imageList && Array.isArray(imageList)) {
+        images = imageList.map(item => item.localUrl);
+      }
+      
       const userMsg = {
         id: Date.now(),
         senderType: 1,  // 用户消息
         content: userMessage,
+        images,
         time: Date.now()
       }
       
