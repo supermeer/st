@@ -1,5 +1,5 @@
 import SystemInfo from '../../../utils/system'
-import { createCharacter } from '../../../services/role/index'
+import { createCharacter, getCurrentPlotByCharacterId } from '../../../services/role/index'
 Page({
   /**
    * 页面的初始数据
@@ -203,14 +203,30 @@ Page({
       mask: true
     })
     
-    createCharacter({...formData, description: formData.description || formData.descriptionPrompt}).then(res => {
+    createCharacter({...formData, description: formData.description || formData.descriptionPrompt}).then(id => {
       wx.hideLoading()
       wx.showToast({
         title: '创建成功',
         icon: 'success',
         duration: 1000
       })
-      wx.navigateBack()
+
+      const tipDialog = this.selectComponent('#tip-dialog')
+      tipDialog.show({
+        content: '智能体创建成功！',
+        cancelText: '返回',
+        confirmText: '去聊天',
+        onCancel: () => {
+          wx.navigateBack()
+        },
+        onConfirm: async () => {
+          const res = await getCurrentPlotByCharacterId(id)
+          wx.redirectTo({
+            url: `/pages/chat/index?plotId=${ res && res.plotId ? res.plotId : ''}&characterId=${id}`
+          })
+        }
+      })
+
     })
   }
 })

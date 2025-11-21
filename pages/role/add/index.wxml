@@ -67,7 +67,7 @@
             <text class="label-required">*</text>
             <text>角色概述</text>
           </view>
-          <view class="textarea-counter">{{formData.description.length}}/2000</view>
+          <view class="textarea-counter">{{formData.description.length}}/10000</view>
           <textarea 
             class="form-textarea" 
             placeholder="角色概述" 
@@ -75,7 +75,7 @@
             value="{{formData.description}}"
             data-field="description"
             bindinput="onTextareaChange"
-            maxlength="2000"
+            maxlength="10000"
           />
         </view>
 
@@ -85,7 +85,7 @@
             <text class="label-required">*</text>
             <text>角色描述</text>
           </view>
-          <view class="textarea-counter">{{formData.descriptionPrompt.length}}/2000</view>
+          <view class="textarea-counter">{{formData.descriptionPrompt.length}}/10000</view>
           <textarea 
             class="form-textarea" 
             placeholder="主要包含但不限于智能体的人设、性格、身份、背景、经历、聊天风格、与用户的关系等。" 
@@ -93,7 +93,7 @@
             value="{{formData.descriptionPrompt}}"
             data-field="descriptionPrompt"
             bindinput="onTextareaChange"
-            maxlength="2000"
+            maxlength="10000"
           />
         </view>
       </view>
@@ -107,7 +107,7 @@
           <view class="form-label">
             <text>剧情介绍</text>
           </view>
-          <view class="textarea-counter">{{formData.scene.length}}/1000</view>
+          <view class="textarea-counter">{{formData.scene.length}}/10000</view>
           <textarea 
             class="form-textarea" 
             placeholder="用于了解智能体的基本信息、如背景、身份、当前对话场景等。" 
@@ -115,7 +115,7 @@
             value="{{formData.scene}}"
             data-field="scene"
             bindinput="onTextareaChange"
-            maxlength="1000"
+            maxlength="10000"
           />
         </view>
 
@@ -124,7 +124,7 @@
           <view class="form-label">
             <text>开场白</text>
           </view>
-          <view class="textarea-counter">{{formData.prologue.length}}/500</view>
+          <view class="textarea-counter">{{formData.prologue.length}}/10000</view>
           <textarea 
             class="form-textarea" 
             placeholder="与用户开启聊天的第一句话。" 
@@ -132,7 +132,7 @@
             value="{{formData.prologue}}"
             data-field="prologue"
             bindinput="onTextareaChange"
-            maxlength="500"
+            maxlength="10000"
           />
         </view>
       </view>
@@ -183,4 +183,5 @@
   <!-- 背景选择弹窗 -->
   <background-sheet id="backgroundSheet" />
 </view>
+<tip-dialog id="tip-dialog" />
 
