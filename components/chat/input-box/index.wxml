@@ -1,4 +1,7 @@
-<view class="input-box-container">
+<view class="input-box-container {{disabled ? 'disabled' : ''}}">
+  <!-- 禁用状态遮罩层：统一拦截所有交互 -->
+  <view wx:if="{{disabled}}" class="disabled-mask" catchtap="onDisabledTap" catchtouchmove="onDisabledTap"></view>
+  
   <!-- 语音录音浮层 -->
   <view wx:if="{{isRecording || voiceStatus}}" class="voice-modal">
     <view class="voice-modal-content {{isTouchMoving ? 'voice-modal-cancel' : ''}}">

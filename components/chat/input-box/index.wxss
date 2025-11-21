@@ -1,6 +1,22 @@
 .input-box-container {
     padding: 20rpx 32rpx;
     transition: height 0.3s ease-out;
+    position: relative;
+}
+
+/* 禁用状态遮罩层：统一拦截所有交互 */
+.disabled-mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 45rpx;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .input-box {

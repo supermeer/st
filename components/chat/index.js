@@ -59,6 +59,11 @@ Component({
           latestMsgId: newVal[newVal.length - 1].id
         })
       }
+      // 检查是否有消息正在生成中
+      const isGenerating = newVal.some(msg => msg.loading === true)
+      this.setData({
+        isGenerating: isGenerating
+      })
     }
   },
   data: {
@@ -92,6 +97,7 @@ Component({
     hasMore: true, // 是否还有更多数据
     pullDownStatus: 'pull', // pull: 下拉加载更多, release: 松开加载更多, loading: 加载中, nomore: 没有更多
     scrollAnimation: true, // 是否启用滚动动画
+    isGenerating: true, // 是否有对话正在生成中
     operatingForm: {
       operate: '',
       msgId: null // 只存储消息 ID，不存储引用

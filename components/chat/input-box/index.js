@@ -6,6 +6,10 @@ Component({
       },
       roleInfo: {
         type: Object
+      },
+      disabled: {
+        type: Boolean,
+        value: false
       }
     },
     data: {
@@ -44,6 +48,15 @@ Component({
       }
     },
     methods: {
+        // 统一处理禁用状态的点击事件
+        onDisabledTap() {
+          wx.showToast({
+            title: '对话生成中，请稍候...',
+            icon: 'none',
+            duration: 1500
+          })
+        },
+        
         // 初始化录音管理器
         initRecorder() {
           try {

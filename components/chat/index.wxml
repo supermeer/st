@@ -66,6 +66,7 @@
     class="input-box"
     plotId="{{chatDetail.plotId}}"
     roleInfo="{{roleDetail}}"
+    disabled="{{isGenerating}}"
     bind:keyboardHeightChange="onKeyboardHeightChange"
     bind:inputLineChange="onInputLineChange"
     bind:hideTabbar="hideTabbar"
