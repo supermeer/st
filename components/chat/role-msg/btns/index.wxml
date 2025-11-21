@@ -1,4 +1,4 @@
-<view class="btns-container">
+<view class="btns-container {{disabled ? 'btns-disabled' : ''}}">
   <!-- <image class="btn-image" src="/static/chat/bf.svg" data-action="play" bind:tap="onBtnClick" /> -->
   <image class="btn-image" src="/static/chat/cs.svg" data-action="retry" bind:tap="onBtnClick" />
   <image class="btn-image" src="/static/chat/jx.svg" data-action="continue" bind:tap="onBtnClick" />

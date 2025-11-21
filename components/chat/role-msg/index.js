@@ -1,7 +1,11 @@
 Component({
   properties: {
     message: Object,
-    isLatest: Boolean
+    isLatest: Boolean,
+    disabled: {
+      type: Boolean,
+      value: false
+    }
   },
   data: {
     thinkingExpanded: false  // UI 状态：思考过程是否展开
@@ -23,6 +27,15 @@ Component({
     },
     
     onButtonClick(e) {
+      // 检查是否禁用
+      if (this.properties.disabled) {
+        wx.showToast({
+          title: '对话生成中，请稍候...',
+          icon: 'none',
+          duration: 1500
+        })
+        return
+      }
       const action = e.currentTarget.dataset.action || e.detail.action;
       this.triggerEvent('buttonClick', { action, current: this, messageId: this.properties.message.id });
       return

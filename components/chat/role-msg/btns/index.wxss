@@ -6,6 +6,12 @@
     align-items: center;
     padding: 0 24rpx;
     margin-top: 12rpx;
+    transition: opacity 0.3s ease;
+}
+
+/* 禁用状态样式 */
+.btns-container.btns-disabled {
+    opacity: 0.4;
 }
 
 .btn-image {

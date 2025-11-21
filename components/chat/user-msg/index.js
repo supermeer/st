@@ -1,10 +1,23 @@
 Component({
   properties: {
-    message: Object
+    message: Object,
+    disabled: {
+      type: Boolean,
+      value: false
+    }
   },
   data: {},
   methods: {
     onButtonClick(e) {
+      // 检查是否禁用
+      if (this.properties.disabled) {
+        wx.showToast({
+          title: '对话生成中，请稍候...',
+          icon: 'none',
+          duration: 1500
+        })
+        return
+      }
       const action = e.currentTarget.dataset.action;
       this.triggerEvent('buttonClick', { action, current: this, messageId: this.properties.message.id, include: true });
     },

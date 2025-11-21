@@ -51,8 +51,8 @@
       <text>{{currentStoryDetail.scene}}</text>
     </view>
     <view wx:for="{{msgList}}" wx:key="id" id="msg-{{item.id}}">
-      <role-msg wx:if="{{item.senderType === 2}}" class="message-item" message="{{item}}" isLatest="{{index === msgList.length - 1}}" bind:buttonClick="onButtonClick" />
-      <user-msg wx:if="{{item.senderType === 1}}" class="message-item" message="{{item}}" bind:buttonClick="onButtonClick" />
+      <role-msg wx:if="{{item.senderType === 2}}" class="message-item" message="{{item}}" isLatest="{{index === msgList.length - 1}}" disabled="{{isGenerating}}" bind:buttonClick="onButtonClick" />
+      <user-msg wx:if="{{item.senderType === 1}}" class="message-item" message="{{item}}" disabled="{{isGenerating}}" bind:buttonClick="onButtonClick" />
     </view>
 
     <view wx:if="{{msgList.length > 0 && msgList[msgList.length - 1].error}}" class="retry-container">

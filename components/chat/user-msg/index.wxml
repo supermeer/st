@@ -1,4 +1,4 @@
-<van-swipe-cell id="swipeCell" class="user-swipe-cell" right-width="{{50}}" async-close>
+<van-swipe-cell id="swipeCell" class="user-swipe-cell" right-width="{{50}}" async-close disabled="{{disabled}}">
   <view class="msg-container">
     <view wx:if="{{message.images && message.images.length > 0}}" class="images-container">
       <view wx:for="{{message.images}}" wx:key="index" class="image-item-container">

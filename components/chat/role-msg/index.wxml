@@ -1,4 +1,4 @@
-<van-swipe-cell id="swipeCell" class="role-swipe-cell" left-width="{{100}}" async-close>
+<van-swipe-cell id="swipeCell" class="role-swipe-cell" left-width="{{100}}" async-close disabled="{{disabled}}">
   <view class="msg-container mes_text">
     
     <!-- 加载中显示：只有在 loading 且没有任何内容时显示 -->
@@ -32,7 +32,7 @@
       <text wx:else>{{message.content}}</text>
     </view>
     
-    <btns wx:if="{{isLatest && !message.loading && !message.error && message.id}}" btns="{{message.btns}}" bind:buttonClick="onButtonClick" />
+    <btns wx:if="{{isLatest && !message.loading && !message.error && message.id}}" btns="{{message.btns}}" disabled="{{disabled}}" bind:buttonClick="onButtonClick" />
   </view>
   <view wx:if="{{!message.loading && !message.error && message.id}}" slot="left" class="swipe-cell-btns">
     <view class="swipe-cell-item" bind:tap="onButtonClick" data-action="rollback">
