@@ -1,6 +1,6 @@
 import SystemInfo from '../../../utils/system'
 import Toast from 'tdesign-miniprogram/toast/index'
-import { getCharacterList, getCurrentPlotByCharacterId } from '../../../services/role/index'
+import { getCharacterList, getCurrentPlotByCharacterId, getHotSearchKeywords } from '../../../services/role/index'
 
 const HISTORY_KEY = 'search_history'
 const MAX_HISTORY = 10 // 最多保存10条历史记录
@@ -22,16 +22,6 @@ Page({
 
     // 热门搜索（可以从后端获取）
     hotList: [
-      '霸道总裁',
-      '温柔医生',
-      '校园白月光',
-      '古风公子',
-      '吸血鬼男友',
-      '神秘侦探',
-      '现代王子',
-      '运动少年',
-      '都市精英',
-      '温柔学长',
     ],
 
     // 是否显示清空历史按钮
@@ -80,6 +70,7 @@ Page({
 
     // 加载历史搜索记录
     this.loadHistory()
+    this.loadHot()
 
     // 如果传入了搜索关键词，自动填充
     if (options.keyword) {
@@ -107,6 +98,14 @@ Page({
     }
   },
 
+  loadHot() {
+    getHotSearchKeywords()
+    .then(res => {
+      this.setData({
+        hotList: res || []
+      })
+    })
+  },
   // 保存历史搜索记录
   saveHistory(keyword) {
     if (!keyword || !keyword.trim()) return

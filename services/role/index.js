@@ -59,3 +59,7 @@ export function getCurrentPlotByCharacterId(characterId) {
 export function getPersonaDetail(id) {
     return request.get(`/api/v1/server/story/getPersonaDetail?personaId=${id}`)
 }
+
+export function getHotSearchKeywords() {
+    return request.get(`/api/v1/server/character/getHotSearchKeywords`)
+}
