@@ -1,5 +1,10 @@
-<van-swipe-cell id="swipeCell" class="user-swipe-cell" right-width="{{50}}" async-close disabled="{{disabled}}">
-  <view class="msg-container">
+<view class="user-msg-wrapper">
+  <view 
+    class="msg-container"
+    id="msg-content-{{message.id}}"
+    bind:longpress="onLongPress" 
+    bind:touchend="onTouchEnd"
+  >
     <view wx:if="{{message.images && message.images.length > 0}}" class="images-container">
       <view wx:for="{{message.images}}" wx:key="index" class="image-item-container">
         <t-image
@@ -15,10 +20,4 @@
       <text class="message-content">{{message.content}}</text>
     </view>
   </view>
-  <view slot="right" class="swipe-cell-btns">
-    <view class="swipe-cell-item" bind:tap="onButtonClick" data-action="rollback">
-      <t-icon name="rollback" class="icon-btn" size="24rpx" />
-      <text>撤回</text>
-    </view>
-  </view>
-</van-swipe-cell>
+</view>

@@ -1,3 +1,8 @@
+.role-msg-wrapper {
+  position: relative;
+  width: 100%;
+}
+
 .msg-container {
   width: 100%;
   padding-left: 24rpx;
@@ -7,43 +12,16 @@
 .msg-content {
   display: block;
   max-width: 80%;
-  /* min-height: 180rpx; */
   background-color: rgba(0, 0, 0, 0.6);
   -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
   color: var(--main-color-white);
   border-radius: 24rpx;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.swipe-cell-btns {
-  height: 100%;
-  width: 100px;
-  padding-left: 10px;
-  display: flex;
-  align-items: center;
-  align-content: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 5px;
-}
-
-.swipe-cell-item {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  font-size: 20rpx;
-  background: #ffffff30;
-  color: #fff;
-  letter-spacing: 0.8rpx;
-}
-
-.img-icon {
-  width: 28rpx;
-  height: 28rpx;
+.msg-container:active .msg-content {
+  transform: scale(0.98);
 }
 
 /* 错误状态样式 */
@@ -232,4 +210,17 @@
 
 .msg-cell {
   padding: 24rpx 32rpx;
+}
+
+/* 长按触发时的轻微效果 */
+@keyframes longPressHint {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.98);
+  }
+  100% {
+    transform: scale(1);
+  }
 }

@@ -98,6 +98,12 @@ Component({
     pullDownStatus: 'pull', // pull: 下拉加载更多, release: 松开加载更多, loading: 加载中, nomore: 没有更多
     scrollAnimation: true, // 是否启用滚动动画
     isGenerating: true, // 是否有对话正在生成中
+    maskVisible: false, // 蒙版是否显示
+    maskButtonTop: 0, // 蒙版按钮 top 位置
+    maskButtonLeft: 0, // 蒙版按钮 left 位置
+    maskButtonRight: 0, // 蒙版按钮 right 位置（用户消息）
+    currentMaskMessageId: null, // 当前显示蒙版的消息 ID
+    currentMessageType: 'role', // 当前消息类型：role 或 user
     operatingForm: {
       operate: '',
       msgId: null // 只存储消息 ID，不存储引用
@@ -110,6 +116,69 @@ Component({
     }
   },
   methods: {
+    // 处理子组件蒙版显示/隐藏事件
+    onMaskShow(e) {
+      const { show, buttonTop, buttonLeft, buttonRight, messageId, messageType } = e.detail
+      
+      if (show) {
+        this.setData({
+          maskVisible: true,
+          maskButtonTop: buttonTop,
+          maskButtonLeft: buttonLeft || 0,
+          maskButtonRight: buttonRight || 0,
+          currentMaskMessageId: messageId,
+          currentMessageType: messageType || 'role'
+        })
+      } else {
+        this.hideMask()
+      }
+    },
+    
+    // 滚动时隐藏蒙版
+    onScroll(e) {
+      if (this.data.maskVisible) {
+        this.hideMask()
+      }
+    },
+    
+    // 隐藏蒙版
+    hideMask() {
+      this.setData({
+        maskVisible: false,
+        currentMaskMessageId: null
+      })
+    },
+    
+    // 阻止事件冒泡
+    stopPropagation() {
+      // 阻止点击事件传递到蒙版
+    },
+    
+    // 阻止滚动穿透
+    preventMove() {
+      return false
+    },
+    
+    // 蒙版按钮点击事件
+    onMaskButtonClick(e) {
+      const action = e.currentTarget.dataset.action
+      
+      // 关闭蒙版
+      this.hideMask()
+      
+      // 触发按钮点击事件
+      this.onButtonClick({
+        detail: {
+          action: action
+        },
+        currentTarget: {
+          dataset: {
+            action: action
+          }
+        }
+      })
+    },
+    
     onBack() {
       wx.navigateBack()
     },

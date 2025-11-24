@@ -7,8 +7,10 @@ Component({
     }
   },
   data: {},
+  longPressTimer: null,
   methods: {
-    onButtonClick(e) {
+    // 长按事件处理
+    onLongPress(e) {
       // 检查是否禁用
       if (this.properties.disabled) {
         wx.showToast({
@@ -18,19 +20,51 @@ Component({
         })
         return
       }
-      const action = e.currentTarget.dataset.action;
-      this.triggerEvent('buttonClick', { action, current: this, messageId: this.properties.message.id, include: true });
+      
+      // 检查消息是否有效
+      if (!this.properties.message.id) {
+        return
+      }
+      
+      // 震动反馈
+      wx.vibrateShort({ type: 'light' })
+      
+      // 获取消息元素位置
+      const query = this.createSelectorQuery()
+      query.select(`#msg-content-${this.properties.message.id}`).boundingClientRect()
+      query.selectViewport().scrollOffset()
+      query.exec((res) => {
+        if (res[0]) {
+          const rect = res[0]
+          const screenWidth = wx.getSystemInfoSync().windowWidth
+          
+          // 计算按钮位置（在消息上方，右对齐）
+          const buttonTop = rect.top - 80
+          const buttonRight = screenWidth - rect.right + 24 // 从右侧计算
+          
+          // 通知父组件显示蒙版和按钮位置
+          this.triggerEvent('maskShow', {
+            show: true,
+            buttonTop: Math.max(buttonTop, 20),
+            buttonRight: buttonRight, // 使用 right 而不是 left
+            messageId: this.properties.message.id,
+            messageType: 'user' // 标记为用户消息
+          })
+        }
+      })
     },
-    closeSwipeCell() {
-      // 通过 id 获取侧滑组件实例
-      const swipeCell = this.selectComponent('#swipeCell');
-      if (swipeCell && swipeCell.close) {
-        swipeCell.close();
+    
+    // 手指离开屏幕
+    onTouchEnd() {
+      if (this.longPressTimer) {
+        clearTimeout(this.longPressTimer)
+        this.longPressTimer = null
       }
     },
-    handleRollback() {
-      console.log('执行撤回操作');
-      // 实现撤回逻辑
+    
+    onButtonClick(e) {
+      const action = e.currentTarget.dataset.action;
+      this.triggerEvent('buttonClick', { action, current: this, messageId: this.properties.message.id, include: true });
     },
     previewImage(e) {
       const { current } = e.currentTarget.dataset

@@ -18,13 +18,14 @@
     scroll-into-view="{{intoViewId}}" 
     scroll-with-animation="{{scrollAnimation}}" 
     show-scrollbar="{{false}}"
-    refresher-enabled="{{hasMore}}"
+    refresher-enabled="{{hasMore && !maskVisible}}"
     refresher-triggered="{{refresherTriggered}}"
     refresher-threshold="{{50}}"
     refresher-background="transparent"
     bindrefresherrefresh="onLoadMore"
     bindrefresherpulling="onPulling"
     bindrefresherrestore="onRestore"
+    bindscroll="onScroll"
     enable-passive="{{true}}"
   >
     <!-- 下拉加载提示 -->
@@ -51,10 +52,9 @@
       <text>{{currentStoryDetail.scene}}</text>
     </view>
     <view wx:for="{{msgList}}" wx:key="id" id="msg-{{item.id}}">
-      <role-msg wx:if="{{item.senderType === 2}}" class="message-item" message="{{item}}" isLatest="{{index === msgList.length - 1}}" disabled="{{isGenerating}}" bind:buttonClick="onButtonClick" />
-      <user-msg wx:if="{{item.senderType === 1}}" class="message-item" message="{{item}}" disabled="{{isGenerating}}" bind:buttonClick="onButtonClick" />
+      <role-msg wx:if="{{item.senderType === 2}}" class="message-item" message="{{item}}" isLatest="{{index === msgList.length - 1}}" disabled="{{isGenerating}}" bind:buttonClick="onButtonClick" bind:maskShow="onMaskShow" />
+      <user-msg wx:if="{{item.senderType === 1}}" class="message-item" message="{{item}}" disabled="{{isGenerating}}" bind:buttonClick="onButtonClick" bind:maskShow="onMaskShow" />
     </view>
-
     <view wx:if="{{msgList.length > 0 && msgList[msgList.length - 1].error}}" class="retry-container">
       <t-icon name="unhappy-1" class="icon-btn" size="18px" />
       有点迷失啦，请点击
@@ -75,6 +75,45 @@
     bind:buttonClick="onButtonClick"
   />
 </view>
+
+<block wx:if="{{maskVisible}}">
+  <view 
+    class="global-action-mask"
+    catchtap="hideMask"
+    catchtouchmove="preventMove"
+  >
+  </view>
+  
+  <!-- AI消息按钮弹窗（左侧） -->
+  <view 
+    wx:if="{{currentMessageType === 'role'}}"
+    class="global-action-buttons buttons-show"
+    style="position: fixed; top: {{maskButtonTop}}px; left: {{maskButtonLeft}}px; z-index: 10001;"
+    catchtap="stopPropagation"
+  >
+    <view class="action-btn" catchtap="onMaskButtonClick" data-action="rollback">
+      <t-image class="action-icon" src="/static/chat/huisu.png" />
+      <text>回溯</text>
+    </view>
+    <view class="action-btn" catchtap="onMaskButtonClick" data-action="newPlot">
+      <t-image class="action-icon" src="/static/chat/juqing.png" />
+      <text>新剧情</text>
+    </view>
+  </view>
+  
+  <!-- 用户消息按钮弹窗（右侧） -->
+  <view 
+    wx:if="{{currentMessageType === 'user'}}"
+    class="global-action-buttons buttons-show"
+    style="position: fixed; top: {{maskButtonTop}}px; right: {{maskButtonRight}}px; z-index: 10001;"
+    catchtap="stopPropagation"
+  >
+    <view class="action-btn" catchtap="onMaskButtonClick" data-action="rollback" data-include="true">
+      <t-icon name="rollback" size="32rpx" class="action-icon" />
+      <text>撤回</text>
+    </view>
+  </view>
+</block>
 
 <tip-dialog id="tip-dialog" />
 <input-sheet id="input-sheet" />

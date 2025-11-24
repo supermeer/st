@@ -1,6 +1,11 @@
-<van-swipe-cell id="swipeCell" class="role-swipe-cell" left-width="{{100}}" async-close disabled="{{disabled}}">
-  <view class="msg-container mes_text">
-    
+<view class="role-msg-wrapper">
+  <!-- 消息容器 -->
+  <view 
+    class="msg-container mes_text" 
+    id="msg-content-{{message.id}}"
+    bind:longpress="onLongPress" 
+    bind:touchend="onTouchEnd"
+  >
     <!-- 加载中显示：只有在 loading 且没有任何内容时显示 -->
     <view wx:if="{{message.loading && !message.error && !message.content && !message.htmlContent && !message.mainContent && !message.hasThinking && !message.isThinking}}" class="loading-container msg-cell">
       <t-loading theme="dots" size="30px" class="loading-icon" />
@@ -34,22 +39,4 @@
     
     <btns wx:if="{{isLatest && !message.loading && !message.error && message.id}}" btns="{{message.btns}}" disabled="{{disabled}}" bind:buttonClick="onButtonClick" />
   </view>
-  <view wx:if="{{!message.loading && !message.error && message.id}}" slot="left" class="swipe-cell-btns">
-    <view class="swipe-cell-item" bind:tap="onButtonClick" data-action="rollback">
-      <t-image class="icon-btn img-icon" src="/static/chat/huisu.png" />
-      <text>回溯</text>
-    </view>
-    <view class="swipe-cell-item" bind:tap="onButtonClick" data-action="newPlot">
-      <t-image class="icon-btn img-icon" src="/static/chat/juqing.png" />
-      <text>新剧情</text> 
-    </view>
-    <!-- <view class="swipe-cell-item" bind:tap="onButtonClick" data-action="like">
-      <t-image class="icon-btn img-icon" src="/static/chat/zan.png" />
-      <text>点赞</text>
-    </view>
-    <view class="swipe-cell-item" bind:tap="onButtonClick" data-action="dislike">
-      <t-image class="icon-btn img-icon" src="/static/chat/cai.png" />
-      <text>点踩</text>
-    </view> -->
-  </view>
-</van-swipe-cell>
+</view>
