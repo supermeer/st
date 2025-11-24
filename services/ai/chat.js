@@ -115,4 +115,17 @@ export function inspirationReply(data) {
   return request.post('/api/v1/server/plot/inspirationReply', data)
 }
 
+// 重说接口（流式）
+export function retellMessage(data, onChunk) {
+  return request.post('/api/v1/server/plot/retell', data, {
+    enableChunked: true,
+    onChunk
+  })
+}
+
+// 设置当前消息接口
+export function setCurrentMessage(data) {
+  return request.post('/api/v1/server/plot/setCurrentMessage', data)
+}
+
 export default ChatService

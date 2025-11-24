@@ -12,30 +12,82 @@
 
     <!-- 列表区域 -->
     <scroll-view class="select-sheet-list" scroll-y>
-      <view wx:if="{{loading}}" class="loading-container">
-        <view class="loading-text">加载中...</view>
-      </view>
-      
-      <view wx:if="{{!loading && list.length > 0}}" class="list-content">
-        <view 
-          wx:for="{{list}}" 
-          wx:key="id"
-          class="list-item"
-          data-item="{{item}}"
-          bindtap="handleSelectItem"
-        >
-          <text class="item-text">{{item.content || item}}</text>
+      <!-- 普通模式 -->
+      <block wx:if="{{mode === 'normal'}}">
+        <view wx:if="{{loading}}" class="loading-container">
+          <view class="loading-text">加载中...</view>
+        </view>
+        
+        <view wx:if="{{!loading && list.length > 0}}" class="list-content">
+          <view 
+            wx:for="{{list}}" 
+            wx:key="id"
+            class="list-item"
+            data-item="{{item}}"
+            bindtap="handleSelectItem"
+          >
+            <text class="item-text">{{item.content || item}}</text>
+          </view>
+        </view>
+
+        <view wx:if="{{!loading && list.length === 0}}" class="empty-container">
+          <text class="empty-text">暂无数据</text>
+        </view>
+      </block>
+
+      <!-- 重说模式 -->
+      <block wx:if="{{mode === 'retry'}}">
+        <view wx:if="{{retryResults.length === 0}}" class="loading-container">
+          <view class="loading-text">生成中...</view>
+        </view>
+        
+        <view wx:if="{{retryResults.length > 0}}" class="retry-content">
+          <view class="retry-item">
+            <rich-text 
+              class="retry-text" 
+              nodes="{{retryResults[currentIndex].htmlContent || retryResults[currentIndex].content}}"
+            ></rich-text>
+            <view wx:if="{{retryResults[currentIndex].loading && !retryResults[currentIndex].content}}" class="retry-loading">
+              <text class="retry-loading-text">生成中...</text>
+            </view>
+          </view>
+        </view>
+      </block>
+    </scroll-view>
+
+    <!-- 底部控制区 -->
+    <view class="select-sheet-footer">
+      <!-- 重说模式：使用按钮 + 分页 -->
+      <view wx:if="{{mode === 'retry'}}" class="retry-footer">
+        <view class="use-btn-container">
+          <view 
+            class="use-btn {{canUse ? '' : 'disabled'}}"
+            catchtap="handleUse"
+          >
+            <text class="use-btn-text">使用该条</text>
+          </view>
+        </view>
+        <view class="pagination">
+          <view class="page-buttons">
+            <view 
+              class="page-btn prev-btn {{currentIndex <= 0 ? 'disabled' : ''}}"
+              catchtap="handlePrevPage"
+            >
+              <text class="page-arrow">‹</text>
+            </view>
+            <view 
+              class="page-btn next-btn {{loading ? 'disabled' : ''}}"
+              catchtap="handleNextPage"
+            >
+              <text class="page-arrow">›</text>
+            </view>
+          </view>
+          <text class="page-info">{{currentPage}}/{{totalPages}}</text>
         </view>
       </view>
 
-      <view wx:if="{{!loading && list.length === 0}}" class="empty-container">
-        <text class="empty-text">暂无数据</text>
-      </view>
-    </scroll-view>
-
-    <!-- 分页控制 -->
-    <view class="select-sheet-footer" wx:if="{{totalPages > 1}}">
-      <view class="pagination">
+      <!-- 普通模式：仅分页 -->
+      <view wx:if="{{mode === 'normal' && totalPages > 1}}" class="pagination">
         <text class="page-info">{{currentPage}}/{{totalPages}}</text>
         <view class="page-buttons">
           <view 

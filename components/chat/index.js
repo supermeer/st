@@ -795,26 +795,21 @@ Component({
       } else if (e.detail.action === 'play') {
         e.detail.current.handlePlay();
       } else if (e.detail.action === 'retry') {
-        // e.detail.current.handleRetry();
-        this.setData({
-          operatingForm: {
-            operate: 'retry',
-            msgId: e.detail.current.id
-          }
-        })
+        const messageId = e.detail.messageId
+        
         const selectSheet = this.selectComponent('#select-sheet')
         selectSheet.show({
+          mode: 'retry',
           title: '重说',
-          dataId: 2,
-          pageSize: 4,
-          fetchData: () => {
-            return Promise.resolve({ list: ['重新生成','很长的提示词很长的提示词很长的提示词很长的提示词很长的提示词很长的提示词很长的提示词','2344343', '34444444', '23433'], total: 14 })
-          },
-          onSelect: (item) => {
-            console.log('选择的值:', item)
+          messageId: messageId,
+          plotId: this.data.chatDetail.plotId,
+          onUse: (result) => {
+            console.log('使用重说结果:', result)
+            // 刷新消息列表以显示替换后的内容
+            this.getNewMessage()
           },
           onClose: () => {
-            console.log('关闭了')
+            console.log('关闭重说弹窗')
           }
         })
         
