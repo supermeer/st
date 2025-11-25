@@ -1,0 +1,58 @@
+<view class="role-detail-page">
+  <custom-nav
+    show-back="{{true}}"
+    show-left-logo="{{false}}"
+    show-home="{{false}}"
+    transparent="{{true}}"
+  >
+  </custom-nav>
+
+  <!-- 角色信息头部 -->
+  <view class="role-header">
+    <image
+      class="role-avatar"
+      src="{{roleInfo.avatar || '/static/chat/default_avatar.png'}}"
+      mode="aspectFill"
+    />
+    <view class="role-info">
+      <text class="role-name">{{roleInfo.name}}</text>
+      <text class="role-dialog-count">对话数：{{roleInfo.dialogCount}}条</text>
+    </view>
+  </view>
+
+  <!-- 消耗明细列表 -->
+  <scroll-view
+    class="consume-list"
+    scroll-y
+    enhanced
+    show-scrollbar="{{false}}"
+    bindscrolltolower="loadMore"
+  >
+    <view
+      wx:for="{{consumeList}}"
+      wx:key="id"
+      class="consume-item"
+    >
+      <view class="consume-left">
+        <view class="consume-title-row">
+          <text class="consume-title">{{item.title}}</text>
+          <text class="consume-count">+{{item.count}}</text>
+        </view>
+        <text class="consume-date">{{item.date}}</text>
+      </view>
+      <view class="consume-right">
+        <text class="consume-points">-{{item.points}}</text>
+      </view>
+    </view>
+
+    <view wx:if="{{loading}}" class="loading-more">
+      <text>加载中...</text>
+    </view>
+    <view wx:if="{{noMore && consumeList.length > 0}}" class="no-more">
+      <text>没有更多了</text>
+    </view>
+    <view wx:if="{{consumeList.length === 0 && !loading}}" class="empty-list">
+      <text>暂无消耗记录</text>
+    </view>
+  </scroll-view>
+</view>

@@ -5,7 +5,9 @@
     "pages/discover/search/index",
     "pages/chat-list/index",
     "pages/usercenter/index",
-    "pages/points/index"
+    "pages/points/index",
+    "pages/points/detail/index",
+    "pages/points/role-detail/index"
   ],
   "subpackages": [
     {

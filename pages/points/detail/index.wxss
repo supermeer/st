@@ -1,0 +1,171 @@
+page {
+  background: #050010;
+  background: linear-gradient(180deg, #111827 0%, #050010 40%, #050010 100%);
+  color: #fff;
+  height: 100%;
+}
+
+.detail-page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.detail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx 32rpx;
+  height: 100rpx;
+}
+
+.detail-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #fff;
+}
+
+.filter-dropdown {
+  display: flex;
+  align-items: center;
+  padding: 12rpx 24rpx;
+  border-radius: 8rpx;
+}
+
+.filter-text {
+  font-size: 28rpx;
+  color: #fff;
+  margin-right: 8rpx;
+}
+
+/* 下拉菜单 */
+.dropdown-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 99;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.dropdown-mask.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.dropdown-menu {
+  position: fixed;
+  top: 200rpx;
+  right: 32rpx;
+  background: #1f2937;
+  border-radius: 16rpx;
+  padding: 16rpx 0;
+  min-width: 200rpx;
+  z-index: 100;
+  opacity: 0;
+  transform: translateY(-20rpx);
+  pointer-events: none;
+  transition: all 0.2s ease;
+}
+
+.dropdown-menu.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.dropdown-item {
+  padding: 24rpx 40rpx;
+  font-size: 28rpx;
+  color: #9ca3af;
+}
+
+.dropdown-item.active {
+  color: #a855f7;
+}
+
+/* 列表 */
+.detail-list {
+  flex: 1;
+  padding: 0 32rpx;
+  overflow-y: auto;
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28rpx 24rpx;
+  border-radius: 16rpx;
+  margin-bottom: 2rpx;
+}
+
+.detail-item.active {
+  background: rgba(168, 85, 247, 0.15);
+  border: 2rpx solid rgba(168, 85, 247, 0.5);
+}
+
+.item-left {
+  flex: 1;
+  overflow: hidden;
+}
+
+.item-title-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8rpx;
+}
+
+.item-title {
+  font-size: 30rpx;
+  font-weight: 500;
+  color: #fff;
+  margin-right: 12rpx;
+}
+
+.item-icon {
+  width: 36rpx;
+  height: 36rpx;
+}
+
+.item-date {
+  font-size: 24rpx;
+  color: #6b7280;
+}
+
+.item-right {
+  flex-shrink: 0;
+  margin-left: 24rpx;
+}
+
+.item-points {
+  font-size: 36rpx;
+  font-weight: 600;
+}
+
+.item-points.income {
+  color: #fff;
+}
+
+.item-points.expense {
+  color: #a855f7;
+}
+
+/* 加载状态 */
+.loading-more,
+.no-more,
+.empty-list {
+  text-align: center;
+  padding: 40rpx;
+  font-size: 24rpx;
+  color: #6b7280;
+}
+
+.empty-list {
+  padding-top: 200rpx;
+}

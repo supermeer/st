@@ -1,0 +1,83 @@
+<wxs module="filter">
+module.exports.formatPoints = function(points) {
+  if (points > 0) return '+' + points;
+  return '' + points;
+}
+</wxs>
+
+<view class="detail-page">
+  <custom-nav
+    show-back="{{true}}"
+    show-left-logo="{{false}}"
+    show-home="{{false}}"
+    transparent="{{true}}"
+  >
+  </custom-nav>
+
+  <view class="detail-header">
+    <text class="detail-title">积分明细</text>
+    <view class="filter-dropdown" bindtap="toggleDropdown">
+      <text class="filter-text">{{filterOptions[filterIndex].label}}</text>
+      <t-icon name="chevron-down" size="16" color="#fff" />
+    </view>
+  </view>
+
+  <!-- 下拉菜单 -->
+  <view class="dropdown-mask {{showDropdown ? 'show' : ''}}" bindtap="closeDropdown"></view>
+  <view class="dropdown-menu {{showDropdown ? 'show' : ''}}">
+    <view
+      wx:for="{{filterOptions}}"
+      wx:key="value"
+      class="dropdown-item {{filterIndex === index ? 'active' : ''}}"
+      bindtap="selectFilter"
+      data-index="{{index}}"
+    >
+      {{item.label}}
+    </view>
+  </view>
+
+  <scroll-view
+    class="detail-list"
+    style="height: calc(100vh - {{pageInfo.navHeight}}px - 100rpx); padding-bottom: {{pageInfo.safeAreaBottom}}px;"
+    scroll-y
+    enhanced
+    show-scrollbar="{{false}}"
+    bindscrolltolower="loadMore"
+  >
+    <view
+      wx:for="{{filteredList}}"
+      wx:key="id"
+      class="detail-item"
+      bindtap="onItemTap"
+      data-item="{{item}}"
+    >
+      <view class="item-left">
+        <view class="item-title-row">
+          <text class="item-title">{{item.title}}</text>
+          <image
+            wx:if="{{item.type === 'role'}}"
+            class="item-icon"
+            src="/static/chat/bf.svg"
+            mode="aspectFit"
+          />
+        </view>
+        <text class="item-date">{{item.date}}</text>
+      </view>
+      <view class="item-right">
+        <text class="item-points {{item.points > 0 ? 'income' : 'expense'}}">
+          {{filter.formatPoints(item.points)}}
+        </text>
+      </view>
+    </view>
+
+    <view wx:if="{{loading}}" class="loading-more">
+      <text>加载中...</text>
+    </view>
+    <view wx:if="{{noMore && filteredList.length > 0}}" class="no-more">
+      <text>没有更多了</text>
+    </view>
+    <view wx:if="{{filteredList.length === 0 && !loading}}" class="empty-list">
+      <text>暂无记录</text>
+    </view>
+  </scroll-view>
+</view>

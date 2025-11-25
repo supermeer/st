@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "积分明细",
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "t-image": "tdesign-miniprogram/image/image",
+    "t-icon": "tdesign-miniprogram/icon/icon",
+    "custom-nav": "/components/custom-nav/index"
+  }
+}

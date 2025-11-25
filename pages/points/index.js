@@ -80,7 +80,9 @@ Page({
   },
 
   goDetail() {
-    // 预留收支明细跳转
+    wx.navigateTo({
+      url: '/pages/points/detail/index'
+    })
   }
 })
 

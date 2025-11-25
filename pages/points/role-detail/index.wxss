@@ -1,0 +1,118 @@
+page {
+  background: #050010;
+  background: linear-gradient(180deg, #111827 0%, #050010 40%, #050010 100%);
+  color: #fff;
+  height: 100%;
+}
+
+.role-detail-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+/* 角色头部信息 */
+.role-header {
+  display: flex;
+  align-items: center;
+  padding: 32rpx;
+  margin-bottom: 24rpx;
+}
+
+.role-avatar {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  margin-right: 24rpx;
+  background: #374151;
+}
+
+.role-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.role-name {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 8rpx;
+}
+
+.role-dialog-count {
+  font-size: 26rpx;
+  color: #9ca3af;
+}
+
+/* 消耗列表 */
+.consume-list {
+  flex: 1;
+  padding: 0 32rpx;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.consume-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28rpx 0;
+  border-bottom: 1rpx solid rgba(255, 255, 255, 0.05);
+}
+
+.consume-item:last-child {
+  border-bottom: none;
+}
+
+.consume-left {
+  flex: 1;
+  overflow: hidden;
+}
+
+.consume-title-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8rpx;
+}
+
+.consume-title {
+  font-size: 30rpx;
+  font-weight: 500;
+  color: #fff;
+  margin-right: 16rpx;
+}
+
+.consume-count {
+  font-size: 26rpx;
+  color: #9ca3af;
+}
+
+.consume-date {
+  font-size: 24rpx;
+  color: #6b7280;
+}
+
+.consume-right {
+  flex-shrink: 0;
+  margin-left: 24rpx;
+}
+
+.consume-points {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #a855f7;
+}
+
+/* 加载状态 */
+.loading-more,
+.no-more,
+.empty-list {
+  text-align: center;
+  padding: 40rpx;
+  font-size: 24rpx;
+  color: #6b7280;
+}
+
+.empty-list {
+  padding-top: 200rpx;
+}
