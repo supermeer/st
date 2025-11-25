@@ -45,9 +45,6 @@ Page({
     prologueExpanded: false,
     prologueNeedFold: false,
     prologueDisplay: '',
-    plotTitleExpanded: false,
-    plotTitleNeedFold: false,
-    plotTitleDisplay: '',
     currentBg: ''
   },
 
@@ -95,9 +92,6 @@ Page({
       })
       const plotId = res.currentPlotId
       if (!res.currentPlotId) {
-        const prologue = res.defaultStoryDetail?.prologue || ''
-        const prologueNeedFold = prologue.length > 120
-        const prologueDisplay = prologueNeedFold && !this.data.prologueExpanded ? prologue.slice(0, 120) + '…' : prologue
         this.setData({
           currentBg: res.backgroundImage,
           plotInfo: {
@@ -110,19 +104,9 @@ Page({
           storyInfo: {
             ...this.data.storyInfo,
             ...res.defaultStoryDetail
-          },
-          plotTitleNeedFold: false,
-          plotTitleDisplay: '',
-          prologueNeedFold: prologueNeedFold,
-          prologueDisplay: prologueDisplay
+          }
         })
       } else {
-        const plotTitle = res.plotDetailVO.title || ''
-        const plotTitleNeedFold = plotTitle.length > 40
-        const plotTitleDisplay = plotTitleNeedFold && !this.data.plotTitleExpanded ? plotTitle.slice(0, 40) + '…' : plotTitle
-        const prologue = res.plotDetailVO.story?.prologue || ''
-        const prologueNeedFold = prologue.length > 120
-        const prologueDisplay = prologueNeedFold && !this.data.prologueExpanded ? prologue.slice(0, 120) + '…' : prologue
         this.setData({
           plotInfo: {
             ...this.data.plotInfo,
@@ -133,11 +117,7 @@ Page({
             ...this.data.storyInfo,
             ...res.plotDetailVO.story
           },
-          currentBg: res.plotDetailVO.backgroundImage,
-          plotTitleNeedFold: plotTitleNeedFold,
-          plotTitleDisplay: plotTitleDisplay,
-          prologueNeedFold: prologueNeedFold,
-          prologueDisplay: prologueDisplay
+          currentBg: res.plotDetailVO.backgroundImage
         })
       }
     })
@@ -251,16 +231,6 @@ Page({
     this.setData({
       prologueExpanded: expanded,
       prologueDisplay: display
-    })
-  },
-  // 折叠/展开：剧情标题
-  togglePlotTitle() {
-    const expanded = !this.data.plotTitleExpanded
-    const title = this.data.plotInfo.title || ''
-    const display = this.data.plotTitleNeedFold && !expanded ? title.slice(0, 40) + '…' : title
-    this.setData({
-      plotTitleExpanded: expanded,
-      plotTitleDisplay: display
     })
   }
 })

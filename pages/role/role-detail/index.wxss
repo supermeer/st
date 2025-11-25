@@ -58,6 +58,14 @@
   opacity: 0.9;
 }
 
+.gender-male {
+  color: #4A9EFF !important; /* 蓝色 */
+}
+
+.gender-female {
+  color: #FF69B4 !important; /* 粉色 */
+}
+
 .role-tags {
   display: flex;
   gap: 16rpx;

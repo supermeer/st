@@ -71,11 +71,8 @@
           <view class="section-title">当前剧情</view>
           <t-icon name="chevron-right-s" class="section-title-icon" size="24" />
         </view>
-        <view class="section-content blur-glass">
-          <text>{{ plotInfo.id ? (plotTitleDisplay || plotInfo.title) : '暂无'}}</text>
-          <text wx:if="{{plotTitleNeedFold}}" class="fold-toggle" bind:tap="togglePlotTitle">
-            {{plotTitleExpanded ? '收起 ▴' : '展开 ▾'}}
-          </text>
+        <view class="memory-content blur-glass">
+          <text>{{ plotInfo.id ? plotInfo.title : '暂无'}}</text>
         </view>
         <view class="section-title-container" bind:tap="onMySetting">
           <view class="section-title">我的设定</view>

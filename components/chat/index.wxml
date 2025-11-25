@@ -49,7 +49,10 @@
         <t-image class="plot-icon" src="/static/chat/juqing.png" />
         <text>剧情</text>
       </view>
-      <text>{{currentStoryDetail.scene}}</text>
+      <text class="plot-content">{{sceneNeedFold ? sceneDisplay : currentStoryDetail.scene}}</text>
+      <text wx:if="{{sceneNeedFold}}" class="fold-toggle" bind:tap="toggleScene">
+        {{sceneExpanded ? '收起 ▴' : '展开 ▾'}}
+      </text>
     </view>
     <view wx:for="{{msgList}}" wx:key="id" id="msg-{{item.id}}">
       <role-msg wx:if="{{item.senderType === 2}}" class="message-item" message="{{item}}" isLatest="{{index === msgList.length - 1}}" disabled="{{isGenerating}}" bind:buttonClick="onButtonClick" bind:maskShow="onMaskShow" />

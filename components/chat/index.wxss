@@ -82,6 +82,8 @@
   color: var(--main-color-white);
   border-radius: 24rpx;
   font-size: 24rpx;
+  position: relative;
+  padding-bottom: 56rpx; /* 给右下角按钮留出空间 */
 }
 
 .plot-title {
@@ -96,6 +98,21 @@
   width: 32rpx;
   height: 32rpx;
   margin-right: 12rpx;
+}
+
+.plot-content {
+  line-height: 1.8;
+  letter-spacing: 0.8rpx;
+  display: block;
+}
+
+.plot-box .fold-toggle {
+  position: absolute;
+  right: 16rpx;
+  bottom: 12rpx;
+  font-size: 24rpx;
+  color: #ddd;
+  padding: 8rpx 16rpx;
 }
 
 .message-item {

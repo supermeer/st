@@ -99,6 +99,10 @@ Component({
     scrollAnimation: true, // 是否启用滚动动画
     isGenerating: true, // 是否有对话正在生成中
     maskVisible: false, // 蒙版是否显示
+    // 剧情文本折叠控制
+    sceneExpanded: false,
+    sceneNeedFold: false,
+    sceneDisplay: '',
     maskButtonTop: 0, // 蒙版按钮 top 位置
     maskButtonLeft: 0, // 蒙版按钮 left 位置
     maskButtonRight: 0, // 蒙版按钮 right 位置（用户消息）
@@ -208,6 +212,11 @@ Component({
         })
         let bg = res.backgroundImage
         if (!res.currentPlotId) {
+          // 处理剧情文本折叠（默认故事）
+          const scene = res.defaultStoryDetail?.scene || ''
+          const needFold = scene.length > 60
+          const display = needFold && !this.data.sceneExpanded ? scene.slice(0, 60) + '…' : scene
+          
           const defaultMsg = {
             senderType: 2,  // AI/角色消息
             content: this.data.currentStoryDetail.prologue,  
@@ -217,7 +226,9 @@ Component({
           }
           
           this.setData({
-            msgList: [...this.data.msgList, defaultMsg]
+            msgList: [...this.data.msgList, defaultMsg],
+            sceneNeedFold: needFold,
+            sceneDisplay: display
           })
         } else {
           if (res.currentPlotId === this.data.chatDetail.plotId && res.plotDetailVO.updateTime > this.data.chatDetail.updateTime) {
@@ -227,6 +238,11 @@ Component({
             this.getMessageList()
           }
           bg = res.plotDetailVO.backgroundImage
+          // 处理剧情文本折叠（剧情详情，如果plotDetailVO没有scene则使用defaultStoryDetail的）
+          const plotScene = res.plotDetailVO?.scene || res.plotDetailVO?.story?.scene  || ''
+          const plotNeedFold = plotScene.length > 60
+          const plotDisplay = plotNeedFold && !this.data.sceneExpanded ? plotScene.slice(0, 60) + '…' : plotScene
+          
           this.setData({
             chatDetail: {
               ...this.data.chatDetail,
@@ -236,6 +252,8 @@ Component({
               ...this.data.currentStoryDetail,
               ...res.plotDetailVO
             },
+            sceneNeedFold: plotNeedFold,
+            sceneDisplay: plotDisplay
           })
 
         }
@@ -850,6 +868,16 @@ Component({
         })
       }
       // e.detail.current.closeSwipeCell();
+    },
+    // 折叠/展开：剧情文本
+    toggleScene() {
+      const expanded = !this.data.sceneExpanded
+      const scene = this.data.currentStoryDetail.scene || ''
+      const display = this.data.sceneNeedFold && !expanded ? scene.slice(0, 60) + '…' : scene
+      this.setData({
+        sceneExpanded: expanded,
+        sceneDisplay: display
+      })
     }
   }
 })
