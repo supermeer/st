@@ -20,7 +20,8 @@ Page({
       avatar: '',
       id: null,
       ifReasoning: false,
-      memoryCount: 0
+      memoryCount: 0,
+      memoryLevel: 'basic' // 记忆等级：basic, good, deep, super
     },
     currentBg: '',
     // 今日对话
@@ -233,14 +234,66 @@ Page({
   },
 
   /**
-   * 专区唤起
+   * 记忆加强弹窗
    */
   onMemoryStrength() {
-    // TODO: 跳转到记忆专区
-    wx.showToast({
-      title: '功能开发中',
-      icon: 'none'
-    })
+    const memorySheet = this.selectComponent('#memorySheet')
+    if (memorySheet) {
+      memorySheet.show({
+        title: '记忆力增强',
+        subtitle: '最大对话长度，将影响每次对话所消耗的积分值。',
+        selectedId: this.data.plotInfo.memoryLevel || 'basic',
+        onConfirm: async (option) => {
+          const oldLevel = this.data.plotInfo.memoryLevel
+          this.setData({
+            'plotInfo.memoryLevel': option.id
+          })
+          const success = await this.saveMemoryLevel(option.id)
+          if (!success) {
+            // 保存失败，回滚
+            this.setData({
+              'plotInfo.memoryLevel': oldLevel
+            })
+          }
+        }
+      })
+    }
+  },
+
+  /**
+   * 保存记忆等级
+   */
+  async saveMemoryLevel(memoryLevel) {
+    try {
+      wx.showLoading({
+        title: '保存中...',
+        mask: true
+      })
+
+      await updatePlot({
+        id: this.data.plotInfo.id,
+        memoryLevel
+      })
+      
+      wx.hideLoading()
+      wx.showToast({
+        title: '保存成功',
+        icon: 'success',
+        duration: 1500
+      })
+      
+      return true
+    } catch (error) {
+      wx.hideLoading()
+      wx.showToast({
+        title: '保存失败',
+        icon: 'error',
+        duration: 2000
+      })
+      console.error('保存记忆等级失败:', error)
+      
+      return false
+    }
   },
 
   /**

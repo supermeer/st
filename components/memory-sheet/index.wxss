@@ -109,8 +109,26 @@
   margin-bottom: 0;
 }
 
+/* 选中状态默认边框 */
 .memory-item.selected {
-  border-color: rgba(124, 90, 255, 0.5);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* 选中状态边框颜色区分 */
+.memory-item.selected.selected-0 {
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.memory-item.selected.selected-1 {
+  border-color: var(--theme-color);
+}
+
+.memory-item.selected.selected-2 {
+  border-color: var(--theme-color-purple);
+}
+
+.memory-item.selected.selected-3 {
+  border-color: var(--yellow-btn-color);
 }
 
 .memory-item:active {
@@ -119,69 +137,120 @@
 
 /* 左侧单选按钮 */
 .memory-radio {
-  margin-right: 20rpx;
-  padding-top: 4rpx;
+  /* margin-right: 20rpx;
+  padding-top: 4rpx; */
 }
 
-.radio-outer {
-  width: 40rpx;
-  height: 40rpx;
-  border-radius: 50%;
-  border: 3rpx solid rgba(255, 255, 255, 0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s;
+.memory-radio-item {
+  --td-radio-icon-checked-color: #fff !important;
+  background: transparent !important;
+  padding-right: 24rpx;
 }
 
-.radio-outer.checked {
-  border-color: #a78bfa;
-  background: linear-gradient(135deg, #7c5aff 0%, #a78bfa 50%, #8b5cf6 100%);
+/* 第一项：白色 */
+.memory-radio-0 {
+  --td-radio-icon-checked-color: #fff !important;
 }
 
-.radio-inner {
-  width: 16rpx;
-  height: 16rpx;
-  border-radius: 50%;
-  background: #ffffff;
+/* 第二项：主题色 */
+.memory-radio-1 {
+  --td-radio-icon-checked-color: var(--theme-color) !important;
+}
+
+/* 第三项：紫色 */
+.memory-radio-2 {
+  --td-radio-icon-checked-color: var(--theme-color-purple) !important;
+}
+
+/* 第四项：黄色 */
+.memory-radio-3 {
+  --td-radio-icon-checked-color: var(--yellow-btn-color) !important;
+}
+
+/* 去掉 t-radio 的边框和间距 */
+.t-radio__icon--left {
+  margin-right: 0 !important;
+}
+.t-radio__border {
+  display: none !important;
 }
 
 /* 内容区域 */
-.memory-content {
+.ms-content {
   flex: 1;
   min-width: 0;
 }
 
-.memory-name-row {
+.ms-name-row {
   display: flex;
   align-items: center;
   margin-bottom: 8rpx;
 }
 
-.memory-name {
-  color: #ffd700;
+.ms-name {
   font-size: 32rpx;
   font-weight: 600;
 }
 
-.memory-description {
+/* 名称颜色区分 - 第一项：白色 */
+.ms-name-0 {
+  color: #fff;
+}
+
+/* 名称颜色区分 - 第二项：主题色 */
+.ms-name-1 {
+  color: var(--theme-color);
+}
+
+/* 名称颜色区分 - 第三项：紫色 */
+.ms-name-2 {
+  color: var(--theme-color-purple);
+}
+
+/* 名称颜色区分 - 第四项：黄色 */
+.ms-name-3 {
+  color: var(--yellow-btn-color);
+}
+
+.ms-description {
   color: rgba(255, 255, 255, 0.6);
   font-size: 26rpx;
   line-height: 1.5;
   display: block;
 }
 
-/* 当前标签 */
+/* 当前标签 - 右上角角标 */
 .current-tag {
   position: absolute;
-  top: 24rpx;
-  right: 24rpx;
-  background: linear-gradient(135deg, #7c5aff 0%, #a78bfa 50%, #8b5cf6 100%);
+  top: -2rpx;
+  right: -2rpx;
   color: #ffffff;
-  font-size: 22rpx;
-  padding: 6rpx 16rpx;
-  border-radius: 8rpx;
+  font-size: 20rpx;
+  padding: 8rpx 20rpx;
+  border-radius: 0 20rpx 0 12rpx;
   font-weight: 500;
+}
+
+/* 当前标签颜色区分 - 第一项：白色 */
+.current-tag-0 {
+  background: rgba(255, 255, 255, 0.9);
+  color: #1a1a1a;
+}
+
+/* 当前标签颜色区分 - 第二项：主题色 */
+.current-tag-1 {
+  background: var(--theme-color);
+}
+
+/* 当前标签颜色区分 - 第三项：紫色 */
+.current-tag-2 {
+  background: var(--theme-color-purple);
+}
+
+/* 当前标签颜色区分 - 第四项：黄色 */
+.current-tag-3 {
+  background: var(--yellow-btn-color);
+  color: #1a1a1a;
 }
 
 /* 空状态 */

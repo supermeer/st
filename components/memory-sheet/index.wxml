@@ -14,7 +14,7 @@
     <!-- 记忆选项列表 -->
     <scroll-view class="memory-list" scroll-y>
       <view 
-        class="memory-item {{selectedOption && selectedOption.id === item.id ? 'selected' : ''}}"
+        class="memory-item memory-item-{{index}} {{selectedOption && selectedOption.id === item.id ? 'selected selected-' + index : ''}}"
         wx:for="{{memoryOptions}}"
         wx:key="id"
         data-index="{{index}}"
@@ -22,21 +22,24 @@
       >
         <!-- 左侧选中指示器 -->
         <view class="memory-radio">
-          <view class="radio-outer {{selectedOption && selectedOption.id === item.id ? 'checked' : ''}}">
-            <view class="radio-inner" wx:if="{{selectedOption && selectedOption.id === item.id}}"></view>
-          </view>
+          <t-radio 
+            class="memory-radio-item memory-radio-{{index}}"
+            block="{{false}}"
+            checked="{{selectedOption && selectedOption.id === item.id}}"
+            icon="dot"
+          />
         </view>
 
         <!-- 内容区域 -->
-        <view class="memory-content">
-          <view class="memory-name-row">
-            <text class="memory-name">{{item.name}}</text>
+        <view class="ms-content">
+          <view class="ms-name-row">
+            <text class="ms-name ms-name-{{index}}">{{item.name}}</text>
           </view>
-          <text class="memory-description">{{item.description}}</text>
+          <text class="ms-description">{{item.description}}</text>
         </view>
 
         <!-- 当前标签 -->
-        <view class="current-tag" wx:if="{{currentOptionId === item.id}}">
+        <view class="current-tag current-tag-{{index}}" wx:if="{{currentOptionId === item.id}}">
           <text>当前</text>
         </view>
       </view>

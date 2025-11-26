@@ -6,7 +6,8 @@
     "t-icon": "tdesign-miniprogram/icon/icon",
     "t-slider": "tdesign-miniprogram/slider/slider",
     "t-radio": "tdesign-miniprogram/radio/radio",
-    "background-sheet": "/components/background-sheet/index"
+    "background-sheet": "/components/background-sheet/index",
+    "memory-sheet": "/components/memory-sheet/index"
   },
   "navigationBarTitleText": "对话设定"
 }

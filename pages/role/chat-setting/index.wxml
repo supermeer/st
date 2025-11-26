@@ -130,5 +130,8 @@
 
   <!-- 背景选择弹窗 -->
   <background-sheet id="backgroundSheet" />
+  
+  <!-- 记忆加强弹窗 -->
+  <memory-sheet id="memorySheet" />
 </view>
 
