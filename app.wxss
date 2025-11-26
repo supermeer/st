@@ -14,7 +14,8 @@
   --magic-color: rgb(91, 0, 255);
 
   /* 按钮文字颜色 */
-  --yellow-btn-color: rgb(253, 171, 11);
+    --yellow-btn-color: rgb(253, 171, 11);
+    --yellow-btn-color__disabled: rgba(253, 171, 11, 0.6);
 }
 
 .cell--noborder .t-cell::after {
@@ -32,6 +33,7 @@ page {
 
   /* 按钮文字颜色 */
   --yellow-btn-color: rgb(253, 171, 11);
+  --yellow-btn-color__disabled: rgba(253, 171, 11, 0.6);
 }
 
 .yellow-btn-text {

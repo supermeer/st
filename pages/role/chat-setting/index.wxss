@@ -156,8 +156,17 @@
   margin-left: 24rpx;
 }
 
-.mode-switch {
-  transform: scale(0.75);
+.mode-radio {
+  flex-shrink: 0;
+  --td-radio-icon-checked-color: var(--yellow-btn-color) !important;
+  --td-radio-icon-disabled-color: var(--yellow-btn-color__disabled) !important;
+  background: transparent !important;
+}
+.t-radio__icon--left {
+  margin-right: 0 !important;
+}
+.t-radio__border {
+  display: none !important;
 }
 
 /* 记忆项 */

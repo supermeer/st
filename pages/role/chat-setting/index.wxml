@@ -46,11 +46,11 @@
             <view class="mode-title">角色扮演基础模型</view>
             <view class="mode-desc">默认角色扮演模型</view>
           </view>
-          <switch 
-            class="mode-switch" 
+          <t-radio 
+            class="mode-radio" 
             checked="{{true}}"
             disabled="{{true}}"
-            color="#6C5CE7"
+            icon="dot"
           />
         </view>
 
@@ -60,11 +60,12 @@
             <view class="mode-title">深度思考模型</view>
             <view class="mode-desc">专为角色设计的思考模型，更亲密</view>
           </view>
-          <switch 
-            class="mode-switch" 
+          <t-radio 
+            class="mode-radio" 
             checked="{{plotInfo.ifReasoning}}"
-            bindchange="onDeepThinkingChange"
-            color="#6C5CE7"
+            bind:change="onDeepThinkingChange"
+            icon="dot"
+            allow-uncheck
           />
         </view>
 

@@ -5,6 +5,7 @@
     "custom-nav": "/components/custom-nav/index",
     "t-icon": "tdesign-miniprogram/icon/icon",
     "t-slider": "tdesign-miniprogram/slider/slider",
+    "t-radio": "tdesign-miniprogram/radio/radio",
     "background-sheet": "/components/background-sheet/index"
   },
   "navigationBarTitleText": "对话设定"

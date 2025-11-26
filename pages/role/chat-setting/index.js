@@ -132,7 +132,7 @@ Page({
    * 切换深度思考模型
    */
   async onDeepThinkingChange(event) {
-    const newValue = event.detail.value
+    const newValue = event.detail.checked
     const oldValue = this.data.plotInfo.ifReasoning
     
     this.setData({
