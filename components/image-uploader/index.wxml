@@ -1,10 +1,10 @@
 <view class="image-uploader" wx:if="{{visible}}">
   <view class="loading-container" wx:if="{{loading}}">
-    <view class="loading-content">
+    <view class="loading-content blur-glass">
       <view class="loading-spinner"></view>
       <text class="loading-text">{{loadingText}}</text>
       <view class="loading-actions">
-        <text class="cancel-btn" bind:tap="onCancel">取消</text>
+        <text class="cancel-btn blur-glass" bind:tap="onCancel">取消</text>
       </view>
     </view>
   </view>
