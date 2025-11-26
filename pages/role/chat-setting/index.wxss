@@ -84,7 +84,6 @@
 
 .upgrade-btn {
   font-size: 26rpx;
-  color: #fff;
   padding: 8rpx 16rpx;
   cursor: pointer;
 }
@@ -103,25 +102,24 @@
 .chat-quota {
   display: flex;
   align-items: baseline;
-  font-size: 48rpx;
+  font-size: 28rpx;
   font-weight: bold;
-  margin-top: 16rpx;
 }
 
 .quota-used {
   color: #fff;
-  font-size: 60rpx;
+  font-size: 28rpx;
 }
 
 .quota-separator {
   color: rgba(255, 255, 255, 0.5);
-  font-size: 48rpx;
+  font-size: 28rpx;
   margin: 0 8rpx;
 }
 
 .quota-total {
   color: rgba(255, 255, 255, 0.6);
-  font-size: 48rpx;
+  font-size: 28rpx;
 }
 
 /* 模式项 */

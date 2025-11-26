@@ -12,6 +12,9 @@
   /* 主题紫色 */
   --theme-color-purple: #6c5ce7;
   --magic-color: rgb(91, 0, 255);
+
+  /* 按钮文字颜色 */
+  --yellow-btn-color: rgb(253, 171, 11);
 }
 
 .cell--noborder .t-cell::after {
@@ -26,6 +29,13 @@ page {
   background-color: var(--theme-color-black);
   --theme-color-purple: #6c5ce7;
   --magic-color: rgb(91, 0, 255);
+
+  /* 按钮文字颜色 */
+  --yellow-btn-color: rgb(253, 171, 11);
+}
+
+.yellow-btn-text {
+  color: var(--yellow-btn-color);
 }
 .page-content {
   flex: 1;

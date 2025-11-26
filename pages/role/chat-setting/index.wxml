@@ -27,7 +27,7 @@
       <view class="setting-section blur-glass">
         <view class="section-header">
           <view class="section-title">今日对话</view>
-          <view class="upgrade-btn" bindtap="onUpgradeLimit">提升上限</view>
+          <view class="upgrade-btn yellow-btn-text" bindtap="onUpgradeLimit">提升上限</view>
         </view>
         <view class="chat-quota">
           <text class="quota-used">{{todayChat.used}}</text>
@@ -69,7 +69,7 @@
         </view>
 
         <!-- 长对话模式 -->
-        <view class="mode-item switch-item">
+        <!-- <view class="mode-item switch-item">
           <view class="mode-content">
             <view class="mode-title">长对话模式</view>
             <view class="mode-desc">专为角色设计的思考模型，更亲密</view>
@@ -80,7 +80,7 @@
             bindchange="onLongConversationChange"
             color="#6C5CE7"
           />
-        </view>
+        </view> -->
       </view>
 
       <!-- 智能体记忆力 -->
@@ -88,7 +88,7 @@
         <view class="section-header">
           <view class="section-title">智能体记忆力</view>
           <view class="memory-link" bindtap="onMemoryStrength">
-            <text>记忆加强</text>
+            <text class="yellow-btn-text">记忆加强</text>
             <t-icon name="chevron-right" size="40rpx" color="rgba(255,255,255,0.6)" />
           </view>
         </view>

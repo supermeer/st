@@ -1,0 +1,243 @@
+/* 遮罩层 */
+.memory-sheet-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 10000;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* 弹窗容器 */
+.memory-sheet-container {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #1a1a1a;
+  border-radius: 32rpx 32rpx 0 0;
+  padding: 40rpx 32rpx 48rpx;
+  padding-bottom: calc(48rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+  transform: translateY(100%);
+  transition: transform 0.3s ease-in-out;
+  z-index: 10001;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.memory-sheet-container.show {
+  transform: translateY(0);
+}
+
+/* 关闭按钮 */
+.memory-sheet-close {
+  position: absolute;
+  top: 32rpx;
+  right: 32rpx;
+  width: 56rpx;
+  height: 56rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.close-icon {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 48rpx;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.memory-sheet-close:active .close-icon {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* 标题 */
+.memory-sheet-title {
+  color: #ffffff;
+  font-size: 40rpx;
+  font-weight: 600;
+  margin-bottom: 16rpx;
+  text-align: left;
+  padding-right: 60rpx;
+}
+
+/* 副标题 */
+.memory-sheet-subtitle {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 26rpx;
+  margin-bottom: 40rpx;
+  text-align: left;
+  line-height: 1.5;
+}
+
+/* 记忆选项列表 */
+.memory-list {
+  flex: 1;
+  margin-bottom: 32rpx;
+  overflow-y: auto;
+}
+
+/* 记忆选项项 */
+.memory-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 28rpx 24rpx;
+  background: #2a2a2a;
+  border-radius: 20rpx;
+  margin-bottom: 20rpx;
+  position: relative;
+  transition: all 0.3s;
+  border: 2rpx solid transparent;
+}
+
+.memory-item:last-child {
+  margin-bottom: 0;
+}
+
+.memory-item.selected {
+  border-color: rgba(124, 90, 255, 0.5);
+}
+
+.memory-item:active {
+  opacity: 0.8;
+}
+
+/* 左侧单选按钮 */
+.memory-radio {
+  margin-right: 20rpx;
+  padding-top: 4rpx;
+}
+
+.radio-outer {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  border: 3rpx solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+}
+
+.radio-outer.checked {
+  border-color: #a78bfa;
+  background: linear-gradient(135deg, #7c5aff 0%, #a78bfa 50%, #8b5cf6 100%);
+}
+
+.radio-inner {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  background: #ffffff;
+}
+
+/* 内容区域 */
+.memory-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.memory-name-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8rpx;
+}
+
+.memory-name {
+  color: #ffd700;
+  font-size: 32rpx;
+  font-weight: 600;
+}
+
+.memory-description {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 26rpx;
+  line-height: 1.5;
+  display: block;
+}
+
+/* 当前标签 */
+.current-tag {
+  position: absolute;
+  top: 24rpx;
+  right: 24rpx;
+  background: linear-gradient(135deg, #7c5aff 0%, #a78bfa 50%, #8b5cf6 100%);
+  color: #ffffff;
+  font-size: 22rpx;
+  padding: 6rpx 16rpx;
+  border-radius: 8rpx;
+  font-weight: 500;
+}
+
+/* 空状态 */
+.empty-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80rpx 0;
+}
+
+.empty-text {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 28rpx;
+}
+
+/* 按钮组 */
+.memory-sheet-buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  gap: 24rpx;
+  margin-top: 16rpx;
+}
+
+/* 按钮基础样式 */
+.memory-sheet-btn {
+  flex: 1;
+  height: 88rpx;
+  border-radius: 44rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+
+/* 取消按钮 */
+.cancel-btn {
+  background: transparent;
+  border: 2rpx solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.cancel-btn:active {
+  opacity: 0.7;
+}
+
+/* 确认按钮 */
+.confirm-btn {
+  background: linear-gradient(135deg, #7c5aff 0%, #a78bfa 50%, #8b5cf6 100%);
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 4rpx 20rpx rgba(124, 90, 255, 0.4);
+}
+
+.confirm-btn:active {
+  opacity: 0.8;
+}

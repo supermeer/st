@@ -45,6 +45,10 @@ Page({
     prologueExpanded: false,
     prologueNeedFold: false,
     prologueDisplay: '',
+    // 我是谁折叠控制
+    identityExpanded: false,
+    identityNeedFold: false,
+    identityDisplay: '',
     currentBg: ''
   },
 
@@ -101,12 +105,18 @@ Page({
             id: null,
             persona: {}
           },
+          identityNeedFold: false,
+          identityDisplay: '',
+          identityExpanded: false,
           storyInfo: {
             ...this.data.storyInfo,
             ...res.defaultStoryDetail
           }
         })
       } else {
+        const identity = res.plotDetailVO?.persona?.identity || ''
+        const identityNeedFold = identity.length > 30
+        const identityDisplay = identityNeedFold && !this.data.identityExpanded ? identity.slice(0, 30) + '…' : identity
         this.setData({
           plotInfo: {
             ...this.data.plotInfo,
@@ -117,7 +127,9 @@ Page({
             ...this.data.storyInfo,
             ...res.plotDetailVO.story
           },
-          currentBg: res.plotDetailVO.backgroundImage
+          currentBg: res.plotDetailVO.backgroundImage,
+          identityNeedFold: identityNeedFold,
+          identityDisplay: identityDisplay
         })
       }
     })
@@ -205,7 +217,7 @@ Page({
       return
     }
     wx.navigateTo({
-      url: `/pages/role/my-setting/index?personaId=${this.data.plotInfo.persona.id}&storyId=${this.data.storyInfo.id}&avatarUrl=${this.data.currentBg}`
+      url: `/pages/role/my-setting/index?personaId=${this.data.plotInfo.persona?.id || ''}&storyId=${this.data.storyInfo.id}&avatarUrl=${this.data.currentBg}`
     })
   },
   onPlotSelect() {
@@ -231,6 +243,16 @@ Page({
     this.setData({
       prologueExpanded: expanded,
       prologueDisplay: display
+    })
+  },
+  // 折叠/展开：我是谁
+  toggleIdentity() {
+    const expanded = !this.data.identityExpanded
+    const identity = this.data.plotInfo.persona?.identity || ''
+    const display = this.data.identityNeedFold && !expanded ? identity.slice(0, 30) + '…' : identity
+    this.setData({
+      identityExpanded: expanded,
+      identityDisplay: display
     })
   }
 })

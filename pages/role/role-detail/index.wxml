@@ -20,7 +20,8 @@
     <view class="info-card blur-glass">
       <view class="role-name-section">
         <text class="role-name">{{roleInfo.name || '角色名称'}}</text>
-        <text class="role-gender">{{roleInfo.gender || '♂'}}</text>
+        <t-icon wx:if="{{roleInfo.gender === '男'}}" name="gender-male" class="role-gender male" />
+        <t-icon wx:elif="{{roleInfo.gender === '女'}}" name="gender-female" class="role-gender female" />
         <view wx:if="{{plotInfo.id}}" class="chat-setting" bind:tap="onDialogSetting">对话设定</view>
       </view>
       <view class="role-tags">
@@ -30,7 +31,7 @@
 
     <view class="detail-content blur-glass">
       <!-- 标签页 -->
-      <view class="tabs blur-glass">
+      <view class="tabs">
         <text class="tab {{currentTab === '1' ? 'active' : ''}}" bind:tap="onTabChange" data-tab="1">关于TA</text>
         <text class="tab {{currentTab === '2' ? 'active' : ''}}" bind:tap="onTabChange" data-tab="2">记忆</text>
         <!-- <text class="tab {{currentTab === '3' ? 'active' : ''}}" bind:tap="onTabChange" data-tab="3">故事</text> -->
@@ -38,7 +39,9 @@
       
       <!-- 内容区域 -->
       <view wx:if="{{currentTab === '1'}}" class="content-section">
-        <view class="section-title">TA的设定</view>
+        <view class="section-title-container">
+          <view class="section-title">TA的设定</view>
+        </view>
         <view class="section-content blur-glass">
           <text>{{descriptionDisplay || roleInfo.description || '暂无描述'}}</text>
           <text wx:if="{{descriptionNeedFold}}" class="fold-toggle" bind:tap="toggleDescription">
@@ -46,7 +49,9 @@
           </text>
         </view>
         
-        <view class="section-title">开场白</view>
+        <view class="section-title-container">
+          <view class="section-title">开场白</view>
+        </view>
         <view class="section-content blur-glass">
           <text>{{prologueDisplay || storyInfo.prologue || '你好，很高兴认识你！'}}</text>
           <text wx:if="{{prologueNeedFold}}" class="fold-toggle" bind:tap="togglePrologue">
@@ -78,22 +83,30 @@
           <view class="section-title">我的设定</view>
           <t-icon wx:if="{{plotInfo.id}}" name="chevron-right-s" class="section-title-icon" size="24" />
         </view>
-        <view class="setting-container">
-          <view class="setting-item blur-glass">
-            <text class="setting-item-title">对我的称呼</text>
-            <text class="setting-item-value">{{plotInfo.persona.userAddressedAs || '暂无'}}</text>
+        <view class="setting-block blur-glass">
+          <view class="setting-row">
+            <view class="setting-item-inline">
+              <text class="setting-item-title">对我的称呼</text>
+              <text class="setting-item-value">{{plotInfo.persona.userAddressedAs || '暂无'}}</text>
+            </view>
+            <view class="setting-item-inline">
+              <text class="setting-item-title">性别</text>
+              <text class="setting-item-value">{{plotInfo.persona.gender || '暂无'}}</text>
+            </view>
           </view>
-          <view class="setting-item blur-glass">
-            <text class="setting-item-title">性别</text>
-            <text class="setting-item-value">{{plotInfo.persona.gender || '暂无'}}</text>
-          </view>
-          <view class="setting-item blur-glass">
+          <view class="setting-identity">
             <text class="setting-item-title">我是谁</text>
-            <text class="setting-item-value">{{plotInfo.persona.identity || '暂无'}}</text>
+            <view class="identity-content">
+              <text>{{identityDisplay || plotInfo.persona.identity || '暂无'}}</text>
+              <text wx:if="{{identityNeedFold}}" class="fold-toggle-inline" bind:tap="toggleIdentity">
+                {{identityExpanded ? '收起 ▴' : '展开 ▾'}}
+              </text>
+            </view>
           </view>
         </view>
         <view class="section-title-container">
           <view class="section-title">智能体记忆力</view>
+          <text class="section-desc yellow-btn-text">记忆加强</text>
           <t-icon name="chevron-right-s" class="section-title-icon" size="24" />
         </view>
         <view class="memory-content blur-glass">
