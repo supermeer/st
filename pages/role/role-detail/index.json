@@ -4,7 +4,8 @@
   "usingComponents": {
     "custom-nav": "/components/custom-nav/index",
     "t-icon": "tdesign-miniprogram/icon/icon",
-    "t-slider": "tdesign-miniprogram/slider/slider"
+    "t-slider": "tdesign-miniprogram/slider/slider",
+    "memory-sheet": "/components/memory-sheet/index"
   },
   "navigationBarTitleText": "角色详情"
 }

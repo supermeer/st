@@ -24,6 +24,7 @@ Page({
       title: '暂无',
       totalMemory: 30,
       memoryCount: 0,
+      memoryOptionId: null, // 记忆力选项ID
       chatStyle: {
         id: null,
         title: ''
@@ -102,6 +103,7 @@ Page({
             ...this.data.plotInfo,
             chatStyle: res.defaultChatStyleDetail,
             memoryCount: 0,
+            memoryOptionId: null,
             id: null,
             persona: {}
           },
@@ -143,6 +145,50 @@ Page({
       return
     }
     this.setData({ currentTab: tab })
+  },
+  onMemorySetting() {
+    if (!this.data.plotInfo.id) {
+      wx.showToast({
+        title: '请先选择剧情',
+        icon: 'none'
+      })
+      return
+    }
+    const memorySheet = this.selectComponent('#memorySheet')
+    if (memorySheet) {
+      memorySheet.show({
+        selectedId: this.data.plotInfo.memoryOptionId,
+        onConfirm: async (selectedOption) => {
+          try {
+            wx.showLoading({
+              title: '保存中...',
+              mask: true
+            })
+            await updatePlot({
+              id: this.data.plotInfo.id,
+              memoryOptionId: selectedOption.id
+            })
+            this.setData({
+              'plotInfo.memoryOptionId': selectedOption.id
+            })
+            wx.hideLoading()
+            wx.showToast({
+              title: '保存成功',
+              icon: 'success',
+              duration: 1200
+            })
+          } catch (error) {
+            wx.hideLoading()
+            wx.showToast({
+              title: '保存失败',
+              icon: 'error',
+              duration: 1500
+            })
+            console.error('更新记忆选项失败:', error)
+          }
+        }
+      })
+    }
   },
   memoryChange(e) {
     const value = e.detail.value
