@@ -50,7 +50,9 @@ Page({
     identityExpanded: false,
     identityNeedFold: false,
     identityDisplay: '',
-    currentBg: ''
+    currentBg: '',
+    // 记忆力说明遮罩层
+    showMemoryDescOverlay: false
   },
 
   // 防抖定时器（记忆力滑块）
@@ -115,6 +117,14 @@ Page({
             ...res.defaultStoryDetail
           }
         })
+        // 处理开场白折叠
+        const prologue = res.defaultStoryDetail?.prologue || ''
+        const prologueNeedFold = prologue.length > 120
+        const prologueDisplay = prologueNeedFold && !this.data.prologueExpanded ? prologue.slice(0, 120) + '…' : prologue
+        this.setData({
+          prologueNeedFold,
+          prologueDisplay
+        })
       } else {
         const identity = res.plotDetailVO?.persona?.identity || ''
         const identityNeedFold = identity.length > 30
@@ -133,6 +143,14 @@ Page({
           identityNeedFold: identityNeedFold,
           identityDisplay: identityDisplay
         })
+        // 处理开场白折叠
+        const prologue = res.plotDetailVO?.story?.prologue || ''
+        const prologueNeedFold = prologue.length > 120
+        const prologueDisplay = prologueNeedFold && !this.data.prologueExpanded ? prologue.slice(0, 120) + '…' : prologue
+        this.setData({
+          prologueNeedFold,
+          prologueDisplay
+        })
       }
     })
   },
@@ -146,6 +164,18 @@ Page({
     }
     this.setData({ currentTab: tab })
   },
+  onMemoryDesc() {
+    this.setData({
+      showMemoryDescOverlay: true
+    })
+  },
+
+  onCloseMemoryDesc() {
+    this.setData({
+      showMemoryDescOverlay: false
+    })
+  },
+
   onMemorySetting() {
     if (!this.data.plotInfo.id) {
       wx.showToast({

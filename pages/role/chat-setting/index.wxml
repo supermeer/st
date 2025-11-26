@@ -87,7 +87,10 @@
       <!-- 智能体记忆力 -->
       <view class="setting-section blur-glass">
         <view class="section-header">
-          <view class="section-title">智能体记忆力</view>
+          <view class="section-title">
+            智能体记忆力
+            <t-icon name="info-circle" size="36rpx" color="#ffffff" catchtap="onMemoryDesc" />
+          </view>
           <view class="memory-link" bindtap="onMemoryStrength">
             <text class="yellow-btn-text">记忆加强</text>
             <t-icon name="chevron-right" size="40rpx" color="rgba(255,255,255,0.6)" />
@@ -133,5 +136,7 @@
   
   <!-- 记忆加强弹窗 -->
   <memory-sheet id="memorySheet" />
-</view>
 
+  <!-- 记忆力说明遮罩层 -->
+  <memory-desc-overlay show="{{ showMemoryDescOverlay }}" bind:close="onCloseMemoryDesc" />
+</view>

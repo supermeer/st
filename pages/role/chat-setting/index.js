@@ -1,4 +1,5 @@
 import SystemInfo from '../../../utils/system'
+import Message from 'tdesign-miniprogram/message/index';
 import { getPlotDetail, updatePlot } from '../../../services/ai/chat'
 Page({
   /**
@@ -62,7 +63,9 @@ Page({
         name: '森林',
         image: 'https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/chat_bg.png'
       }
-    ]
+    ],
+    // 记忆力说明遮罩层
+    showMemoryDescOverlay: false
   },
 
   // 防抖定时器
@@ -167,6 +170,18 @@ Page({
         'chatMode.longConversation': oldValue
       })
     }
+  },
+
+  onMemoryDesc() {
+    this.setData({
+      showMemoryDescOverlay: true
+    })
+  },
+
+  onCloseMemoryDesc() {
+    this.setData({
+      showMemoryDescOverlay: false
+    })
   },
 
   /**

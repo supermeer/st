@@ -1,0 +1,9 @@
+<van-overlay show="{{ show }}" bind:click="onClose" custom-style="background: rgba(0, 0, 0, 0.6);" custom-class="custom-class">
+  <view class="memory-desc-wrapper" catchtap="onClose">
+    <view class="memory-desc-content blur-glass content-class" catchtap="noop">
+      <view class="memory-desc-text">
+        记忆力是智能体能够回忆的最大对话长度，包括了智能体设定、我的设定等。记忆加强，可增加最大对话长度。最大对话长度越长，智能体可"记住"的回忆就越多。但需注意，记忆力增强后，智能体每次回复对话，将消耗更多的积分值。
+      </view>
+    </view>
+  </view>
+</van-overlay>

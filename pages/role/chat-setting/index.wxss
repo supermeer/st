@@ -72,6 +72,12 @@
   font-weight: bold;
   color: #fff;
   margin-bottom: 24rpx;
+  display: flex;
+  align-items: center;
+}
+
+.section-title .t-icon {
+  margin-left: 12rpx;
 }
 
 /* 区块头部（带右侧操作） */

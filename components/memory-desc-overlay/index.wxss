@@ -1,0 +1,21 @@
+.memory-desc-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 48rpx;
+  box-sizing: border-box;
+}
+
+.memory-desc-content {
+  border-radius: 24rpx;
+  padding: 40rpx;
+  max-width: 600rpx;
+}
+
+.memory-desc-text {
+  font-size: 28rpx;
+  color: #fff;
+  line-height: 1.8;
+  text-align: justify;
+}

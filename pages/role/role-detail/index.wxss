@@ -158,6 +158,12 @@
   font-weight: bold;
   padding-left: 24rpx;
   color: #fff;
+  display: flex;
+  align-items: center;
+}
+
+.section-title .t-icon {
+  margin-left: 12rpx;
 }
 .section-desc {
   font-size: 24rpx;
