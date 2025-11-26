@@ -71,7 +71,6 @@ Component({
           // 计算按钮位置（在消息上方）
           const buttonTop = rect.top - 80 // 按钮高度约 60px + 间距 20px
           const buttonLeft = rect.left + 24 // 与消息左对齐
-          
           // 通知父组件显示蒙版和按钮位置
           this.triggerEvent('maskShow', {
             show: true,

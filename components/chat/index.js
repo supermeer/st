@@ -165,7 +165,7 @@ Component({
     
     // 蒙版按钮点击事件
     onMaskButtonClick(e) {
-      const action = e.currentTarget.dataset.action
+      const { action, id, include } = e.currentTarget.dataset
       
       // 关闭蒙版
       this.hideMask()
@@ -173,11 +173,15 @@ Component({
       // 触发按钮点击事件
       this.onButtonClick({
         detail: {
-          action: action
+          action: action,
+          messageId: id,
+          include
         },
         currentTarget: {
           dataset: {
-            action: action
+            action: action,
+            messageId: id,
+            include
           }
         }
       })
