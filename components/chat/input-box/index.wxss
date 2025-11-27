@@ -17,6 +17,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    animation: maskFadeIn 0.25s ease;
+}
+
+@keyframes maskFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 .input-box {
@@ -27,11 +33,13 @@
     height: 90rpx;
     padding: 0 20rpx;
     animation: fadeInUp 0.3s ease-out;
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease;
 }
 
 .input-box-recording {
     background: linear-gradient(90deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.6));
     transform: scale(1.02);
+    box-shadow: 0 4rpx 20rpx rgba(255, 255, 255, 0.2);
 }
 
 @keyframes fadeInUp {
@@ -47,6 +55,12 @@
     width: 50rpx;
     height: 50rpx;
     /* margin-right: 12rpx; */
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.input-box-image:active {
+    transform: scale(0.9);
+    opacity: 0.8;
 }
 
 .input-box-image:nth-last-child(2) {
@@ -127,7 +141,16 @@
     left: 0;
     width: 50rpx;
     height: 50rpx;
-    transition: opacity 0.2s ease;
+    transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* 发送按钮出现动画 */
+  .icon-send-wrapper {
+    transform: scale(0.8);
+  }
+  
+  .icon-send-wrapper[style*="opacity: 1"] {
+    transform: scale(1);
   }
 
   .input-box-inspiration {
@@ -135,6 +158,18 @@
     padding: 0 20rpx;
     height: 400rpx;
     overflow-y: auto;
+    animation: panelSlideUp 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  @keyframes panelSlideUp {
+    from {
+      opacity: 0;
+      transform: translateY(30rpx);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
   .input-box-inspiration-title {
     font-size: 28rpx;
@@ -145,6 +180,11 @@
   .input-box-inspiration-title .icon-btn {
     margin-left: auto;
     color: #00C96B;
+    transition: transform 0.3s ease;
+  }
+
+  .input-box-inspiration-title .icon-btn:active {
+    transform: rotate(180deg);
   }
 
   .input-box-inspiration-item {
@@ -158,6 +198,30 @@
     display: flex;
     /* align-items: center; */
     justify-content: space-between;
+    transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+    animation: inspirationItemFadeIn 0.4s ease backwards;
+  }
+
+  .input-box-inspiration-item:nth-child(1) { animation-delay: 0.05s; }
+  .input-box-inspiration-item:nth-child(2) { animation-delay: 0.1s; }
+  .input-box-inspiration-item:nth-child(3) { animation-delay: 0.15s; }
+  .input-box-inspiration-item:nth-child(4) { animation-delay: 0.2s; }
+
+  @keyframes inspirationItemFadeIn {
+    from {
+      opacity: 0;
+      transform: translateX(-20rpx);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .input-box-inspiration-item:active {
+    transform: scale(0.98);
+    background: #ffffff50;
+    box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.15);
   }
 
   .icon-btn {
@@ -175,6 +239,7 @@
   .input-box-board {
     margin-top: 20rpx;
     padding: 0 20rpx;
+    animation: panelSlideUp 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   }
   .input-box-board-item {
     display: inline-flex;
@@ -186,9 +251,30 @@
     background: #ffffff20;
     margin: 20rpx 10rpx 20rpx;
     border-radius: 28rpx;
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s ease, box-shadow 0.2s ease;
+    animation: boardItemPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
   }
+
+  .input-box-board-item:nth-child(1) { animation-delay: 0.05s; }
+  .input-box-board-item:nth-child(2) { animation-delay: 0.1s; }
+  .input-box-board-item:nth-child(3) { animation-delay: 0.15s; }
+  .input-box-board-item:nth-child(4) { animation-delay: 0.2s; }
+
+  @keyframes boardItemPop {
+    from {
+      opacity: 0;
+      transform: scale(0.8);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
   .input-box-board-item:active {
     background: #ffffff60;
+    transform: scale(0.95);
+    box-shadow: 0 4rpx 20rpx rgba(255, 255, 255, 0.15);
   }
   .input-box-board-item text {
     font-size: 24rpx;
@@ -200,6 +286,11 @@
   .board-box-image {
     width: 50rpx;
     height: 50rpx;
+    transition: transform 0.2s ease;
+  }
+
+  .input-box-board-item:active .board-box-image {
+    transform: scale(1.1);
   }
 
   /* 重置分享按钮样式，使其与其他按钮一致 */
@@ -245,12 +336,25 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     backdrop-filter: blur(10px);
+    animation: voiceModalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  @keyframes voiceModalPop {
+    from {
+      opacity: 0;
+      transform: scale(0.85);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
   }
 
   .voice-modal-cancel {
     background: rgba(220, 50, 50, 0.95);
+    transform: scale(1.05);
   }
 
   .voice-status-box {
@@ -399,6 +503,18 @@
     margin-bottom: 40rpx;
     height: 160rpx;
     color: #fff;
+    animation: emptyFadeIn 0.4s ease;
+  }
+
+  @keyframes emptyFadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
   }
  
  

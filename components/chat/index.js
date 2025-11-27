@@ -100,7 +100,9 @@ Component({
     isGenerating: true, // 是否有对话正在生成中
     userScrolled: false, // 用户是否手动滚动（用于控制流式追加时是否自动滚动）
     _isAutoScrolling: false, // 是否正在程序自动滚动
+    isScrolledUp: false, // 是否向上滚动（用于控制顶部渐变透明效果）
     maskVisible: false, // 蒙版是否显示
+    maskClosing: false, // 蒙版是否正在关闭（用于动画）
     // 剧情文本折叠控制
     sceneExpanded: false,
     sceneNeedFold: false,
@@ -145,25 +147,55 @@ Component({
       if (this.data.maskVisible) {
         this.hideMask()
       }
-      // 如果是程序自动滚动，不检测
+      
+      const { scrollTop, scrollHeight } = e.detail
+      
+      // 获取 scroll-view 高度
+      if (!this._scrollViewHeight) {
+        const query = this.createSelectorQuery()
+        query.select('.message-list').boundingClientRect().exec((res) => {
+          if (res && res[0]) {
+            this._scrollViewHeight = res[0].height
+            this._handleScrollState(scrollTop, scrollHeight)
+          }
+        })
+      } else {
+        this._handleScrollState(scrollTop, scrollHeight)
+      }
+    },
+    
+    // 处理滚动状态（渐变效果 + 用户滚动检测）
+    _handleScrollState(scrollTop, scrollHeight) {
+      const viewHeight = this._scrollViewHeight || 500
+      const distanceToBottom = scrollHeight - scrollTop - viewHeight
+      
+      // 根据滑动方向控制透明效果
+      const lastScrollTop = this._lastScrollTop || 0
+      const isScrollingUp = scrollTop > lastScrollTop // 向上滑动（内容向上移动，scrollTop增加）
+      const isScrollingDown = scrollTop < lastScrollTop // 向下滑动
+      
+      // 只在有明显滑动时判断（避免微小抖动）
+      if (Math.abs(scrollTop - lastScrollTop) > 5) {
+        if (isScrollingUp && !this.data.isScrolledUp) {
+          // 向上滑动 → 显示透明效果
+          this.setData({ isScrolledUp: true })
+        } else if (isScrollingDown && this.data.isScrolledUp && distanceToBottom > 10) {
+          // 向下滑动且不在底部 → 取消透明效果
+          this.setData({ isScrolledUp: false })
+        }
+        // 滑到底部时不做处理，保持当前状态
+      }
+      
+      this._lastScrollTop = scrollTop
+      
+      // 如果是程序自动滚动，不检测用户滚动
       if (this._isAutoScrolling) {
         return
       }
+      
       // 检测用户是否手动滚动（仅在生成中时检测）
       if (this.data.isGenerating) {
-        const { scrollTop, scrollHeight } = e.detail
-        // 获取 scroll-view 高度来计算距离底部的距离
-        if (!this._scrollViewHeight) {
-          const query = this.createSelectorQuery()
-          query.select('.message-list').boundingClientRect().exec((res) => {
-            if (res && res[0]) {
-              this._scrollViewHeight = res[0].height
-              this._checkUserScroll(scrollTop, scrollHeight)
-            }
-          })
-        } else {
-          this._checkUserScroll(scrollTop, scrollHeight)
-        }
+        this._checkUserScroll(scrollTop, scrollHeight)
       }
     },
     
@@ -180,12 +212,20 @@ Component({
       }
     },
     
-    // 隐藏蒙版
+    // 隐藏蒙版（带关闭动画）
     hideMask() {
-      this.setData({
-        maskVisible: false,
-        currentMaskMessageId: null
-      })
+      if (!this.data.maskVisible || this.data.maskClosing) return
+      
+      this.setData({ maskClosing: true })
+      
+      // 等待动画完成后真正隐藏
+      setTimeout(() => {
+        this.setData({
+          maskVisible: false,
+          maskClosing: false,
+          currentMaskMessageId: null
+        })
+      }, 200)
     },
     
     // 阻止事件冒泡

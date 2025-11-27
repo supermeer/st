@@ -39,7 +39,7 @@ Component({
           const screenWidth = wx.getSystemInfoSync().windowWidth
           
           // 计算按钮位置（在消息上方，右对齐）
-          const buttonTop = rect.top - 80
+          const buttonTop = rect.top + 20
           const buttonRight = screenWidth - rect.right + 24 // 从右侧计算
           
           // 通知父组件显示蒙版和按钮位置

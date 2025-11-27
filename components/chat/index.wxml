@@ -13,7 +13,7 @@
     </view>
   </view>
   <scroll-view 
-    class="message-list"
+    class="message-list {{isScrolledUp ? 'scrolled-up' : ''}}"
     scroll-y="{{true}}" 
     scroll-into-view="{{intoViewId}}" 
     scroll-with-animation="{{scrollAnimation}}" 
@@ -81,14 +81,14 @@
 
 <block wx:if="{{maskVisible}}">
   <view 
-    class="global-action-mask"
+    class="global-action-mask {{maskClosing ? 'mask-closing' : ''}}"
     catchtap="hideMask"
     catchtouchmove="preventMove"
   >
   </view>
   <view 
     wx:if="{{currentMessageType === 'role'}}"
-    class="global-action-buttons buttons-show"
+    class="global-action-buttons buttons-show {{maskClosing ? 'buttons-closing' : ''}}"
     style="position: fixed; top: {{maskButtonTop}}px; left: {{maskButtonLeft}}px; z-index: 10001;"
     catchtap="stopPropagation"
   >
@@ -105,7 +105,7 @@
   <!-- 用户消息按钮弹窗（右侧） -->
   <view 
     wx:if="{{currentMessageType === 'user'}}"
-    class="global-action-buttons buttons-show"
+    class="global-action-buttons buttons-show {{maskClosing ? 'buttons-closing' : ''}}"
     style="position: fixed; top: {{maskButtonTop}}px; right: {{maskButtonRight}}px; z-index: 10001;"
     catchtap="stopPropagation"
   >
