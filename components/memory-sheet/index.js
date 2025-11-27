@@ -66,24 +66,28 @@ Component({
       return [
         {
           id: 'basic',
+          num: 6,
           name: '基础记忆',
           description: '记要点不记细节，简单唠嗑够用～',
           icon: '/static/chat/memory_basic.png'
         },
         {
           id: 'good',
+          num: 12,
           name: '较好记忆',
           description: '话题不脱节，日常聊天超顺畅！',
           icon: '/static/chat/memory_good.png'
         },
         {
           id: 'deep',
+          num: 24,
           name: '深度记忆',
           description: '越聊越懂你，像熟朋友一样～但提升积分消耗速度哦！',
           icon: '/static/chat/memory_deep.png'
         },
         {
           id: 'super',
+          num: 200,
           name: '超强记忆',
           description: '连你随口说的细节都记得，互动超有默契！但超吃积分!!',
           icon: '/static/chat/memory_super.png'

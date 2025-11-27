@@ -293,7 +293,7 @@ Page({
       return
     }
     wx.navigateTo({
-      url: `/pages/role/my-setting/index?personaId=${this.data.plotInfo.persona?.id || ''}&storyId=${this.data.storyInfo.id}&avatarUrl=${this.data.currentBg}`
+      url: `/pages/role/my-setting/index?personaId=${this.data.plotInfo.persona?.id || ''}&storyId=${this.data.storyInfo.id}&avatarUrl=${this.data.currentBg}&plotId=${this.data.plotInfo.id}`
     })
   },
   onPlotSelect() {

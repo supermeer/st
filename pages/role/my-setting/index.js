@@ -9,8 +9,8 @@ Page({
       safeAreaBottom: 0,
       navHeight: 0
     },
-    storyId: null,
     avatarUrl: null,
+    plotId: null,
     formData: {
       userAddressedAs: '',
       gender: '',
@@ -45,9 +45,9 @@ Page({
         isGlobal: true
       })
     }
-    if (options.storyId) {
+    if (options.plotId) {
       this.setData({
-        storyId: options.storyId
+        plotId: options.plotId
       })
     }
     if (options.gender || options.userAddressedAs || options.identity) {
@@ -110,31 +110,6 @@ Page({
    */
   onSubmit() {
     const { userAddressedAs, gender, identity } = this.data.formData
-
-    // 验证必填项
-    if (!userAddressedAs.trim()) {
-      wx.showToast({
-        title: '请输入称呼',
-        icon: 'none'
-      })
-      return
-    }
-
-    if (!gender) {
-      wx.showToast({
-        title: '请选择性别',
-        icon: 'none'
-      })
-      return
-    }
-
-    if (!identity.trim()) {
-      wx.showToast({
-        title: '请描述一下自己',
-        icon: 'none'
-      })
-      return
-    }
     
     if (this.data.formData.id) {
       updatePersona({
@@ -151,7 +126,7 @@ Page({
       return
     }
 
-    if (!this.data.storyId) {
+    if (!this.data.plotId) {
       // 直接调用上一页面传递的回调函数
       const prevPage = getCurrentPages()[getCurrentPages().length - 2]
       prevPage.confirmUserSettings({
@@ -165,7 +140,7 @@ Page({
 
     createPersona({
       ...this.data.formData,
-      storyId: this.data.storyId
+      plotId: this.data.plotId
     })
     .then(res => {
       wx.showToast({

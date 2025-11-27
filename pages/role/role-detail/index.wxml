@@ -64,7 +64,7 @@
           <t-icon wx:if="{{plotInfo.id}}" name="add-circle-filled" class="section-title-icon" size="18" />
         </view>
         <view class="style-content blur-glass" bind:tap="onChatStyle">
-          <text>{{plotInfo.chatStyle.title || ''}}</text>
+          <text>{{plotInfo.chatStyle.title || '默认风格'}}</text>
           <view wx:if="{{plotInfo.id}}" class="style-right-content">
             <text class="style-right-text">选择风格</text>
             <t-icon name="chevron-right-s" class="section-title-icon" size="28" />

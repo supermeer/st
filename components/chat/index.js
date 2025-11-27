@@ -98,6 +98,8 @@ Component({
     pullDownStatus: 'pull', // pull: 下拉加载更多, release: 松开加载更多, loading: 加载中, nomore: 没有更多
     scrollAnimation: true, // 是否启用滚动动画
     isGenerating: true, // 是否有对话正在生成中
+    userScrolled: false, // 用户是否手动滚动（用于控制流式追加时是否自动滚动）
+    _isAutoScrolling: false, // 是否正在程序自动滚动
     maskVisible: false, // 蒙版是否显示
     // 剧情文本折叠控制
     sceneExpanded: false,
@@ -138,10 +140,43 @@ Component({
       }
     },
     
-    // 滚动时隐藏蒙版
+    // 滚动时隐藏蒙版，并检测用户手动滚动
     onScroll(e) {
       if (this.data.maskVisible) {
         this.hideMask()
+      }
+      // 如果是程序自动滚动，不检测
+      if (this._isAutoScrolling) {
+        return
+      }
+      // 检测用户是否手动滚动（仅在生成中时检测）
+      if (this.data.isGenerating) {
+        const { scrollTop, scrollHeight } = e.detail
+        // 获取 scroll-view 高度来计算距离底部的距离
+        if (!this._scrollViewHeight) {
+          const query = this.createSelectorQuery()
+          query.select('.message-list').boundingClientRect().exec((res) => {
+            if (res && res[0]) {
+              this._scrollViewHeight = res[0].height
+              this._checkUserScroll(scrollTop, scrollHeight)
+            }
+          })
+        } else {
+          this._checkUserScroll(scrollTop, scrollHeight)
+        }
+      }
+    },
+    
+    // 检查用户是否手动滚动
+    _checkUserScroll(scrollTop, scrollHeight) {
+      const viewHeight = this._scrollViewHeight || 500
+      const distanceToBottom = scrollHeight - scrollTop - viewHeight
+      // 如果距离底部超过150px，认为用户手动滚动了
+      if (distanceToBottom > 150) {
+        if (!this.data.userScrolled) {
+          this.setData({ userScrolled: true })
+          console.log('[Chat] 用户手动滚动，停止自动滚动')
+        }
       }
     },
     
@@ -288,6 +323,8 @@ Component({
         })
       }
       const { content, imageList = [] } = e.detail;
+      // 发送新消息时重置用户滚动状态，恢复自动滚动
+      this.setData({ userScrolled: false })
       const msg = this.addUserMessage(content, imageList)
       this.setData({
         operatingForm: {
@@ -346,7 +383,10 @@ Component({
             msgList: this.data.msgList
           })
         }
-        this.scrollToBottom()
+        // 仅在用户未手动滚动时自动滚动到底部
+          if (!this.data.userScrolled) {
+            this.scrollToBottom()
+          }
       })
         .then((res) => {
           this.setData({
@@ -417,10 +457,16 @@ Component({
     },
      // 滚动到底部（使用锚点方式更稳定）
     scrollToBottom() {
+      // 标记为程序自动滚动
+      this._isAutoScrolling = true
       // 通过切换 intoViewId 触发滚动，避免相同值不生效
       this.setData({ intoViewId: '' })
       setTimeout(() => {
         this.setData({ intoViewId: 'bottom-anchor' })
+        // 延迟重置标志，等待滚动完成
+        setTimeout(() => {
+          this._isAutoScrolling = false
+        }, 300)
       }, 0)
     },
     scrollToView(id) {
@@ -739,6 +785,8 @@ Component({
     onRetry(e) {
       const { operate, msgId } = this.data.operatingForm
       const msg = this.data.msgList.find(m => m.id === msgId)
+      // 重试时重置用户滚动状态，恢复自动滚动
+      this.setData({ userScrolled: false })
       switch (operate) {
         case 'sendMessage':
           this.generateRequest('sendMessage', msg.content)
@@ -836,7 +884,9 @@ Component({
         })
         
       } else if (e.detail.action === 'continue') {
+        // 继续生成时重置用户滚动状态，恢复自动滚动
         this.setData({
+          userScrolled: false,
           operatingForm: {
             operate: 'continue',
             msgId: e.detail.messageId

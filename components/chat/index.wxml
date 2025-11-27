@@ -44,7 +44,7 @@
         <text class="tip-text">没有更多了</text>
       </view>
     </view>
-    <view class="plot-box blur-glass">
+    <view wx:if="{{currentStoryDetail.scene}}" class="plot-box blur-glass">
       <view class="plot-title">
         <t-image class="plot-icon" src="/static/chat/juqing.png" />
         <text>剧情</text>

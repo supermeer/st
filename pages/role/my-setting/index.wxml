@@ -9,7 +9,7 @@
   <view class="chat-header blur-glass" style="top: {{ pageInfo.navHeight }}px">
     <image wx:if="{{!isGlobal}}" class="chat-avatar" src="{{avatarUrl}}" mode="aspectFill"></image>
     <view class="right-content">
-      <view class="chat-title">{{isGlobal ? '全局人设' : '设置该角色与你之间的关系'}}</view>
+      <view class="chat-title">{{isGlobal ? '全局人设' : '当前对话中角色与你之间的关系'}}</view>
       <view wx:if="{{isGlobal}}" class="chat-desc">{{globalDesc}}</view>
     </view>
   </view>
