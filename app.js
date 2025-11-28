@@ -63,14 +63,13 @@ App({
   onLaunch: function () {
     // 使用 westore 初始化用户登录态与信息
     userStore.initFromLocal()
-    // 获取系统信息和导航栏高度
-    this.getNavHeight()
-
-    const accountInfo = wx.getAccountInfoSync();
-    wx.setStorageSync('aE', accountInfo.miniProgram.envVersion === 'release' ? '1' : '0')
   },
   onShow: function () {
     updateManager()
+    // 获取系统信息和导航栏高度
+    this.getNavHeight()
+    const accountInfo = wx.getAccountInfoSync();
+    wx.setStorageSync('aE', accountInfo.miniProgram.envVersion === 'release' ? '1' : '0')
     // wx.navigateTo({
     //   url: '/pages/contentadd/index'
     // })

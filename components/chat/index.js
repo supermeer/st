@@ -61,8 +61,10 @@ Component({
       }
       // 检查是否有消息正在生成中
       const isGenerating = newVal.some(msg => msg.loading === true)
+      // 在生成期间关闭滚动动画，生成结束后再恢复，避免频繁动画导致抖动
       this.setData({
-        isGenerating: isGenerating
+        isGenerating: isGenerating,
+        scrollAnimation: !isGenerating
       })
     }
   },
@@ -440,6 +442,13 @@ Component({
           this.setData({
               msgList: [...this.data.msgList]
           })
+          // 流式结束后，消息内部会渲染操作按钮，导致内容高度变化
+          // 如果用户没有手动上滑，补一次滚动到底，确保仍然在最底部
+          if (!this.data.userScrolled) {
+            setTimeout(() => {
+              this.scrollToBottom()
+            }, 50)
+          }
         })
         .catch((err) => {
           // 找到要标记错误的消息
@@ -481,7 +490,7 @@ Component({
       })
       if (keyboardHeight > 0) {
         this.setData({
-          contentHeight: `calc(100% - ${keyboardHeight}px + ${this.data.tabbarHeight}rpx + ${this.data.safeAreaBottom}px)`
+          contentHeight: `calc(100% - ${keyboardHeight}px + ${ !this.properties.showBack ? this.data.tabbarHeight : 0 }rpx + ${!this.properties.showBack ? this.data.safeAreaBottom : 0}px)`
         })
         setTimeout(() => {
           this.scrollToBottom()
@@ -497,6 +506,16 @@ Component({
     },
      // 滚动到底部（使用锚点方式更稳定）
     scrollToBottom() {
+      const now = Date.now()
+      // 简单节流：在短时间内多次调用只生效一次，减少流式追加时的抖动
+      if (this._lastAutoScrollTime && now - this._lastAutoScrollTime < 120) {
+        return
+      }
+      // 如果已经在自动滚动中，避免重复触发
+      if (this._isAutoScrolling) {
+        return
+      }
+      this._lastAutoScrollTime = now
       // 标记为程序自动滚动
       this._isAutoScrolling = true
       // 通过切换 intoViewId 触发滚动，避免相同值不生效
