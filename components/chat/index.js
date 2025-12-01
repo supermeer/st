@@ -20,6 +20,34 @@ Component({
       this.getRoleInfo()
     }
   },
+  pageLifetimes: {
+    show() {
+      // 当前所在页面每次显示时都会触发
+      // 1. 重置键盘高度相关状态，避免沿用上一次的高度
+      this.setData({
+        keyboardHeight: 0,
+        contentHeight: '100%'
+      })
+
+      // 2. 重新绑定全局键盘高度监听
+      if (wx && wx.onKeyboardHeightChange) {
+        // 先卸载旧监听，避免重复注册或被其他页面覆盖后失效
+        if (this._keyboardHeightListener && wx.offKeyboardHeightChange) {
+          wx.offKeyboardHeightChange(this._keyboardHeightListener)
+        }
+        this._keyboardHeightListener = (res) => {
+          this.onKeyboardHeightChange({ detail: res.height })
+        }
+        wx.onKeyboardHeightChange(this._keyboardHeightListener)
+      }
+    },
+    hide() {
+      // 当前页面隐藏时，可按需卸载监听，防止影响其他页面
+      if (this._keyboardHeightListener && wx && wx.offKeyboardHeightChange) {
+        wx.offKeyboardHeightChange(this._keyboardHeightListener)
+      }
+    }
+  },
   // 监听roleInfo变化
   observers: {
     'roleInfo.id': function (newVal) {
@@ -493,7 +521,7 @@ Component({
           contentHeight: `calc(100% - ${keyboardHeight}px + ${ !this.properties.showBack ? this.data.tabbarHeight : 0 }rpx + ${!this.properties.showBack ? this.data.safeAreaBottom : 0}px)`
         })
         setTimeout(() => {
-          this.scrollToBottom()
+          this.scrollToBottom(true)
         }, 400);
       } else {
         this.setData({
@@ -505,26 +533,40 @@ Component({
       this.scrollToBottom()
     },
      // 滚动到底部（使用锚点方式更稳定）
-    scrollToBottom() {
+    scrollToBottom(force = false) {
       const now = Date.now()
-      // 简单节流：在短时间内多次调用只生效一次，减少流式追加时的抖动
-      if (this._lastAutoScrollTime && now - this._lastAutoScrollTime < 120) {
-        return
-      }
-      // 如果已经在自动滚动中，避免重复触发
-      if (this._isAutoScrolling) {
-        return
+      if (!force) {
+        // 简单节流：在短时间内多次调用只生效一次，减少流式追加时的抖动
+        if (this._lastAutoScrollTime && now - this._lastAutoScrollTime < 120) {
+          return
+        }
+        // 如果已经在自动滚动中，避免重复触发
+        if (this._isAutoScrolling) {
+          return
+        }
+      } else {
+        // 强制滚动时，先清理未完成的自动滚动状态
+        if (this._autoScrollTimer) {
+          clearTimeout(this._autoScrollTimer)
+          this._autoScrollTimer = null
+        }
+        if (this._resetAutoScrollFlagTimer) {
+          clearTimeout(this._resetAutoScrollFlagTimer)
+          this._resetAutoScrollFlagTimer = null
+        }
+        this._isAutoScrolling = false
       }
       this._lastAutoScrollTime = now
       // 标记为程序自动滚动
       this._isAutoScrolling = true
       // 通过切换 intoViewId 触发滚动，避免相同值不生效
       this.setData({ intoViewId: '' })
-      setTimeout(() => {
+      this._autoScrollTimer = setTimeout(() => {
         this.setData({ intoViewId: 'bottom-anchor' })
         // 延迟重置标志，等待滚动完成
-        setTimeout(() => {
+        this._resetAutoScrollFlagTimer = setTimeout(() => {
           this._isAutoScrolling = false
+          this._resetAutoScrollFlagTimer = null
         }, 300)
       }, 0)
     },

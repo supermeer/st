@@ -66,13 +66,21 @@ Page({
     currentBg: null
   },
   onLoad() {
-    this.setData({
-      pageInfo: { ...SystemInfo.getPageInfo(), ...this.data.pageInfo }
-    })
-    // calc({{pageInfo.safeAreaBottom}}px + {{pageInfo.tabbarHeight}}rpx);
-    this.setData({
-      paddingBtm: `calc(${this.data.pageInfo.safeAreaBottom}px + ${this.data.pageInfo.tabbarHeight}rpx)`
-    })
+    const getPageInfo = () => {
+      this.setData({
+        pageInfo: { ...SystemInfo.getPageInfo(), ...this.data.pageInfo }
+      })
+      // calc({{pageInfo.safeAreaBottom}}px + {{pageInfo.tabbarHeight}}rpx);
+      this.setData({
+        paddingBtm: `calc(${this.data.pageInfo.safeAreaBottom}px + ${this.data.pageInfo.tabbarHeight}rpx)`
+      })
+    }
+    getPageInfo()
+    if (!this.data.pageInfo.safeAreaBottom) {
+      setTimeout(() => {
+        getPageInfo()
+      }, 300);
+    }
   },
   onShow() {
     this.getTabBar().init()

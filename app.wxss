@@ -49,7 +49,7 @@ page {
   font-size: 28rpx;
   letter-spacing: 0.8rpx;
   border-radius: 24rpx;
-  font-weight: bold;
+  /* font-weight: bold; */
 }
 
 .page-content-full {

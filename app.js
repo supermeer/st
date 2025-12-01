@@ -68,6 +68,11 @@ App({
     updateManager()
     // 获取系统信息和导航栏高度
     this.getNavHeight()
+    if (!this.globalData.safeAreaBottom) {
+      setTimeout(() => {
+        this.getNavHeight()
+      }, 300);
+    }
     const accountInfo = wx.getAccountInfoSync();
     wx.setStorageSync('aE', accountInfo.miniProgram.envVersion === 'release' ? '1' : '0')
     // wx.navigateTo({

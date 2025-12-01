@@ -64,7 +64,6 @@
       maxlength="1000"
       adjust-position="{{false}}"
       bind:line-change="onInputLineChange"
-      bind:keyboardheightchange="onKeyboardHeightChange"
       bind:enter="onSend"
     />
     <view class="bottom-line">
