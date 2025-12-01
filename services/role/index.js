@@ -63,3 +63,11 @@ export function getPersonaDetail(id) {
 export function getHotSearchKeywords() {
     return request.get(`/api/v1/server/character/getHotSearchKeywords`)
 }
+
+export function getDefaultPersona() {
+    return request.get(`/api/v1/server/story/getDefaultPersona`)
+}
+
+export function updateDefaultPersona(data) {
+    return request.post(`/api/v1/server/story/updateDefaultPersona`, data)
+}

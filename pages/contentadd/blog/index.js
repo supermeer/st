@@ -199,9 +199,9 @@ Page({
   // 查看历史记录
   viewHistory() {
     // 测试ai/chat/session/index
-    wx.navigateTo({
-      url: '/pages/chat/history/index'
-    })
+    // wx.navigateTo({
+    //   url: '/pages/chat/history/index'
+    // })
     // wx.navigateTo({
     //   url: '../history/index?categoryType=' + this.data.categoryType
     // })

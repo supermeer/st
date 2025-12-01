@@ -1,9 +1,8 @@
-
+import userStore from '../../store/user'
 import { createOrderAndPrepay } from '../../services/order/index'
 
 Page({
   data: {
-    currentPoints: 3000,
     expireDate: '2025.04.12',
     selectedIndex: 2,
     plans: [
@@ -16,7 +15,13 @@ Page({
     ]
   },
 
-  onLoad() {},
+  onLoad() {
+    userStore.bind(this)
+  },
+
+  onShow() {
+    userStore.refreshPointInfo()
+  },
 
   selectPlan(e) {
     const { index } = e.currentTarget.dataset

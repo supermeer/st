@@ -9,7 +9,7 @@
     <t-image slot="center" src="/static/usercenter/mine_nav.jpg" width="112rpx" height="44rpx" />
   </custom-nav>
   <view class="usercenter-content">
-    <view class="user-info">
+    <view class="user-info" bindtap="onUserInfoClick">
       <t-image class="user-info-avatar" src="/static/avatar.jpg" />
       <view class="user-info-name">
         <text>{{userInfo.nickname || '小柚子'}}</text>
@@ -19,8 +19,8 @@
     </view>
     <view class="score-box" bind:tap="onScoreClick">
       <t-image class="score-box-icon" src="/static/vip/score.png" />
-      <text class="score-box-text">123321</text>
-      <text class="score-box-desc">有300积分3天后过期</text>
+      <text class="score-box-text">{{(pointInfo.pointBalance || 0) + (pointInfo.dailyFreeBalance || 0)}}</text>
+      <text class="score-box-desc">今日赠送{{pointInfo.dailyFreeBalance || 0}}积分已到账</text>
       <t-icon class="score-box-arr" name="chevron-right" size="18" />
     </view>
     <view class="vip-box">

@@ -21,8 +21,8 @@
       <view class="points-summary-left">
         <t-image class="points-summary-icon" src="/static/vip/score.png" mode="aspectFit" />
         <view class="points-summary-info">
-          <view class="points-summary-value">{{currentPoints || 0}}</view>
-          <view class="points-summary-expire">积分将于 {{expireDate}} 到期</view>
+          <view class="points-summary-value">{{pointInfo.pointBalance || 0}}</view>
+          <!-- <view class="points-summary-expire">今日赠送积分剩余：{{pointInfo.dailyFreeBalance || 0}}</view> -->
         </view>
       </view>
     </view>

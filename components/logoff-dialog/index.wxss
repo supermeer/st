@@ -33,7 +33,7 @@ view {
     font-size: 40rpx;
     font-weight: bold;
     text-align: center;
-    color: #333333;
+    color: #fff;
     margin-top: 52rpx;
     display: flex;
     align-items: center;
@@ -48,8 +48,9 @@ view {
 }
 
 .logoff-dialog-desc {
-    font-size: 36rpx;
-    color: #000;
+    font-size: 32rpx;
+    color: #aaa;
+    font-weight: bold;
     margin: 84rpx 0;
 }
 

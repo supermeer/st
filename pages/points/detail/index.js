@@ -1,4 +1,5 @@
 import SystemInfo from '../../../utils/system'
+import { getMyPointDetails } from '../../../services/vip/index'
 Page({
   data: {
     pageInfo: {

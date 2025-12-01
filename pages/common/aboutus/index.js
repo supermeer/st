@@ -5,6 +5,11 @@ Page({
   data: {
     itemList: [
       {
+        title: '全局设定',
+        desc: '设置您的全局设定',
+        url: '/pages/role/my-setting/index?isGlobal=true'
+      },
+      {
         title: '隐私协议',
         desc: '',
         url: '/pages/common/agreement/index?type=3'
@@ -21,19 +26,22 @@ Page({
       },
       {
         title: '版本号',
-        desc: '1.0.0',
+        desc: '',
         url: ''
       }
     ]
   },
 
   onLoad() {
-    // 获取版本号
-    if (app.globalData && app.globalData.version) {
-      this.setData({
-        version: app.globalData.version
+    const accountInfo = wx.getAccountInfoSync();
+    this.setData({
+      itemList: this.data.itemList.map(item => {
+        if (item.title === '版本号') {
+          item.desc = accountInfo.miniProgram.version
+        }
+        return item
       })
-    }
+    })
   },
   logoff() {
     this.logoffDialogRef = this.selectComponent('#logoff-dialog')

@@ -1,6 +1,5 @@
 <view class="common-dialog-content">
     <slot></slot>
-    <t-image src="/static/dialog-content_bg.png" class="common-dialog-bg" />
     <view class="button-container">
         <view wx:if="{{cancelTitle}}" class="cancel-btn btn" bindtap="cancel">{{cancelTitle}}</view>
         <view wx:if="{{confirmTitle}}" class="confirm-btn btn" bindtap="confirm">{{confirmTitle}}</view>

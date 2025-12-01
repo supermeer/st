@@ -125,9 +125,9 @@ Page({
 
   // 查看历史记录
   viewHistory() {
-    wx.navigateTo({
-      url: '/pages/chat/history/index'
-    })
+    // wx.navigateTo({
+    //   url: '/pages/chat/history/index'
+    // })
   },
 
   // 立即生成

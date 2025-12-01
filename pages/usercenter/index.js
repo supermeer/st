@@ -12,6 +12,7 @@ Page({
   onShow() {
     this.getTabBar().init()
     userStore.refreshVipInfo()
+    userStore.refreshPointInfo()
     this.getCharacterList()
   },
   getCharacterList() {
@@ -36,9 +37,12 @@ Page({
       url: `/pages/chat/index?plotId=${ res && res.plotId ? res.plotId : ''}&characterId=${id}`
     })
   },
-
+  onUserInfoClick() {
+    wx.navigateTo({
+      url: '/pages/common/aboutus/index'
+    })
+  },
   onVipRenewClick() {
-    console.log(111222333)
     wx.navigateTo({
       url: '/pages/vip/packages/index'
     })

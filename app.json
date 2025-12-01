@@ -57,7 +57,7 @@
     {
       "root": "pages/chat",
       "name": "chat",
-      "pages": ["index", "history/index", "session/index"]
+      "pages": ["index"]
     }
   ],
   "tabBar": {

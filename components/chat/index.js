@@ -415,6 +415,30 @@ Component({
         fileKeys = imageList.map(item => item.fileKey);
       }
       this.addAIMessage()
+      
+      // 防抖计时器和标志
+      let updateTimer = null
+      let pendingUpdate = false
+      
+      const flushUpdate = () => {
+        if (pendingUpdate) {
+          this.setData({
+            msgList: this.data.msgList
+          })
+          pendingUpdate = false
+        }
+      }
+      
+      const scheduleUpdate = () => {
+        if (!updateTimer) {
+          updateTimer = setTimeout(() => {
+            flushUpdate()
+            updateTimer = null
+          }, 50)
+        }
+        pendingUpdate = true
+      }
+      
       ChatService.sendMessage(
         {
           userMessage: content || '',
@@ -435,12 +459,14 @@ Component({
             latestMessage.htmlContent = formatMessage(latestMessage.content || '')
             latestMessage.url = url
             latestMessage.isThinking = false
+            scheduleUpdate()
           } 
           if (type === 'thinking') {
             latestMessage.thinkContent += msg || ''
             latestMessage.thinkHtmlContent = formatMessage(latestMessage.thinkContent || '')
             latestMessage.isThinking = true
             latestMessage.hasThinking = true
+            scheduleUpdate()
           }
           if (type === 'aiMessageId') {
             latestMessage.id = msg
@@ -449,9 +475,6 @@ Component({
             const userMsg = this.data.msgList[this.data.msgList.length - 2]
             userMsg.id = msg
           }
-          this.setData({
-            msgList: this.data.msgList
-          })
         }
         // 仅在用户未手动滚动时自动滚动到底部
           if (!this.data.userScrolled) {
@@ -459,6 +482,13 @@ Component({
           }
       })
         .then((res) => {
+          // 流式完成时，确保所有待处理的更新被刷新
+          if (updateTimer) {
+            clearTimeout(updateTimer)
+            updateTimer = null
+          }
+          flushUpdate()
+          
           this.setData({
             operatingForm: {
               operate: '',

@@ -1,5 +1,6 @@
 const { Store } = require('../miniprogram_npm/westore/index.js')
 import { getMyVipInfo } from '../services/usercenter/index'
+import { getMyPointInfo } from '../services/vip/index'
 
 const DEFAULT_USER = {
   avatarUrl: '',
@@ -19,6 +20,11 @@ const DEFAULT_VIP_INFO = {
   formattedMonthlyExpireTime: ''
 }
 
+const DEFAULT_POINT_INFO = {
+  dailyFreeBalance: 0,
+  pointBalance: 0
+}
+
 function clone(obj) {
   try {
     return JSON.parse(JSON.stringify(obj))
@@ -36,7 +42,8 @@ class UserStore extends Store {
     this.data = {
       userInfo: {},
       loginMark: false,
-      vipInfo: {}
+      vipInfo: {},
+      pointInfo: {}
     }
   }
 
@@ -57,7 +64,8 @@ class UserStore extends Store {
     const userData = {
       userInfo: this.data.userInfo,
       loginMark: this.data.loginMark,
-      vipInfo: this.data.vipInfo
+      vipInfo: this.data.vipInfo,
+      pointInfo: this.data.pointInfo
     }
 
     if (typeof key === 'string' && this.views[key]) {
@@ -77,7 +85,8 @@ class UserStore extends Store {
     const userData = {
       userInfo: this.data.userInfo,
       loginMark: this.data.loginMark,
-      vipInfo: this.data.vipInfo
+      vipInfo: this.data.vipInfo,
+      pointInfo: this.data.pointInfo
     }
 
     if (arguments.length === 1 && typeof viewKey === 'string') {
@@ -100,6 +109,9 @@ class UserStore extends Store {
     if (!this.data) return
     if (typeof this.data.vipInfo === 'undefined') {
       this.data.vipInfo = {}
+    }
+    if (typeof this.data.pointInfo === 'undefined') {
+      this.data.pointInfo = clone(DEFAULT_POINT_INFO)
     }
     if (!this.data.userInfo) {
       this.data.userInfo = clone(DEFAULT_USER)
@@ -169,6 +181,18 @@ class UserStore extends Store {
       wx.setStorageSync('vipInfo', this.data.vipInfo)
       this.update()
       return this.data.vipInfo
+    })
+  }
+
+  refreshPointInfo() {
+    return getMyPointInfo().then((res) => {
+      this.data.pointInfo = {
+        ...this.data.pointInfo,
+        ...res
+      }
+      wx.setStorageSync('pointInfo', this.data.pointInfo)
+      this.update()
+      return this.data.pointInfo
     })
   }
 

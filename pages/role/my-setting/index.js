@@ -1,5 +1,5 @@
 import SystemInfo from '../../../utils/system'
-import { createPersona, getPersonaDetail, updatePersona } from '../../../services/role/index'
+import { createPersona, getPersonaDetail, updatePersona, getDefaultPersona, updateDefaultPersona } from '../../../services/role/index'
 Page({
   /**
    * 页面的初始数据
@@ -44,6 +44,7 @@ Page({
       this.setData({
         isGlobal: true
       })
+      this.getGlobalPersona()
     }
     if (options.plotId) {
       this.setData({
@@ -62,6 +63,30 @@ Page({
     }
     this.setData({
       pageInfo: { ...this.data.pageInfo, ...SystemInfo.getPageInfo() }
+    })
+  },
+  
+  getGlobalPersona() {
+    getDefaultPersona()
+    .then(res => {
+      this.setData({
+        formData: {
+          ...this.data.formData,
+          ...res
+        }
+      })
+    })
+  },
+
+  updateGlobalPersona() {
+    updateDefaultPersona(this.data.formData)
+    .then(res => {
+      wx.showToast({
+        title: '更新成功',
+        icon: 'success',
+        duration: 1000
+      })
+      wx.navigateBack()
     })
   },
 
@@ -111,6 +136,11 @@ Page({
   onSubmit() {
     const { userAddressedAs, gender, identity } = this.data.formData
     
+    if (this.data.isGlobal) {
+      this.updateGlobalPersona()
+      return
+    }
+
     if (this.data.formData.id) {
       updatePersona({
         ...this.data.formData,
