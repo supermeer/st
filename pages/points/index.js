@@ -108,7 +108,6 @@ Page({
 
   onDialogClose() {
     userStore.refreshPointInfo()
-    // wx.navigateBack()
   }
 })
 

@@ -17,8 +17,8 @@ Page({
     filteredList: [],
     loading: false,
     noMore: false,
-    page: 1,
-    pageSize: 20
+    current: 1,
+    size: 20
   },
 
   onLoad(options) {
@@ -33,28 +33,49 @@ Page({
   },
 
   loadData() {
-    // TODO: 调用接口获取数据
-    // 模拟数据
-    const mockList = [
-      { id: '1', title: '沈川寒', type: 'role', points: -14320, date: '2025.04.12 12:12', roleId: 'role_1', avatar: '', dialogCount: 100 },
-      { id: '2', title: '李大炮', type: 'role', points: -2330, date: '2025.04.12 12:12', roleId: 'role_2', avatar: '', dialogCount: 50 },
-      { id: '3', title: '积分充值', type: 'recharge', points: 600, date: '2025.04.12 12:12' },
-      { id: '4', title: '李大炮', type: 'role', points: -20, date: '2025.04.12 12:12', roleId: 'role_2', avatar: '', dialogCount: 5 },
-      { id: '5', title: '闻大炮', type: 'role', points: -20, date: '2025.04.12 12:12', roleId: 'role_3', avatar: '', dialogCount: 5 },
-      { id: '6', title: '积分充值', type: 'recharge', points: 600, date: '2025.04.12 12:12' },
-      { id: '7', title: '开通会员赠送', type: 'gift', points: 1000, date: '2025.04.12 12:12' },
-      { id: '8', title: '沈川寒', type: 'role', points: -14320, date: '2025.04.12 12:12', roleId: 'role_1', avatar: '', dialogCount: 100 },
-      { id: '9', title: '李大炮', type: 'role', points: -2330, date: '2025.04.12 12:12', roleId: 'role_2', avatar: '', dialogCount: 50 },
-      { id: '10', title: '积分充值', type: 'recharge', points: 600, date: '2025.04.12 12:12' },
-      { id: '11', title: '闻大炮', type: 'role', points: -20, date: '2025.04.12 12:12', roleId: 'role_3', avatar: '', dialogCount: 5 },
-      { id: '12', title: '积分充值', type: 'recharge', points: 600, date: '2025.04.12 12:12' },
-      { id: '13', title: '开通会员赠送', type: 'gift', points: 1000, date: '2025.04.12 12:12' },
-    ]
-
     this.setData({
-      list: mockList,
-      noMore: true
+      loading: true
     })
+    getMyPointDetails({
+      current: this.data.current,
+      size: this.data.size
+    }).then(res => {
+      console.log(res, '=======')
+      const { list, current } = this.data
+      const newList = current === 1 ? res.data : [...list, ...res.data]
+      this.setData({
+        list: newList,
+        noMore: res.data.length < this.data.size
+      })
+      this.filterList()
+    }).catch(err => {
+      console.error('加载数据失败:', err)
+      this.setData({
+        loading: false
+      })
+    })
+    // // TODO: 调用接口获取数据
+    // // 模拟数据
+    // const mockList = [
+    //   { id: '1', title: '沈川寒', type: 'role', points: -14320, date: '2025.04.12 12:12', roleId: 'role_1', avatar: '', dialogCount: 100 },
+    //   { id: '2', title: '李大炮', type: 'role', points: -2330, date: '2025.04.12 12:12', roleId: 'role_2', avatar: '', dialogCount: 50 },
+    //   { id: '3', title: '积分充值', type: 'recharge', points: 600, date: '2025.04.12 12:12' },
+    //   { id: '4', title: '李大炮', type: 'role', points: -20, date: '2025.04.12 12:12', roleId: 'role_2', avatar: '', dialogCount: 5 },
+    //   { id: '5', title: '闻大炮', type: 'role', points: -20, date: '2025.04.12 12:12', roleId: 'role_3', avatar: '', dialogCount: 5 },
+    //   { id: '6', title: '积分充值', type: 'recharge', points: 600, date: '2025.04.12 12:12' },
+    //   { id: '7', title: '开通会员赠送', type: 'gift', points: 1000, date: '2025.04.12 12:12' },
+    //   { id: '8', title: '沈川寒', type: 'role', points: -14320, date: '2025.04.12 12:12', roleId: 'role_1', avatar: '', dialogCount: 100 },
+    //   { id: '9', title: '李大炮', type: 'role', points: -2330, date: '2025.04.12 12:12', roleId: 'role_2', avatar: '', dialogCount: 50 },
+    //   { id: '10', title: '积分充值', type: 'recharge', points: 600, date: '2025.04.12 12:12' },
+    //   { id: '11', title: '闻大炮', type: 'role', points: -20, date: '2025.04.12 12:12', roleId: 'role_3', avatar: '', dialogCount: 5 },
+    //   { id: '12', title: '积分充值', type: 'recharge', points: 600, date: '2025.04.12 12:12' },
+    //   { id: '13', title: '开通会员赠送', type: 'gift', points: 1000, date: '2025.04.12 12:12' },
+    // ]
+
+    // this.setData({
+    //   list: mockList,
+    //   noMore: true
+    // })
     this.filterList()
   },
 
@@ -69,7 +90,10 @@ Page({
       filteredList = list.filter(item => item.points < 0)
     }
 
-    this.setData({ filteredList })
+    this.setData({ 
+      filteredList,
+      loading: false
+    })
   },
 
   toggleDropdown() {
@@ -101,6 +125,9 @@ Page({
 
   loadMore() {
     if (this.data.loading || this.data.noMore) return
-    // TODO: 加载更多数据
+    this.setData({
+      current: this.data.current + 1
+    })
+    this.loadData()
   }
 })

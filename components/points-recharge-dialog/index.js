@@ -1,4 +1,5 @@
-import { createOrderAndPrepay } from '../../services/order/index'
+import { createOrderAndPrepay, getPricingPlan } from '../../services/order/index'
+import userStore from '../../store/user'
 
 Component({
   properties: {
@@ -18,22 +19,26 @@ Component({
   data: {
     visible: false,
     selectedIndex: 0,
-    plans: [
-      { points: 600, price: 6 },
-      { points: 3000, price: 30 },
-      { points: 6000, price: 60 },
-      { points: 10000, price: 100 },
-      { points: 30000, price: 300 },
-      { points: 50000, price: 500 }
-    ]
+    plans: []
   },
   methods: {
     show(options = {}) {
-      const { plans } = options
-      if (Array.isArray(plans) && plans.length) {
-        this.setData({ plans, selectedIndex: 0 })
-      }
-      this.setData({ visible: true })
+      this.setData({ visible: true, selectedIndex: 0 })
+      this.getPricingPlan()
+    },
+    getPricingPlan() {
+      getPricingPlan({
+        type: 1
+      })
+        .then((res) => {
+          this.setData({ plans: (res || []).map(item => ({
+            ...item,
+            price: ((item.amountInFen || 0) / 100.0).toFixed(1)
+          })) })
+        })
+        .catch((err) => {
+          console.error(err)
+        })
     },
     hide() {
       this.setData({ visible: false })
@@ -63,6 +68,14 @@ Component({
         mask: true
       })
 
+      const resultDialog = this.selectComponent('#rechargeResultDialog')
+      if (resultDialog) {
+        resultDialog.show({
+          orderNumber: 12224,
+          points: plan.point
+        })
+      }
+      return
       createOrderAndPrepay({
         openId: wx.getStorageSync('openId'),
         orderType: 1,
@@ -80,7 +93,7 @@ Component({
               if (resultDialog && res.orderNumber) {
                 resultDialog.show({
                   orderNumber: res.orderNumber,
-                  points: plan.points
+                  points: plan.point
                 })
               }
             },
@@ -101,15 +114,17 @@ Component({
           })
         })
     },
-    onRechargeResultClose() {
-      // 目前仅关闭结果弹窗，必要时可以在这里补充刷新积分等逻辑
+    onRechargeResultClose(e) {
+      // 充值成功后刷新积分信息
+      userStore.refreshPointInfo()
+      // 触发充值完成事件，返回充值结果给父组件
+      this.triggerEvent('recharge-success')
+      e.detail.success && this.close()
     },
     handleAgreementTap() {
-      this.triggerEvent('agreement')
-    },
-
-    handleMaskClick() {
-      // this.close()
+      wx.navigateTo({
+        url: '/pages/common/agreement/index?type=1'
+      })
     }
   }
 })

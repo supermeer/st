@@ -1,7 +1,6 @@
 <view
   class="points-dialog-mask"
   wx:if="{{visible}}"
-  bindtap="handleMaskClick"
   catchtouchmove="{{true}}"
 >
   <view class="points-dialog-container" catchtap="">
@@ -32,7 +31,7 @@
         >
           <view class="plan-points">
             <t-image class="points-icon" src="{{index === selectedIndex ? '/static/vip/score_s.png' : '/static/vip/score.png'}}"></t-image>
-            <text class="plan-points-num">{{item.points}}</text>
+            <text class="plan-points-num">{{item.point}}</text>
           </view>
           <view class="plan-price">￥{{item.price}}</view>
         </view>

@@ -63,7 +63,7 @@ Component({
     handleResponse(res) {
       if (res === 1) {
         this.clearPollingTimer()
-        userStore.refreshVipInfo()
+        userStore.refreshPointInfo()
         this.setData({ status: 1 })
       } else if (res === 2) {
         this.clearPollingTimer()
@@ -72,7 +72,7 @@ Component({
     },
     handleConfirm() {
       this.hide()
-      this.triggerEvent('close')
+      this.triggerEvent('close', { success: this.data.status === 1 })
     },
     handleMaskClick() {
     //   this.hide()
