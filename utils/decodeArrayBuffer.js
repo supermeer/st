@@ -111,16 +111,47 @@ export class StreamParser {
   _getSafeCutIndex() {
     if (this.buffer.length === 0) return 0
 
-    let cutIndex = this.buffer.length
-    const lastByte = this.buffer[this.buffer.length - 1]
-
-    // 检查是否在多字节字符内部[2,4](@ref)
-    if (lastByte >= 0x80) {
-      if (lastByte >= 0xf0) cutIndex -= 4 // 4字节字符（如Emoji）
-      else if (lastByte >= 0xe0) cutIndex -= 3 // 3字节（如中文）
-      else if (lastByte >= 0xc0) cutIndex -= 2 // 2字节（如拉丁扩展字符）
+    let cutIndex = this.buffer.length - 1
+    
+    // 从末尾向前扫描，找到多字节字符的起始字节
+    // 续字节范围：0x80-0xbf，需要向前跳过
+    while (cutIndex >= 0 && this.buffer[cutIndex] >= 0x80 && this.buffer[cutIndex] < 0xc0) {
+      cutIndex--
     }
-    return Math.max(0, cutIndex) // 确保非负数
+    
+    // 现在cutIndex指向起始字节或ASCII字符
+    if (cutIndex >= 0) {
+      const startByte = this.buffer[cutIndex]
+      
+      if (startByte < 0x80) {
+        // ASCII字符，可以保留
+        cutIndex++
+      } else if (startByte >= 0xf0) {
+        // 4字节字符，需要4个字节完整
+        if (cutIndex + 4 > this.buffer.length) {
+          // 不完整，向前回溯
+          cutIndex = Math.max(0, cutIndex)
+        } else {
+          cutIndex += 4
+        }
+      } else if (startByte >= 0xe0) {
+        // 3字节字符，需要3个字节完整
+        if (cutIndex + 3 > this.buffer.length) {
+          cutIndex = Math.max(0, cutIndex)
+        } else {
+          cutIndex += 3
+        }
+      } else if (startByte >= 0xc0) {
+        // 2字节字符，需要2个字节完整
+        if (cutIndex + 2 > this.buffer.length) {
+          cutIndex = Math.max(0, cutIndex)
+        } else {
+          cutIndex += 2
+        }
+      }
+    }
+    
+    return Math.max(0, cutIndex)
   }
 
   /**

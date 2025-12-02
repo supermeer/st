@@ -24,7 +24,7 @@
     <view class="settings-content" style="padding-bottom: {{ pageInfo.safeAreaBottom + 40}}px;">
       
       <!-- 今日对话 -->
-      <view class="setting-section blur-glass">
+      <!-- <view class="setting-section blur-glass">
         <view class="section-header">
           <view class="section-title">今日对话</view>
           <view class="upgrade-btn yellow-btn-text" bindtap="onUpgradeLimit">提升上限</view>
@@ -34,7 +34,7 @@
           <text class="quota-separator"> / </text>
           <text class="quota-total">{{todayChat.total}}</text>
         </view>
-      </view>
+      </view> -->
 
       <!-- 对话模式 -->
       <view class="setting-section blur-glass">
