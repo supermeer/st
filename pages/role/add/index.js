@@ -147,7 +147,7 @@ Page({
     if (backgroundSheet) {
       backgroundSheet.show({
         title: '聊天背景',
-        cancelText: '创建专属背景',
+        // cancelText: '创建专属背景',
         confirmText: '设为背景',
         backgrounds: [],
         selectedId: this.data.formData.chatBackground,

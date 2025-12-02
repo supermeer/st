@@ -128,4 +128,9 @@ export function setCurrentMessage(data) {
   return request.post('/api/v1/server/plot/setCurrentMessage', data)
 }
 
+// 获取记忆类型列表
+export function getMemoryType() {
+  return request.get('/api/v1/server/plot/getMemoryType')
+}
+
 export default ChatService

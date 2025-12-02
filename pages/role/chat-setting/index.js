@@ -1,6 +1,6 @@
 import SystemInfo from '../../../utils/system'
 import Message from 'tdesign-miniprogram/message/index';
-import { getPlotDetail, updatePlot } from '../../../services/ai/chat'
+import { getPlotDetail, updatePlot, getMemoryType } from '../../../services/ai/chat'
 Page({
   /**
    * 页面的初始数据
@@ -65,7 +65,9 @@ Page({
       }
     ],
     // 记忆力说明遮罩层
-    showMemoryDescOverlay: false
+    showMemoryDescOverlay: false,
+    // 记忆选项列表
+    memoryOptions: []
   },
 
   // 防抖定时器
@@ -97,6 +99,7 @@ Page({
     this.setData({
       pageInfo: { ...this.data.pageInfo, ...SystemInfo.getPageInfo() }
     })
+    this.getMemoryType()
   },
 
   getPlotInfo(plotId) {
@@ -110,6 +113,15 @@ Page({
       })
     })
   },
+
+  getMemoryType() {
+    return getMemoryType().then(res => {
+      this.setData({
+        memoryOptions: res || []
+      })
+    })
+  },
+
   /**
    * 提升对话上限
    */
@@ -319,7 +331,7 @@ Page({
     if (backgroundSheet) {
       backgroundSheet.show({
         title: '聊天背景',
-        cancelText: '创建专属背景',
+        // cancelText: '创建专属背景',
         confirmText: '设为背景',
         backgrounds: this.data.backgroundList,
         selectedId: this.data.chatBackground.id,
@@ -332,9 +344,9 @@ Page({
           }
         },
         onCancel: () => {
-          wx.navigateTo({
-            url: '/pages/common/pic-generate/index'
-          })
+          // wx.navigateTo({
+          //   url: '/pages/common/pic-generate/index'
+          // })
         }
       })
     }

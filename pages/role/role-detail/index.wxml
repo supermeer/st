@@ -22,7 +22,10 @@
         <text class="role-name">{{roleInfo.name || '角色名称'}}</text>
         <t-icon wx:if="{{roleInfo.gender === '男'}}" name="gender-male" class="role-gender male" />
         <t-icon wx:elif="{{roleInfo.gender === '女'}}" name="gender-female" class="role-gender female" />
-        <view wx:if="{{plotInfo.id}}" class="chat-setting" bind:tap="onDialogSetting">对话设定</view>
+        <view wx:if="{{plotInfo.id}}" class="chat-setting" bind:tap="onDialogSetting">
+          对话设定
+          <t-icon name="chevron-right-s" class="chat-setting-icon" size="24" />
+        </view>
       </view>
       <view class="role-tags">
         <text class="tag" wx:for="{{roleInfo.tags}}" wx:key="index">#{{item.name}}</text>
@@ -76,7 +79,7 @@
           <view class="section-title">当前剧情</view>
           <t-icon name="chevron-right-s" class="section-title-icon" size="24" />
         </view>
-        <view class="memory-content blur-glass">
+        <view class="plot-content blur-glass">
           <text>{{ plotInfo.id ? plotInfo.title : '暂无'}}</text>
         </view>
         <view class="section-title-container" bind:tap="onMySetting">
@@ -112,20 +115,10 @@
           <text class="section-desc yellow-btn-text">记忆加强</text>
           <t-icon name="chevron-right-s" class="section-title-icon" size="24" />
         </view>
-        <view class="memory-content blur-glass">
-          <view class="memory-header">
-            <text class="memory-label">记忆</text>
-            <text class="memory-value">{{plotInfo.memoryCount}}条</text>
-          </view>
-          <t-slider
-            class="memory-slider"
-            default-value="{{plotInfo.memoryCount}}"
-            value="{{plotInfo.memoryCount}}"
-            label="{{false}}"
-            step="{{1}}"
-            bind:change="memoryChange"
-          />
-        </view>
+        <memory-display 
+          currentMemory="{{plotInfo.memoryCount}}"
+          memoryOptions="{{memoryOptions}}"
+        />
       </view>
     </view>
     

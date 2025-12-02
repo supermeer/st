@@ -67,6 +67,7 @@
       bind:enter="onSend"
     />
     <view class="bottom-line">
+      <t-image class="bracket-icon input-box-image" src="/static/chat/bracket.png" bindtap="addBracket" />
       <t-image class="input-box-image" src="/static/chat/linggan.png" bindtap="showInspiration" />
       <view class="icon-wrapper">
         <view class="icon-item icon-add-wrapper" style="opacity: {{inputValue && inputValue.length > 0 ? 0 : 1}}; pointer-events: {{inputValue && inputValue.length > 0 ? 'none' : 'auto'}};">

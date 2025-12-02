@@ -51,6 +51,11 @@
           </view>
         </view>
       </view>
+      <view wx:if="{{roleList.length === 0}}" class="role-empty-state">
+        <t-icon name="empty" size="64" color="#ccc" />
+        <text class="empty-text">暂无自定义智能体</text>
+        <text class="empty-desc">快去创建吧！</text>
+      </view>
     </view>
   </view>
 </view>

@@ -13,10 +13,16 @@
 
     <!-- 记忆选项列表 -->
     <scroll-view class="memory-list" scroll-y>
+      <!-- 加载状态 -->
+      <view wx:if="{{loading}}" class="loading-container">
+        <text class="loading-text">加载中...</text>
+      </view>
+
+      <!-- 记忆选项 -->
       <view 
-        class="memory-item memory-item-{{index}} {{selectedOption && selectedOption.id === item.id ? 'selected selected-' + index : ''}}"
+        class="memory-item memory-item-{{index}} {{selectedOption && selectedOption.value === item.value ? 'selected selected-' + index : ''}}"
         wx:for="{{memoryOptions}}"
-        wx:key="id"
+        wx:key="value"
         data-index="{{index}}"
         bindtap="handleSelectOption"
       >
@@ -25,26 +31,26 @@
           <t-radio 
             class="memory-radio-item memory-radio-{{index}}"
             block="{{false}}"
-            checked="{{selectedOption && selectedOption.id === item.id}}"
+            checked="{{selectedOption && selectedOption.value === item.value}}"
             icon="dot"
           />
         </view>
 
-        <!-- 内容区域 -->
+        <!-- 内容区域 --> 
         <view class="ms-content">
           <view class="ms-name-row">
-            <text class="ms-name ms-name-{{index}}">{{item.name}}</text>
+            <text class="ms-name ms-name-{{index}}">{{item.label}}</text>
           </view>
           <text class="ms-description">{{item.description}}</text>
         </view>
 
         <!-- 当前标签 -->
-        <view class="current-tag current-tag-{{index}}" wx:if="{{currentOptionId === item.id}}">
+        <view class="current-tag current-tag-{{index}}" wx:if="{{currentCount === item.value}}">
           <text>当前</text>
         </view>
       </view>
 
-      <view wx:if="{{memoryOptions.length === 0}}" class="empty-container">
+      <view wx:if="{{!loading && memoryOptions.length === 0}}" class="empty-container">
         <text class="empty-text">暂无记忆选项</text>
       </view>
     </scroll-view>

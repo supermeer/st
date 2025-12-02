@@ -98,20 +98,10 @@
         </view>
         
         <!-- 一般记忆 -->
-        <view class="memory-item">
-          <view class="memory-header">
-            <text class="memory-label">记忆容量</text>
-            <text class="memory-value">{{plotInfo.memoryCount}}条</text>
-          </view>
-          <t-slider
-            class="memory-slider"
-            default-value="{{plotInfo.memoryCount}}"
-            value="{{plotInfo.memoryCount}}"
-            label="{{false}}"
-            step="{{1}}"
-            bind:change="onMemoryChange"
-          />
-        </view>
+        <memory-display 
+          currentMemory="{{plotInfo.memoryCount}}"
+          memoryOptions="{{memoryOptions}}"
+        />
       </view>
 
       <!-- 其他功能设置 -->

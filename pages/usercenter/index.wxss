@@ -212,3 +212,26 @@ page {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+.role-empty-state {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80rpx 32rpx;
+  color: #999;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #ddd;
+  margin-top: 24rpx;
+}
+
+.empty-desc {
+  font-size: 24rpx;
+  color: #999;
+  margin-top: 12rpx;
+}

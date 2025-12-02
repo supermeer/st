@@ -1,0 +1,9 @@
+<view class="memory-card memory-card-{{selectedIndex}}">
+  <view class="memory-card-content">
+    <view class="memory-card-top">
+      <view class="memory-card-label">{{selectedOption.label || '记忆'}}</view>
+      <!-- <view class="memory-card-value">{{currentMemory}}</view> -->
+    </view>
+    <view class="memory-card-description">{{selectedOption.description || ''}}</view>
+  </view>
+</view>

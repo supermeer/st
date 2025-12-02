@@ -1,6 +1,6 @@
 import SystemInfo from '../../../utils/system'
 import { getCharacterDetail, getStoryDetail } from '../../../services/role/index'
-import { getPlotDetail, updatePlot } from '../../../services/ai/chat'
+import { getPlotDetail, updatePlot, getMemoryType } from '../../../services/ai/chat'
 Page({
   /**
    * 页面的初始数据
@@ -52,7 +52,8 @@ Page({
     identityDisplay: '',
     currentBg: '',
     // 记忆力说明遮罩层
-    showMemoryDescOverlay: false
+    showMemoryDescOverlay: false,
+    memoryOptions: []
   },
 
   // 防抖定时器（记忆力滑块）
@@ -78,8 +79,9 @@ Page({
     })
   },
 
-  onShow() {
+  async onShow() {
     if (this.data.roleInfo.id) {
+      await this.getMemoryType()
       this.loadRoleDetail(this.data.roleInfo.id)
     }
   },
@@ -154,6 +156,13 @@ Page({
       }
     })
   },
+  getMemoryType() {
+    return getMemoryType().then(res => {
+      this.setData({
+        memoryOptions: res || []
+      })
+    })
+  },
   onTabChange(event) {
     const tab = event.currentTarget.dataset.tab
     if (tab == 3) {
@@ -176,7 +185,7 @@ Page({
     })
   },
 
-  onMemorySetting() {
+  async onMemorySetting() {
     if (!this.data.plotInfo.id) {
       wx.showToast({
         title: '请先选择剧情',
@@ -187,8 +196,10 @@ Page({
     const memorySheet = this.selectComponent('#memorySheet')
     if (memorySheet) {
       memorySheet.show({
-        selectedId: this.data.plotInfo.memoryOptionId,
-        onConfirm: async (selectedOption) => {
+        currentCount: this.data.plotInfo.memoryCount,
+        plotId: this.data.plotInfo.id,
+        memoryOptions: [...this.data.memoryOptions],
+        onConfirm: async (count) => {
           try {
             wx.showLoading({
               title: '保存中...',
@@ -196,10 +207,10 @@ Page({
             })
             await updatePlot({
               id: this.data.plotInfo.id,
-              memoryOptionId: selectedOption.id
+              memoryCount: count
             })
             this.setData({
-              'plotInfo.memoryOptionId': selectedOption.id
+              'plotInfo.memoryCount': count
             })
             wx.hideLoading()
             wx.showToast({

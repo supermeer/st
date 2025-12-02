@@ -39,6 +39,12 @@
   padding-bottom: 16rpx;
   margin-left: auto;
   color: var(--yellow-btn-color);
+  display: flex;
+  align-items: center;
+}
+
+.chat-setting-icon {
+  color: var(--yellow-btn-color);
 }
 
 .role-name-section {
@@ -172,32 +178,14 @@
 .section-title-icon {
   color: #fff;
 }
-.memory-content {
+
+.plot-content {
   font-size: 28rpx;
   color: #fff;
   line-height: 2.5;
   text-align: justify;
   padding: 24rpx;
   border-radius: 16rpx;
-}
-
-.memory-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 16rpx;
-}
-
-.memory-label {
-  font-size: 28rpx;
-  font-weight: 500;
-  color: #fff;
-}
-
-.memory-value {
-  font-size: 28rpx;
-  font-weight: bold;
-  color: #fff;
 }
 .setting-block {
   border-radius: 16rpx;
@@ -239,15 +227,6 @@
   font-size: 24rpx;
   color: #ddd;
   margin-left: 12rpx;
-}
-
-
-.memory-slider {
- margin-bottom: 24rpx;
- --td-slider-bar-height: 24rpx;
- --td-slider-default-color: rgba(0, 0, 0, 0.3);
- --td-slider-active-color: rgba(255,255,255, 0.5);
- --td-slider-text-color: #fff;
 }
 
 .style-content {
