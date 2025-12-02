@@ -5,7 +5,8 @@
   "usingComponents": {
     "t-image": "tdesign-miniprogram/image/image",
     "t-icon": "tdesign-miniprogram/icon/icon",
-    "custom-nav": "/components/custom-nav/index"
+    "custom-nav": "/components/custom-nav/index",
+    "recharge-result-dialog": "/components/recharge-result-dialog/index"
   }
 }
 

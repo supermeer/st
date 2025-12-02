@@ -1,18 +1,11 @@
 import userStore from '../../store/user'
-import { createOrderAndPrepay } from '../../services/order/index'
+import { createOrderAndPrepay, getPricingPlan } from '../../services/order/index'
 
 Page({
   data: {
     expireDate: '2025.04.12',
-    selectedIndex: 2,
-    plans: [
-      { points: 600, price: 6 },
-      { points: 3000, price: 30 },
-      { points: 6000, price: 60 },
-      { points: 10000, price: 100 },
-      { points: 30000, price: 300 },
-      { points: 50000, price: 500 }
-    ]
+    selectedIndex: -1,
+    plans: []
   },
 
   onLoad() {
@@ -21,11 +14,27 @@ Page({
 
   onShow() {
     userStore.refreshPointInfo()
+    this.getPricingPlan()
   },
 
   selectPlan(e) {
     const { index } = e.currentTarget.dataset
     this.setData({ selectedIndex: index })
+  },
+
+  getPricingPlan() {
+    getPricingPlan({
+      type: 1
+    })
+      .then((res) => {
+        this.setData({ plans: (res || []).map(item => ({
+          ...item,
+          price: ((item.amountInFen || 0) / 100.0).toFixed(1)
+        })) })
+      })
+      .catch((err) => {
+        console.error(err)
+      })
   },
 
   handleRecharge() {
@@ -55,9 +64,9 @@ Page({
           ...res,
           success: () => {
             wx.hideLoading()
-            wx.showToast({
-              title: '支付成功',
-              icon: 'success'
+            this.showRechargeResultDialog({
+              orderNumber: res.orderNumber,
+              points: plan.point
             })
           },
           fail: () => {
@@ -80,7 +89,7 @@ Page({
 
   handleAgreementTap() {
     wx.navigateTo({
-      url: '/pages/common/agreement/index'
+      url: '/pages/common/agreement/index?type=1'
     })
   },
 
@@ -88,6 +97,18 @@ Page({
     wx.navigateTo({
       url: '/pages/points/detail/index'
     })
+  },
+
+  showRechargeResultDialog(options) {
+    const dialog = this.selectComponent('#rechargeResultDialog')
+    if (dialog) {
+      dialog.show(options)
+    }
+  },
+
+  onDialogClose() {
+    userStore.refreshPointInfo()
+    // wx.navigateBack()
   }
 })
 

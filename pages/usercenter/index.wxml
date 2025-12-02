@@ -8,6 +8,9 @@
   >
     <t-image slot="center" src="/static/usercenter/mine_nav.jpg" width="112rpx" height="44rpx" />
   </custom-nav>
+  
+  <t-button class="open-vip-btn" bind:tap="onPointsRechargeClick">积分充值</t-button>
+  
   <view class="usercenter-content">
     <view class="user-info" bindtap="onUserInfoClick">
       <t-image class="user-info-avatar" src="/static/avatar.jpg" />

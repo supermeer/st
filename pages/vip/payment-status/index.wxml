@@ -24,12 +24,12 @@
 
       
       <!-- 提示信息 -->
-      <view class="payment-tips">过程中，有任何问题，可添联系客服。</view>
+      <!-- <view class="payment-tips">过程中，有任何问题，可添联系客服。</view> -->
     </view>
     <view wx:if="{{paymentInfo.status === 1}}" class="home-button" bindtap="goBack">继续体验</view>
     
     <!-- 添加客服微信按钮 -->
-    <view class="contact-button blur-glass" bindtap="contactCustomerService">联系客服</view>
+    <!-- <view class="contact-button blur-glass" bindtap="contactCustomerService">联系客服</view> -->
   </view>
 </view>
 

@@ -77,7 +77,7 @@ Page({
   // 协议点击
   onRechargeAgreement() {
     wx.navigateTo({
-      url: '/pages/common/agreement/index'
+      url: '/pages/common/agreement/index?type=1'
     })
   }
 })

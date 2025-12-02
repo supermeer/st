@@ -29,7 +29,7 @@ Component({
       this.clearPollingTimer()
       this.setData({
         visible: true,
-        status: 1,
+        status: 0,
         orderNumber,
         points
       })
@@ -55,7 +55,10 @@ Component({
         .then((res) => {
           this.handleResponse(res)
         })
-        .catch(() => {})
+        .catch((err) => {
+          this.clearPollingTimer()
+          this.setData({ status: 2 })
+        })
     },
     handleResponse(res) {
       if (res === 1) {

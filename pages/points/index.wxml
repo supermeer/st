@@ -21,7 +21,7 @@
       <view class="points-summary-left">
         <t-image class="points-summary-icon" src="/static/vip/score.png" mode="aspectFit" />
         <view class="points-summary-info">
-          <view class="points-summary-value">{{pointInfo.pointBalance || 0}}</view>
+          <view class="points-summary-value">{{(pointInfo.pointBalance || 0) + (pointInfo.dailyFreeBalance || 0)}}</view>
           <!-- <view class="points-summary-expire">今日赠送积分剩余：{{pointInfo.dailyFreeBalance || 0}}</view> -->
         </view>
       </view>
@@ -43,7 +43,7 @@
             src="{{index === selectedIndex ? '/static/vip/score_s.png' : '/static/vip/score.png'}}"
             mode="aspectFit"
           />
-          <text class="plan-points-num">{{item.points}}</text>
+          <text class="plan-points-num">{{item.point}}</text>
         </view>
         <view class="plan-price">￥{{item.price}}</view>
       </view>
@@ -67,4 +67,9 @@
       <text class="agreement-link">《会员服务协议》</text>
     </view>
   </view>
+
+  <recharge-result-dialog
+    id="rechargeResultDialog"
+    bind:close="onDialogClose"
+  />
 </view>
