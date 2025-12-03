@@ -130,3 +130,10 @@
   <!-- 记忆力说明遮罩层 -->
   <memory-desc-overlay show="{{ showMemoryDescOverlay }}" bind:close="onCloseMemoryDesc" />
 </view>
+
+<image-uploader
+  visible="{{showUploader}}"
+  bind:success="onUploadSuccess"
+  bind:fail="onUploadFail"
+  bind:cancel="onUploadCancel"
+/>

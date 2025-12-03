@@ -26,38 +26,6 @@ Page({
     isLogin: false,
     pageInfo: {},
     paddingBtm: 0,
-    backgrounds: [
-      {
-        id: 1,
-        name: '背景1',
-        image: 'https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/order_bg.png'
-      },
-      {
-        id: 2,
-        name: '背景2',
-        image: 'https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/order_bg.png'
-      },
-      {
-        id: 3,
-        name: '背景3',
-        image: 'https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/order_bg.png'
-      },
-      {
-        id: 4,
-        name: '背景4',
-        image: 'https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/order_bg.png'
-      },
-      {
-        id: 5,
-        name: '背景5',
-        image: 'https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/order_bg.png'
-      },
-      {
-        id: 6,
-        name: '背景6',
-        image: 'https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/order_bg.png'
-      },
-    ],
     roleForm: {
       id: null,
       type: '',
@@ -105,6 +73,7 @@ Page({
   getHomePlotMessage() {
     getHomePlotMessage().then(res => {
       if (res.plotId && this.data.roleForm.plotId === res.plotId) {
+
         return
       }
       this.setData({

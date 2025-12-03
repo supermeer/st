@@ -1,6 +1,6 @@
 <view class="role-add-page">
   <!-- 固定背景图 -->
-  <!-- <image class="page-bg" src="https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/chat_bg.png" mode="aspectFill"></image> -->
+  <image class="page-bg" src="{{currentBg}}" mode="aspectFill"></image>
   
   <!-- 固定顶部导航栏 -->
   <custom-nav title="" showBack="{{true}}" showHome="{{false}}" transparent="{{true}}" />
@@ -182,6 +182,11 @@
   
   <!-- 背景选择弹窗 -->
   <background-sheet id="backgroundSheet" />
+  <image-uploader
+    visible="{{showUploader}}"
+    bind:success="onUploadSuccess"
+    bind:fail="onUploadFail"
+    bind:cancel="onUploadCancel"
+  />
 </view>
 <tip-dialog id="tip-dialog" />
-

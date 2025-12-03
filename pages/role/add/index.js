@@ -28,7 +28,9 @@ Page({
       id: null,
       name: ''
     },
-    genderList: ['男', '女', '其他']
+    genderList: ['男', '女', '其他'],
+    currentBg: '',
+    showUploader: false
   },
 
   /**
@@ -143,28 +145,51 @@ Page({
    * 聊天背景
    */
   onChatBackground() {
-    const backgroundSheet = this.selectComponent('#backgroundSheet')
-    if (backgroundSheet) {
-      backgroundSheet.show({
-        title: '聊天背景',
-        // cancelText: '创建专属背景',
-        confirmText: '设为背景',
-        backgrounds: [],
-        selectedId: this.data.formData.chatBackground,
-        onConfirm: (background) => {
-          if (background) {
-            this.setData({
-              'formData.chatBackground': background.id
-            })
-          }
-        },
-        onCancel: () => {
-          // wx.navigateTo({
-          //   url: '/pages/common/pic-generate/index'
-          // })
-        }
-      })
-    }
+    this.setData({
+      showUploader: true
+    })
+    // const backgroundSheet = this.selectComponent('#backgroundSheet')
+    // if (backgroundSheet) {
+    //   backgroundSheet.show({
+    //     title: '聊天背景',
+    //     // cancelText: '创建专属背景',
+    //     confirmText: '设为背景',
+    //     backgrounds: [],
+    //     selectedId: this.data.formData.chatBackground,
+    //     onConfirm: (background) => {
+    //       if (background) {
+    //         this.setData({
+    //           'formData.chatBackground': background.id
+    //         })
+    //       }
+    //     },
+    //     onCancel: () => {
+    //       // wx.navigateTo({
+    //       //   url: '/pages/common/pic-generate/index'
+    //       // })
+    //     }
+    //   })
+    // }
+  },
+
+  async onUploadSuccess(e) {
+    const { tempFilePath, signature } = e.detail
+
+    this.setData({
+      showUploader: false,
+      currentBg: tempFilePath,
+      'formData.defaultBackgroundImage': signature && signature.uploadUrl ? signature.uploadUrl : this.data.formData.defaultBackgroundImage
+    })
+  },
+
+  onUploadFail(e) {
+    const { message } = e
+    wx.showToast({ title: message, icon: 'none' })
+    this.setData({ showUploader: false })
+  },
+
+  onUploadCancel() {
+    this.setData({ showUploader: false })
   },
 
   /**
@@ -203,7 +228,10 @@ Page({
       mask: true
     })
     
-    createCharacter({...formData, description: formData.description || formData.descriptionPrompt}).then(id => {
+    createCharacter({
+      ...formData,
+      description: formData.description || formData.descriptionPrompt
+    }).then(id => {
       wx.hideLoading()
       wx.showToast({
         title: '创建成功',

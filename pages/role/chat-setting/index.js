@@ -47,23 +47,8 @@ Page({
       image: 'https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/chat_bg.png'
     },
     // 背景列表
-    backgroundList: [
-      {
-        id: 'default',
-        name: '默认背景',
-        image: 'https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/chat_bg.png'
-      },
-      {
-        id: 'bg1',
-        name: '星空',
-        image: 'https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/chat_bg.png'
-      },
-      {
-        id: 'bg2',
-        name: '森林',
-        image: 'https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/chat_bg.png'
-      }
-    ],
+    backgroundList: [],
+    showUploader: false,
     // 记忆力说明遮罩层
     showMemoryDescOverlay: false,
     // 记忆选项列表
@@ -327,29 +312,60 @@ Page({
    * 选择聊天背景
    */
   onSelectBackground() {
-    const backgroundSheet = this.selectComponent('#backgroundSheet')
-    if (backgroundSheet) {
-      backgroundSheet.show({
-        title: '聊天背景',
-        // cancelText: '创建专属背景',
-        confirmText: '设为背景',
-        backgrounds: this.data.backgroundList,
-        selectedId: this.data.chatBackground.id,
-        onConfirm: (background) => {
-          if (background) {
-            this.setData({
-              chatBackground: background
-            })
-            this.saveChatSettings()
-          }
-        },
-        onCancel: () => {
-          // wx.navigateTo({
-          //   url: '/pages/common/pic-generate/index'
-          // })
-        }
-      })
-    }
+
+    this.setData({
+      showUploader: true
+    })
+
+
+    // const backgroundSheet = this.selectComponent('#backgroundSheet')
+    // if (backgroundSheet) {
+    //   backgroundSheet.show({
+    //     title: '聊天背景',
+    //     // cancelText: '创建专属背景',
+    //     confirmText: '设为背景',
+    //     backgrounds: this.data.backgroundList,
+    //     selectedId: this.data.chatBackground.id,
+    //     onConfirm: (background) => {
+    //       if (background) {
+    //         this.setData({
+    //           chatBackground: background
+    //         })
+    //         this.saveChatSettings()
+    //       }
+    //     },
+    //     onCancel: () => {
+    //       // wx.navigateTo({
+    //       //   url: '/pages/common/pic-generate/index'
+    //       // })
+    //     }
+    //   })
+    // }
+  },
+
+  async onUploadSuccess(e) {
+    const { tempFilePath, signature } = e.detail
+    
+    this.setData({
+      showUploader: false
+    })
+    await updatePlot({
+      id: this.data.plotInfo.id,
+      backgroundImage: signature.uploadUrl
+    })
+    this.setData({
+      currentBg: tempFilePath
+    })
+  },
+
+  onUploadFail(e) {
+    const { message } = e
+    wx.showToast({ title: message, icon: 'none' })
+    this.setData({ showUploader: false })
+  },
+
+  onUploadCancel() {
+    this.setData({ showUploader: false })
   },
 
   /**

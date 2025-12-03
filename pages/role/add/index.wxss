@@ -7,6 +7,17 @@
   background: #000;
 }
 
+/* 固定背景图 */
+.page-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 0;
+  object-fit: cover;
+}
+
 /* 可滚动内容区域 */
 .scroll-content {
   position: relative;

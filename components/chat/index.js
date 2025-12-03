@@ -22,6 +22,7 @@ Component({
   },
   pageLifetimes: {
     show() {
+      this.getRoleInfo()
       // 当前所在页面每次显示时都会触发
       // 1. 重置键盘高度相关状态，避免沿用上一次的高度
       this.setData({
