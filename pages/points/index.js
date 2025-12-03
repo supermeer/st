@@ -27,10 +27,13 @@ Page({
       type: 1
     })
       .then((res) => {
-        this.setData({ plans: (res || []).map(item => ({
-          ...item,
-          price: ((item.amountInFen || 0) / 100.0).toFixed(1)
-        })) })
+        this.setData({
+          plans: (res || []).map(item => ({
+            ...item,
+            price: ((item.amountInFen || 0) / 100.0).toFixed(1)
+          })),
+          selectedIndex: 0
+        })
       })
       .catch((err) => {
         console.error(err)

@@ -1,4 +1,7 @@
 /* pages/role/role-detail/index.wxss */
+page {
+  background-color: #000;
+}
 .role-detail-page {
   position: relative;
   width: 100%;
