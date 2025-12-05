@@ -45,7 +45,7 @@
         <view class="section-title-container">
           <view class="section-title">TA的设定</view>
         </view>
-        <view class="section-content blur-glass">
+        <view class="section-content like-blur-glass">
           <text>{{descriptionDisplay || roleInfo.description || '暂无描述'}}</text>
           <text wx:if="{{descriptionNeedFold}}" class="fold-toggle" bind:tap="toggleDescription">
             {{descriptionExpanded ? '收起 ▴' : '展开 ▾'}}
@@ -55,8 +55,8 @@
         <view class="section-title-container">
           <view class="section-title">开场白</view>
         </view>
-        <view class="section-content blur-glass">
-          <text>{{prologueDisplay || storyInfo.prologue || '你好，很高兴认识你！'}}</text>
+        <view class="section-content like-blur-glass">
+          <text>{{prologueDisplay || storyInfo.prologue || '暂无'}}</text>
           <text wx:if="{{prologueNeedFold}}" class="fold-toggle" bind:tap="togglePrologue">
             {{prologueExpanded ? '收起 ▴' : '展开 ▾'}}
           </text>
@@ -66,7 +66,7 @@
           <view class="section-title">对话风格</view>
           <t-icon wx:if="{{plotInfo.id}}" name="add-circle-filled" class="section-title-icon" size="18" />
         </view>
-        <view class="style-content blur-glass" bind:tap="onChatStyle">
+        <view class="style-content like-blur-glass" bind:tap="onChatStyle">
           <text>{{plotInfo.chatStyle.title || '默认风格'}}</text>
           <view wx:if="{{plotInfo.id}}" class="style-right-content">
             <text class="style-right-text">选择风格</text>
@@ -79,14 +79,14 @@
           <view class="section-title">当前剧情</view>
           <t-icon name="chevron-right-s" class="section-title-icon" size="24" />
         </view>
-        <view class="plot-content blur-glass">
+        <view class="plot-content like-blur-glass">
           <text>{{ plotInfo.id ? plotInfo.title : '暂无'}}</text>
         </view>
         <view class="section-title-container" bind:tap="onMySetting">
           <view class="section-title">我的设定</view>
           <t-icon wx:if="{{plotInfo.id}}" name="chevron-right-s" class="section-title-icon" size="24" />
         </view>
-        <view class="setting-block blur-glass">
+        <view class="setting-block like-blur-glass">
           <view class="setting-row">
             <view class="setting-item-inline">
               <text class="setting-item-title">对我的称呼</text>

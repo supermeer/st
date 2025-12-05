@@ -198,25 +198,37 @@ Component({
     // 处理滚动状态（渐变效果 + 用户滚动检测）
     _handleScrollState(scrollTop, scrollHeight) {
       const viewHeight = this._scrollViewHeight || 500
-      const distanceToBottom = scrollHeight - scrollTop - viewHeight
-      
-      // 根据滑动方向控制透明效果
-      const lastScrollTop = this._lastScrollTop || 0
-      const isScrollingUp = scrollTop > lastScrollTop // 向上滑动（内容向上移动，scrollTop增加）
-      const isScrollingDown = scrollTop < lastScrollTop // 向下滑动
-      
-      // 只在有明显滑动时判断（避免微小抖动）
-      if (Math.abs(scrollTop - lastScrollTop) > 5) {
-        if (isScrollingUp && !this.data.isScrolledUp) {
-          // 向上滑动 → 显示透明效果
-          this.setData({ isScrolledUp: true })
-        } else if (isScrollingDown && this.data.isScrolledUp && distanceToBottom > 10) {
-          // 向下滑动且不在底部 → 取消透明效果
+      const isScrollable = scrollHeight > viewHeight + 1
+      if (!isScrollable) {
+        if (this.data.isScrolledUp) {
           this.setData({ isScrolledUp: false })
         }
-        // 滑到底部时不做处理，保持当前状态
+        this._lastScrollTop = scrollTop
+        return
       }
-      
+
+      const lastScrollTop = typeof this._lastScrollTop === 'number' ? this._lastScrollTop : scrollTop
+      const delta = scrollTop - lastScrollTop
+
+      // 顶部阈值内：不显示渐隐
+      if (scrollTop <= 8) {
+        if (this.data.isScrolledUp) {
+          this.setData({ isScrolledUp: false })
+        }
+      } else if (Math.abs(delta) > 5) {
+        if (delta > 0) {
+          // 手势上滑（内容上移）→ 显示顶部渐隐
+          if (!this.data.isScrolledUp) {
+            this.setData({ isScrolledUp: true })
+          }
+        } else {
+          // 手势下滑（内容下移）→ 取消顶部渐隐，保证“全部显示”的效果
+          if (this.data.isScrolledUp) {
+            this.setData({ isScrolledUp: false })
+          }
+        }
+      }
+
       this._lastScrollTop = scrollTop
       
       // 如果是程序自动滚动，不检测用户滚动
