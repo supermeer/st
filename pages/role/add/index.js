@@ -178,7 +178,7 @@ Page({
     this.setData({
       showUploader: false,
       currentBg: tempFilePath,
-      'formData.defaultBackgroundImage': signature && signature.uploadUrl ? signature.uploadUrl : this.data.formData.defaultBackgroundImage
+      'formData.defaultBackgroundImage': signature && signature.uploadUrl ? signature.uploadUrl.split('?')[0] : this.data.formData.defaultBackgroundImage
     })
   },
 
@@ -207,7 +207,7 @@ Page({
       return
     }
     
-    if (!formData.descriptionPrompt) {
+    if (!formData.descriptionPrompt ) {
       wx.showToast({
         title: '请输入角色描述',
         icon: 'none'

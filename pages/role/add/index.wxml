@@ -62,7 +62,7 @@
           </view>
         </view>
         
-        <view class="form-item textarea-item">
+        <view wx:if="{{isDev}}" class="form-item textarea-item">
           <view class="form-label">
             <text class="label-required">*</text>
             <text>角色概述</text>
@@ -80,7 +80,7 @@
         </view>
 
         <!-- 角色描述 -->
-        <view wx:if="{{isDev}}" class="form-item textarea-item">
+        <view class="form-item textarea-item">
           <view class="form-label">
             <text class="label-required">*</text>
             <text>角色描述</text>
@@ -184,6 +184,7 @@
   <background-sheet id="backgroundSheet" />
   <image-uploader
     visible="{{showUploader}}"
+    isPublic="true"
     bind:success="onUploadSuccess"
     bind:fail="onUploadFail"
     bind:cancel="onUploadCancel"
