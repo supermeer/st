@@ -9,10 +9,10 @@
         <view class="user-info">
           <t-image class="avatar" src="{{userAvatar}}" mode="aspectFill"></t-image>
           <view class="user-meta">
-            <view class="user-name">{{userName}}</view>
+            <view class="user-name">{{userInfo.nickname}}</view>
             <view class="user-score">
               <t-image class="points-icon" src="/static/vip/score.png"></t-image>
-              <text class="points-text">{{remainPoints || 0}}</text>
+              <text class="points-text">{{pointInfo.pointBalance || 0}}</text>
             </view>
           </view>
         </view>

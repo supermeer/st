@@ -119,3 +119,8 @@
 <tip-dialog id="tip-dialog" />
 <input-sheet id="input-sheet" />
 <select-sheet id="select-sheet" />
+
+
+<points-recharge-dialog
+  id="pointsRechargeDialog"
+/>

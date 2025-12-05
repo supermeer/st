@@ -136,4 +136,5 @@
   bind:success="onUploadSuccess"
   bind:fail="onUploadFail"
   bind:cancel="onUploadCancel"
+  isPublic="true"
 />

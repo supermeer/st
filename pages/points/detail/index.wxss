@@ -141,19 +141,23 @@ page {
 .item-right {
   flex-shrink: 0;
   margin-left: 24rpx;
+  display: flex;
+  align-items: center;
 }
 
+.amount-mark {
+  color: var(--theme-color);
+  font-size: 28rpx;
+  font-weight: bold;
+  margin-right: 12rpx;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 4rpx 8rpx;
+  border-radius: 8rpx;
+}
 .item-points {
-  font-size: 36rpx;
+  font-size: 40rpx;
   font-weight: 600;
-}
-
-.item-points.income {
   color: #fff;
-}
-
-.item-points.expense {
-  color: #a855f7;
 }
 
 /* 加载状态 */

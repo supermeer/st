@@ -14,7 +14,7 @@
       <t-image class="user-info-avatar" src="/static/avatar.jpg" />
       <view class="user-info-name">
         <text>{{userInfo.nickname || '小柚子'}}</text>
-        <view class="user-info-uid">UID:123321</view>
+        <!-- <view class="user-info-uid">UID:123321</view> -->
       </view>
       <t-icon class="user-info-arr" name="chevron-right" size="32" color="#fff" />
     </view>
@@ -28,8 +28,8 @@
       <view class="vip-box-left-content">
         <view class="vip-box-header">
           <t-image wx:if="{{!vipInfo.ifVip}}" class="vip-box-header-icon" src="/static/vip/vip.png"/>
-          <text class="vip-box-header-text">{{vipInfo.ifVip ? '星柚会员' : '开通会员'}}</text>
-          <t-button wx:if="{{!vipInfo.ifVip}}" class="open-vip-btn" bind:tap="onVipRenewClick">立即开通</t-button>
+          <text class="vip-box-header-text">{{vipInfo.ifVip ? '星柚会员' : (isDev ? '沉浸式体验' : '开通会员')}}</text>
+          <t-button wx:if="{{!vipInfo.ifVip && !isDev}}" class="open-vip-btn" bind:tap="onVipRenewClick">立即开通</t-button>
         </view>
         <view wx:if="{{vipInfo.ifVip}}" class="open-vip-btm-line">{{}}2026.10.12到期</view>
         <view wx:else class="open-vip-btm-line">无线畅聊 记忆增强 更多灵感回复</view>
@@ -63,9 +63,6 @@
 
 <points-recharge-dialog
   id="pointsRechargeDialog"
-  userAvatar="{{userInfo.avatar}}"
-  userName="{{userInfo.nickname || '小柚子'}}"
-  userLevel="{{vipInfo.level}}"
 />
 
 <t-toast id="t-toast" />

@@ -1,11 +1,12 @@
+import { formatTime } from "../../../utils/util"
+import { getCharacterPointDetail } from "../../../services/vip/index"
 Page({
   data: {
     roleInfo: {
       roleId: '',
       name: '',
       avatar: '',
-      dialogCount: 0,
-      totalPoints: 0
+      dialogCount: 0
     },
     consumeList: [],
     loading: false,
@@ -14,55 +15,106 @@ Page({
     pageSize: 20
   },
 
-  onLoad(options) {
-    const { roleId, roleName, dialogCount, totalPoints, avatar } = options
+  onLoad(options = {}) {
+    const {
+      roleId,
+      roleName,
+      avatar,
+      dialogCount
+    } = options
+
+    const parsedRoleId = roleId || ''
+    const initialRoleInfo = {
+      roleId: parsedRoleId,
+      name: roleName ? decodeURIComponent(roleName) : this.data.roleInfo.name,
+      avatar: avatar ? decodeURIComponent(avatar) : this.data.roleInfo.avatar,
+      dialogCount: dialogCount ? Number(dialogCount) || 0 : this.data.roleInfo.dialogCount
+    }
+
     this.setData({
       roleInfo: {
-        roleId: roleId || '',
-        name: decodeURIComponent(roleName || ''),
-        avatar: avatar ? decodeURIComponent(avatar) : '',
-        dialogCount: parseInt(dialogCount) || 0,
-        totalPoints: parseInt(totalPoints) || 0
+        ...this.data.roleInfo,
+        ...initialRoleInfo
       }
     })
-    this.loadData()
+
+    if (!parsedRoleId) {
+      console.warn('缺少角色ID，无法加载角色详情与积分明细')
+      return
+    }
+
+    this.loadData(1)
   },
 
-  loadData() {
-    const { roleInfo } = this.data
-    // TODO: 调用接口获取该角色的消耗明细
-    // 模拟数据
-    const mockList = [
-      { id: '1', title: '对话消耗', count: 1, points: 10, date: '2025.04.12 12:12' },
-      { id: '2', title: '对话消耗', count: 1, points: 20, date: '2025.04.12 12:12' },
-      { id: '3', title: '对话消耗', count: 1, points: 20, date: '2025.04.12 12:12' },
-      { id: '4', title: '对话消耗', count: 1, points: 20, date: '2025.04.12 12:12' },
-      { id: '5', title: '对话消耗', count: 1, points: 20, date: '2025.04.12 12:12' },
-      { id: '6', title: '对话消耗', count: 1, points: 20, date: '2025.04.12 12:12' },
-      { id: '7', title: '对话消耗', count: 1, points: 20, date: '2025.04.12 12:12' },
-      { id: '8', title: '对话消耗', count: 1, points: 20, date: '2025.04.12 12:12' },
-      { id: '9', title: '对话消耗', count: 1, points: 20, date: '2025.04.12 12:12' },
-      { id: '10', title: '对话消耗', count: 1, points: 20, date: '2025.04.12 12:12' },
-      { id: '11', title: '对话消耗', count: 1, points: 20, date: '2025.04.12 12:12' },
-      { id: '12', title: '对话消耗', count: 1, points: 20, date: '2025.04.12 12:12' },
-      { id: '13', title: '对话消耗', count: 1, points: 20, date: '2025.04.12 12:12' },
-      { id: '14', title: '对话消耗', count: 1, points: 20, date: '2025.04.12 12:12' },
-      { id: '15', title: '对话消耗', count: 1, points: 20, date: '2025.04.12 12:12' },
-      { id: '16', title: '对话消耗', count: 1, points: 20, date: '2025.04.12 12:12' },
-      { id: '17', title: '对话消耗', count: 1, points: 20, date: '2025.04.12 12:12' },
-      { id: '18', title: '对话消耗', count: 1, points: 20, date: '2025.04.12 12:12' },
-      { id: '19', title: '对话消耗', count: 1, points: 20, date: '2025.04.12 12:12' },
-      { id: '20', title: '对话消耗', count: 1, points: 20, date: '2025.04.12 12:12' },
-    ]
+  loadData(page = this.data.page || 1) {
+    const { roleInfo, pageSize } = this.data
+
+    if (!roleInfo.roleId) {
+      console.warn('缺少角色ID，无法获取积分明细')
+      return
+    }
+    const shouldReset = page === 1
 
     this.setData({
-      consumeList: mockList,
-      noMore: true
+      loading: true,
+      ...(shouldReset ? { consumeList: [], noMore: false } : {})
+    })
+
+    getCharacterPointDetail({
+      characterId: roleInfo.roleId,
+      current: page,
+      size: pageSize
+    }).then((res = {}) => {
+      const {
+        records = [],
+        current = page,
+        pages = 1,
+        total = 0
+      } = res
+
+      const formattedRecords = records.map((item = {}) => {
+        const date = item.createTime ? formatTime(item.createTime, 'YYYY.MM.DD HH:mm') : ''
+        return {
+          ...item,
+          date
+        }
+      })
+
+      const mergedList = shouldReset
+        ? formattedRecords
+        : [...this.data.consumeList, ...formattedRecords]
+      const noMore = current >= pages
+
+      const latestRecord = records[0] || {}
+      const roleInfo = {
+        ...this.data.roleInfo,
+        name: latestRecord.characterName,
+        avatar: latestRecord.backgroundImage,
+        dialogCount: total
+      }
+
+      this.setData({
+        consumeList: mergedList,
+        page: current,
+        noMore,
+        loading: false,
+        roleInfo
+      })
+    }).catch(err => {
+      wx.showToast({
+        title: typeof err === 'string' ? err : '加载失败，请稍后重试',
+        icon: 'none'
+      })
+      this.setData({
+        loading: false,
+        ...(shouldReset ? { consumeList: [] } : {})
+      })
     })
   },
 
   loadMore() {
-    if (this.data.loading || this.data.noMore) return
-    // TODO: 加载更多数据
+    const { loading, noMore, page } = this.data
+    if (loading || noMore) return
+    this.loadData(page + 1)
   }
 })

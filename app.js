@@ -1,5 +1,5 @@
 import updateManager from './common/updateManager'
-import request from './services/request/http'
+import { config } from "./config/index"
 import userStore from './store/user'
 // app.js（App() 外部）
 const originalPage = Page
@@ -74,10 +74,14 @@ App({
       }, 300);
     }
     const accountInfo = wx.getAccountInfoSync();
-    wx.setStorageSync('aE', accountInfo.miniProgram.envVersion === 'release' ? '1' : '0')
-    // wx.navigateTo({
-    //   url: '/pages/contentadd/index'
-    // })
+    let aE = 0
+    if (accountInfo.miniProgram.envVersion === 'release') {
+      aE = 1
+    }
+    if (config.baseUrl === 'http://192.168.1.44:9000') {
+      aE = 1
+    }
+    wx.setStorageSync('aE', aE)
   },
   // 获取导航栏高度
   getNavHeight() {

@@ -2,11 +2,18 @@ import userStore from '../../store/user'
 import { getCharacterList, getCurrentPlotByCharacterId } from '../../services/role/index'
 Page({
   data: {
-    roleList: []
+    roleList: [],
+    isDev: false
   },
 
   onLoad() {
     userStore.bind(this)
+    const ev = wx.getStorageSync('aE')
+    if (ev == '0') {
+      this.setData({
+        isDev: true
+      })
+    }
   },
 
   onShow() {
@@ -49,6 +56,7 @@ Page({
   },
 
   onScoreClick() {
+    if (this.data.isDev) return
     wx.navigateTo({
       url: '/pages/points/index'
     })

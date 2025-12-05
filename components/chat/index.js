@@ -336,7 +336,7 @@ Component({
           }
           
           this.setData({
-            msgList: [...this.data.msgList, defaultMsg],
+            msgList: defaultMsg.content ? [defaultMsg] : [],
             sceneNeedFold: needFold,
             sceneDisplay: display
           })
@@ -524,6 +524,20 @@ Component({
             this.setData({
               msgList: [...this.data.msgList.slice(0, -1)]
             })
+          }
+          if (err && err.code === 402) {
+            const ev = wx.getStorageSync('aE')
+            if (ev == '0') {
+              wx.showToast({
+                title: '能量不足，明天再来吧！',
+                icon: 'none'
+              })
+            } else {
+              const dialog = this.selectComponent('#pointsRechargeDialog')
+              if (dialog) {
+                dialog.show()
+              }
+            }
           }
         })
 

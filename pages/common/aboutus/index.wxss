@@ -34,11 +34,18 @@ page {
   margin-top: 20rpx;
   border-radius: 24rpx;
   padding: 0 32rpx;
-  color: #fff;
+  color: #aaa;
 }
 
 .aboutus-item:active {
   background-color: #222;
+}
+
+.aboutus-header .aboutus-item-title {
+  font-size: 24rpx;
+  color: #fff;
+  margin-top: 30rpx;
+  font-weight: bold;
 }
 
 .aboutus-item-title {

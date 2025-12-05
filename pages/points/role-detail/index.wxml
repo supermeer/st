@@ -35,13 +35,13 @@
     >
       <view class="consume-left">
         <view class="consume-title-row">
-          <text class="consume-title">{{item.title}}</text>
-          <text class="consume-count">+{{item.count}}</text>
+          <text class="consume-title">对话消耗</text>
+          <text class="consume-count">+1</text>
         </view>
         <text class="consume-date">{{item.date}}</text>
       </view>
       <view class="consume-right">
-        <text class="consume-points">-{{item.points}}</text>
+        <text class="consume-points">-{{item.changeAmount}}</text>
       </view>
     </view>
 

@@ -26,8 +26,10 @@
     <view class="benefits-card blur-glass">
       <view class="benefits-title">开通会员，解锁高级权益</view>
       <view class="benefits-list">
-        <view class="benefit-item">无限畅聊</view>
-        <view class="benefit-item">记忆增强</view>
+        <!-- <view class="benefit-item">无限畅聊</view>
+        <view class="benefit-item">记忆增强</view> -->
+        <view class="benefit-item">更多剧情</view>
+        <view class="benefit-item">更多灵感</view>
         <view class="benefit-item">更多沉浸式体验</view>
       </view>
     </view>
@@ -45,25 +47,10 @@
         </view>
       </view>
       <view class="table-body">
-        <view class="table-row">
-          <view class="table-cell cell-label">图片生成</view>
-          <view class="table-cell cell-value">{{quotaInfo.imageGenCurrent || 40}}</view>
-          <view class="table-cell cell-value cell-member">{{quotaInfo.imageGenMember || 80}}</view>
-        </view>
-        <view class="table-row">
-          <view class="table-cell cell-label">视频1.0生成</view>
-          <view class="table-cell cell-value">{{quotaInfo.video1Current || 10}}</view>
-          <view class="table-cell cell-value cell-member">{{quotaInfo.video1Member || 20}}</view>
-        </view>
-        <view class="table-row">
-          <view class="table-cell cell-label">视频2.0生成</view>
-          <view class="table-cell cell-value">{{quotaInfo.video2Current || 5}}</view>
-          <view class="table-cell cell-value cell-member">{{quotaInfo.video2Member || 7}}</view>
-        </view>
-        <view class="table-row">
-          <view class="table-cell cell-label">无水印下载</view>
-          <view class="table-cell cell-value">-</view>
-          <view class="table-cell cell-value cell-member">{{quotaInfo.downloadMember || 4}}</view>
+        <view wx:for="{{selectedPackage.benefitInfo}}" wx:key="index" class="table-row">
+          <view class="table-cell cell-label">{{item.name}}</view>
+          <view class="table-cell cell-value">{{item.normal}}</view>
+          <view class="table-cell cell-value cell-member">{{item.vip}}</view>
         </view>
       </view>
     </view>

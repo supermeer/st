@@ -351,7 +351,7 @@ Page({
     })
     await updatePlot({
       id: this.data.plotInfo.id,
-      backgroundImage: signature.uploadUrl
+      backgroundImage: signature.uploadUrl.split('?')[0]
     })
     this.setData({
       currentBg: tempFilePath

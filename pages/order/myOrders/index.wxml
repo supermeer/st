@@ -1,15 +1,11 @@
-<view class="orders-container" style="background-image: url('https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/page_bg_1.png'); background-size: 100% 100%; background-repeat: no-repeat; background-position: center;">
+<view class="orders-container">
   <!-- 自定义导航栏 -->
   <custom-nav
-    class="nav-container"
-    title="我的订单" 
+    class="custom-nav"
+    title=""
     showBack="{{true}}"
-    showHome="{{false}}"
-    transparent="{{true}}"
-    bgColor="#ffffff"
-    bind:back="onBackClick"
-    bind:home="onHomeClick"
-  />
+    showHome="{{false}}">
+  </custom-nav>
 
   <!-- 内容区域 -->
   <view class="content-container">

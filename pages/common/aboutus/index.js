@@ -5,9 +5,23 @@ Page({
   data: {
     itemList: [
       {
+        header: true,
+        title: '我的',
+      },
+      {
         title: '全局设定',
         desc: '设置您的全局设定',
         url: '/pages/role/my-setting/index?isGlobal=true'
+      },
+      {
+        title: '我的订单',
+        desc: '',
+        url: '/pages/order/myOrders/index'
+      },
+
+      {
+        header: true,
+        title: '关于我们',
       },
       {
         title: '隐私协议',

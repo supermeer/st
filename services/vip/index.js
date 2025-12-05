@@ -4,6 +4,10 @@ export function getMyPointInfo() {
   return request.get('/api/v1/user/vip/getMyPointInfo')
 }
 
-export function getMyPointDetails() {
-  return request.get('/api/v1/user/vip/getMyPointDetails')
+export function getMyPointDetails(params) {
+  return request.get('/api/v1/user/vip/getMyPointDetails', params)
+}
+
+export function getCharacterPointDetail(params) {
+  return request.get('/api/v1/user/vip/getCharacterPointDetail', params)
 }

@@ -21,6 +21,12 @@ Component({
     selectedIndex: 0,
     plans: []
   },
+  lifetimes: {
+    attached() {
+      userStore.bindTo(this, 'pointsRechargeDialog')
+      userStore.initFromLocal()
+    }
+  },
   methods: {
     show(options = {}) {
       this.setData({ visible: true, selectedIndex: 0 })

@@ -45,7 +45,7 @@ module.exports.formatPoints = function(points) {
     bindscrolltolower="loadMore"
   >
     <view
-      wx:for="{{filteredList}}"
+      wx:for="{{list}}"
       wx:key="id"
       class="detail-item"
       bindtap="onItemTap"
@@ -53,7 +53,9 @@ module.exports.formatPoints = function(points) {
     >
       <view class="item-left">
         <view class="item-title-row">
-          <text class="item-title">{{item.title}}</text>
+          <text wx:if="{{item.characterName}}" class="item-title">{{item.characterName}}</text>
+          <text wx:if="{{item.changeType == 1 && item.sourceType == 1}}" class="item-title">积分充值</text>
+          <text wx:if="{{item.changeType == 1 && item.sourceType == 2}}" class="item-title">会员赠送</text>
           <image
             wx:if="{{item.type === 'role'}}"
             class="item-icon"
@@ -61,22 +63,23 @@ module.exports.formatPoints = function(points) {
             mode="aspectFit"
           />
         </view>
-        <text class="item-date">{{item.date}}</text>
+        <text class="item-date">{{item.formattedTime}}</text>
       </view>
       <view class="item-right">
-        <text class="item-points {{item.points > 0 ? 'income' : 'expense'}}">
-          {{filter.formatPoints(item.points)}}
-        </text>
+        <view wx:if="{item.characterName}" class="amount-mark">总</view>
+        <view class="item-points">
+          {{item.changeType == 1 ? '+' : '-'}}{{item.changeAmount}}
+        </view>
       </view>
     </view>
 
     <view wx:if="{{loading}}" class="loading-more">
       <text>加载中...</text>
     </view>
-    <view wx:if="{{noMore && filteredList.length > 0}}" class="no-more">
+    <view wx:if="{{noMore && list.length > 0}}" class="no-more">
       <text>没有更多了</text>
     </view>
-    <view wx:if="{{filteredList.length === 0 && !loading}}" class="empty-list">
+    <view wx:if="{{list.length === 0 && !loading}}" class="empty-list">
       <text>暂无记录</text>
     </view>
   </scroll-view>

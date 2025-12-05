@@ -100,7 +100,7 @@ page {
 .consume-points {
   font-size: 36rpx;
   font-weight: 600;
-  color: #a855f7;
+  color: #fff;
 }
 
 /* 加载状态 */

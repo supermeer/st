@@ -1,4 +1,5 @@
 import SystemInfo from '../../../utils/system'
+import { formatTime } from '../../../utils/util'
 import { getMyPointDetails } from '../../../services/vip/index'
 Page({
   data: {
@@ -8,13 +9,13 @@ Page({
     },
     filterIndex: 0,
     filterOptions: [
-      { label: '全部', value: 'all' },
-      { label: '收入', value: 'income' },
-      { label: '支出', value: 'expense' }
+      { label: '全部', value: '' },
+      { label: '收入', value: '1' },
+      { label: '支出', value: '2' }
     ],
+    changeType: '',
     showDropdown: false,
     list: [],
-    filteredList: [],
     loading: false,
     noMore: false,
     current: 1,
@@ -38,61 +39,29 @@ Page({
     })
     getMyPointDetails({
       current: this.data.current,
-      size: this.data.size
+      size: this.data.size,
+      changeType: this.data.changeType
     }).then(res => {
-      console.log(res, '=======')
-      const { list, current } = this.data
-      const newList = current === 1 ? res.data : [...list, ...res.data]
+      const { records = [], pages, current } = res
+      const formattedRecords = records.map((item) => ({
+        ...item,
+        formattedTime: item.createTime
+          ? formatTime(item.createTime, 'YYYY.MM.DD HH:mm')
+          : ''
+      }))
+      const newList = this.data.current === 1
+        ? formattedRecords
+        : [...this.data.list, ...formattedRecords]
       this.setData({
         list: newList,
-        noMore: res.data.length < this.data.size
+        noMore: current >= pages,
+        loading: false
       })
-      this.filterList()
     }).catch(err => {
       console.error('加载数据失败:', err)
       this.setData({
         loading: false
       })
-    })
-    // // TODO: 调用接口获取数据
-    // // 模拟数据
-    // const mockList = [
-    //   { id: '1', title: '沈川寒', type: 'role', points: -14320, date: '2025.04.12 12:12', roleId: 'role_1', avatar: '', dialogCount: 100 },
-    //   { id: '2', title: '李大炮', type: 'role', points: -2330, date: '2025.04.12 12:12', roleId: 'role_2', avatar: '', dialogCount: 50 },
-    //   { id: '3', title: '积分充值', type: 'recharge', points: 600, date: '2025.04.12 12:12' },
-    //   { id: '4', title: '李大炮', type: 'role', points: -20, date: '2025.04.12 12:12', roleId: 'role_2', avatar: '', dialogCount: 5 },
-    //   { id: '5', title: '闻大炮', type: 'role', points: -20, date: '2025.04.12 12:12', roleId: 'role_3', avatar: '', dialogCount: 5 },
-    //   { id: '6', title: '积分充值', type: 'recharge', points: 600, date: '2025.04.12 12:12' },
-    //   { id: '7', title: '开通会员赠送', type: 'gift', points: 1000, date: '2025.04.12 12:12' },
-    //   { id: '8', title: '沈川寒', type: 'role', points: -14320, date: '2025.04.12 12:12', roleId: 'role_1', avatar: '', dialogCount: 100 },
-    //   { id: '9', title: '李大炮', type: 'role', points: -2330, date: '2025.04.12 12:12', roleId: 'role_2', avatar: '', dialogCount: 50 },
-    //   { id: '10', title: '积分充值', type: 'recharge', points: 600, date: '2025.04.12 12:12' },
-    //   { id: '11', title: '闻大炮', type: 'role', points: -20, date: '2025.04.12 12:12', roleId: 'role_3', avatar: '', dialogCount: 5 },
-    //   { id: '12', title: '积分充值', type: 'recharge', points: 600, date: '2025.04.12 12:12' },
-    //   { id: '13', title: '开通会员赠送', type: 'gift', points: 1000, date: '2025.04.12 12:12' },
-    // ]
-
-    // this.setData({
-    //   list: mockList,
-    //   noMore: true
-    // })
-    this.filterList()
-  },
-
-  filterList() {
-    const { list, filterIndex, filterOptions } = this.data
-    const filterValue = filterOptions[filterIndex].value
-
-    let filteredList = list
-    if (filterValue === 'income') {
-      filteredList = list.filter(item => item.points > 0)
-    } else if (filterValue === 'expense') {
-      filteredList = list.filter(item => item.points < 0)
-    }
-
-    this.setData({ 
-      filteredList,
-      loading: false
     })
   },
 
@@ -108,17 +77,21 @@ Page({
     const { index } = e.currentTarget.dataset
     this.setData({
       filterIndex: index,
-      showDropdown: false
+      showDropdown: false,
+      changeType: this.data.filterOptions[index].value,
+      current: 1,
+      list: [],
+      noMore: false
     })
-    this.filterList()
+    this.loadData()
   },
 
   onItemTap(e) {
     const { item } = e.currentTarget.dataset
     // 只有角色类型的条目才能点击进入详情
-    if (item.type === 'role') {
+    if (item.characterId) {
       wx.navigateTo({
-        url: `/pages/points/role-detail/index?roleId=${item.roleId}&roleName=${encodeURIComponent(item.title)}&dialogCount=${item.dialogCount}&totalPoints=${Math.abs(item.points)}`
+        url: `/pages/points/role-detail/index?roleId=${item.characterId}&roleName=${encodeURIComponent(item.characterName)}&dialogCount=${item.dialogCount}`
       })
     }
   },

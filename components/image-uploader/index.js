@@ -1,4 +1,4 @@
-import { fetchFilePresignedUrl, uploadConfirm } from '../../services/file/index'
+import { fetchFilePresignedUrl, fecthPublicFilePresignedUrl } from '../../services/file/index'
 
 Component({
   properties: {
@@ -9,6 +9,10 @@ Component({
     sourceType: {
       type: Array,
       value: ['album', 'camera'] // 支持相册和拍照
+    },
+    isPublic: {
+      type: Boolean,
+      value: false
     }
   },
   data: {
@@ -83,7 +87,10 @@ Component({
               fileType: file.type
             }
           ]
-          fetchFilePresignedUrl(signedList)
+          const getPresigned = this.properties.isPublic
+            ? fecthPublicFilePresignedUrl
+            : fetchFilePresignedUrl
+          getPresigned(signedList)
             .then((signatureResp) => {
               const signatureList = Array.isArray(signatureResp)
                 ? signatureResp
@@ -140,7 +147,6 @@ Component({
             this.setData({
               loading: false
             })
-
             // 返回上传成功的图片信息
             this.triggerEvent('success', {
               file,

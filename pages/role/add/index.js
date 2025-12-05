@@ -76,18 +76,18 @@ Page({
    * 选择头像
    */
   onChooseAvatar() {
-    wx.chooseImage({
-      count: 1,
-      sizeType: ['compressed'],
-      sourceType: ['album', 'camera'],
-      success: (res) => {
-        const tempFilePath = res.tempFilePaths[0]
-        // TODO: 上传图片到服务器
-        this.setData({
-          'formData.avatar': tempFilePath
-        })
-      }
-    })
+    // wx.chooseImage({
+    //   count: 1,
+    //   sizeType: ['compressed'],
+    //   sourceType: ['album', 'camera'],
+    //   success: (res) => {
+    //     const tempFilePath = res.tempFilePaths[0]
+    //     // TODO: 上传图片到服务器
+    //     this.setData({
+    //       'formData.avatar': tempFilePath
+    //     })
+    //   }
+    // })
   },
 
   /**
