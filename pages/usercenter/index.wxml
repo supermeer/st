@@ -21,17 +21,17 @@
     <view class="score-box" bind:tap="onScoreClick">
       <t-image class="score-box-icon" src="/static/vip/score.png" />
       <text class="score-box-text">{{(pointInfo.pointBalance || 0) + (pointInfo.dailyFreeBalance || 0)}}</text>
-      <text class="score-box-desc">今日赠送{{pointInfo.dailyFreeBalance || 0}}积分已到账</text>
-      <t-icon class="score-box-arr" name="chevron-right" size="18" />
+      <text wx:if="{{!isDev}}" class="score-box-desc">今日赠送{{pointInfo.dailyFreeBalance || 0}}积分已到账</text>
+      <t-icon wx:if="{{!isDev}}" class="score-box-arr" name="chevron-right" size="18" />
     </view>
-    <view class="vip-box">
+    <view class="vip-box" bind:tap="onVipRenewClick">
       <view class="vip-box-left-content">
         <view class="vip-box-header">
           <t-image wx:if="{{!vipInfo.ifVip}}" class="vip-box-header-icon" src="/static/vip/vip.png"/>
           <text class="vip-box-header-text">{{vipInfo.ifVip ? '星柚会员' : (isDev ? '沉浸式体验' : '开通会员')}}</text>
-          <t-button wx:if="{{!vipInfo.ifVip && !isDev}}" class="open-vip-btn" bind:tap="onVipRenewClick">立即开通</t-button>
+          <t-button wx:if="{{!vipInfo.ifVip && !isDev}}" class="open-vip-btn" bind:catchtap="onVipRenewClick">立即开通</t-button>
         </view>
-        <view wx:if="{{vipInfo.ifVip}}" class="open-vip-btm-line">{{}}2026.10.12到期</view>
+        <view wx:if="{{vipInfo.ifVip}}" class="open-vip-btm-line">{{vipInfo.formattedMonthlyExpireTime}}</view>
         <view wx:else class="open-vip-btm-line">无线畅聊 记忆增强 更多灵感回复</view>
       </view>
       <t-image wx:if="{{vipInfo.ifVip}}" class="vip-box-icon" src="/static/vip/vip.png"/>

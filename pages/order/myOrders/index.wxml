@@ -28,10 +28,9 @@
             <view
               wx:for="{{orderList}}"
               wx:key="id"
-              class="order-item"
+              class="order-item blur-glass"
               bindtap="onOrderClick"
               data-id="{{item.id}}"
-              style="background-image: url('https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/order_bg.png'); background-size: 100% 100%; background-repeat: no-repeat; background-position: center;"
             >
               <view class="order-header">订单编号：{{item.orderNumber}}</view>
               <view class="order-goods">

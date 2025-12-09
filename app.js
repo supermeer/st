@@ -78,7 +78,7 @@ App({
     if (accountInfo.miniProgram.envVersion === 'release') {
       aE = 1
     }
-    if (config.baseUrl === 'http://192.168.1.44:9000') {
+    if (config.baseUrl === 'http://192.168.1.44:19000') {
       aE = 1
     }
     wx.setStorageSync('aE', aE)
@@ -89,13 +89,14 @@ App({
       const windowInfo = wx.getWindowInfo()
       const safeArea = windowInfo.safeArea
       this.globalData.safeAreaTop = safeArea.top
-      this.globalData.safeAreaBottom = windowInfo.windowHeight - safeArea.bottom
+      const sb = (!!windowInfo.windowHeight && !!safeArea.bottom) ? windowInfo.windowHeight - safeArea.bottom: 47
+      this.globalData.safeAreaBottom = sb
       this.globalData.statusBarHeight = safeArea.top
       this.globalData.navHeight = safeArea.top + 44
       this.globalData.tabbarHeight = 100
       return {
         safeAreaTop: this.globalData.safeAreaTop,
-        safeAreaBottom: this.globalData.safeAreaBottom,
+        safeAreaBottom: sb,
         statusBarHeight: this.globalData.statusBarHeight,
         navHeight: this.globalData.navHeight,
         tabbarHeight: this.globalData.tabbarHeight
@@ -104,4 +105,4 @@ App({
       return {}
     }
   }
-})
+}) 

@@ -30,7 +30,7 @@ Page({
         this.setData({
           plans: (res || []).map(item => ({
             ...item,
-            price: ((item.amountInFen || 0) / 100.0).toFixed(1)
+            price: ((item.amountInFen || 0) / 100.0).toFixed(2)
           })),
           selectedIndex: 0
         })
@@ -59,7 +59,7 @@ Page({
 
     createOrderAndPrepay({
       openId: wx.getStorageSync('openId'),
-      orderType: 1,
+      orderType: plan.orderType,
       count: 1
     })
       .then((res) => {

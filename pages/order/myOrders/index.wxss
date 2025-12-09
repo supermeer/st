@@ -42,7 +42,7 @@ page {
 .order-header {
   height: 36rpx;
   line-height: 36rpx;
-  color: rgba(0, 0, 0, 0.6);
+  color: rgba(255, 255, 255, 0.6);
   font-size: 20rpx;
   letter-spacing: 0.8rpx;
 }
@@ -55,13 +55,13 @@ page {
 .order-goods-name {
   font-size: 28rpx;
   font-weight: bold;
-  color: rgba(0, 0, 0, 0.8);
+  color: rgba(255, 255, 255, 0.8);
   letter-spacing: 0.8rpx;
 }
 .order-goods-count {
   font-size: 24rpx;
   margin-left: 46rpx;
-  color: rgba(0, 0, 0, 0.6);
+  color: rgba(255, 255, 255, 0.6);
   letter-spacing: 0.8rpx;
 }
 .order-goods-price {
@@ -81,7 +81,7 @@ page {
 .order-time {
   height: 36rpx;
   line-height: 36rpx;
-  color: rgba(0, 0, 0, 0.6);
+  color: rgba(255, 255, 255, 0.6);
   font-size: 20rpx;
   letter-spacing: 0.8rpx;
 }
@@ -90,7 +90,7 @@ page {
   height: 36rpx;
   line-height: 36rpx;
   font-size: 20rpx;
-  color: rgba(0, 0, 0, 0.6);
+  color: rgba(255, 255, 255, 0.6);
   letter-spacing: 0.8rpx;
   margin-left: auto;
 }

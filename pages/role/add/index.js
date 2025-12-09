@@ -22,8 +22,9 @@ Page({
       identity: '',
       personaGender: null,
       defaultBackgroundImage: null,
-      isDev: false
+      backgroundImage: null
     },
+    isDev: false,
     styleForm: {
       id: null,
       name: ''
@@ -174,11 +175,12 @@ Page({
 
   async onUploadSuccess(e) {
     const { tempFilePath, signature } = e.detail
-
+    const bg = signature && signature.uploadUrl ? signature.uploadUrl.split('?')[0] : tempFilePath
     this.setData({
       showUploader: false,
       currentBg: tempFilePath,
-      'formData.defaultBackgroundImage': signature && signature.uploadUrl ? signature.uploadUrl.split('?')[0] : this.data.formData.defaultBackgroundImage
+      'formData.defaultBackgroundImage': bg,
+      'formData.backgroundImage': bg
     })
   },
 

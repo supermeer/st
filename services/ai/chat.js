@@ -86,8 +86,8 @@ export function getChatList(params) {
 export function deletePlot(data) {
   return request.post('/api/v1/server/plot/deletePlot', data)
 }
-export function topPlot(data) {
-  return request.post('/api/v1/server/plot/topPlot', data)
+export function topChat(data) {
+  return request.post('/api/v1/server/plot/topChat', data)
 }
 export function getPlotDetail(plotId) {
   return request.get(`/api/v1/server/plot/getPlotDetail?plotId=${plotId}`)

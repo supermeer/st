@@ -40,7 +40,7 @@ Page({
       })
       // calc({{pageInfo.safeAreaBottom}}px + {{pageInfo.tabbarHeight}}rpx);
       this.setData({
-        paddingBtm: `calc(${this.data.pageInfo.safeAreaBottom}px + ${this.data.pageInfo.tabbarHeight}rpx)`
+        paddingBtm: `calc(${this.data.pageInfo.safeAreaBottom || 47}px + ${this.data.pageInfo.tabbarHeight || 100}rpx)`
       })
     }
     getPageInfo()
@@ -103,7 +103,7 @@ Page({
   },
   showTabbar() {
     this.setData({
-      paddingBtm: `calc(${this.data.pageInfo.safeAreaBottom}px + ${this.data.pageInfo.tabbarHeight}rpx)`
+      paddingBtm: `calc(${this.data.pageInfo.safeAreaBottom || 47}px + ${this.data.pageInfo.tabbarHeight || 100}rpx)`
     })
     this.getTabBar().show()
   },

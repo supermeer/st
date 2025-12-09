@@ -195,14 +195,33 @@ Component({
       }
     },
     
+    // 控制顶部渐隐切换：
+    // - 开启：仅在用户滚动“空闲”一小段时间后再启用，避免中断阻尼/动量
+    // - 关闭：立即生效
+    _setMaskState(target) {
+      if (target) {
+        // 计划启用：需要空闲一段时间（无新的滚动事件）
+        if (this._maskEnableTimer) clearTimeout(this._maskEnableTimer)
+        this._maskEnableTimer = setTimeout(() => {
+          this._maskEnableTimer = null
+          if (!this.data.isScrolledUp) this.setData({ isScrolledUp: true })
+        }, 150)
+      } else {
+        // 计划关闭：立即关闭并取消任何待启用
+        if (this._maskEnableTimer) {
+          clearTimeout(this._maskEnableTimer)
+          this._maskEnableTimer = null
+        }
+        if (this.data.isScrolledUp) this.setData({ isScrolledUp: false })
+      }
+    },
+    
     // 处理滚动状态（渐变效果 + 用户滚动检测）
     _handleScrollState(scrollTop, scrollHeight) {
       const viewHeight = this._scrollViewHeight || 500
       const isScrollable = scrollHeight > viewHeight + 1
       if (!isScrollable) {
-        if (this.data.isScrolledUp) {
-          this.setData({ isScrolledUp: false })
-        }
+        this._setMaskState(false)
         this._lastScrollTop = scrollTop
         return
       }
@@ -212,20 +231,14 @@ Component({
 
       // 顶部阈值内：不显示渐隐
       if (scrollTop <= 8) {
-        if (this.data.isScrolledUp) {
-          this.setData({ isScrolledUp: false })
-        }
+        this._setMaskState(false)
       } else if (Math.abs(delta) > 5) {
         if (delta > 0) {
-          // 手势上滑（内容上移）→ 显示顶部渐隐
-          if (!this.data.isScrolledUp) {
-            this.setData({ isScrolledUp: true })
-          }
+          // 手势上滑（内容上移）→ 准备显示顶部渐隐（需空闲后启用）
+          this._setMaskState(true)
         } else {
-          // 手势下滑（内容下移）→ 取消顶部渐隐，保证“全部显示”的效果
-          if (this.data.isScrolledUp) {
-            this.setData({ isScrolledUp: false })
-          }
+          // 手势下滑（内容下移）→ 立即取消顶部渐隐
+          this._setMaskState(false)
         }
       }
 
@@ -332,7 +345,7 @@ Component({
             ...res.defaultStoryDetail
           }
         })
-        let bg = res.backgroundImage
+        let bg = res.backgroundImage || res.defaultStoryDetail.defaultBackgroundImage || ''
         if (!res.currentPlotId) {
           // 处理剧情文本折叠（默认故事）
           const scene = res.defaultStoryDetail?.scene || ''
@@ -395,6 +408,10 @@ Component({
       this.getMessageList()
     },
     async sendMessage(e) {
+      const { content, imageList = [] } = e.detail;
+      if (!content && (!imageList || imageList.length === 0)) {
+        return
+      }
       if (!this.data.chatDetail.plotId) {
         const plotId = await ChatService.createPlot({ characterId: this.properties.roleInfo.id})
         this.setData({
@@ -405,7 +422,6 @@ Component({
           'pagination.plotId': plotId
         })
       }
-      const { content, imageList = [] } = e.detail;
       // 发送新消息时重置用户滚动状态，恢复自动滚动
       this.setData({ userScrolled: false })
       const msg = this.addUserMessage(content, imageList)

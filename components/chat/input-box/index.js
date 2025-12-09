@@ -504,7 +504,8 @@ Component({
         },
         getInspiration() {
           inspirationReply({
-            plotId: this.properties.plotId
+            plotId: this.properties.plotId,
+            characterId: this.properties.roleInfo.id
           }).then(res => {
             if (!res) {
               this.setData({

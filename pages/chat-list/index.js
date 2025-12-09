@@ -1,7 +1,7 @@
 import userStore from '../../store/user'
 import SystemInfo from '../../utils/system'
 import Toast from 'tdesign-miniprogram/toast/index'
-import { getChatList, deletePlot, topPlot } from '../../services/ai/chat'
+import { getChatList, deletePlot, topChat } from '../../services/ai/chat'
 import dayjs from 'dayjs'
 
 Page(
@@ -170,7 +170,7 @@ Page(
       const { id } = e.currentTarget.dataset
       const plot = this.data.chatList.find(item => item.plotId === id)
       const isTop = !plot.isTop
-      this.topChat(id, isTop)
+      this.topChat(plot.characterId, isTop)
     },
     /**
      * 删除聊天
@@ -218,7 +218,7 @@ Page(
     // 置顶
     async topChat(id, isTop) {
       try {
-        await topPlot({ id, isTop })
+        await topChat({ characterId: id, isTop })
         Toast({
           context: this,
           selector: '#t-toast',

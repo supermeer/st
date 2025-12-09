@@ -150,7 +150,7 @@ page {
   font-size: 28rpx;
   font-weight: bold;
   margin-right: 12rpx;
-  background: rgba(255, 255, 255, 0.2);
+  /* background: rgba(255, 255, 255, 0.2); */
   padding: 4rpx 8rpx;
   border-radius: 8rpx;
 }

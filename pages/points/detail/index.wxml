@@ -56,6 +56,8 @@ module.exports.formatPoints = function(points) {
           <text wx:if="{{item.characterName}}" class="item-title">{{item.characterName}}</text>
           <text wx:if="{{item.changeType == 1 && item.sourceType == 1}}" class="item-title">积分充值</text>
           <text wx:if="{{item.changeType == 1 && item.sourceType == 2}}" class="item-title">会员赠送</text>
+          <text wx:if="{{item.changeType == 1&& item.sourceType == 4}}" class="item-title">日积分发放</text>
+          <text wx:if="{{item.sourceType == 5}}" class="item-title">日积分过期</text>
           <image
             wx:if="{{item.type === 'role'}}"
             class="item-icon"
@@ -66,7 +68,7 @@ module.exports.formatPoints = function(points) {
         <text class="item-date">{{item.formattedTime}}</text>
       </view>
       <view class="item-right">
-        <view wx:if="{item.characterName}" class="amount-mark">总</view>
+        <view wx:if="{{item.characterName}}" class="amount-mark">总</view>
         <view class="item-points">
           {{item.changeType == 1 ? '+' : '-'}}{{item.changeAmount}}
         </view>

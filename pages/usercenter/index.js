@@ -50,6 +50,7 @@ Page({
     })
   },
   onVipRenewClick() {
+    if (this.data.isDev) return
     wx.navigateTo({
       url: '/pages/vip/packages/index'
     })

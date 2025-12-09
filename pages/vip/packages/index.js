@@ -26,7 +26,7 @@ Page({
       const data = (res || []).map((item) => ({
         ...item,
         benefitInfo: JSON.parse(item.benefitInfo || "[]"),
-        amountInYuan: (item.amountInFen / 100).toFixed(0)
+        amountInYuan: (item.amountInFen / 100).toFixed(2)
       }))
       if (data.length) {
         this.setData({
@@ -60,7 +60,7 @@ Page({
     }
     createOrderAndPrepay({
       openId: wx.getStorageSync('openId'),
-      orderType: 1,
+      orderType: selectedPackage.orderType,
       count: 1
     })
       .then((res) => {
