@@ -14,3 +14,4 @@
 <background-sheet id="backgroundSheet" />
 
 <auth id="auth" check-phone="{{false}}" bind:loginSuccess="loginSuccess" />
+<tip-dialog id="tip-dialog" />

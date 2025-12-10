@@ -7,6 +7,7 @@
   "usingComponents": {
     "chat": "/components/chat/index",
     "auth": "/components/auth/index",
-    "background-sheet": "/components/background-sheet/index"
+    "background-sheet": "/components/background-sheet/index",
+    "tip-dialog": "/components/tip-dialog/index"
   }
 }

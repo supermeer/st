@@ -27,6 +27,7 @@
     enhanced
     show-scrollbar="{{false}}"
     bindscrolltolower="loadMore"
+    style="height: calc(100vh - {{pageInfo.navHeight}}px - 200rpx); padding-bottom: {{pageInfo.safeAreaBottom}}px;"
   >
     <view
       wx:for="{{consumeList}}"

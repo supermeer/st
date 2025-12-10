@@ -11,7 +11,7 @@
 
   <view class="usercenter-content">
     <view class="user-info" bindtap="onUserInfoClick">
-      <t-image class="user-info-avatar" src="/static/avatar.jpg" />
+      <t-image class="user-info-avatar" src="{{userInfo.avatarUrl}}" />
       <view class="user-info-name">
         <text>{{userInfo.nickname || '小柚子'}}</text>
         <!-- <view class="user-info-uid">UID:123321</view> -->

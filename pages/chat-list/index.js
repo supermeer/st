@@ -170,7 +170,11 @@ Page(
       const { id } = e.currentTarget.dataset
       const plot = this.data.chatList.find(item => item.plotId === id)
       const isTop = !plot.isTop
-      this.topChat(plot.characterId, isTop)
+      this.topChat({
+        characterId: plot.characterId,
+        plotId: plot.plotId,
+        isTop
+      })
     },
     /**
      * 删除聊天
@@ -216,9 +220,9 @@ Page(
       }
     },
     // 置顶
-    async topChat(id, isTop) {
+    async topChat({ characterId, plotId, isTop }) {
       try {
-        await topChat({ characterId: id, isTop })
+        await topChat({ characterId, isTop })
         Toast({
           context: this,
           selector: '#t-toast',
@@ -226,7 +230,7 @@ Page(
         })
         this.loadChatList()
         // 右滑关闭
-        this.closeSwipeCell(id)
+        this.closeSwipeCell(plotId)
       } catch (error) {
         Toast({
           context: this,

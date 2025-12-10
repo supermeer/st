@@ -43,6 +43,40 @@ request.useResponseInterceptor(
       if (res.data.code === 200) {
         return res.data.data
       } else {
+        const { code } = res.data
+        if (code === 10006 || code === 10007) {
+          const ev = wx.getStorageSync('aE')
+          if (ev == '0') {
+            wx.showToast({
+              title: '能量不足，明天再来吧！',
+              icon: 'none'
+            })
+            return Promise.reject({
+              code,
+              msg: '能量不足，明天子啊来吧！'
+            })
+          } else {
+            const pages = getCurrentPages()
+            const current = pages && pages[pages.length - 1]
+            if (current) {
+              const tipDialog = current.selectComponent('#tip-dialog')
+              tipDialog.show({
+                content: res.data.msg,
+                cancelText: '取消',
+                confirmText: '开通会员',
+                onConfirm: () => {
+                  wx.navigateTo({
+                    url: '/pages/vip/packages/index'
+                  })
+                }
+              })
+            }
+          }
+          return Promise.reject({
+            code: 402,
+            msg: '积分不足，请购买积分套餐或加油包'
+          })
+        }
         wx.showToast({
           title: res.data.msg || '请求发生错误',
           icon: 'none',

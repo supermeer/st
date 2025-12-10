@@ -1,7 +1,12 @@
+import SystemInfo from '../../../utils/system'
 import { formatTime } from "../../../utils/util"
 import { getCharacterPointDetail } from "../../../services/vip/index"
 Page({
   data: {
+    pageInfo: {
+      safeAreaBottom: 0,
+      navHeight: 0
+    },
     roleInfo: {
       roleId: '',
       name: '',
@@ -16,6 +21,9 @@ Page({
   },
 
   onLoad(options = {}) {
+    this.setData({
+      pageInfo: { ...this.data.pageInfo, ...SystemInfo.getPageInfo() }
+    })
     const {
       roleId,
       roleName,
