@@ -182,90 +182,42 @@ Page({
   },
 
   /**
-   * 记忆力滑块变化（带防抖）
-   */
-  onMemoryChange(event) {
-    const value = event.detail.value
-    
-    // 如果是第一次滑动，保存原始值
-    if (this.memoryOriginalValue === null) {
-      this.memoryOriginalValue = this.data.plotInfo.memoryCount
-    }
-    
-    this.setData({
-      'plotInfo.memoryCount': value
-    })
-    
-    // 清除之前的定时器
-    if (this.memoryDebounceTimer) {
-      clearTimeout(this.memoryDebounceTimer)
-    }
-    
-    // 设置新的定时器，800ms后执行保存
-    this.memoryDebounceTimer = setTimeout(async () => {
-      const success = await this.saveChatSettings()
-      if (!success && this.memoryOriginalValue !== null) {
-        // 请求失败，回滚到原始状态
-        this.setData({
-          'plotInfo.memoryCount': this.memoryOriginalValue
-        })
-      }
-      // 重置原始值
-      this.memoryOriginalValue = null
-    }, 800)
-  },
-
-  /**
-   * 记忆力滑块变化结束
-   */
-  async onMemoryChangeEnd(event) {
-    // 清除防抖定时器
-    if (this.memoryDebounceTimer) {
-      clearTimeout(this.memoryDebounceTimer)
-      this.memoryDebounceTimer = null
-    }
-    
-    // 立即保存
-    const success = await this.saveChatSettings()
-    if (!success) {
-      // 请求失败，回滚到原始值
-      if (this.memoryOriginalValue !== null) {
-        this.setData({
-          'plotInfo.memoryCount': this.memoryOriginalValue
-        })
-      }
-      wx.showModal({
-        title: '保存失败',
-        content: '记忆力设置保存失败，已恢复原值',
-        showCancel: false
-      })
-    }
-    
-    // 重置原始值
-    this.memoryOriginalValue = null
-  },
-
-  /**
    * 记忆加强弹窗
    */
   onMemoryStrength() {
     const memorySheet = this.selectComponent('#memorySheet')
     if (memorySheet) {
       memorySheet.show({
-        title: '记忆力增强',
-        subtitle: '最大对话长度，将影响每次对话所消耗的积分值。',
-        selectedId: this.data.plotInfo.memoryLevel || 'basic',
-        onConfirm: async (option) => {
-          const oldLevel = this.data.plotInfo.memoryLevel
-          this.setData({
-            'plotInfo.memoryLevel': option.id
-          })
-          const success = await this.saveMemoryLevel(option.id)
-          if (!success) {
-            // 保存失败，回滚
-            this.setData({
-              'plotInfo.memoryLevel': oldLevel
+        currentCount: this.data.plotInfo.memoryCount,
+        plotId: this.data.plotInfo.id,
+        memoryOptions: [...this.data.memoryOptions],
+        onConfirm: async (count) => {
+          try {
+            wx.showLoading({
+              title: '保存中...',
+              mask: true
             })
+            await updatePlot({
+              id: this.data.plotInfo.id,
+              memoryCount: count
+            })
+            this.setData({
+              'plotInfo.memoryCount': count
+            })
+            wx.hideLoading()
+            wx.showToast({
+              title: '保存成功',
+              icon: 'success',
+              duration: 1200
+            })
+          } catch (error) {
+            wx.hideLoading()
+            wx.showToast({
+              title: '保存失败',
+              icon: 'error',
+              duration: 1500
+            })
+            console.error('更新记忆选项失败:', error)
           }
         }
       })

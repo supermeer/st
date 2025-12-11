@@ -231,56 +231,6 @@ Page({
       })
     }
   },
-  memoryChange(e) {
-    const value = e.detail.value
-
-    // 首次滑动时记录原始值
-    if (this.memoryOriginalValue === null) {
-      this.memoryOriginalValue = this.data.plotInfo.memoryCount
-    }
-
-    // 先更新本地展示
-    this.setData({
-      'plotInfo.memoryCount': value
-    })
-
-    // 防抖保存
-    if (this.memoryDebounceTimer) {
-      clearTimeout(this.memoryDebounceTimer)
-    }
-    this.memoryDebounceTimer = setTimeout(async () => {
-      try {
-        wx.showLoading({
-          title: '保存中...',
-          mask: true
-        })
-        await updatePlot({
-          id: this.data.plotInfo.id,
-          memoryCount: this.data.plotInfo.memoryCount
-        })
-        wx.hideLoading()
-        wx.showToast({
-          title: '保存成功',
-          icon: 'success',
-          duration: 1200
-        })
-      } catch (error) {
-        wx.hideLoading()
-        this.setData({
-          'plotInfo.memoryCount': this.memoryOriginalValue || 0
-        })
-        wx.showToast({
-          title: '保存失败',
-          icon: 'error',
-          duration: 1500
-        })
-        console.error('更新记忆力失败:', error)
-      } finally {
-        // 重置原始值
-        this.memoryOriginalValue = null
-      }
-    }, 800)
-  },
   onDialogSetting() {
     wx.navigateTo({
       url: `/pages/role/chat-setting/index?plotId=${this.data.plotInfo.id}&roleName=${this.data.roleInfo.name}`
