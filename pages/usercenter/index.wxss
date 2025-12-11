@@ -165,7 +165,7 @@ page {
   flex-wrap: wrap;
   padding: 16rpx 0;
   gap: 16rpx;
-  height: calc(100% - 560rpx);
+  max-height: calc(100% - 560rpx);
   overflow-y: auto;
 }
 
