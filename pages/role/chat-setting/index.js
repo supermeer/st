@@ -133,18 +133,16 @@ Page({
    * 切换深度思考模型
    */
   async onDeepThinkingChange(event) {
-    const newValue = event.detail.checked
-    const oldValue = this.data.plotInfo.ifReasoning
     
     this.setData({
-      'plotInfo.ifReasoning': newValue
+      'plotInfo.ifReasoning': !this.data.plotInfo.ifReasoning
     })
     
     const success = await this.saveChatSettings()
     if (!success) {
       // 请求失败，回滚状态
       this.setData({
-        'plotInfo.ifReasoning': oldValue
+        'plotInfo.ifReasoning': this.data.plotInfo.ifReasoning
       })
     }
   },

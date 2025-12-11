@@ -48,8 +48,8 @@
           </view>
           <t-radio 
             class="mode-radio" 
-            checked="{{true}}"
-            disabled="{{true}}"
+            checked="{{!plotInfo.ifReasoning}}"
+            bind:change="{{onDeepThinkingChange}}"
             icon="dot"
           />
         </view>
@@ -65,7 +65,6 @@
             checked="{{plotInfo.ifReasoning}}"
             bind:change="onDeepThinkingChange"
             icon="dot"
-            allow-uncheck
           />
         </view>
 
