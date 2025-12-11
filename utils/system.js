@@ -72,7 +72,7 @@ const isDevTools = () => getDeviceType() === DEVICE_TYPE.DEVTOOLS
  */
 const getPageInfo = () => {
   // 如果全局已有数据，直接返回
-  if (app.globalData.navHeight > 0) {
+  if (app.globalData.navHeight > 0 && app.globalData.safeAreaBottom >= 0) {
     return {
       navHeight: app.globalData.navHeight,
       statusBarHeight: app.globalData.statusBarHeight,
