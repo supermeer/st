@@ -225,6 +225,13 @@
   justify-content: center;
 }
 
+.ai-tip {
+  color: #aaa;
+  text-align: center;
+  display: inline-block;
+  font-size: 24rpx;
+}
+
 .tip-content {
   display: flex;
   align-items: center;

@@ -59,7 +59,7 @@
                 <t-icon name="backtop" size="18px" color="#fff" />
                 {{item.isTop ? '取消置顶' : '置顶'}}
               </view>
-              <view class="swipe-action delete-btn" catch:tap="onDeleteChat" data-id="{{item.plotId}}">
+              <view class="swipe-action delete-btn" catch:tap="onDeleteChat" data-id="{{item.characterId}}">
                 <t-icon name="delete" size="18px" color="#ee5a6f" />
                 删除
               </view>

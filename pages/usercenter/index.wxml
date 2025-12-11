@@ -21,7 +21,7 @@
     <view class="score-box" bind:tap="onScoreClick">
       <t-image class="score-box-icon" src="/static/vip/score.png" />
       <text class="score-box-text">{{(pointInfo.pointBalance || 0) + (pointInfo.dailyFreeBalance || 0)}}</text>
-      <text wx:if="{{!isDev}}" class="score-box-desc">今日赠送{{pointInfo.dailyFreeBalance || 0}}积分已到账</text>
+      <text wx:if="{{!isDev}}" class="score-box-desc">今日赠送{{pointInfo.dailyFreeBalancePreset || 0}}积分已到账</text>
       <t-icon wx:if="{{!isDev}}" class="score-box-arr" name="chevron-right" size="18" />
     </view>
     <view class="vip-box" bind:tap="onVipRenewClick">

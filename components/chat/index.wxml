@@ -8,6 +8,7 @@
       <t-image class="role-avatar" src="{{avatarUrl}}" mode="aspectFill" />
       <view class="role-msg">
         <text class="role-name">{{roleDetail.name}}</text>
+        <text class="ai-tip">内容由AI生成，仅供参考</text>
         <!-- <text class="role-job">{{roleDetail.description}}</text> -->
       </view>
     </view>

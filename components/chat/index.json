@@ -1,5 +1,6 @@
 {
   "component": true,
+  "styleIsolation": "apply-shared",
   "usingComponents": {
     "user-msg": "/components/chat/user-msg/index",
     "role-msg": "/components/chat/role-msg/index",

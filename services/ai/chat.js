@@ -86,6 +86,9 @@ export function getChatList(params) {
 export function deletePlot(data) {
   return request.post('/api/v1/server/plot/deletePlot', data)
 }
+export function deleteChat(data) {
+  return request.post('/api/v1/server/plot/deleteChat', data)
+}
 export function topChat(data) {
   return request.post('/api/v1/server/plot/topChat', data)
 }

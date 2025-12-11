@@ -14,12 +14,17 @@ Page = function (pageConfig) {
     }
 
     // 获取当前页面路径
-    const pages = getCurrentPages()
-    const currentPage = pages[pages.length - 1]
-    const path = currentPage.route
+    // const pages = getCurrentPages()
+    // const currentPage = pages[pages.length - 1]
+    // const path = currentPage.route
+    // return {
+    //   title: '星语酒馆',
+    //   path: `/${path}?isShare=true`, // 自动携带当前页面路径
+    //   imageUrl: '/images/global-share.jpg'
+    // }
     return {
-      title: '柚见星辰',
-      path: `/${path}?isShare=true`, // 自动携带当前页面路径
+      title: '星语酒馆',
+      path: `/pages/home/home`, // 自动携带当前页面路径
       imageUrl: '/images/global-share.jpg'
     }
   }
@@ -89,7 +94,7 @@ App({
       const windowInfo = wx.getWindowInfo()
       const safeArea = windowInfo.safeArea
       this.globalData.safeAreaTop = safeArea.top
-      const sb = (!!windowInfo.windowHeight && !!safeArea.bottom) ? windowInfo.windowHeight - safeArea.bottom: 47
+      const sb = (!!windowInfo.windowHeight && !!safeArea.bottom) ? (windowInfo.windowHeight - safeArea.bottom) : 0
       this.globalData.safeAreaBottom = sb
       this.globalData.statusBarHeight = safeArea.top
       this.globalData.navHeight = safeArea.top + 44

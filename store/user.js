@@ -22,6 +22,7 @@ const DEFAULT_VIP_INFO = {
 
 const DEFAULT_POINT_INFO = {
   dailyFreeBalance: 0,
+  dailyFreeBalancePreset: 0,
   pointBalance: 0
 }
 

@@ -1,7 +1,7 @@
 import userStore from '../../store/user'
 import SystemInfo from '../../utils/system'
 import Toast from 'tdesign-miniprogram/toast/index'
-import { getChatList, deletePlot, topChat } from '../../services/ai/chat'
+import { getChatList, deleteChat, topChat } from '../../services/ai/chat'
 import dayjs from 'dayjs'
 
 Page(
@@ -201,7 +201,7 @@ Page(
      */
     async deleteChat(id) {
       try {
-        await deletePlot({ id })
+        await deleteChat({ characterId: id })
         Toast({
           context: this,
           selector: '#t-toast',
