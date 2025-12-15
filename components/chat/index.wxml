@@ -114,6 +114,10 @@
       <t-icon name="rollback" size="32rpx" class="action-icon" />
       <text>撤回</text>
     </view>
+    <view class="action-btn" catchtap="onMaskButtonClick" data-id="{{currentMaskMessageId}}" data-include="{{true}}" data-action="copy" data-include="true">
+      <t-icon name="copy" size="32rpx" class="action-icon" />
+      <text>复制</text>
+    </view>
   </view>
 </block>
 

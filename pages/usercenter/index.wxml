@@ -9,7 +9,7 @@
     <t-image slot="center" src="/static/usercenter/mine_nav.jpg" width="112rpx" height="44rpx" />
   </custom-nav>
 
-  <view class="usercenter-content">
+  <view class="usercenter-content" style="height: {{contentHeight}}">
     <view class="user-info" bindtap="onUserInfoClick">
       <t-image class="user-info-avatar" src="{{userInfo.avatarUrl}}" />
       <view class="user-info-name">

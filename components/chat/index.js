@@ -1094,6 +1094,18 @@ Component({
             })
           }
         })
+      } else if (e.detail.action === 'copy') {
+        const messageId = e.detail.messageId
+        const msg = this.data.msgList.find(m => m.id === messageId)
+        wx.setClipboardData({
+          data: msg.content,
+          success: () => {
+            wx.showToast({
+              title: '复制成功',
+              icon: 'none'
+            })
+          }
+        })
       }
       // e.detail.current.closeSwipeCell();
     },

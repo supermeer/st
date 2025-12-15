@@ -49,7 +49,7 @@
           <t-radio 
             class="mode-radio" 
             checked="{{!plotInfo.ifReasoning}}"
-            bind:change="{{onDeepThinkingChange}}"
+            bind:change="onDeepThinkingChange"
             icon="dot"
           />
         </view>

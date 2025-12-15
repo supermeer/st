@@ -1,9 +1,12 @@
 import userStore from '../../store/user'
+import SystemInfo from '../../utils/system'
 import { getCharacterList, getCurrentPlotByCharacterId } from '../../services/role/index'
 Page({
   data: {
     roleList: [],
-    isDev: false
+    isDev: false,
+    pageInfo: {},
+    contentHeight: '100vh'
   },
 
   onLoad() {
@@ -14,6 +17,12 @@ Page({
         isDev: true
       })
     }
+    this.setData({
+      pageInfo: { ...SystemInfo.getPageInfo(), ...this.data.pageInfo }
+    })
+    this.setData({
+      contentHeight: `calc(100vh - ${this.data.pageInfo.safeAreaBottom || 0}px - ${this.data.pageInfo.tabbarHeight || 100}rpx - ${this.data.pageInfo.navHeight}px)`
+    })
   },
 
   onShow() {
