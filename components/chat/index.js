@@ -90,6 +90,13 @@ Component({
       }
       // 检查是否有消息正在生成中
       const isGenerating = newVal.some(msg => msg.loading === true)
+      // 在加载更多或程序自动滚动期间，不调整 scrollAnimation，避免打断定位行为
+      if (this.data.isLoadingMore || this._isAutoScrolling) {
+        this.setData({
+          isGenerating: isGenerating
+        })
+        return
+      }
       // 在生成期间关闭滚动动画，生成结束后再恢复，避免频繁动画导致抖动
       this.setData({
         isGenerating: isGenerating,
@@ -200,6 +207,10 @@ Component({
     // - 关闭：立即生效
     _setMaskState(target) {
       if (target) {
+        // 如果当前处于“加载更多后的冷却期”，不启用顶部渐隐蒙版
+        if (this._maskDisabledUntil && Date.now() < this._maskDisabledUntil) {
+          return
+        }
         // 计划启用：需要空闲一段时间（无新的滚动事件）
         if (this._maskEnableTimer) clearTimeout(this._maskEnableTimer)
         this._maskEnableTimer = setTimeout(() => {
@@ -229,8 +240,15 @@ Component({
       const lastScrollTop = typeof this._lastScrollTop === 'number' ? this._lastScrollTop : scrollTop
       const delta = scrollTop - lastScrollTop
 
-      // 顶部阈值内：不显示渐隐
-      if (scrollTop <= 8) {
+      // 如果是程序自动滚动（包括加载更多后的定位滚动），不处理蒙版和用户滚动检测
+      if (this._isAutoScrolling) {
+        this._setMaskState(false)
+        this._lastScrollTop = scrollTop
+        return
+      }
+
+      // 顶部阈值内或正在加载更多：不显示渐隐
+      if (scrollTop <= 8 || this.data.isLoadingMore) {
         this._setMaskState(false)
       } else if (Math.abs(delta) > 5) {
         if (delta > 0) {
@@ -243,11 +261,6 @@ Component({
       }
 
       this._lastScrollTop = scrollTop
-      
-      // 如果是程序自动滚动，不检测用户滚动
-      if (this._isAutoScrolling) {
-        return
-      }
       
       // 检测用户是否手动滚动（仅在生成中时检测）
       if (this.data.isGenerating) {
@@ -695,6 +708,10 @@ Component({
         return
       }
       
+      // 开始加载更多时，立即关闭顶部渐隐蒙版，并设置一小段冷却时间
+      this._setMaskState(false)
+      this._maskDisabledUntil = Date.now() + 600
+
       this.setData({
         isLoadingMore: true,
         refresherTriggered: true,
@@ -725,32 +742,30 @@ Component({
     // 加载更多数据成功
     loadMoreHandle(msgs) {
       // 禁用滚动动画，避免 refresher 复位动画和 scrollToView 动画冲突
-      this.setData(
-        {
-          scrollAnimation: false
-        },
-        () => {
-          this.setData(
-            {
-              isLoadingMore: false,
-              refresherTriggered: false,
-              pullDownStatus: this.data.hasMore ? 'pull' : 'nomore',
-            },
-            () => {
-              // 滚动完成后延迟恢复动画，确保位置已固定
-              setTimeout(() => {
-                this.setData({
-                  msgList: [...msgs, ...this.data.msgList]
-                })
-                this.scrollToView(`msg-${this.data.topMsg.id}`)
-                setTimeout(() => {
-                  this.setData({ scrollAnimation: true })
-                }, 100)
-              }, 100)
-            }
-          )
+      const topMsg = this.data.topMsg
+      const topMsgId = topMsg && topMsg.id ? topMsg.id : null
+
+      // 从插入新消息开始，就视为程序自动滚动，并在一段时间内禁用顶部蒙版
+      this._isAutoScrolling = true
+      this._maskDisabledUntil = Date.now() + 600
+
+      this.setData({
+        scrollAnimation: false,
+        msgList: [...msgs, ...this.data.msgList],
+        isLoadingMore: false,
+        refresherTriggered: false,
+        pullDownStatus: this.data.hasMore ? 'pull' : 'nomore',
+      }, () => {
+        // 使用 scrollToView 将视图锚定回原本的顶部消息，但由于 scrollAnimation 已关闭，不会有明显滚动动画
+        if (topMsgId) {
+          this.scrollToView(`msg-${topMsgId}`)
         }
-      )
+        // 在短暂延迟后恢复自动滚动标记和动画配置
+        setTimeout(() => { 
+          this._isAutoScrolling = false
+          this.setData({ scrollAnimation: true })
+        }, 200)
+      })
     },
     // 重置加载状态（供父组件调用，例如切换会话时）
     resetLoadStatus() {

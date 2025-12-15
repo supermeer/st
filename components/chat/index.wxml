@@ -19,32 +19,14 @@
     scroll-into-view="{{intoViewId}}" 
     scroll-with-animation="{{scrollAnimation}}" 
     show-scrollbar="{{false}}"
-    refresher-enabled="{{hasMore && !maskVisible}}"
-    refresher-triggered="{{refresherTriggered}}"
-    refresher-threshold="{{50}}"
-    refresher-background="transparent"
-    bindrefresherrefresh="onLoadMore"
-    bindrefresherpulling="onPulling"
-    bindrefresherrestore="onRestore"
+    upper-threshold="30"
+    bindscrolltoupper="onLoadMore"
     bindscroll="onScroll"
     enable-passive="{{true}}"
   >
     <!-- 下拉加载提示 -->
-    <view class="loading-more-tip">
-      <view wx:if="{{pullDownStatus === 'pull'}}" class="tip-content">
-        <text class="tip-text">下拉加载更多</text>
-      </view>
-      <view wx:elif="{{pullDownStatus === 'release'}}" class="tip-content">
-        <text class="tip-text">松开加载更多</text>
-      </view>
-      <view wx:elif="{{pullDownStatus === 'loading'}}" class="tip-content">
-        <view class="loading-icon"></view>
-        <text class="tip-text">加载中...</text>
-      </view>
-      <view wx:elif="{{pullDownStatus === 'nomore'}}" class="tip-content">
-        <text class="tip-text">没有更多了</text>
-      </view>
-    </view>
+    <view class="loading-more-tip" style="display: none;"></view>
+    <!-- 下拉加载提示 -->
     <view wx:if="{{currentStoryDetail.scene && pullDownStatus === 'nomore'}}" class="plot-box blur-glass">
       <view class="plot-title">
         <t-image class="plot-icon" src="/static/chat/juqing.png" />
@@ -100,6 +82,10 @@
     <view class="action-btn" catchtap="onMaskButtonClick" data-id="{{currentMaskMessageId}}" data-action="newPlot">
       <t-image class="action-icon" src="/static/chat/juqing.png" />
       <text>新剧情</text>
+    </view>
+    <view class="action-btn" catchtap="onMaskButtonClick" data-id="{{currentMaskMessageId}}" data-include="{{true}}" data-action="copy" data-include="true">
+      <t-icon name="copy" size="32rpx" class="action-icon" />
+      <text>复制</text>
     </view>
   </view>
   
