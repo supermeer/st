@@ -20,6 +20,11 @@
     scroll-with-animation="{{scrollAnimation}}" 
     show-scrollbar="{{false}}"
     upper-threshold="30"
+    refresher-enabled="{{hasMore}}"
+    refresher-triggered="{{refresherTriggered}}"
+    refresher-threshold="{{hasMore ? 10 : 0}}"
+    refresher-background="transparent"
+    bindrefresherrefresh="onLoadMore"
     bindscrolltoupper="onLoadMore"
     bindscroll="onScroll"
     enable-passive="{{true}}"
@@ -27,7 +32,7 @@
     <!-- 下拉加载提示 -->
     <view class="loading-more-tip" style="display: none;"></view>
     <!-- 下拉加载提示 -->
-    <view wx:if="{{currentStoryDetail.scene && pullDownStatus === 'nomore'}}" class="plot-box blur-glass">
+    <view wx:if="{{currentStoryDetail.scene && !hasMore}}" class="plot-box blur-glass">
       <view class="plot-title">
         <t-image class="plot-icon" src="/static/chat/juqing.png" />
         <text>剧情</text>

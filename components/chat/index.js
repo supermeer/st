@@ -137,7 +137,6 @@ Component({
     isLoadingMore: false,
     topMsg: null,
     hasMore: true, // 是否还有更多数据
-    pullDownStatus: 'pull', // pull: 下拉加载更多, release: 松开加载更多, loading: 加载中, nomore: 没有更多
     scrollAnimation: true, // 是否启用滚动动画
     isGenerating: true, // 是否有对话正在生成中
     userScrolled: false, // 用户是否手动滚动（用于控制流式追加时是否自动滚动）
@@ -683,28 +682,6 @@ Component({
         url: `/pages/role/role-detail/index?characterId=${this.properties.roleInfo.id}&plotId=${this.data.chatDetail.plotId || ''}`
       })
     },
-    // 监听下拉动作
-    onPulling(e) {
-      // 当下拉距离超过阈值时，显示"松开加载更多"
-      const threshold = 50
-      if (e.detail.dy > threshold && this.data.pullDownStatus === 'pull' && !this.data.isLoadingMore) {
-        this.setData({
-          pullDownStatus: 'release'
-        })
-      } else if (e.detail.dy <= threshold && this.data.pullDownStatus === 'release' && !this.data.isLoadingMore) {
-        this.setData({
-          pullDownStatus: 'pull'
-        })
-      }
-    },
-    // 监听恢复动作（取消下拉）
-    onRestore() {
-      if (!this.data.isLoadingMore && this.data.hasMore) {
-        this.setData({
-          pullDownStatus: 'pull'
-        })
-      }
-    },
     // 下拉刷新处理
     onLoadMore() {
       // 防止重复加载或没有更多数据
@@ -725,7 +702,6 @@ Component({
       this.setData({
         isLoadingMore: true,
         refresherTriggered: true,
-        pullDownStatus: 'loading',
         topMsg: this.data.msgList[0]
       })
       
@@ -737,7 +713,6 @@ Component({
       this.setData({
         refresherTriggered: false,
         isLoadingMore: false,
-        pullDownStatus: this.data.hasMore ? 'pull' : 'nomore'
       })
     },
     // 没有更多数据处理
@@ -745,7 +720,6 @@ Component({
       this.setData({
         isLoadingMore: false,
         hasMore: false,
-        pullDownStatus: 'nomore',
         refresherTriggered: false
       })
     },
@@ -764,7 +738,6 @@ Component({
         msgList: [...msgs, ...this.data.msgList],
         isLoadingMore: false,
         refresherTriggered: false,
-        pullDownStatus: this.data.hasMore ? 'pull' : 'nomore',
       }, () => {
         // 使用 scrollToView 将视图锚定回原本的顶部消息，但由于 scrollAnimation 已关闭，不会有明显滚动动画
         if (topMsgId) {
@@ -781,7 +754,6 @@ Component({
     resetLoadStatus() {
       this.setData({
         hasMore: true,
-        pullDownStatus: 'pull',
         isLoadingMore: false,
         refresherTriggered: false
       })
@@ -922,7 +894,6 @@ Component({
       this.setData({
         'pagination.current': 1,
         hasMore: true,
-        pullDownStatus: 'pull',
         isLoadingMore: false,
         refresherTriggered: false
       })
