@@ -385,7 +385,8 @@ Component({
           this.setData({
             msgList: defaultMsg.content ? [defaultMsg] : [],
             sceneNeedFold: needFold,
-            sceneDisplay: display
+            sceneDisplay: display,
+            hasMore: false
           })
         } else {
           if (res.currentPlotId === this.data.chatDetail.plotId && res.plotDetailVO.updateTime > this.data.chatDetail.updateTime) {
