@@ -1,5 +1,6 @@
 import SystemInfo from '../../utils/system'
 import { getHomePlotMessage } from '../../services/ai/chat'
+import { getCharacterDetail } from '../../services/role/index'
 // "plugins": {
 //   "WechatSI": {
 //     "version": "0.3.1",
@@ -122,5 +123,18 @@ Page({
     this.setData({
       currentBg: e
     })
+  },
+  async onShareAppMessage() {
+    const { id } = this.data.roleForm || {}
+    let path = `/pages/chat/index?characterId=${id}&isShare=${true}`
+    const characterDetail = await getCharacterDetail(id)
+    if (characterDetail.isSystem != 1) {
+      path = '/pages/home/home'
+    }
+    return {
+      title: '星语酒馆',
+      path,
+      imageUrl: '/images/global-share.jpg'
+    }
   },
 })

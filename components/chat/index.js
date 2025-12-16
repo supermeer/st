@@ -12,6 +12,10 @@ Component({
     showBack: {
       type: Boolean,
       value: false
+    },
+    isShare: {
+      type: Boolean,
+      value: false
     }
   },
   lifetimes: {
@@ -332,6 +336,12 @@ Component({
     },
     
     onBack() {
+      if (this.properties.isShare) {
+        wx.switchTab({
+          url: '/pages/home/home',
+        })
+        return
+      }
       wx.navigateBack()
     },
     getPageInfo() {
@@ -1136,3 +1146,4 @@ Component({
     }
   }
 })
+

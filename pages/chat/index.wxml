@@ -6,9 +6,11 @@
       bind:retryMessage="onRetryMessage"
       roleInfo="{{roleForm}}"
       showBack="{{true}}"
+      isShare="{{shareForm.isShare}}"
     />
   </view>
 </view>
 
 <!-- <auth id="auth" check-phone="{{false}}" bind:loginSuccess="loginSuccess" /> -->
+<auth id="auth" check-phone="{{false}}" bind:loginSuccess="loginSuccess" />
 <tip-dialog id="tip-dialog" />
