@@ -21,7 +21,7 @@ Component({
   lifetimes: {
     attached: function () {
       this.getPageInfo()
-      this.getRoleInfo()
+      // this.getRoleInfo()
     }
   },
   pageLifetimes: {
@@ -847,7 +847,8 @@ Component({
           hasMore: hasMore
         })
         setTimeout(() => {
-          this.scrollToBottom()
+          // 使用强制滚动，确保在撤回、重说、回溯等刷新消息列表后能滚动到底部
+          this.scrollToBottom(true)
         }, 100)
       }).catch(err => {
         console.error('获取消息列表失败:', err)
