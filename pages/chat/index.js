@@ -56,7 +56,7 @@ Page({
         roleForm: {
           ...this.data.roleForm,
           ...this.data.shareForm,
-          plotId: res.plotId
+          plotId: res && res.plotId ? res.plotId : null
         }
       })
     })
