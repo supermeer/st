@@ -1,5 +1,17 @@
 <view class="btns-container {{disabled ? 'btns-disabled' : ''}}">
   <!-- <image class="btn-image" src="/static/chat/bf.svg" data-action="play" bind:tap="onBtnClick" /> -->
-  <image class="btn-image" src="/static/chat/cs.svg" data-action="retry" bind:tap="onBtnClick" />
-  <image class="btn-image" src="/static/chat/jx.svg" data-action="continue" bind:tap="onBtnClick" />
+  <view class="btn-container" data-action="retry" bind:tap="onBtnClick">
+    <image class="btn-image" src="/static/chat/cs.svg" />
+    <text class="btn-text">重说</text>
+  </view>
+  <view class="btn-container" data-action="continue" bind:tap="onBtnClick" >
+    <image class="btn-image" src="/static/chat/jx.svg" />
+    <text class="btn-text">继续</text>
+  </view>
+  <view wx:if="{{showTip}}" class="bottom-line">
+    <text class="btm-text">如果不知道回什么，可以点击</text>
+    <image class="btm-image" src="/static/chat/linggan.png" />
+    <text class="btm-close-text" catch:tap="closeTip">不再提示</text>
+  </view>
+  
 </view>

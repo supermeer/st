@@ -1,8 +1,7 @@
 .btns-container {
-    background: rgba(0, 0, 0, 0.6);
-    height: 60rpx;
-    border-radius: 30rpx;
-    display: inline-flex;
+    /* height: 60rpx;
+    border-radius: 30rpx; */
+    /* display: inline-flex; */
     align-items: center;
     padding: 0 24rpx;
     margin-top: 12rpx;
@@ -14,8 +13,53 @@
     opacity: 0.4;
 }
 
+.btn-container {
+    background: rgba(0, 0, 0, 0.6);
+    height: 60rpx;
+    border-radius: 30rpx;
+    display: inline-flex;
+    align-items: center;
+    padding: 0 12rpx;
+    margin-right: 12rpx;
+    transition: opacity 0.3s ease;
+}
+
 .btn-image {
     width: 40rpx;
     height: 40rpx;
-    margin: 0 12rpx;
+    margin-left: 12rpx;
+}
+
+.btn-text {
+    font-size: 24rpx;
+    color: #ddd;
+    margin-left: 4rpx;
+}
+
+
+.bottom-line {
+    width: 100%;
+    background: transparent;
+    color: #aaa;
+    font-size: 24rpx;
+    display: flex;
+    margin-top: 40rpx;
+    align-items: center;
+    justify-content: center;
+    padding-right: 12rpx;
+}
+
+.btm-image {
+    width: 40rpx;
+    height: 40rpx;
+}
+
+.btm-text {
+    font-size: 24rpx;
+    color: #ddd;
+}
+
+.btm-close-text {
+    color: #999;
+    margin-left: 24rpx;
 }
