@@ -56,10 +56,10 @@
 
 .btm-text {
     font-size: 24rpx;
-    color: #ddd;
+    color: #eee;
 }
 
 .btm-close-text {
-    color: #999;
+    color: #bbb;
     margin-left: 24rpx;
 }
