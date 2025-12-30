@@ -10,7 +10,8 @@
     "memory-sheet": "/components/memory-sheet/index",
     "memory-desc-overlay": "/components/memory-desc-overlay/index",
     "memory-display": "/components/memory-display/index",
-    "image-uploader": "/components/image-uploader/index"
+    "image-uploader": "/components/image-uploader/index",
+    "t-switch": "tdesign-miniprogram/switch/switch"
   },
   "navigationBarTitleText": "对话设定"
 }

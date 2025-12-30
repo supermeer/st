@@ -1,11 +1,14 @@
 import userStore from '../../store/user'
 import SystemInfo from '../../utils/system'
-import { getCharacterList, getCurrentPlotByCharacterId } from '../../services/role/index'
+import ActionSheet, { ActionSheetTheme } from 'tdesign-miniprogram/action-sheet';
+import { getCharacterList, getCurrentPlotByCharacterId, deleteCharacter } from '../../services/role/index'
+import { redeemInviteCode } from '../../services/usercenter/index'  
 Page({
   data: {
     roleList: [],
     isDev: false,
     pageInfo: {},
+    editingRole: null,
     contentHeight: '100vh'
   },
 
@@ -58,6 +61,27 @@ Page({
       url: '/pages/common/aboutus/index'
     })
   },
+  onInviteCodeClick() {
+    this.selectComponent('#inviteCodeDialog').show()
+  },
+  // 处理确认
+  onInviteConfirm(e) {
+    const { inviteCode } = e.detail
+    // 调用接口验证邀请码...
+    redeemInviteCode({
+      invitationCode: inviteCode
+    }).then(res => {
+      console.log(res, 'res')
+      userStore.refreshPointInfo()
+      this.selectComponent('#inviteCodeDialog').hide()
+      this.selectComponent('#rechargeResultDialog').show({
+        points: 50,
+        success: true
+      })
+    }).catch(err => {
+      this.selectComponent('#inviteCodeDialog').setError(err.msg || err || '兑换失败，请稍后重试')
+    })
+  },
   onVipRenewClick() {
     if (this.data.isDev) return
     wx.navigateTo({
@@ -77,6 +101,47 @@ Page({
     const dialog = this.selectComponent('#pointsRechargeDialog')
     if (dialog) {
       dialog.show()
+    }
+  },
+
+  onLongPress(e) {
+    const id = e.currentTarget.dataset.id
+    this.setData({
+      editingRole: id
+    })
+    ActionSheet.show({
+      theme: ActionSheetTheme.List,
+      selector: '#actionSheet',
+      context: this,
+      cancelText: '取消',
+      items: ['编辑', '删除'],
+    });
+  },
+  handleSelected(e) {
+    const type = e.detail.selected
+    if (type === '删除') {
+      const deleteRequest = () => {
+        deleteCharacter({
+          id: this.data.editingRole
+        }).then(res => {
+          this.getCharacterList()
+        })
+      }
+      const tipDialog = this.selectComponent('#tip-dialog')
+      tipDialog.show({
+        content: '删除后，您与该智能体的所有对话将被清除，且不可撤回。',
+        cancelText: '取消',
+        confirmText: '确认',
+        onConfirm: () => {
+          deleteRequest()
+        }
+      })
+
+      return
+    }
+
+    if (type === '编辑') {
+      
     }
   }
 })

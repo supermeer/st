@@ -116,6 +116,37 @@ export function processQuotes(text) {
 }
 
 /**
+ * 处理状态栏标签 <StatusBlock>
+ * 支持原始标签和被 HTML 转义后的标签
+ * 支持流式返回时未闭合的标签
+ */
+export function processStatusBlock(text) {
+  let result = text;
+  
+  // 1. 匹配完整的被转义标签 &lt;StatusBlock&gt;...&lt;/StatusBlock&gt;
+  result = result.replace(/&lt;StatusBlock&gt;([\s\S]*?)&lt;\/StatusBlock&gt;/gi, function (match, content) {
+    return `<span class="status-block">${content}</span>`;
+  });
+  
+  // 2. 匹配完整的原始标签
+  result = result.replace(/<StatusBlock>([\s\S]*?)<\/StatusBlock>/gi, function (match, content) {
+    return `<span class="status-block">${content}</span>`;
+  });
+  
+  // 3. 流式返回：匹配未闭合的被转义开始标签（到 </p> 或文本末尾）
+  result = result.replace(/&lt;StatusBlock&gt;([\s\S]*?)(<\/p>|$)/gi, function (match, content, ending) {
+    return `<span class="status-block">${content}</span>${ending}`;
+  });
+  
+  // 4. 流式返回：匹配未闭合的原始开始标签（到 </p> 或文本末尾）
+  result = result.replace(/<StatusBlock>([\s\S]*?)(<\/p>|$)/gi, function (match, content, ending) {
+    return `<span class="status-block">${content}</span>${ending}`;
+  });
+  
+  return result;
+}
+
+/**
  * 处理小括号（转换为 <em> 标签）
  */
 export function processParentheses(text) {
@@ -149,9 +180,12 @@ function addInlineStyles(html, colors) {
   );
 
   // 2. 引号样式 <span class="quote">
+  // `<span class="quote" style="color:${colors.quote};">`
+
+  // 2. 引号样式 <span class="quote"> - 使用渐变色
   result = result.replace(
     /<span(\s[^>]*)?class="quote"([^>]*)?>|<span\s+class="quote">/gi,
-    `<span class="quote" style="color:${colors.quote};">`
+    `<span class="quote" style="background:linear-gradient(90deg, #ffdf40ff, #13bcdaff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">`
   );
 
   // 3. 引号中的斜体继承引号颜色
@@ -258,6 +292,12 @@ function addInlineStyles(html, colors) {
     '<p$1 style="margin:0.5em 0;line-height:1.6;">'
   );
 
+  // 15. 状态栏标签样式 <span class="status-block">
+  result = result.replace(
+    /<span(\s[^>]*)?class="status-block"([^>]*)?>|<span\s+class="status-block">/gi,
+    `<span class="status-block" style="display:block;background:rgba(255,255,255,0.12);border-left:3px solid #13bcdaff;color:#bbb;padding:8px 12px;border-radius:8px;font-size:0.8em;white-space:pre-wrap;margin:8px 0;padding-top: 0;">`
+  );
+
   return result;
 }
 
@@ -308,6 +348,9 @@ export function formatMessage(text, config = {}) {
   } catch (error) {
     console.error("Marked.js 解析错误:", error);
   }
+
+  // 处理状态栏标签（在 marked 解析后处理，避免被转义）
+  mes = processStatusBlock(mes);
 
   // 6. 添加内联样式（rich-text 不支持外部 class）
   mes = addInlineStyles(mes, cfg.colors);

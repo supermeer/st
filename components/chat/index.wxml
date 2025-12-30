@@ -14,7 +14,7 @@
     </view>
   </view>
   <scroll-view 
-    class="message-list {{isScrolledUp ? 'scrolled-up' : ''}}"
+    class="message-list {{isScrolledUp && !keepFullScreen ? 'scrolled-up' : ''}}"
     scroll-y="{{true}}" 
     scroll-into-view="{{intoViewId}}" 
     scroll-with-animation="{{scrollAnimation}}" 
@@ -29,29 +29,31 @@
     bindscroll="onScroll"
     enable-passive="{{true}}"
   >
-    <!-- 下拉加载提示 -->
-    <view class="loading-more-tip" style="display: none;"></view>
-    <!-- 下拉加载提示 -->
-    <view wx:if="{{currentStoryDetail.scene && !hasMore}}" class="plot-box blur-glass">
-      <view class="plot-title">
-        <t-image class="plot-icon" src="/static/chat/juqing.png" />
-        <text>剧情</text>
+    <view class="message-content-wrapper">
+      <!-- 下拉加载提示 -->
+      <view class="loading-more-tip" style="display: none;"></view>
+      <!-- 下拉加载提示 -->
+      <view wx:if="{{currentStoryDetail.scene && !hasMore}}" class="plot-box blur-glass">
+        <view class="plot-title">
+          <t-image class="plot-icon" src="/static/chat/juqing.png" />
+          <text>剧情</text>
+        </view>
+        <text class="plot-content">{{sceneNeedFold ? sceneDisplay : currentStoryDetail.scene}}</text>
+        <text wx:if="{{sceneNeedFold}}" class="fold-toggle" bind:tap="toggleScene">
+          {{sceneExpanded ? '收起 ▴' : '展开 ▾'}}
+        </text>
       </view>
-      <text class="plot-content">{{sceneNeedFold ? sceneDisplay : currentStoryDetail.scene}}</text>
-      <text wx:if="{{sceneNeedFold}}" class="fold-toggle" bind:tap="toggleScene">
-        {{sceneExpanded ? '收起 ▴' : '展开 ▾'}}
-      </text>
+      <view wx:for="{{msgList}}" wx:key="id" id="msg-{{item.id}}">
+        <role-msg wx:if="{{item.senderType === 2}}" class="message-item" message="{{item}}" isLatest="{{index === msgList.length - 1}}" disabled="{{isGenerating}}" bind:buttonClick="onButtonClick" bind:maskShow="onMaskShow" />
+        <user-msg wx:if="{{item.senderType === 1}}" class="message-item" message="{{item}}" disabled="{{isGenerating}}" bind:buttonClick="onButtonClick" bind:maskShow="onMaskShow" />
+      </view>
+      <view wx:if="{{msgList.length > 0 && msgList[msgList.length - 1].error}}" class="retry-container">
+        <t-icon name="unhappy-1" class="icon-btn" size="18px" />
+        有点迷失啦，请点击
+        <text class="retry-text" bindtap="onRetry">重新尝试</text>
+      </view>
+      <view id="bottom-anchor" style="height: 1rpx;"></view>
     </view>
-    <view wx:for="{{msgList}}" wx:key="id" id="msg-{{item.id}}">
-      <role-msg wx:if="{{item.senderType === 2}}" class="message-item" message="{{item}}" isLatest="{{index === msgList.length - 1}}" disabled="{{isGenerating}}" bind:buttonClick="onButtonClick" bind:maskShow="onMaskShow" />
-      <user-msg wx:if="{{item.senderType === 1}}" class="message-item" message="{{item}}" disabled="{{isGenerating}}" bind:buttonClick="onButtonClick" bind:maskShow="onMaskShow" />
-    </view>
-    <view wx:if="{{msgList.length > 0 && msgList[msgList.length - 1].error}}" class="retry-container">
-      <t-icon name="unhappy-1" class="icon-btn" size="18px" />
-      有点迷失啦，请点击
-      <text class="retry-text" bindtap="onRetry">重新尝试</text>
-    </view>
-    <view id="bottom-anchor" style="height: 1rpx;"></view>
   </scroll-view>
   <input-box
     class="input-box"

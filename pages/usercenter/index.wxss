@@ -65,6 +65,20 @@ page {
   color: #ddd;
 }
 
+.user-invite-code {
+  display: flex;
+  align-items: center;
+  font-size: 26rpx;
+  color: var(--magic-color);
+  font-weight: normal;
+  margin-top: 12rpx;
+}
+.user-invite-code-icon {
+  width: 32rpx;
+  height: 32rpx;
+  margin-right: 12rpx;
+}
+
 .user-info-arr {
   margin-left: auto;
 }
@@ -87,7 +101,7 @@ page {
 .score-box-text {
   font-size: 48rpx;
   font-weight: bold;
-  color: var(--magic-color);
+  color: var(--theme-color-purple);
 }
 .score-box-desc {
   font-size: 24rpx;
@@ -106,7 +120,7 @@ page {
   margin-top: 12rpx;
   padding: 32rpx;
   border-radius: 24rpx;
-  background: rgb(79, 80, 87);
+  background: rgba(240, 240, 240, 0.2);
   display: flex;
   justify-content: space-bettwen;
   align-items: center;
@@ -130,7 +144,7 @@ page {
   margin-left: 12rpx;
   font-weight: bold;
   font-size: 32rpx;
-  color: var(--magic-color);
+  color: var(--theme-color-purple);
 }
 
 .open-vip-btn {
@@ -158,6 +172,14 @@ page {
   color: #ddd;
   font-size: 24rpx;
   padding: 24rpx 12rpx;
+  display: flex;
+  align-items: center;
+}
+
+.roles-title-desc {
+  font-size: 20rpx;
+  color: #999;
+  margin-left: 12rpx;
 }
 
 .role-list {

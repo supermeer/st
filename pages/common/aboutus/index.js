@@ -10,9 +10,25 @@ Page({
       },
       {
         title: '全局设定',
-        desc: '设置您的全局设定',
+        desc: '设置所有智能体对你的称呼',
         url: '/pages/role/my-setting/index?isGlobal=true'
       },
+      {
+        title: '始终全屏展示对话',
+        desc: '',
+        url: '',
+        isSwitch: true,
+        switchOptions: {
+          checked: false,
+          getChecked: () => {
+            return wx.getStorageSync('alwaysFullScreen') === 'true'
+          },
+          onChange: (checked) => {
+            wx.setStorageSync('alwaysFullScreen', checked ? 'true' : 'false')
+          }
+        }
+      },
+      
       {
         title: '我的订单',
         desc: '',
@@ -48,14 +64,20 @@ Page({
 
   onLoad() {
     const accountInfo = wx.getAccountInfoSync();
-    this.setData({
-      itemList: this.data.itemList.map(item => {
-        if (item.title === '版本号') {
-          item.desc = accountInfo.miniProgram.version
+    const itemList = this.data.itemList.map(item => {
+      const newItem = { ...item }
+      if (newItem.title === '版本号') {
+        newItem.desc = accountInfo.miniProgram.version
+      }
+      if (newItem.isSwitch && newItem.switchOptions?.getChecked) {
+        newItem.switchOptions = {
+          ...newItem.switchOptions,
+          checked: newItem.switchOptions.getChecked()
         }
-        return item
-      })
+      }
+      return newItem
     })
+    this.setData({ itemList })
   },
   logoff() {
     this.logoffDialogRef = this.selectComponent('#logoff-dialog')
@@ -93,6 +115,17 @@ Page({
     const { url } = e.currentTarget.dataset
     if (url) {
       wx.navigateTo({ url })
+    }
+  },
+  onSwitchChange(e) {
+    const { index } = e.currentTarget.dataset
+    const { value } = e.detail
+    const item = this.data.itemList[index]
+    if (item?.switchOptions?.onChange) {
+      item.switchOptions.onChange(value)
+      const itemList = [...this.data.itemList]
+      itemList[index].switchOptions.checked = value
+      this.setData({ itemList })
     }
   }
 })

@@ -15,8 +15,12 @@
       <view class="user-info-name">
         <text>{{userInfo.nickname || '小柚子'}}</text>
         <!-- <view class="user-info-uid">UID:123321</view> -->
+        <view class="user-invite-code" catchtap="onInviteCodeClick">
+          <t-image class="user-invite-code-icon" src="/static/usercenter/score.png"/>
+          填写邀请码
+        </view>
       </view>
-      <t-icon class="user-info-arr" name="chevron-right" size="32" color="#fff" />
+      <t-icon class="user-info-arr" name="setting" size="24" color="#fff" />
     </view>
     <view class="score-box" bind:tap="onScoreClick">
       <t-image class="score-box-icon" src="/static/vip/score.png" />
@@ -36,7 +40,10 @@
       </view>
       <t-image wx:if="{{vipInfo.ifVip}}" class="vip-box-icon" src="/static/vip/vip.png"/>
     </view>                                                        
-    <view class="roles-title">智能体</view>
+    <view class="roles-title">
+      智能体
+      <view class="roles-title-desc">(长按编辑)</view>
+    </view>
     <view class="role-list">
       <view 
         class="role-card" 
@@ -44,6 +51,7 @@
         wx:key="id"
         style="background-image: url('{{item.backgroundImage || item.avatar}}');"
         bind:tap="onRoleClick"
+        bind:longpress="onLongPress"
         data-id="{{item.id}}"
       >
         <view class="role-info">
@@ -64,5 +72,23 @@
 <points-recharge-dialog
   id="pointsRechargeDialog"
 />
+
+<invite-code-dialog 
+  id="inviteCodeDialog"
+  bind:cancel="onInviteCancel"
+  bind:confirm="onInviteConfirm"
+/>
+
+<recharge-result-dialog 
+  id="rechargeResultDialog"
+/>
+
+<t-action-sheet
+  id="actionSheet"
+  usingCustomNavbar
+  bind:selected="handleSelected"
+/>
+
+<tip-dialog id="tip-dialog" />
 
 <t-toast id="t-toast" />

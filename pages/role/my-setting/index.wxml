@@ -32,7 +32,7 @@
         <input 
           class="form-input" 
           type="text" 
-          placeholder="请输入称呼"
+          placeholder="暂未设置"
           placeholder-class="input-placeholder"
           value="{{formData.userAddressedAs}}"
           bindinput="onUserAddressedAsInput"
@@ -75,7 +75,7 @@
         <view class="form-label">我是谁</view>
         <textarea 
           class="form-textarea" 
-          placeholder="请描述一下自己..."
+          placeholder="请输入"
           placeholder-class="input-placeholder"
           value="{{formData.identity}}"
           bindinput="onIdentityInput"
@@ -83,6 +83,13 @@
           auto-height
         />
         <view class="textarea-counter">{{formData.identity.length}}/500</view>
+      </view>
+
+      <view class="form-item reset-btn" wx:if="{{isGlobal}}">
+        <view class="reset-btn-text blur-glass" bindtap="onReset">
+        恢复默认设定
+          <t-icon name="refresh" size="24rpx" color="#fff" />
+        </view>
       </view>
 
     </view>

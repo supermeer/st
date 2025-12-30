@@ -83,7 +83,7 @@ App({
     if (accountInfo.miniProgram.envVersion === 'release') {
       aE = 1
     }
-    if (config.baseUrl === 'http://192.168.1.44:19000') {
+    if (config.baseUrl === 'http://192.168.1.44:19000' || config.baseUrl === 'http://10.0.106.58:19000') {
       aE = 1
     }
     wx.setStorageSync('aE', aE)

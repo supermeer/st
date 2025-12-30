@@ -9,7 +9,11 @@
     "t-image": "tdesign-miniprogram/image/image",
     "t-toast": "tdesign-miniprogram/toast/toast",
     "custom-nav": "/components/custom-nav/index",
-    "points-recharge-dialog": "/components/points-recharge-dialog/index"
+    "points-recharge-dialog": "/components/points-recharge-dialog/index",
+    "invite-code-dialog": "/components/invite-code-dialog/index",
+    "recharge-result-dialog": "/components/recharge-result-dialog/index",
+    "t-action-sheet": "tdesign-miniprogram/action-sheet/action-sheet",
+    "tip-dialog": "/components/tip-dialog/index"
   },
   "enablePullDownRefresh": false
 }

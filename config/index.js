@@ -1,8 +1,9 @@
 export const config = {
   /** 是否使用mock代替api返回 */
   useMock: false,
-  // baseUrl: 'http://192.168.1.44:19000' 
-  baseUrl: 'https://www.yours-x.com/character'
+  // baseUrl: 'http://192.168.1.44:19000'
+  baseUrl: 'http://10.0.106.58:19000'
+  // baseUrl: 'https://www.yours-x.com/character'
 }
 
 export const cdnBase =

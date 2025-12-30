@@ -6,6 +6,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    keepFullScreen: false,
     pageInfo: {
       safeAreaBottom: 0,
       navHeight: 0
@@ -85,6 +86,11 @@ Page({
       pageInfo: { ...this.data.pageInfo, ...SystemInfo.getPageInfo() }
     })
     this.getMemoryType()
+  },
+  onShow() {
+    this.setData({
+      keepFullScreen: wx.getStorageSync('alwaysFullScreen') === 'true'
+    })
   },
 
   getPlotInfo(plotId) {
@@ -354,6 +360,14 @@ Page({
       
       return false
     }
+  },
+
+  onSwitchChange(e) {
+    const { value } = e.detail
+    this.setData({
+      keepFullScreen: value
+    })
+    wx.setStorageSync('alwaysFullScreen', value ? 'true' : 'false')
   },
 
   /**

@@ -22,7 +22,15 @@ Component({
   },
   methods: {
     show(options = {}) {
-      const { orderNumber, points = 0 } = options
+      const { orderNumber, points = 0, success = false } = options
+      if (success) {
+       this.setData({
+        visible: true,
+        status: 1,
+        points
+       })
+        return
+      }
       if (!orderNumber) {
         return
       }

@@ -197,3 +197,7 @@
   gap: 8rpx;
 }
 
+.setting-switch {
+  --td-switch-checked-color: var(--yellow-btn-color);
+}
+

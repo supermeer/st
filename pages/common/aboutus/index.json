@@ -4,6 +4,7 @@
     "t-icon": "tdesign-miniprogram/icon/icon",
     "t-toast": "tdesign-miniprogram/toast/toast",
     "custom-nav": "/components/custom-nav/index",
-    "logoff-dialog": "/components/logoff-dialog/index"
+    "logoff-dialog": "/components/logoff-dialog/index",
+    "t-switch": "tdesign-miniprogram/switch/switch"
   }
 }

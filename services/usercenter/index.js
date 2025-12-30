@@ -30,6 +30,10 @@ export function getMyVipInfo() {
   return request.get('/api/v1/user/vip/getMyVipInfo')
 }
 
+export function redeemInviteCode(data) {
+  return request.post(`/api/v1/user/vip/redeemInviteCode?invitationCode=${data.invitationCode}`, data)
+}
+
 export function getQuotaInfo() {
   return request.get('/api/v1/user/vip/getQuotaInfo')
 }

@@ -11,6 +11,7 @@
       <view class="aboutus-item-title">{{item.title}}</view>
       <view class="aboutus-item-desc">{{item.desc}}</view>
       <t-icon wx:if="{{item.url}}" class="aboutus-item-arr" name="chevron-right" size="18" color="#999" />
+      <t-switch wx:if="{{item.isSwitch}}" class="aboutus-item-switch" value="{{item.switchOptions.checked}}" data-index="{{index}}" bindchange="onSwitchChange" />
     </view>
     <view class="logoff-item" bindtap="logoff">
       <view class="logoff-item-title">注销账号</view>

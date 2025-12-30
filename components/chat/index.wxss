@@ -80,6 +80,14 @@
   position: relative;
 }
 
+.message-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 100%;
+  box-sizing: border-box;
+}
+
 .message-list.scrolled-up {
   -webkit-mask-image: linear-gradient(
     to bottom,

@@ -58,6 +58,7 @@ module.exports.formatPoints = function(points) {
           <text wx:if="{{item.changeType == 1 && item.sourceType == 2}}" class="item-title">会员赠送</text>
           <text wx:if="{{item.changeType == 1&& item.sourceType == 4}}" class="item-title">日积分发放</text>
           <text wx:if="{{item.sourceType == 5}}" class="item-title">日积分过期</text>
+          <text wx:if="{{item.changeType == 1 && item.sourceType == 6}}" class="item-title">邀请码赠送</text>
           <image
             wx:if="{{item.type === 'role'}}"
             class="item-icon"

@@ -1,5 +1,5 @@
 import SystemInfo from '../../../utils/system'
-import { createPersona, getPersonaDetail, updatePersona, getDefaultPersona, updateDefaultPersona } from '../../../services/role/index'
+import { createPersona, getPersonaDetail, updatePersona, getDefaultPersona, updateDefaultPersona, deleteDefaultPersona } from '../../../services/role/index'
 Page({
   /**
    * 页面的初始数据
@@ -127,6 +127,20 @@ Page({
   onIdentityInput(event) {
     this.setData({
       'formData.identity': event.detail.value
+    })
+  },
+
+  onReset() {
+    deleteDefaultPersona().then(() => {
+      wx.showToast({
+        title: '重置成功',
+        icon: 'success',
+        duration: 1000
+      })
+
+      setTimeout(() => {
+        wx.navigateBack()
+      }, 1000);
     })
   },
 

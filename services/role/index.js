@@ -12,12 +12,20 @@ export function createCharacter(data) {
     return request.post('/api/v1/server/character/createCharacter', data)
 }
 
+export function deleteCharacter(data) {
+    return request.post('/api/v1/server/character/deleteCharacter', data)
+}
+
 export function createPersona(data) {
     return request.post('/api/v1/server/story/createPersona', data)
 }
 
 export function updatePersona(data) {
     return request.post('/api/v1/server/story/updatePersona', data)
+}
+
+export function deleteDefaultPersona() {
+    return request.post('/api/v1/server/story/deleteDefaultPersona')
 }
 
 export function getCharacterList(params) {

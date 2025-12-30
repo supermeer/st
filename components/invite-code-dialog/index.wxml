@@ -1,0 +1,35 @@
+<view
+  class="invite-dialog-mask"
+  wx:if="{{visible}}"
+  catchtouchmove="{{true}}"
+>
+  <view class="invite-dialog-container" catchtap="">
+    <view class="invite-dialog">
+      <view class="invite-title">输入邀请码</view>
+      <view class="invite-desc">请输入获取的邀请码，确认后即可获取奖励~</view>
+
+      <view class="input-wrapper">
+        <view class="input-icon">
+          <view class="icon-line"></view>
+          <view class="icon-line icon-line-short"></view>
+          <view class="icon-line"></view>
+          <view class="icon-line icon-line-short"></view>
+        </view>
+        <input
+          class="invite-input"
+          placeholder="填写邀请码"
+          placeholder-class="input-placeholder"
+          value="{{inviteCode}}"
+          bindinput="onInputChange"
+        />
+        <view class="error-msg" wx:if="{{errorMsg}}">{{errorMsg}}</view>
+      </view>
+
+
+      <view class="footer">
+        <view class="btn cancel-btn" bindtap="handleCancel">取消</view>
+        <view class="btn confirm-btn" bindtap="handleConfirm">确认</view>
+      </view>
+    </view>
+  </view>
+</view>
