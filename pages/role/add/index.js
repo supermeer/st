@@ -24,27 +24,20 @@ Page({
       defaultBackgroundImage: null,
       backgroundImage: null
     },
-    isDev: false,
     styleForm: {
       id: null,
       name: ''
     },
     genderList: ['男', '女', '其他'],
     currentBg: '',
-    showUploader: false
+    showUploader: false,
+    showAdvancedSetting: false
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-
-    const ev = wx.getStorageSync('aE')
-    if (ev == '0') {
-      this.setData({
-        isDev: true
-      })
-    }
 
     this.setData({
       pageInfo: { ...this.data.pageInfo, ...SystemInfo.getPageInfo() }
@@ -103,6 +96,12 @@ Page({
           'formData.gender': this.data.genderList[res.tapIndex]
         })
       }
+    })
+  },
+
+  onAdvancedSetting() {
+    this.setData({
+      showAdvancedSetting: true
     })
   },
 
@@ -198,7 +197,7 @@ Page({
    * 提交表单
    */
   onSubmit() {
-    const { formData, isDev } = this.data
+    const { formData } = this.data
     
     // 表单验证
     if (!formData.name) {
@@ -217,7 +216,7 @@ Page({
       return
     }
 
-    if (isDev && !formData.description) {
+    if (!formData.description) {
       wx.showToast({
         title: '请输入角色概述',
         icon: 'none'

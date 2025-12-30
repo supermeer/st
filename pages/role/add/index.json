@@ -7,7 +7,8 @@
     "input-sheet": "/components/input-sheet/index",
     "background-sheet": "/components/background-sheet/index",
     "tip-dialog": "/components/tip-dialog/index",
-    "image-uploader": "/components/image-uploader/index"
+    "image-uploader": "/components/image-uploader/index",
+    "t-image": "tdesign-miniprogram/image/image"
   },
   "navigationBarTitleText": ""
 }

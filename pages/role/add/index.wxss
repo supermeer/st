@@ -32,10 +32,58 @@
 
 /* 头像上传区域 */
 .avatar-section {
-  display: flex;
+  /* display: flex;
   align-items: center;
   margin-bottom: 32rpx;
-  padding-left: 20rpx;
+  padding-left: 20rpx; */
+  height: 140rpx;
+  padding-bottom: 20rpx;
+}
+
+.bg-empty {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30rpx;
+  font-weight: bold;
+  color: var(--yellow-btn-color);
+  background: rgba(253, 171, 11, 0.2);
+  border-radius: 26rpx;
+}
+
+.bg-empty-image {
+  width: 56rpx;
+  height: 56rpx;
+  margin-right: 10rpx;
+}
+
+.edit-avatar {
+  width: 140rpx;
+  height: 140rpx;
+}
+
+.edit-avatar {
+  width: 60%;
+  height: 100%;
+  border-radius: 60rpx;
+  display: flex;
+  align-items: center;
+  padding: 0 20rpx;
+  color: #fff;
+  font-size: 28rpx;
+}
+
+.avatar-image {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 50%;
+  margin-right: 20rpx;
+}
+
+.avatar-edit-icon {
+  margin-left: auto;
 }
 
 .avatar-upload {
@@ -50,11 +98,6 @@
   align-items: center;
   justify-content: center;
   border: 2rpx solid rgba(255, 255, 255, 0.3);
-}
-
-.avatar-image {
-  width: 100%;
-  height: 100%;
 }
 
 .avatar-placeholder {
@@ -76,6 +119,24 @@
   padding: 32rpx;
   border-radius: 24rpx;
   color: #fff;
+}
+
+.advanced-setting-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.advanced-setting {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: var(--yellow-btn-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2rpx solid var(--yellow-btn-color);
+  border-radius: 35rpx;
+  height: 70rpx;
+  padding: 0 30rpx;
 }
 
 /* 区块标题 */
@@ -110,7 +171,7 @@
   font-size: 28rpx;
   color: #fff;
   font-weight: 500;
-  margin-bottom: 16rpx;
+  margin-bottom: 8rpx;
   display: flex;
   align-items: center;
 }
@@ -185,6 +246,13 @@
   right: 0;
   font-size: 24rpx;
   color: rgba(255, 255, 255, 0.5);
+}
+
+.label-placeholder {
+  font-size: 22rpx;
+  color: rgba(255, 255, 255, 0.5);
+  padding-left: 16rpx;
+  padding-bottom: 8rpx;
 }
 
 .form-textarea {
