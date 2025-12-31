@@ -18,7 +18,7 @@
 }
 
 .t-class-divider {
-  padding: 0 30%;
+  padding: 0 12%;
 }
 
 .t-class-divider-content {

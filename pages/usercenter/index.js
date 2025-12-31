@@ -141,7 +141,9 @@ Page({
     }
 
     if (type === '编辑') {
-      
+      wx.navigateTo({
+        url: `/pages/role/add/index?id=${this.data.editingRole}`
+      })
     }
   }
 })

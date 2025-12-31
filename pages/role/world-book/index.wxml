@@ -1,0 +1,100 @@
+<view class="world-book-page">
+  <!-- 固定背景图 -->
+  <image wx:if="{{currentBg}}" class="page-bg" src="{{currentBg}}" mode="aspectFill"></image>
+  <view wx:else class="page-bg page-bg-default"></view>
+
+  <!-- 固定顶部导航栏 -->
+  <custom-nav title="世界书" showBack="{{true}}" showHome="{{false}}" transparent="{{true}}" />
+
+  <!-- 可滚动内容区域 -->
+  <scroll-view
+    class="scroll-content"
+    scroll-y
+    enhanced
+    show-scrollbar="{{false}}"
+    style="height: calc(100vh - {{ pageInfo.navHeight }}px);"
+  >
+    <view class="page-content" style="padding-bottom: calc({{ pageInfo.safeAreaBottom}}px + 140rpx);">
+      
+      <!-- 列表区域 -->
+      <view class="list-section blur-glass">
+        <view class="section-title">世界书条目</view>
+
+        <!-- 空状态 -->
+        <view wx:if="{{worldBookList.length === 0}}" class="empty-state">
+          <view class="empty-text">暂无世界书条目</view>
+          <view class="empty-btn" bindtap="onAddItem">
+            <t-icon name="add" size="32rpx" color="rgb(253, 171, 11)" />
+            <text>新增条目</text>
+          </view>
+        </view>
+
+        <!-- 列表 -->
+        <view wx:else class="book-list">
+          <view 
+            wx:for="{{worldBookList}}" 
+            wx:key="index" 
+            class="book-item"
+            data-index="{{index}}"
+            bindtap="onEditItem"
+          >
+            <view class="item-left">
+              <!-- 类型标签 -->
+              <view 
+                class="type-tag" 
+                style="background: {{typeOptions[item.type === 'system' ? 0 : (item.type === 'ai' ? 1 : 2)].color}};"
+              >
+                {{typeOptions[item.type === 'system' ? 0 : (item.type === 'ai' ? 1 : 2)].label}}
+              </view>
+              <!-- 标题 -->
+              <view class="item-title text-line1">{{item.title || '未命名条目'}}</view>
+            </view>
+            
+            <view class="item-right" catchtap="preventBubble">
+              <!-- 上移按钮 -->
+              <view 
+                class="move-btn {{index === 0 ? 'disabled' : ''}}" 
+                data-index="{{index}}"
+                catchtap="onMoveUp"
+              >
+                <t-icon name="chevron-up" size="40rpx" color="{{index === 0 ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.8)'}}" />
+              </view>
+              <!-- 下移按钮 -->
+              <view 
+                class="move-btn {{index === worldBookList.length - 1 ? 'disabled' : ''}}" 
+                data-index="{{index}}"
+                catchtap="onMoveDown"
+              >
+                <t-icon name="chevron-down" size="40rpx" color="{{index === worldBookList.length - 1 ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.8)'}}" />
+              </view>
+              <!-- 删除按钮 -->
+              <view 
+                class="delete-btn" 
+                data-index="{{index}}"
+                catchtap="onDeleteItem"
+              >
+                <t-icon name="delete" size="36rpx" color="rgba(255,100,100,0.8)" />
+              </view>
+            </view>
+          </view>
+
+          <!-- 新增行 -->
+          <view class="book-item add-item" bindtap="onAddItem">
+            <view class="add-content">
+              <t-icon name="add" size="40rpx" color="rgb(253, 171, 11)" />
+              <text class="add-text">新增条目</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+    </view>
+  </scroll-view>
+
+  <!-- 固定底部保存按钮 -->
+  <view class="submit-footer" style="padding-bottom: {{ pageInfo.safeAreaBottom }}px;">
+    <view class="submit-btn" bindtap="onSave">保存</view>
+  </view>
+</view>
+
+<tip-dialog id="tip-dialog" />

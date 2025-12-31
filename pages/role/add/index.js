@@ -1,5 +1,5 @@
 import SystemInfo from '../../../utils/system'
-import { createCharacter, getCurrentPlotByCharacterId } from '../../../services/role/index'
+import { createCharacter, updateCharacter, getCurrentPlotByCharacterId, getCharacterDetail } from '../../../services/role/index'
 Page({
   /**
    * 页面的初始数据
@@ -10,10 +10,12 @@ Page({
       navHeight: 0
     },
     formData: {
+      id: null,
       name: '',
       gender: '',
       description: '',
       descriptionPrompt: '',
+      prompt: null,
       avatarUrl: '',
       scene: '',
       prologue: '',
@@ -24,6 +26,7 @@ Page({
       defaultBackgroundImage: null,
       backgroundImage: null
     },
+    worldBookList: [],
     styleForm: {
       id: null,
       name: ''
@@ -38,9 +41,33 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-
+    const { id } = options
+    if (id) {
+      this.setData({
+        'formData.id': id
+      })
+      this.getCharacterById(id)
+    }
     this.setData({
       pageInfo: { ...this.data.pageInfo, ...SystemInfo.getPageInfo() }
+    })
+  },
+
+  getCharacterById(id) {
+    getCharacterDetail(id)
+    .then(res => {
+      const { scene, prologue } = res.defaultStoryDetail || {}
+      this.setData({
+        formData: {
+          ...this.data.formData,
+          ...res,
+          scene: scene || '',
+          prologue: prologue || '',
+          descriptionPrompt: res.descriptionPrompt || res.description || '',
+        },
+        currentBg: res.backgroundImage,
+        worldBookList: res.prompt ? JSON.parse(res.prompt) : []
+      })
     })
   },
 
@@ -172,6 +199,25 @@ Page({
     // }
   },
 
+  onWorldBook() {
+    wx.navigateTo({
+      url: '/pages/role/world-book/index',
+      success: (res) => {
+        res.eventChannel.emit('acceptDataFromOpenerPage', {
+          background: this.data.formData.backgroundImage,
+          worldBookList: this.data.worldBookList
+        })
+      }
+    })
+  },
+
+  // 上一页面需要实现 confirmWorldBook 方法接收保存的数据
+  confirmWorldBook(list) {
+    this.setData({
+      worldBookList: list,
+      'formData.prompt': JSON.stringify(list || [])
+    })
+  },
   async onUploadSuccess(e) {
     const { tempFilePath, signature } = e.detail
     const bg = signature && signature.uploadUrl ? signature.uploadUrl.split('?')[0] : tempFilePath
@@ -210,48 +256,51 @@ Page({
     
     if (!formData.descriptionPrompt ) {
       wx.showToast({
-        title: '请输入角色描述',
+        title: '请输入智能体设定',
         icon: 'none'
       })
       return
     }
 
-    if (!formData.description) {
-      wx.showToast({
-        title: '请输入角色概述',
-        icon: 'none'
-      })
-      return
-    }
+    // if (!formData.description) {
+    //   wx.showToast({
+    //     title: '请输入角色描述',
+    //     icon: 'none'
+    //   })
+    //   return
+    // }
     
+    const method = formData.id ? updateCharacter : createCharacter
+
     wx.showLoading({
-      title: '创建中...',
+      title: `${method === updateCharacter ? '更新中...' : '创建中...'}`,
       mask: true
     })
     
-    createCharacter({
+    method({
       ...formData,
       description: formData.description || formData.descriptionPrompt
     }).then(id => {
+      const characterId = formData.id || id
       wx.hideLoading()
       wx.showToast({
-        title: '创建成功',
+        title: `${method === updateCharacter ? '更新成功' : '创建成功'}`,
         icon: 'success',
         duration: 1000
       })
 
       const tipDialog = this.selectComponent('#tip-dialog')
       tipDialog.show({
-        content: '智能体创建成功！',
+        content: `${method === updateCharacter ? '更新成功' : '创建成功'}`,
         cancelText: '返回',
         confirmText: '去聊天',
         onCancel: () => {
           wx.navigateBack()
         },
         onConfirm: async () => {
-          const res = await getCurrentPlotByCharacterId(id)
+          const res = await getCurrentPlotByCharacterId(characterId)
           wx.redirectTo({
-            url: `/pages/chat/index?plotId=${ res && res.plotId ? res.plotId : ''}&characterId=${id}`
+            url: `/pages/chat/index?plotId=${ res && res.plotId ? res.plotId : ''}&characterId=${characterId}`
           })
         }
       })

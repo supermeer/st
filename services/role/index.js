@@ -12,6 +12,10 @@ export function createCharacter(data) {
     return request.post('/api/v1/server/character/createCharacter', data)
 }
 
+export function updateCharacter(data) {
+    return request.post('/api/v1/server/character/updateCharacter', data)
+}
+
 export function deleteCharacter(data) {
     return request.post('/api/v1/server/character/deleteCharacter', data)
 }

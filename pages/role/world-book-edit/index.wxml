@@ -1,0 +1,94 @@
+<view class="world-book-edit-page">
+  <!-- 固定背景图 -->
+  <image wx:if="{{currentBg}}" class="page-bg" src="{{currentBg}}" mode="aspectFill"></image>
+  <view wx:else class="page-bg page-bg-default"></view>
+
+  <!-- 固定顶部导航栏 -->
+  <custom-nav title="世界书条目" showBack="{{true}}" showHome="{{false}}" transparent="{{true}}" />
+
+  <!-- 可滚动内容区域 -->
+  <scroll-view
+    class="scroll-content"
+    scroll-y
+    enhanced
+    show-scrollbar="{{false}}"
+    style="height: calc(100vh - {{ pageInfo.navHeight }}px);"
+  >
+    <view class="page-content" style="padding-bottom: calc({{ pageInfo.safeAreaBottom}}px + 140rpx);">
+      
+      <!-- 头像区域 -->
+      <view class="avatar-section blur-glass">
+        <image wx:if="{{currentBg}}" class="avatar-img" src="{{currentBg}}" mode="aspectFill"></image>
+        <view wx:else class="avatar-img avatar-default">
+          <t-icon name="user" size="60rpx" color="rgba(255,255,255,0.5)" />
+        </view>
+        <view class="avatar-title">世界书条目</view>
+      </view>
+
+      <!-- 表单区域 -->
+      <view class="form-section blur-glass">
+        <!-- 标题 -->
+        <view class="form-item">
+          <view class="form-label">
+            <text class="required">*</text>
+            <text>标题</text>
+          </view>
+          <input 
+            class="form-input" 
+            placeholder="请输入" 
+            placeholder-class="placeholder"
+            value="{{formData.title}}"
+            bindinput="onTitleInput"
+            maxlength="30"
+          />
+          <view class="input-counter">{{formData.title.length}}/30</view>
+        </view>
+
+        <!-- 触发对象 -->
+        <view class="form-item">
+          <view class="form-label">
+            <text class="required">*</text>
+            <text>消息类型</text>
+          </view>
+          <view class="type-options">
+            <view 
+              wx:for="{{typeOptions}}" 
+              wx:key="value"
+              class="type-option {{formData.msgType === item.value ? 'active' : ''}}"
+              data-type="{{item.value}}"
+              bindtap="onTypeSelect"
+            >
+              {{item.label}}
+            </view>
+          </view>
+        </view>
+
+        <!-- 提示词 -->
+        <view class="form-item">
+          <view class="form-label">
+            <text class="required">*</text>
+            <text>提示词</text>
+          </view>
+          <view class="textarea-counter">{{formData.content.length}}/5000</view>
+          <view class="textarea-wrapper">
+            <textarea 
+              class="form-textarea" 
+              placeholder="输入世界书内容" 
+              placeholder-class="placeholder"
+              value="{{formData.content}}"
+              bindinput="onContentInput"
+              auto-height="{{true}}"
+              maxlength="5000"
+            />
+          </view>
+        </view>
+      </view>
+
+    </view>
+  </scroll-view>
+
+  <!-- 固定底部保存按钮 -->
+  <view class="submit-footer" style="padding-bottom: {{ pageInfo.safeAreaBottom }}px;">
+    <view class="submit-btn" bindtap="onSave">保存</view>
+  </view>
+</view>

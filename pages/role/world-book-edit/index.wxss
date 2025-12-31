@@ -1,0 +1,213 @@
+/* pages/role/world-book-edit/index.wxss */
+.world-book-edit-page {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: #000;
+}
+
+/* 固定背景图 */
+.page-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 0;
+  object-fit: cover;
+}
+
+.page-bg-default {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+}
+
+/* 可滚动内容区域 */
+.scroll-content {
+  position: relative;
+  width: 100%;
+  z-index: 1;
+}
+
+/* 页面内容 */
+.page-content {
+  padding: 32rpx;
+}
+
+/* 头像区域 */
+.avatar-section {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+  border-radius: 24rpx;
+}
+
+.avatar-img {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.avatar-default {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.avatar-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #fff;
+}
+
+/* 表单区域 */
+.form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 32rpx;
+  padding: 24rpx;
+  border-radius: 24rpx;
+}
+
+/* 表单项 */
+.form-item {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.form-item .textarea-wrapper, .form-item .type-options {
+  width: 100%;
+}
+
+/* 表单标签 */
+.form-label {
+  display: flex;
+  align-items: center;
+  font-size: 28rpx;
+  color: #fff;
+}
+
+.required {
+  color: #f00;
+  margin-right: 4rpx;
+}
+
+/* 输入框 */
+.form-input {
+  height: 80rpx;
+  padding: 0 24rpx;
+  background: transparent;
+  border: none;
+  font-size: 28rpx;
+  color: #fff;
+  text-align: right;
+}
+
+.form-item:first-child {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.form-item:first-child .form-input {
+  flex: 1;
+  text-align: right;
+}
+
+/* 占位符样式 */
+.placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* 类型选项 */
+.type-options {
+  display: flex;
+  gap: 24rpx;
+  margin-top: 8rpx;
+  padding-left: 24rpx;
+}
+
+.type-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 60rpx;
+  padding: 0 42rpx;
+  border-radius: 40rpx;
+  font-size: 28rpx;
+  color: #fff;
+  background: transparent;
+  border: 2rpx solid rgba(255, 255, 255, 0.3);
+  transition: all 0.3s;
+}
+
+.type-option.active {
+  background: rgb(253, 171, 11);
+  border-color: rgb(253, 171, 11);
+  color: #000;
+}
+
+/* 字数计数器 */
+.input-counter {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.5);
+  text-align: right;
+  margin-top: 8rpx;
+}
+
+.textarea-counter {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.5);
+  text-align: right;
+  margin-left: auto;
+}
+
+/* 文本域容器 */
+.textarea-wrapper {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 16rpx;
+  padding: 24rpx;
+  min-height: 400rpx;
+  margin-top: 8rpx;
+}
+
+/* 文本域 */
+.form-textarea {
+  width: 100%;
+  min-height: 360rpx;
+  font-size: 28rpx;
+  color: #fff;
+  background: transparent;
+  line-height: 1.6;
+}
+
+/* 固定底部提交按钮 */
+.submit-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 20rpx 32rpx;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.4) 0%, transparent 100%);
+}
+
+.submit-btn {
+  width: 100%;
+  height: 96rpx;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #fff;
+  box-shadow: 0 8rpx 24rpx rgba(102, 126, 234, 0.4);
+}

@@ -28,7 +28,7 @@
       
       <!-- 对我的称呼 -->
       <view class="form-item blur-glass">
-        <view class="form-label">对我的称呼</view>
+        <view class="form-label">我的名称</view>
         <input 
           class="form-input" 
           type="text" 

@@ -94,6 +94,7 @@
         status="{{loadMoreStatus}}" 
         list-is-empty="{{listIsEmpty}}"
         bind:retry="onRetryLoad"
+        noMoreText="超多角色正快马赶来，不负期待✨"
       >
         <view slot="empty" class="empty-container">
           <text class="empty-text">暂无内容</text>

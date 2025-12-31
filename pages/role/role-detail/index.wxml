@@ -89,7 +89,7 @@
         <view class="setting-block like-blur-glass">
           <view class="setting-row">
             <view class="setting-item-inline">
-              <text class="setting-item-title">对我的称呼</text>
+              <text class="setting-item-title">我的名称</text>
               <text class="setting-item-value">{{plotInfo.persona.userAddressedAs || '暂无'}}</text>
             </view>
             <view class="setting-item-inline">

@@ -293,7 +293,10 @@ Page(
       if (isRefresh) {
         this.data.pageNo = 1
       } else {
-        this.data.pageNo += 1
+        // this.data.pageNo += 1
+        this.setData({
+          pageNo: this.data.pageNo + 1
+        })
       }
 
       // 设置加载状态

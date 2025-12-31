@@ -1,0 +1,199 @@
+/* pages/role/world-book/index.wxss */
+.world-book-page {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: #000;
+}
+
+/* 固定背景图 */
+.page-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 0;
+  object-fit: cover;
+}
+
+.page-bg-default {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+}
+
+/* 可滚动内容区域 */
+.scroll-content {
+  position: relative;
+  width: 100%;
+  z-index: 1;
+}
+
+/* 页面内容 */
+.page-content {
+  padding: 32rpx;
+}
+
+/* 列表区块 */
+.list-section {
+  padding: 32rpx;
+  border-radius: 24rpx;
+  color: #fff;
+}
+
+/* 区块标题 */
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 32rpx;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80rpx 0;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 32rpx;
+}
+
+.empty-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+  padding: 20rpx 40rpx;
+  border: 2rpx solid rgb(253, 171, 11);
+  border-radius: 40rpx;
+  color: rgb(253, 171, 11);
+  font-size: 28rpx;
+  font-weight: 500;
+}
+
+/* 列表 */
+.book-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+/* 列表项 */
+.book-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 16rpx;
+  min-height: 100rpx;
+}
+
+.item-left {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+  gap: 16rpx;
+}
+
+/* 类型标签 */
+.type-tag {
+  flex-shrink: 0;
+  padding: 6rpx 16rpx;
+  border-radius: 8rpx;
+  font-size: 22rpx;
+  color: #fff;
+  font-weight: 500;
+}
+
+/* 标题 */
+.item-title {
+  flex: 1;
+  font-size: 28rpx;
+  color: #fff;
+  min-width: 0;
+}
+
+.item-right {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  flex-shrink: 0;
+}
+
+/* 移动按钮 */
+.move-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 8rpx;
+}
+
+.move-btn.disabled {
+  opacity: 1;
+}
+
+/* 删除按钮 */
+.delete-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 8rpx;
+  margin-left: 8rpx;
+}
+
+/* 新增行 */
+.add-item {
+  border: 2rpx dashed rgba(253, 171, 11, 0.5);
+  background: transparent;
+  justify-content: center;
+}
+
+.add-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+}
+
+.add-text {
+  font-size: 28rpx;
+  color: rgb(253, 171, 11);
+  font-weight: 500;
+}
+
+/* 固定底部提交按钮 */
+.submit-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 20rpx 32rpx;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.4) 0%, transparent 100%);
+}
+
+.submit-btn {
+  width: 100%;
+  height: 96rpx;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #fff;
+  box-shadow: 0 8rpx 24rpx rgba(102, 126, 234, 0.4);
+}
