@@ -201,3 +201,8 @@
   --td-switch-checked-color: var(--yellow-btn-color);
 }
 
+.setting-value {
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.6);
+}
+

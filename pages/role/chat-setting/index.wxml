@@ -125,6 +125,15 @@
             />
           </view>
         </view>
+
+        <!-- 对话字体颜色 -->
+        <view class="setting-item" bindtap="onGradientPicker">
+          <view class="setting-label">对话字体颜色</view>
+          <view class="setting-action">
+            <text class="setting-value">{{quoteGradientName}}</text>
+            <t-icon name="chevron-right" size="40rpx" color="rgba(255,255,255,0.6)" />
+          </view>
+        </view>
       </view>
 
     </view>

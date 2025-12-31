@@ -15,7 +15,7 @@ export const QUOTE_GRADIENT_OPTIONS = [
   {
     id: 'orange-red',
     name: '橙红渐变',
-    gradient: 'linear-gradient(90deg, #ffa726, #ff5252)'
+    gradient: 'linear-gradient(90deg, #ffa726, #c70000ff)'
   },
   {
     id: 'green-blue',

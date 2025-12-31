@@ -1,12 +1,14 @@
 import SystemInfo from '../../../utils/system'
 import Message from 'tdesign-miniprogram/message/index';
 import { getPlotDetail, updatePlot, getMemoryType } from '../../../services/ai/chat'
+import { QUOTE_GRADIENT_OPTIONS } from '../../../utils/msgHandler'
 Page({
   /**
    * 页面的初始数据
    */
   data: {
     keepFullScreen: false,
+    quoteGradientName: '金青渐变',
     pageInfo: {
       safeAreaBottom: 0,
       navHeight: 0
@@ -88,8 +90,11 @@ Page({
     this.getMemoryType()
   },
   onShow() {
+    const savedId = wx.getStorageSync('quoteGradient') || 'gold-cyan'
+    const option = QUOTE_GRADIENT_OPTIONS.find(opt => opt.id === savedId)
     this.setData({
-      keepFullScreen: wx.getStorageSync('alwaysFullScreen') === 'true'
+      keepFullScreen: wx.getStorageSync('alwaysFullScreen') === 'true',
+      quoteGradientName: option ? option.name : '金青渐变'
     })
   },
 
@@ -368,6 +373,25 @@ Page({
       keepFullScreen: value
     })
     wx.setStorageSync('alwaysFullScreen', value ? 'true' : 'false')
+  },
+
+  onGradientPicker() {
+    wx.showActionSheet({
+      itemList: QUOTE_GRADIENT_OPTIONS.map(opt => opt.name),
+      success: (res) => {
+        const selected = QUOTE_GRADIENT_OPTIONS[res.tapIndex]
+        if (selected) {
+          wx.setStorageSync('quoteGradient', selected.id)
+          this.setData({
+            quoteGradientName: selected.name
+          })
+          wx.showToast({
+            title: '已切换为' + selected.name,
+            icon: 'none'
+          })
+        }
+      }
+    })
   },
 
   /**
