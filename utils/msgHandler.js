@@ -1,5 +1,46 @@
 const marked = require("marked");
 
+// 引号渐变色选项
+export const QUOTE_GRADIENT_OPTIONS = [
+  {
+    id: 'gold-cyan',
+    name: '金青渐变',
+    gradient: 'linear-gradient(90deg, #ffdf40ff, #13bcdaff)'
+  },
+  {
+    id: 'pink-purple',
+    name: '粉紫渐变',
+    gradient: 'linear-gradient(90deg, #ff6b9d, #c44cff)'
+  },
+  {
+    id: 'orange-red',
+    name: '橙红渐变',
+    gradient: 'linear-gradient(90deg, #ffa726, #ff5252)'
+  },
+  {
+    id: 'green-blue',
+    name: '绿蓝渐变',
+    gradient: 'linear-gradient(90deg, #4caf50, #2196f3)'
+  },
+  {
+    id: 'classic',
+    name: '经典配色',
+    gradient: 'none',
+    color: 'rgb(225, 138, 36)'
+  }
+];
+
+// 获取当前用户选择的渐变色
+export function getQuoteGradient() {
+  try {
+    const savedId = wx.getStorageSync('quoteGradient') || 'gold-cyan';
+    const option = QUOTE_GRADIENT_OPTIONS.find(opt => opt.id === savedId);
+    return option || QUOTE_GRADIENT_OPTIONS[0];
+  } catch (e) {
+    return QUOTE_GRADIENT_OPTIONS[0];
+  }
+}
+
 // 配置 marked
 marked.setOptions({
   breaks: true, // 支持换行
@@ -179,13 +220,19 @@ function addInlineStyles(html, colors) {
     `<$1$2 style="color:${colors.em};font-style:italic;">`
   );
 
-  // 2. 引号样式 <span class="quote">
-  // `<span class="quote" style="color:${colors.quote};">`
-
-  // 2. 引号样式 <span class="quote"> - 使用渐变色
+  // 2. 引号样式 <span class="quote"> - 使用用户选择的渐变色
+  const quoteOption = getQuoteGradient();
+  let quoteStyle;
+  if (quoteOption.gradient === 'none') {
+    // 纯色模式
+    quoteStyle = `color:${quoteOption.color};`;
+  } else {
+    // 渐变色模式
+    quoteStyle = `background:${quoteOption.gradient};-webkit-background-clip:text;-webkit-text-fill-color:transparent;`;
+  }
   result = result.replace(
     /<span(\s[^>]*)?class="quote"([^>]*)?>|<span\s+class="quote">/gi,
-    `<span class="quote" style="background:linear-gradient(90deg, #ffdf40ff, #13bcdaff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">`
+    `<span class="quote" style="${quoteStyle}">`
   );
 
   // 3. 引号中的斜体继承引号颜色

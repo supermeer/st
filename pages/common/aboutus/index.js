@@ -1,5 +1,6 @@
 import { logoff } from '../../../services/usercenter/index'
 import userStore from '../../../store/user'
+import { QUOTE_GRADIENT_OPTIONS } from '../../../utils/msgHandler'
 const app = getApp()
 Page({
   data: {
@@ -26,6 +27,17 @@ Page({
           onChange: (checked) => {
             wx.setStorageSync('alwaysFullScreen', checked ? 'true' : 'false')
           }
+        }
+      },
+      {
+        title: '对话字体颜色',
+        desc: '',
+        url: '',
+        isGradientPicker: true,
+        getGradientDesc: () => {
+          const savedId = wx.getStorageSync('quoteGradient') || 'gold-cyan'
+          const option = QUOTE_GRADIENT_OPTIONS.find(opt => opt.id === savedId)
+          return option ? option.name : '金青渐变'
         }
       },
       
@@ -63,6 +75,9 @@ Page({
   },
 
   onLoad() {
+    this.updateItemList()
+  },
+  updateItemList() {
     const accountInfo = wx.getAccountInfoSync();
     const itemList = this.data.itemList.map(item => {
       const newItem = { ...item }
@@ -74,6 +89,9 @@ Page({
           ...newItem.switchOptions,
           checked: newItem.switchOptions.getChecked()
         }
+      }
+      if (newItem.isGradientPicker && newItem.getGradientDesc) {
+        newItem.desc = newItem.getGradientDesc()
       }
       return newItem
     })
@@ -127,5 +145,22 @@ Page({
       itemList[index].switchOptions.checked = value
       this.setData({ itemList })
     }
+  },
+  onGradientPicker() {
+    const savedId = wx.getStorageSync('quoteGradient') || 'gold-cyan'
+    wx.showActionSheet({
+      itemList: QUOTE_GRADIENT_OPTIONS.map(opt => opt.name),
+      success: (res) => {
+        const selected = QUOTE_GRADIENT_OPTIONS[res.tapIndex]
+        if (selected) {
+          wx.setStorageSync('quoteGradient', selected.id)
+          this.updateItemList()
+          wx.showToast({
+            title: '已切换为' + selected.name,
+            icon: 'none'
+          })
+        }
+      }
+    })
   }
 })

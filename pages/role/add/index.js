@@ -56,11 +56,15 @@ Page({
   getCharacterById(id) {
     getCharacterDetail(id)
     .then(res => {
+      const { userAddressedAs, identity, gender } = res.defaultPersona || {}
       const { scene, prologue } = res.defaultStoryDetail || {}
       this.setData({
         formData: {
           ...this.data.formData,
           ...res,
+          userAddressedAs: userAddressedAs || '',
+          identity: identity || '',
+          personaGender: gender || '',
           scene: scene || '',
           prologue: prologue || '',
           descriptionPrompt: res.descriptionPrompt || res.description || '',

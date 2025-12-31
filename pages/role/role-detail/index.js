@@ -109,7 +109,9 @@ Page({
             memoryCount: 0,
             memoryOptionId: null,
             id: null,
-            persona: {}
+            persona: {
+              ...(res.defaultPersona || {})
+            }
           },
           identityNeedFold: false,
           identityDisplay: '',
