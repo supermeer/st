@@ -156,33 +156,77 @@ export function processQuotes(text) {
   });
 }
 
+// StatusBlock 占位符前缀，用于在 markdown 转换前保护 StatusBlock 内容
+const STATUS_BLOCK_PLACEHOLDER = '\u0000STATUS_BLOCK_';
+
 /**
- * 处理状态栏标签 <StatusBlock>
- * 支持原始标签和被 HTML 转义后的标签
- * 支持流式返回时未闭合的标签
+ * 提取 StatusBlock 内容，用占位符替代（在 markdown 转换前调用）
+ * 返回 { text: 处理后的文本, blocks: StatusBlock内容数组 }
  */
-export function processStatusBlock(text) {
+export function extractStatusBlocks(text) {
+  const blocks = [];
   let result = text;
   
-  // 1. 匹配完整的被转义标签 &lt;StatusBlock&gt;...&lt;/StatusBlock&gt;
-  result = result.replace(/&lt;StatusBlock&gt;([\s\S]*?)&lt;\/StatusBlock&gt;/gi, function (match, content) {
-    return `<span class="status-block">${content}</span>`;
-  });
-  
-  // 2. 匹配完整的原始标签
+  // 1. 匹配完整的原始标签 <StatusBlock>...</StatusBlock>
   result = result.replace(/<StatusBlock>([\s\S]*?)<\/StatusBlock>/gi, function (match, content) {
-    return `<span class="status-block">${content}</span>`;
+    const index = blocks.length;
+    blocks.push(content);
+    return `${STATUS_BLOCK_PLACEHOLDER}${index}\u0000`;
   });
   
-  // 3. 流式返回：匹配未闭合的被转义开始标签（到 </p> 或文本末尾）
-  result = result.replace(/&lt;StatusBlock&gt;([\s\S]*?)(<\/p>|$)/gi, function (match, content, ending) {
-    return `<span class="status-block">${content}</span>${ending}`;
+  // 2. 流式返回：匹配未闭合的原始开始标签（到文本末尾）
+  result = result.replace(/<StatusBlock>([\s\S]*)$/gi, function (match, content) {
+    const index = blocks.length;
+    blocks.push(content);
+    return `${STATUS_BLOCK_PLACEHOLDER}${index}\u0000`;
   });
   
-  // 4. 流式返回：匹配未闭合的原始开始标签（到 </p> 或文本末尾）
-  result = result.replace(/<StatusBlock>([\s\S]*?)(<\/p>|$)/gi, function (match, content, ending) {
-    return `<span class="status-block">${content}</span>${ending}`;
-  });
+  return { text: result, blocks };
+}
+
+/**
+ * 还原 StatusBlock 内容（在 markdown 转换后调用）
+ * 将占位符替换为处理后的 StatusBlock HTML
+ */
+export function restoreStatusBlocks(html, blocks) {
+  let result = html;
+  
+  // 匹配占位符（可能被包裹在 <p> 标签中）
+  // 注意：占位符可能在 <p>...</p> 内部，需要处理这种情况
+  for (let i = 0; i < blocks.length; i++) {
+    const placeholder = `${STATUS_BLOCK_PLACEHOLDER}${i}\u0000`;
+    const blockContent = blocks[i];
+    
+    // 单独对 StatusBlock 内容进行 markdown 转换
+    let parsedContent;
+    try {
+      parsedContent = marked.parse(blockContent);
+    } catch (e) {
+      parsedContent = blockContent;
+    }
+    
+    const statusBlockHtml = `<div class="status-block">${parsedContent}</div>`;
+    
+    // 检查占位符是否被包裹在 <p> 标签中
+    // 如果是，需要关闭前面的 <p> 并在后面重新打开
+    const wrappedInPRegex = new RegExp(`(<p[^>]*>)([\\s\\S]*?)${placeholder.replace(/\u0000/g, '\\u0000')}([\\s\\S]*?)(</p>)`, 'gi');
+    
+    if (wrappedInPRegex.test(result)) {
+      // 占位符在 <p> 内部，需要拆分
+      result = result.replace(new RegExp(`(<p[^>]*>)([\\s\\S]*?)${placeholder.replace(/\u0000/g, '\\u0000')}([\\s\\S]*?)(</p>)`, 'gi'), 
+        function(match, pOpen, before, after, pClose) {
+          // 如果前面有内容，保留 <p>；否则不需要
+          const beforePart = before.trim() ? `${pOpen}${before}${pClose}` : '';
+          // 如果后面有内容，重新打开 <p>；否则不需要
+          const afterPart = after.trim() ? `${pOpen}${after}${pClose}` : '';
+          return `${beforePart}${statusBlockHtml}${afterPart}`;
+        }
+      );
+    } else {
+      // 占位符不在 <p> 内，直接替换
+      result = result.replace(placeholder, statusBlockHtml);
+    }
+  }
   
   return result;
 }
@@ -339,10 +383,10 @@ function addInlineStyles(html, colors) {
     '<p$1 style="margin:0.5em 0;line-height:1.6;">'
   );
 
-  // 15. 状态栏标签样式 <span class="status-block">
+  // 15. 状态栏标签样式 <div class="status-block">
   result = result.replace(
-    /<span(\s[^>]*)?class="status-block"([^>]*)?>|<span\s+class="status-block">/gi,
-    `<span class="status-block" style="display:block;background:rgba(255,255,255,0.12);border-left:3px solid #13bcdaff;color:#bbb;padding:8px 12px;border-radius:8px;font-size:0.8em;white-space:pre-wrap;margin:8px 0;padding-top: 0;">`
+    /<div(\s[^>]*)?class="status-block"([^>]*)?>|<div\s+class="status-block">/gi,
+    `<div class="status-block" style="background:rgba(255,255,255,0.12);border-left:3px solid #13bcdaff;color:#bbb;padding:8px 12px;border-radius:8px;font-size:0.8em;margin:8px 0;">`
   );
 
   return result;
@@ -362,6 +406,10 @@ export function formatMessage(text, config = {}) {
   if (cfg.autoFixMarkdown) {
     mes = fixMarkdown(mes, true);
   }
+
+  // 1.5 提取 StatusBlock（在 markdown 转换前，避免内容被包裹在 <p> 中）
+  const { text: textWithoutStatusBlocks, blocks: statusBlocks } = extractStatusBlocks(mes);
+  mes = textWithoutStatusBlocks;
 
   // 2. HTML 转义（可选）
   if (cfg.encodeTags) {
@@ -396,8 +444,8 @@ export function formatMessage(text, config = {}) {
     console.error("Marked.js 解析错误:", error);
   }
 
-  // 处理状态栏标签（在 marked 解析后处理，避免被转义）
-  mes = processStatusBlock(mes);
+  // 还原 StatusBlock（在 marked 解析后，将占位符替换为处理后的 StatusBlock HTML）
+  mes = restoreStatusBlocks(mes, statusBlocks);
 
   // 6. 添加内联样式（rich-text 不支持外部 class）
   mes = addInlineStyles(mes, cfg.colors);
