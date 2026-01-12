@@ -20,12 +20,13 @@ Component({
   },
   lifetimes: {
     attached: function () {
-      this.getPageInfo()
+      // this.getPageInfo()
       // this.getRoleInfo()
     }
   },
   pageLifetimes: {
     show() {
+      this.getPageInfo()
       this.setData({
         keepFullScreen: wx.getStorageSync('alwaysFullScreen') === 'true'
       })

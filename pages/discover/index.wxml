@@ -13,7 +13,7 @@
 
   <!-- 顶部导航标签 -->
   <view class="top-nav">
-    <scroll-view class="nav-scroll" scroll-x enable-flex show-scrollbar="{{false}}" scroll-left="{{navScrollLeft}}" scroll-with-animation>
+    <scroll-view class="nav-scroll" scroll-x enable-flex enhanced="{{true}}" show-scrollbar="{{false}}" scroll-left="{{navScrollLeft}}" scroll-with-animation>
       <view class="nav-tabs">
         <view 
           class="nav-tab {{activeNav === item.id ? 'active' : ''}}" 
@@ -36,7 +36,7 @@
 
   <!-- 筛选标签 -->
   <view class="filter-tags">
-    <scroll-view class="tags-scroll" scroll-x show-scrollbar="{{false}}" scroll-left="{{tagScrollLeft}}" scroll-with-animation>
+    <scroll-view class="tags-scroll" scroll-x enhanced="{{true}}" show-scrollbar="{{false}}" scroll-left="{{tagScrollLeft}}" scroll-with-animation>
       <view class="tag-item {{utils.includes(activeTags, item.id) ? 'active' : ''}}" 
         wx:for="{{tagList}}" 
         wx:key="id"

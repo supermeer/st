@@ -200,7 +200,7 @@
   <view class="submit-footer" style="padding-bottom: {{ pageInfo.safeAreaBottom }}px;">
     <view class="submit-btn" bindtap="onSubmit">
       {{formData.id ? '保存' : '创建智能体'}}
-      <view class="edit-tip">对智能体编辑成功后，将影响后续的对话内容哦。</view>
+      <view wx:if="{{formData.id}}" class="edit-tip">对智能体编辑成功后，将影响后续的对话内容哦。</view>
     </view>
   </view>
 

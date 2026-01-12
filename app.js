@@ -92,12 +92,13 @@ App({
   getNavHeight() {
     try {
       const windowInfo = wx.getWindowInfo()
+      const statusBarHeight = windowInfo.statusBarHeight
       const safeArea = windowInfo.safeArea
       this.globalData.safeAreaTop = safeArea.top
       const sb = (!!windowInfo.windowHeight && !!safeArea.bottom) ? (windowInfo.windowHeight - safeArea.bottom) : 0
       this.globalData.safeAreaBottom = sb
-      this.globalData.statusBarHeight = safeArea.top
-      this.globalData.navHeight = safeArea.top + 44
+      this.globalData.statusBarHeight = statusBarHeight
+      this.globalData.navHeight = statusBarHeight + 44
       this.globalData.tabbarHeight = 100
       return {
         safeAreaTop: this.globalData.safeAreaTop,
