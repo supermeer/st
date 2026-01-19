@@ -626,6 +626,14 @@ Component({
             showInspiration: false
           })
           this.triggerEvent('showTabbar')
+        },
+        cs() {
+          const app = getApp()
+          wx.openCustomerServiceChat({
+            extInfo: { url: app.globalData.wxCustomerService.url },
+            corpId: app.globalData.wxCustomerService.corpId,
+            success(res) {}
+          })
         }
     }
   })

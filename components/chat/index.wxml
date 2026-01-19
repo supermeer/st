@@ -38,6 +38,9 @@
         <view class="plot-title">
           <t-image class="plot-icon" src="/static/chat/juqing.png" />
           <text>剧情</text>
+          <view style="padding-left: 20rpx;">
+            <role-hot-container chatCount="{{roleDetail.messageCount}}" roleHot="{{roleDetail.browseCount}}" />
+          </view>
         </view>
         <text class="plot-content">{{sceneNeedFold ? sceneDisplay : currentStoryDetail.scene}}</text>
         <text wx:if="{{sceneNeedFold}}" class="fold-toggle" bind:tap="toggleScene">

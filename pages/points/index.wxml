@@ -27,7 +27,48 @@
       </view>
     </view>
 
-    <view class="section-title">购买积分</view>
+    <view class="section-title">积分获取方式</view>
+
+    <view class="point-items">
+      <view class="point-item" bindtap="pointCharge">
+        <view class="point-item-header">
+          充值积分
+          <view class="point-item-header-right">去充值<t-icon name="chevron-right" size="20" /></view>
+        </view>
+        <view class="point-item-desc">
+          积分充值，超划算~
+        </view>
+      </view>
+      <view class="point-item" bindtap="vipCharge">
+        <view class="point-item-header">
+          开通会员
+          <view class="point-item-header-right">去开通<t-icon name="chevron-right" size="20" /></view>
+        </view>
+        <view class="point-item-desc">
+          开会员直接<text class="point-item-desc-white">送积分</text>！还有<text class="point-item-desc-white">一堆福利</text>等你来薅！
+        </view>
+      </view>
+      <view class="point-item">
+        <view class="point-item-header">
+          <view class="point-item-title">邀请好友赚积分<view class="point-item-title-tag gn">不限次</view></view>
+          <view class="point-item-header-right">去邀请<t-icon name="chevron-right" size="20" /></view>
+        </view>
+        <view class="point-item-desc">
+          积分充值，超划算~
+        </view>
+      </view>
+      <view class="point-item">
+        <view class="point-item-header">
+          <view class="point-item-title">创作者激励活动<view class="point-item-title-tag rd">超火热</view></view>
+          <view class="point-item-header-right">查看活动<t-icon name="chevron-right" size="20" /></view>
+        </view>
+        <view class="point-item-desc">
+          积分充值，超划算~
+        </view>
+      </view>
+    </view>
+
+    <!-- <view class="section-title">购买积分</view>
 
     <view class="plan-grid">
       <view
@@ -47,10 +88,10 @@
         </view>
         <view class="plan-price">￥{{item.price}}</view>
       </view>
-    </view>
+    </view> -->
   </view>
 
-  <view class="points-footer">
+  <!-- <view class="points-footer">
     <view class="points-tips">
       <view class="points-tip-line">提示：</view>
       <view class="points-tip-line">
@@ -66,10 +107,14 @@
       支付代表同意 
       <text class="agreement-link">《会员服务协议》</text>
     </view>
-  </view>
-
+  </view> -->
+<!-- 
   <recharge-result-dialog
     id="rechargeResultDialog"
     bind:close="onDialogClose"
+  /> -->
+
+  <points-recharge-dialog
+    id="pointsRechargeDialog"
   />
 </view>

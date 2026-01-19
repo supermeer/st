@@ -86,6 +86,57 @@ page {
   margin: 24rpx 0;
 }
 
+.point-item {
+  background: #111827;
+  border-radius: 24rpx;
+  padding: 24rpx 28rpx;
+  margin-bottom: 20rpx;
+}
+
+.point-item-header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  color: #ddd;
+}
+
+.point-item-title {
+  display: flex;
+  align-items: center;
+}
+
+.point-item-title-tag {
+  border-radius: 6rpx;
+  padding: 6rpx 8rpx;
+  margin-left: 8rpx;
+  font-size: 22rpx;
+}
+
+.gn {
+  background: rgb(223, 243, 223);
+  color: rgb(8, 196, 8);
+}
+
+.rd {
+  background: rgb(236, 199, 199);
+  color: rgb(230, 72, 72);
+}
+
+.point-item-header-right {
+  color: #a855f7;
+  display: flex;
+  font-weight: normal;
+}
+
+.point-item-desc {
+  color: #bbb;
+  margin-top: 12rpx;
+}
+.point-item-desc-white {
+  color: #fff;
+  font-weight: bold;
+}
+
 .plan-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

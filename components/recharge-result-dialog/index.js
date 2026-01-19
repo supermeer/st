@@ -24,11 +24,11 @@ Component({
     show(options = {}) {
       const { orderNumber, points = 0, success = false } = options
       if (success) {
-       this.setData({
-        visible: true,
-        status: 1,
-        points
-       })
+        this.setData({
+          visible: true,
+          status: 1,
+          points
+        })
         return
       }
       if (!orderNumber) {
@@ -82,9 +82,18 @@ Component({
       this.hide()
       this.triggerEvent('close', { success: this.data.status === 1 })
     },
+    handleCs() {
+      const app = getApp()
+      wx.openCustomerServiceChat({
+        extInfo: { url: app.globalData.wxCustomerService.url },
+        corpId: app.globalData.wxCustomerService.corpId,
+        success(res) {}
+      })
+      this.hide()
+    },
     handleMaskClick() {
-    //   this.hide()
-    //   this.triggerEvent('close')
+      //   this.hide()
+      //   this.triggerEvent('close')
     }
   }
 })

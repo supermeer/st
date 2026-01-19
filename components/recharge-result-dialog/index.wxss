@@ -145,15 +145,29 @@
   margin-right: 12rpx;
 }
 
-.recharge-result-btn {
+.recharge-result-footer {
+  display: flex;
   width: 100%;
+}
+
+.recharge-btn {
+  flex: 1;
+  margin: 12rpx;
   height: 96rpx;
   border-radius: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.recharge-result-btn {
   background: linear-gradient(135deg, #7c5aff 0%, #a855f7 50%, #6366f1 100%);
   color: #fff;
   font-size: 32rpx;
   font-weight: 600;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+}
+.recharge-cs-btn {
+  border: 1px solid #999;
+  border-radius: 96rpx;
+  color: #999; 
 }

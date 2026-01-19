@@ -48,7 +48,7 @@ Page({
     if (!this.data.pageInfo.safeAreaBottom) {
       setTimeout(() => {
         getPageInfo()
-      }, 300);
+      }, 300)
     }
   },
   onShow() {
@@ -72,9 +72,8 @@ Page({
     this.getHomePlotMessage()
   },
   getHomePlotMessage() {
-    getHomePlotMessage().then(res => {
+    getHomePlotMessage().then((res) => {
       if (res.plotId && this.data.roleForm.plotId === res.plotId) {
-
         return
       }
       this.setData({
@@ -136,5 +135,5 @@ Page({
       path,
       imageUrl: '/images/global-share.jpg'
     }
-  },
+  }
 })

@@ -30,6 +30,9 @@
       <view class="role-tags">
         <text class="tag" wx:for="{{roleInfo.tags}}" wx:key="index">#{{item.name}}</text>
       </view>
+      <view style="padding: 12rpx 0; text-align: center">
+        <role-hot-container chatCount="{{roleInfo.messageCount}}" roleHot="{{roleInfo.browseCount}}" />
+      </view>
     </view>
 
     <view class="detail-content blur-glass">

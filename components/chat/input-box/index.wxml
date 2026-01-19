@@ -123,6 +123,10 @@
       <t-image class="board-box-image" src="/static/chat/jubao.png" />
       <text>举报</text>
     </view> -->
+    <view class="input-box-board-item" bindtap="cs">
+      <t-image class="board-box-image" src="/static/chat/kf.png" />
+      <text>联系客服</text>
+    </view>
   </view>
 </view>
 

@@ -81,6 +81,7 @@
               <text class="role-name">{{item.name}}</text>
               <t-icon name="check-circle-filled" size="32rpx" color="#4A9EFF" wx:if="{{item.verified}}" />
             </view>
+            <role-hot-container chatCount="{{item.messageCount}}" roleHot="{{item.browseCount}}" />
             <view class="role-tags">
               <text class="role-tag blur-glass" wx:for="{{item.tagNames}}" wx:key="index" wx:for-item="tag">#{{tag}}</text>
             </view>

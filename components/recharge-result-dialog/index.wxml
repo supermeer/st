@@ -25,8 +25,13 @@
       充值失败，请稍后重试
     </view>
 
-    <view class="recharge-result-btn" bindtap="handleConfirm">
-      {{status === 1 ? '继续体验' : '我知道了'}}
+    <view class="recharge-result-footer">
+      <view class="recharge-btn recharge-cs-btn" bindtap="handleCs">
+        添加客服
+      </view>
+      <view class="recharge-btn recharge-result-btn" bindtap="handleConfirm">
+        {{status === 1 ? '继续体验' : '我知道了'}}
+      </view>
     </view>
   </view>
 </view>

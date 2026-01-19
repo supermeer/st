@@ -11,6 +11,7 @@
     "t-icon": "tdesign-miniprogram/icon/icon",
     "t-toast": "tdesign-miniprogram/toast/toast",
     "load-more": "/components/load-more/index",
-    "custom-nav": "/components/custom-nav/index"
+    "custom-nav": "/components/custom-nav/index",
+    "role-hot-container": "/components/role-hot-container/index"
   }
 }

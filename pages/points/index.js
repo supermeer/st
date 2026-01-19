@@ -96,6 +96,24 @@ Page({
     })
   },
 
+  pointCharge() {
+    const dialog = this.selectComponent('#pointsRechargeDialog')
+    if (dialog) {
+      dialog.show()
+    }
+  },
+  vipCharge() {
+    wx.navigateTo({
+      url: "/pages/vip/packages/index"
+    })
+  },
+  invite() {
+
+  },
+  author() {
+
+  },
+
   goDetail() {
     wx.navigateTo({
       url: '/pages/points/detail/index'

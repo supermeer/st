@@ -13,7 +13,8 @@
     "invite-code-dialog": "/components/invite-code-dialog/index",
     "recharge-result-dialog": "/components/recharge-result-dialog/index",
     "t-action-sheet": "tdesign-miniprogram/action-sheet/action-sheet",
-    "tip-dialog": "/components/tip-dialog/index"
+    "tip-dialog": "/components/tip-dialog/index",
+    "role-hot-container": "/components/role-hot-container/index"
   },
   "enablePullDownRefresh": false
 }

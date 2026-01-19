@@ -353,7 +353,7 @@ Component({
       retellMessage(
         { messageId: this.data.messageId, plotId: this.data.plotId },
         (eventData) => {
-          console.log('retellMessage chunk:', eventData.payload.msg);
+          // console.log('retellMessage chunk:', eventData.payload.msg);
           const msg = eventData.payload.msg
           const type = eventData.payload.type
           const currentResult = this.data.retryResults[newIndex]

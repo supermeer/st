@@ -54,6 +54,20 @@
         </view>
       </view>
     </view>
+    
+    <!-- 规则说明 -->
+    <view class="rule-info">
+      <view class="rule-info-title">规则说明</view>
+      <view class="rule-info-item">
+      1、一次可购买多个会员，有效期自动顺延。
+      </view>
+      <view class="rule-info-item">
+      2、赠送积分，支付完成后，立即到账，无需等会员生效。
+      </view>
+      <view class="rule-info-item">
+      3、支付成功后，不支持退款。
+      </view>
+    </view>
   </scroll-view>
 
   <view class="bottom-container">

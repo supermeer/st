@@ -1,0 +1,13 @@
+.role-hot-container {
+  display: inline-flex;
+  align-items: center;
+  font-weight: normal;
+  font-size: 24rpx;
+  color: #ccc;
+}
+
+.role-hot-icon {
+  width: 30rpx;
+  height: 30rpx;
+  margin-right: 4rpx;
+}

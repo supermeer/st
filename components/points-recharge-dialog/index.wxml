@@ -7,7 +7,7 @@
     <view class="points-dialog">
       <view class="points-header">
         <view class="user-info">
-          <t-image class="avatar" src="{{userAvatar}}" mode="aspectFill"></t-image>
+          <t-image class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></t-image>
           <view class="user-meta">
             <view class="user-name">{{userInfo.nickname}}</view>
             <view class="user-score">
@@ -19,7 +19,7 @@
         <view class="close-icon" bindtap="close">✕</view>
       </view>
 
-      <view class="tips-text">积分不足，请尽快充值！</view>
+      <view wx:if="{{!pointInfo.pointBalance || pointInfo.pointBalance== 0}}" class="tips-text">积分不足，请尽快充值！</view>
 
       <view class="plan-grid">
         <view

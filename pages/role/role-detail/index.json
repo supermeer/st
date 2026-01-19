@@ -7,7 +7,8 @@
     "t-slider": "tdesign-miniprogram/slider/slider",
     "memory-sheet": "/components/memory-sheet/index",
     "memory-desc-overlay": "/components/memory-desc-overlay/index",
-    "memory-display": "/components/memory-display/index"
+    "memory-display": "/components/memory-display/index",
+    "role-hot-container": "/components/role-hot-container/index"
   },
   "navigationBarTitleText": "角色详情"
 }

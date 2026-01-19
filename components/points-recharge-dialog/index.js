@@ -74,17 +74,9 @@ Component({
         mask: true
       })
 
-      const resultDialog = this.selectComponent('#rechargeResultDialog')
-      if (resultDialog) {
-        resultDialog.show({
-          orderNumber: 12224,
-          points: plan.point
-        })
-      }
-      return
       createOrderAndPrepay({
         openId: wx.getStorageSync('openId'),
-        orderType: 1,
+        orderType: plan.orderType,
         // 按当前约定不对 price 做额外处理
         count: 1
       })
