@@ -1,0 +1,72 @@
+.activity-dialog-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.activity-dialog-container {
+  width: 622rpx;
+  border-radius: 32rpx;
+  overflow: hidden;
+  background: linear-gradient(180deg, #6d4dff 0%, #b68cff 100%);
+}
+
+.activity-title-wrap {
+  padding: 36rpx 24rpx 18rpx;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.activity-title {
+  color: #fff;
+  font-size: 40rpx;
+  font-weight: 700;
+  text-align: center;
+}
+
+.activity-body {
+  padding: 54rpx 48rpx 64rpx;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.activity-icon {
+  width: 110rpx;
+  height: 110rpx;
+  margin-bottom: 32rpx;
+}
+
+.activity-content {
+  color: #fff;
+  font-size: 38rpx;
+  font-weight: bold;
+  line-height: 2;
+  text-align: center;
+  white-space: pre-line;
+  margin-bottom: 56rpx;
+}
+
+.activity-btn {
+  width: 80%;
+  height: 104rpx;
+  border-radius: 52rpx;
+  background: linear-gradient(135deg, #7c5aff 0%, #a855f7 50%, #6366f1 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.activity-btn-text {
+  color: #fff;
+  font-size: 34rpx;
+  font-weight: 700;
+}

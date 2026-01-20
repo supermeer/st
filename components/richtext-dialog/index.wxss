@@ -1,0 +1,99 @@
+.rich-dialog-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.rich-dialog-container {
+  width: 622rpx;
+  border-radius: 32rpx;
+  background: linear-gradient(180deg, #6d4dff 0%, #b68cff 100%);
+  position: relative;
+}
+
+.rich-dialog-top-icon {
+  border-radius: 70rpx;
+  width: 140rpx;
+  height: 140rpx;
+  border: 8rpx solid #bbb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(0deg, #6d4dff 0%, #b68cff 100%);
+  position: absolute;
+  top: -70rpx;
+  left: calc(50% - 70rpx);
+}
+
+.rich-dialog-body {
+  padding: 54rpx 48rpx 64rpx;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.rich-dialog-icon {
+  width: 110rpx;
+  height: 110rpx;
+  margin-bottom: 32rpx;
+}
+
+.rich-dialog-loading {
+  width: 100%;
+  padding: 80rpx 0 120rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rich-dialog-content {
+  width: 100%;
+  color: #fff;
+  font-size: 32rpx;
+  line-height: 1.9;
+  max-height: 680rpx;
+  overflow: auto;
+  margin-bottom: 56rpx;
+}
+
+.rich-dialog-btns {
+  width: 100%;
+  padding: 24rpx 52rpx;
+  display: flex;
+  gap: 24rpx;
+  justify-content: center;
+}
+
+.rich-dialog-btn {
+  flex: 1;
+  height: 80rpx;
+  border-radius: 40rpx;
+  background: linear-gradient(135deg, #7c5aff 0%, #a855f7 50%, #6366f1 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.rich-dialog-btn.is-outline {
+  background: transparent;
+  border: 2rpx solid rgba(255, 255, 255, 0.8);
+}
+
+.rich-dialog-btn-text {
+  color: #fff;
+  font-size: 28rpx;
+  font-weight: 700;
+}
+
+.rich-dialog-btn-text.is-outline {
+  color: rgba(255, 255, 255, 0.95);
+}

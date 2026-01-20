@@ -1,0 +1,22 @@
+<view class="activity-dialog-mask" wx:if="{{visible}}" bindtap="handleMaskClick" catchtouchmove="{{true}}">
+  <view class="activity-dialog-container" catchtap="">
+    <view class="activity-title-wrap">
+      <view class="activity-title">{{overrideTitle || title}}</view>
+    </view>
+
+    <view class="activity-body">
+      <t-image
+        wx:if="{{(overrideIconSrc || iconSrc)}}"
+        class="activity-icon"
+        src="{{overrideIconSrc || iconSrc}}"
+        mode="aspectFit"
+      />
+
+      <text class="activity-content">{{overrideContent || content}}</text>
+
+      <view class="activity-btn" bindtap="handleConfirm">
+        <view class="activity-btn-text">{{overrideButtonText || buttonText}}</view>
+      </view>
+    </view>
+  </view>
+</view>

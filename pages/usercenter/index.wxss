@@ -182,12 +182,39 @@ page {
   margin-left: 12rpx;
 }
 
+.role-type-tabs {
+  width: 100%;
+  display: inline-flex;
+  height: 70rpx;
+  white-space: nowrap;
+  padding-bottom: 10rpx;
+}
+.role-type-tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 24rpx;
+  height: 60rpx;
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #999;
+  white-space: nowrap;
+  transition: all 0.3s;
+  margin-left: 20rpx;
+}
+.role-type-tab.active {
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 35rpx;
+  color: #fff;
+}
+
+
 .role-list {
   display: flex;
   flex-wrap: wrap;
   padding: 16rpx 0;
   gap: 16rpx;
-  max-height: calc(100% - 560rpx);
+  max-height: calc(100% - 630rpx);
   overflow-y: auto;
 }
 
@@ -206,6 +233,49 @@ page {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+}
+
+.role-status-ribbon {
+  position: absolute;
+  top: 18rpx;
+  right: -44rpx;
+  z-index: 2;
+  width: 160rpx;
+  height: 44rpx;
+  line-height: 44rpx;
+  text-align: center;
+  font-size: 22rpx;
+  font-weight: 700;
+  transform: rotate(45deg);
+  transform-origin: center;
+  border-radius: 8rpx;
+  box-shadow: 0 8rpx 18rpx rgba(0, 0, 0, 0.35);
+  letter-spacing: 1rpx;
+}
+
+.role-status-ribbon.status-pending {
+  background: linear-gradient(135deg, rgba(26, 106, 255, 0.5) 0%, rgba(26, 106, 255, 0.22) 100%);
+  color: #0361ee;
+}
+
+.role-status-ribbon.status-approved {
+  background: linear-gradient(135deg, rgba(110, 243, 181, 0.26) 0%, rgba(23, 201, 100, 0.26) 100%);
+  color: #063a1e;
+}
+
+.role-status-ribbon.status-rejected {
+  background: linear-gradient(135deg, rgba(253, 10, 10, 0.5) 0%, rgba(253, 10, 10, 0.24) 100%);
+  color: #f32d2d;
+}
+
+.role-status-ribbon.status-offline {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.52) 0%, rgba(200, 200, 200, 0.20) 100%);
+  color: #aaa;
+}
+
+.role-status-ribbon.status-draft {
+  background: linear-gradient(135deg, rgba(139, 143, 255, 0.24) 0%, rgba(168, 85, 247, 0.24) 100%);
+  color: #12002b;
 }
 
 .role-card:active {
@@ -252,8 +322,19 @@ page {
   margin-top: 24rpx;
 }
 
+.author-btn {
+  color: var(--magic-color);
+}
+
 .empty-desc {
-  font-size: 24rpx;
-  color: #999;
-  margin-top: 12rpx;
+  font-size: 28rpx;
+  color: var(--magic-color);
+  margin-top: 18rpx;
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+}
+
+.role-create-btn {
+  margin-right: 12rpx;
 }

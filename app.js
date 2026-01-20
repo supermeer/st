@@ -1,5 +1,5 @@
 import updateManager from './common/updateManager'
-import { config } from "./config/index"
+import { config } from './config/index'
 import userStore from './store/user'
 // app.js（App() 外部）
 const originalPage = Page
@@ -66,6 +66,25 @@ App({
     menuButtonInfo: null
   },
   onLaunch: function () {
+    let pageLog = wx.getStorageSync('pageLog')
+    if (pageLog !== 'DONE') {
+      !pageLog && (pageLog = [])
+      wx.onAppRoute((res) => {
+        if (pageLog.length >= 10) {
+          wx.setStorageSync('pageLog', 'DONE')
+          return
+        }
+        pageLog.push(res)
+        if (
+          pageLog.length == 2 ||
+          pageLog.length == 5 ||
+          pageLog.length == 10
+        ) {
+          // 上报
+        }
+        wx.setStorageSync('pageLog', pageLog)
+      })
+    }
     // 使用 westore 初始化用户登录态与信息
     userStore.initFromLocal()
   },
@@ -73,17 +92,27 @@ App({
     updateManager()
     // 获取系统信息和导航栏高度
     this.getNavHeight()
+    let activeMark = wx.getStorageSync('activeMark')
+    if (!activeMark) {
+      activeMark = 1
+    } else if (activeMark < 6) {
+      activeMark++
+    }
+    wx.setStorageSync('activeMark', activeMark)
     if (!this.globalData.safeAreaBottom) {
       setTimeout(() => {
         this.getNavHeight()
-      }, 300);
+      }, 300)
     }
-    const accountInfo = wx.getAccountInfoSync();
+    const accountInfo = wx.getAccountInfoSync()
     let aE = 0
     if (accountInfo.miniProgram.envVersion === 'release') {
       aE = 1
     }
-    if (config.baseUrl === 'http://192.168.1.44:19000' || config.baseUrl === 'http://10.0.106.58:19000') {
+    if (
+      config.baseUrl === 'http://192.168.1.44:19000' ||
+      config.baseUrl === 'http://10.0.106.58:19000'
+    ) {
       aE = 1
     }
     wx.setStorageSync('aE', aE)
@@ -95,7 +124,10 @@ App({
       const statusBarHeight = windowInfo.statusBarHeight
       const safeArea = windowInfo.safeArea
       this.globalData.safeAreaTop = safeArea.top
-      const sb = (!!windowInfo.windowHeight && !!safeArea.bottom) ? (windowInfo.windowHeight - safeArea.bottom) : 0
+      const sb =
+        !!windowInfo.windowHeight && !!safeArea.bottom
+          ? windowInfo.windowHeight - safeArea.bottom
+          : 0
       this.globalData.safeAreaBottom = sb
       this.globalData.statusBarHeight = statusBarHeight
       this.globalData.navHeight = statusBarHeight + 44
@@ -111,4 +143,4 @@ App({
       return {}
     }
   }
-}) 
+})

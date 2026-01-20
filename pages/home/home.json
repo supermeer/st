@@ -8,6 +8,8 @@
     "chat": "/components/chat/index",
     "auth": "/components/auth/index",
     "background-sheet": "/components/background-sheet/index",
-    "tip-dialog": "/components/tip-dialog/index"
+    "activity-dialog": "/components/activity-dialog/index",
+    "tip-dialog": "/components/tip-dialog/index",
+    "richtext-dialog": "/components/richtext-dialog/index"
   }
 }

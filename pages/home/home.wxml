@@ -12,6 +12,18 @@
 </view>
 
 <background-sheet id="backgroundSheet" />
-
 <auth id="auth" check-phone="{{false}}" bind:loginSuccess="loginSuccess" />
 <tip-dialog id="tip-dialog" />
+
+<activity-dialog
+  id="activityDialog"
+  title="喊上你的搭子"
+  content="TA消费\n你躺赚积分"
+  buttonText="查看活动"
+  bind:confirm="onActivityConfirm"
+/>
+
+<richtext-dialog
+  id="richtextDialog"
+  bind:action="richtextAction"
+/>

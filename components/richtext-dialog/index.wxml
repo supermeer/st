@@ -1,0 +1,38 @@
+<view class="rich-dialog-mask" wx:if="{{visible}}" bindtap="handleMaskClick" catchtouchmove="{{true}}">
+  <view class="rich-dialog-container" catchtap="">
+    <view class="rich-dialog-top-icon">
+      <t-icon name="notification-filled" color="#fff" size="32" />
+    </view>
+
+    <view class="rich-dialog-body">
+      <t-image
+        wx:if="{{(overrideIconSrc || iconSrc)}}"
+        class="rich-dialog-icon"
+        src="{{overrideIconSrc || iconSrc}}"
+        mode="aspectFit"
+      />
+
+      <view wx:if="{{loading}}" class="rich-dialog-loading">
+        <t-loading theme="dots" size="30px" class="rich-dialog-loading-icon" />
+      </view>
+
+      <view wx:else>
+        <view class="rich-dialog-content">
+          <rich-text nodes="{{overrideContentNodes || contentNodes}}"></rich-text>
+        </view>
+      </view>
+    </view>
+    <view class="rich-dialog-btns">
+      <button
+        wx:for="{{(overrideButtons || buttons)}}"
+        wx:key="index"
+        class="rich-dialog-btn {{item.variant === 'outline' ? 'is-outline' : ''}}"
+        data-index="{{index}}"
+        bindtap="handleButtonTap"
+        open-type="{{item.type === 'share' ? 'share' : ''}}"
+      >
+        <view class="rich-dialog-btn-text {{item.variant === 'outline' ? 'is-outline' : ''}}">{{item.text}}</view>
+      </button>
+    </view>
+  </view>
+</view>

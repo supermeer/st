@@ -42,7 +42,20 @@
     </view>                                                        
     <view class="roles-title">
       智能体
-      <view class="roles-title-desc">(长按编辑)</view>
+      <view wx:if="{{roleList && roleList.length > 0}}" class="roles-title-desc">(长按智能体卡片可以编辑哦~)</view>
+    </view>
+    <view class="role-type-tabs">
+      <view 
+        class="role-type-tab {{activeRoleType === item.value ? 'active' : ''}}" 
+        wx:for="{{roleTypeList}}" 
+        wx:key="value"
+        bindtap="onRoleTypeChange"
+        data-value="{{item.value}}"
+        data-index="{{index}}"
+        id="role-tab-{{index}}"
+      >
+        {{item.name}} {{item.count}}
+      </view>
     </view>
     <view class="role-list">
       <view 
@@ -54,16 +67,23 @@
         bind:longpress="onLongPress"
         data-id="{{item.id}}"
       >
+        <view
+          wx:if="{{item._statusBadge && item._statusBadge.text}}"
+          class="role-status-ribbon {{item._statusBadge.className}}"
+        >
+          {{item._statusBadge.text}}
+        </view>
         <view class="role-info">
           <view class="role-name-row">
             <text class="role-name">{{item.name}}</text>
           </view>
+            <role-hot-container chatCount="{{item.messageCount}}" roleHot="{{item.browseCount}}" />
         </view>
       </view>
       <view wx:if="{{roleList.length === 0}}" class="role-empty-state">
         <t-icon name="empty" size="64" color="#ccc" />
-        <text class="empty-text">暂无自定义智能体</text>
-        <text class="empty-desc">快去创建吧！</text>
+        <text class="empty-text">参与创作者激励活动，奖励超香！<text class="author-btn" bindtap="onActivityClick">查看活动</text></text>
+        <view class="empty-desc" bindtap="createRole"><t-icon class="role-create-btn" name="user-add" size="24" />创建智能体</view>
       </view>
     </view>
   </view>
