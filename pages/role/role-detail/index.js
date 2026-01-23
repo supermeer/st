@@ -1,6 +1,13 @@
 import SystemInfo from '../../../utils/system'
-import { getCharacterDetail, getStoryDetail } from '../../../services/role/index'
-import { getPlotDetail, updatePlot, getMemoryType } from '../../../services/ai/chat'
+import {
+  getCharacterDetail,
+  getStoryDetail
+} from '../../../services/role/index'
+import {
+  getPlotDetail,
+  updatePlot,
+  getMemoryType
+} from '../../../services/ai/chat'
 Page({
   /**
    * 页面的初始数据
@@ -17,7 +24,7 @@ Page({
     },
     storyInfo: {
       id: null,
-      prologue: '', //开场白
+      prologue: '' //开场白
     },
     plotInfo: {
       id: null,
@@ -29,8 +36,7 @@ Page({
         id: null,
         title: ''
       },
-      persona: {
-      },
+      persona: {}
     },
     scrollTop: 0,
     pageInfo: {
@@ -86,18 +92,21 @@ Page({
     }
   },
   loadRoleDetail(id) {
-    getCharacterDetail(id).then(res => {
+    getCharacterDetail(id).then((res) => {
       const merged = {
         ...this.data.roleInfo,
         ...res
       }
       const desc = merged.description || ''
       const needFold = desc.length > 120
-      const display = needFold && !this.data.descriptionExpanded ? desc.slice(0, 120) + '…' : desc
+      const display =
+        needFold && !this.data.descriptionExpanded
+          ? desc.slice(0, 120) + '…'
+          : desc
       this.setData({
         roleInfo: merged,
         descriptionNeedFold: needFold,
-        descriptionDisplay: display 
+        descriptionDisplay: display
       })
       const plotId = res.currentPlotId
       if (!res.currentPlotId) {
@@ -124,7 +133,10 @@ Page({
         // 处理开场白折叠
         const prologue = res.defaultStoryDetail?.prologue || ''
         const prologueNeedFold = prologue.length > 120
-        const prologueDisplay = prologueNeedFold && !this.data.prologueExpanded ? prologue.slice(0, 120) + '…' : prologue
+        const prologueDisplay =
+          prologueNeedFold && !this.data.prologueExpanded
+            ? prologue.slice(0, 120) + '…'
+            : prologue
         this.setData({
           prologueNeedFold,
           prologueDisplay
@@ -132,7 +144,10 @@ Page({
       } else {
         const identity = res.plotDetailVO?.persona?.identity || ''
         const identityNeedFold = identity.length > 30
-        const identityDisplay = identityNeedFold && !this.data.identityExpanded ? identity.slice(0, 30) + '…' : identity
+        const identityDisplay =
+          identityNeedFold && !this.data.identityExpanded
+            ? identity.slice(0, 30) + '…'
+            : identity
         this.setData({
           plotInfo: {
             ...this.data.plotInfo,
@@ -150,7 +165,10 @@ Page({
         // 处理开场白折叠
         const prologue = res.plotDetailVO?.story?.prologue || ''
         const prologueNeedFold = prologue.length > 120
-        const prologueDisplay = prologueNeedFold && !this.data.prologueExpanded ? prologue.slice(0, 120) + '…' : prologue
+        const prologueDisplay =
+          prologueNeedFold && !this.data.prologueExpanded
+            ? prologue.slice(0, 120) + '…'
+            : prologue
         this.setData({
           prologueNeedFold,
           prologueDisplay
@@ -159,7 +177,7 @@ Page({
     })
   },
   getMemoryType() {
-    return getMemoryType().then(res => {
+    return getMemoryType().then((res) => {
       this.setData({
         memoryOptions: res || []
       })
@@ -246,11 +264,22 @@ Page({
       url: `/pages/role/chat-style/add/index?currentBg=${this.data.currentBg}`
     })
   },
-  onChatStyle() {
-    wx.navigateTo({
-      url: `/pages/role/chat-style/index?currentBg=${this.data.currentBg}`
-    })
-  },
+  // onChatStyle() {
+  //   wx.navigateTo({
+  //     url: `/pages/role/chat-style/index?currentBg=${this.data.currentBg}`
+  //   })
+  // },
+  // confirmChatStyle(e) {
+  //   this.setData({
+  //     plotInfo: {
+  //       ...this.data.plotInfo,
+  //       chatStyle: {
+  //         id: e.id,
+  //         title: e.title
+  //       }
+  //     }
+  //   })
+  // },
   onMySetting() {
     if (!this.data.plotInfo.id) {
       return
@@ -268,7 +297,10 @@ Page({
   toggleDescription() {
     const expanded = !this.data.descriptionExpanded
     const desc = this.data.roleInfo.description || ''
-    const display = this.data.descriptionNeedFold && !expanded ? desc.slice(0, 120) + '…' : desc
+    const display =
+      this.data.descriptionNeedFold && !expanded
+        ? desc.slice(0, 120) + '…'
+        : desc
     this.setData({
       descriptionExpanded: expanded,
       descriptionDisplay: display
@@ -278,7 +310,8 @@ Page({
   togglePrologue() {
     const expanded = !this.data.prologueExpanded
     const pro = this.data.storyInfo.prologue || ''
-    const display = this.data.prologueNeedFold && !expanded ? pro.slice(0, 120) + '…' : pro
+    const display =
+      this.data.prologueNeedFold && !expanded ? pro.slice(0, 120) + '…' : pro
     this.setData({
       prologueExpanded: expanded,
       prologueDisplay: display
@@ -288,11 +321,13 @@ Page({
   toggleIdentity() {
     const expanded = !this.data.identityExpanded
     const identity = this.data.plotInfo.persona?.identity || ''
-    const display = this.data.identityNeedFold && !expanded ? identity.slice(0, 30) + '…' : identity
+    const display =
+      this.data.identityNeedFold && !expanded
+        ? identity.slice(0, 30) + '…'
+        : identity
     this.setData({
       identityExpanded: expanded,
       identityDisplay: display
     })
   }
 })
-

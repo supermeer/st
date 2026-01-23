@@ -4,9 +4,13 @@ import ActionSheet, { ActionSheetTheme } from 'tdesign-miniprogram/action-sheet'
 import {
   getCharacterList,
   getCurrentPlotByCharacterId,
-  deleteCharacter
+  deleteCharacter,
+  applyCharacterPublished
 } from '../../services/role/index'
-import { redeemInviteCode } from '../../services/usercenter/index'
+import {
+  redeemInviteCode,
+  generateInvitationCode
+} from '../../services/usercenter/index'
 
 function getRoleStatusBadge(role) {
   const raw =
@@ -50,6 +54,7 @@ Page({
     isDev: false,
     pageInfo: {},
     editingRole: null,
+    editingRoleInfo: null,
     roleTypeList: [
       {
         name: '私密',
@@ -176,6 +181,44 @@ Page({
     })
   },
 
+  onActivityClick() {
+    const richtextDialog = this.selectComponent('#richtextDialog')
+    richtextDialog.show({
+      buttons: [
+        { text: '添加客服', variant: 'outline', type: 'cs' },
+        { text: '去创建', type: 'create' }
+      ]
+    })
+  },
+
+  onInviteClick() {
+    const richtextDialog = this.selectComponent('#richtextDialog')
+    richtextDialog.show({
+      isShare: true,
+      buttons: [
+        { text: '添加客服', variant: 'outline', type: 'cs' },
+        { text: '去分享', type: 'share' }
+      ]
+    })
+  },
+
+  async richtextAction({ detail }) {
+    const { type } = detail
+    if (type === 'cs') {
+      const app = getApp()
+      wx.openCustomerServiceChat({
+        extInfo: { url: app.globalData.wxCustomerService.url },
+        corpId: app.globalData.wxCustomerService.corpId,
+        success(res) {}
+      })
+    }
+    if (type === 'create') {
+      wx.navigateTo({
+        url: '/pages/role/add/index'
+      })
+    }
+  },
+
   createRole() {
     wx.navigateTo({
       url: '/pages/role/add/index'
@@ -184,15 +227,17 @@ Page({
 
   onLongPress(e) {
     const id = e.currentTarget.dataset.id
+    const info = this.data.roleList.find((item) => item.id == id)
     this.setData({
-      editingRole: id
+      editingRole: id,
+      editingRoleInfo: info || {}
     })
     ActionSheet.show({
       theme: ActionSheetTheme.List,
       selector: '#actionSheet',
       context: this,
       cancelText: '取消',
-      items: ['编辑', '删除']
+      items: ['编辑', '删除', '发布']
     })
   },
   handleSelected(e) {
@@ -221,6 +266,48 @@ Page({
     if (type === '编辑') {
       wx.navigateTo({
         url: `/pages/role/add/index?id=${this.data.editingRole}`
+      })
+      return
+    }
+
+    if (type === '发布') {
+      console.log(this.data.editingRoleInfo)
+      if (!this.data.editingRoleInfo.backgroundImage) {
+        wx.showToast({
+          title: '智能体发布需要专属形象，请先给智能体创建专属形象',
+          icon: 'none',
+          duration: 1500
+        })
+        return
+      }
+      if (
+        !this.data.editingRoleInfo.tagNames ||
+        this.data.editingRoleInfo.tagNames.length == 0 ||
+        this.data.editingRoleInfo.typeIds ||
+        this.data.editingRoleInfo.typeIds.length == 0 
+      ) {
+        wx.showToast({
+          title:
+            '智能体发布需要补充标签和类型，请先在编辑页的高级设定中添加智能体标签和类型',
+          icon: 'none',
+          duration: 1500
+        })
+        return
+      }
+      const tipDialog = this.selectComponent('#tip-dialog')
+      tipDialog.show({
+        hideTopIcon: true,
+        contentAlign: 'left',
+        content:
+          '版权声明：\n请确认次智能体是您的原创智能体，不侵犯他人的图像、IP或其他权益。侵犯他人权益的智能体无法获得认证，严重的情况可能会影响您在该平台的服务。\n\n1、创建的智能体为本人独立创作，不存在抄袭、剽窃等任何形式的侵权，也不侵犯他人权益。\n2、同意平台管理规则，如因智能体引发的法律纠纷或争议均由本人承担责任。\n\n',
+        cancelText: '取消',
+        confirmText: '同意并发布',
+        onConfirm: () => {
+          applyCharacterPublished({characterId: this.data.editingRole})
+          .then(res => {
+            this.getCharacterList()
+          })
+        }
       })
     }
   }

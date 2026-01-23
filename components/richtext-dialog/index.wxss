@@ -64,6 +64,19 @@
   margin-bottom: 56rpx;
 }
 
+.invite-line {
+  display: flex;
+  font-size: 28rpx;
+  justify-content: space-between;
+  color: #fff;
+  padding: 0 32rpx;
+}
+
+.copy-btn {
+  color: var(--theme-color);
+  flex-shrink: 0;
+}
+
 .rich-dialog-btns {
   width: 100%;
   padding: 24rpx 52rpx;

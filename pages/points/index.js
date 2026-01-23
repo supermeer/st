@@ -14,7 +14,7 @@ Page({
 
   onShow() {
     userStore.refreshPointInfo()
-    this.getPricingPlan()
+    // this.getPricingPlan()
   },
 
   selectPlan(e) {
@@ -108,10 +108,44 @@ Page({
     })
   },
   invite() {
-
+    const richtextDialog = this.selectComponent('#richtextDialog')
+    richtextDialog.show({
+      isShare: true,
+      buttons: [
+        { text: '添加客服', variant: 'outline', type: 'cs' },
+        { text: '分享邀请码', type: 'share' }
+      ]
+    })
   },
   author() {
-
+    const richtextDialog = this.selectComponent('#richtextDialog')
+    richtextDialog.show({
+      buttons: [
+        { text: '添加客服', variant: 'outline', type: 'cs' },
+        { text: '去发布', type: 'publish' }
+      ]
+    })
+  },
+  richtextAction({ detail }) {
+    const { type } = detail
+    if (type === 'cs') {
+      const app = getApp()
+      wx.openCustomerServiceChat({
+        extInfo: { url: app.globalData.wxCustomerService.url },
+        corpId: app.globalData.wxCustomerService.corpId,
+        success(res) {}
+      })
+    }
+    if (type === 'share') {
+      this.setData({
+        isInvite: true
+      })
+    }
+    if (type === 'publish') {
+      wx.switchTab({
+        url: '/pages/usercenter/index'
+      })
+    }
   },
 
   goDetail() {

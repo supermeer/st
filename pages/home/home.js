@@ -1,6 +1,7 @@
 import SystemInfo from '../../utils/system'
 import { getHomePlotMessage } from '../../services/ai/chat'
 import { getCharacterDetail } from '../../services/role/index'
+import { redeemInviteCode } from '../../services/usercenter/index'
 
 Page({
   data: {
@@ -79,6 +80,7 @@ Page({
       dialog.show(options)
     } else if (activeMark == 6) {
       options = {
+        isShare: true,
         title: '喊上你的搭子',
         iconSrc: '/static/activity/active-rank.png',
         content: 'TA消费\n你躺赚积分'
@@ -89,15 +91,16 @@ Page({
   onActivityConfirm() {
     const activeMark = wx.getStorageSync('activeMark')
     const richtextDialog = this.selectComponent('#richtextDialog')
-    if (activeMark == 3) {
+    if (activeMark == 6) {
       richtextDialog.show({
+        isShare: true,
         buttons: [
           { text: '添加客服', variant: 'outline', type: 'cs' },
           { text: '分享邀请码', type: 'share' }
         ]
       })
     }
-    if (activeMark == 6) {
+    if (activeMark == 3) {
       richtextDialog.show({
         buttons: [
           { text: '添加客服', variant: 'outline', type: 'cs' },
@@ -121,6 +124,11 @@ Page({
         isInvite: true
       })
     }
+    if (type === 'publish') {
+      wx.switchTab({
+        url: '/pages/usercenter/index'
+      })
+    }
   },
   getHomePlotMessage() {
     getHomePlotMessage().then((res) => {
@@ -142,10 +150,19 @@ Page({
       this.selectComponent('auth') || this.selectComponent('#auth')
     authRef && authRef.login()
   },
-  loginSuccess() {
+  async loginSuccess() {
     this.setData({ isLogin: true })
     this.getHomePlotMessage()
     if (this.data.inviteForm.isInvite) {
+      await redeemInviteCode({
+        invitationCode: this.data.inviteForm.inviteCode
+      })
+      this.setData({
+        inviteForm: {
+          isInvite: false,
+          inviteCode: null
+        }
+      })
     }
   },
   hideTabbar() {
@@ -171,6 +188,9 @@ Page({
       }
     })
   },
+  onCurrentBgChange(e) {
+    this.setCurrentBg(e.detail.bg)
+  },
   setCurrentBg(e) {
     this.setData({
       currentBg: e
@@ -180,7 +200,9 @@ Page({
     const { id } = this.data.roleForm || {}
     let path = `/pages/chat/index?characterId=${id}&isShare=${true}`
     if (this.data.isInvite) {
-      path = `/pages/home/home?inviteCode=123&isInvite=${true}`
+      const code = await getApp().getInviteCode()
+      path = `/pages/home/home?inviteCode=${code}&isInvite=${true}`
+      console.log(path)
     } else {
       const characterDetail = await getCharacterDetail(id)
       if (characterDetail.isSystem != 1) {

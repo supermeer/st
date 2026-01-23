@@ -48,8 +48,9 @@ Page({
    */
   onImportStyle(event) {
     const { id } = event.currentTarget.dataset
-    const list = this.data.activeTab === 0 ? this.data.templateList : this.data.myStyleList
-    const styleInfo = list.find(item => item.id === id)
+    const list =
+      this.data.activeTab === 0 ? this.data.templateList : this.data.myStyleList
+    const styleInfo = list.find((item) => item.id === id)
     const prevPage = getCurrentPages()[getCurrentPages().length - 2]
     prevPage.confirmChatStyle({
       ...styleInfo
@@ -59,7 +60,7 @@ Page({
 
   /**
    * 还原设置
-   */ 
+   */
   onResetSettings() {
     wx.showModal({
       title: '提示',
@@ -67,7 +68,7 @@ Page({
       success: (res) => {
         restorePlotChatStyle({
           plotId: this.data.plotId
-        }).then(res => {
+        }).then((res) => {
           wx.showToast({
             title: '已还原',
             icon: 'success'
@@ -96,7 +97,7 @@ Page({
   getStyleList() {
     getChatStyleList({
       ifSystem: this.data.activeTab === 0
-    }).then(res => {
+    }).then((res) => {
       const key = this.data.activeTab === 0 ? 'templateList' : 'myStyleList'
       this.setData({
         [key]: [...res]
@@ -104,4 +105,3 @@ Page({
     })
   }
 })
-

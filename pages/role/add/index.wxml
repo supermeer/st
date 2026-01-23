@@ -77,7 +77,7 @@
             <text>智能体设定</text>
           </view>
           <view class="textarea-counter">{{formData.descriptionPrompt.length}}/10000</view>
-          <view class="label-placeholder">决定智能体的对话效果。</view>
+          <view class="label-placeholder">决定智能体的对话效果，且仅创作者可见，不会对外展示。</view>
           <textarea 
             class="form-textarea" 
             placeholder="填写智能体的信息，包含但不限于智能体的人设、性格、身份、背景、经历、聊天风格、与用户的关系等。" 
@@ -118,6 +118,7 @@
             <text>剧情介绍</text>
           </view>
           <view class="textarea-counter">{{formData.scene.length}}/10000</view>
+          <view class="label-placeholder">不影响对话效果，仅用于用户快速了解智能体，会对外展示。</view>
           <textarea 
             class="form-textarea" 
             placeholder="用于了解智能体的基本信息、如背景、身份、当前对话场景等。" 
@@ -183,6 +184,57 @@
           </view>
         </view>
 
+        <view class="advanced-meta-block">
+          <view class="meta-header">
+            <view class="meta-title">
+              <text>智能体类型</text>
+            </view>
+          </view>
+          <view class="meta-desc">不影响对话效果，仅用于用户快速了解该智能体。</view>
+          <view class="meta-options">
+            <view
+              wx:for="{{typeOptions}}"
+              wx:key="id"
+              class="meta-option {{item.selected ? 'meta-option-selected' : ''}}"
+              data-id="{{item.id}}"
+              bindtap="onToggleType"
+            >
+              {{item.name}}
+            </view>
+          </view>
+        </view>
+
+        <view class="advanced-meta-block">
+          <view class="meta-header meta-header-row">
+            <view class="meta-title">
+              <text>智能体标签</text>
+            </view>
+            <view class="meta-count">{{(formData.tagIds && formData.tagIds.length) || 0}}/{{maxTagSelect}}</view>
+          </view>
+          <view class="meta-desc">不影响对话效果，仅用于用户快速了解该智能体。</view>
+          <view class="tag-chips">
+            <view
+              wx:for="{{selectedTagList}}"
+              wx:key="id"
+              class="tag-chip"
+            >
+              <text class="tag-chip-text">{{item.name}}</text>
+              <t-icon
+                name="close"
+                size="28rpx"
+                color="rgba(255,255,255,0.8)"
+                class="tag-chip-close"
+                data-id="{{item.id}}"
+                bindtap="onRemoveSelectedTag"
+              />
+            </view>
+            <view class="tag-add" bindtap="onOpenTagSelector">
+              <text class="tag-add-plus">+</text>
+              添加标签
+            </view>
+          </view>
+        </view>
+
         <!-- 聊天背景 -->
         <!-- <view class="setting-item" bindtap="onChatBackground">
           <view class="setting-label">聊天背景</view>
@@ -216,5 +268,34 @@
     bind:fail="onUploadFail"
     bind:cancel="onUploadCancel"
   />
+
+  <t-overlay visible="{{showTagSelector}}" z-index="12000" bind:click="onCloseTagSelector">
+    <view class="tag-selector-overlay">
+      <view class="tag-selector-panel" catchtap="onTouchMove">
+        <view class="tag-selector-header">
+          <view class="tag-selector-title">选择标签</view>
+          <t-icon name="close" size="36rpx" color="#fff" bindtap="onCloseTagSelector" />
+        </view>
+        <scroll-view class="tag-selector-body" scroll-y enhanced show-scrollbar="{{false}}">
+          <view class="tag-selector-sub">最多选择 {{maxTagSelect}} 个</view>
+          <view class="meta-options">
+            <view
+              wx:for="{{tagSelectorOptions}}"
+              wx:key="id"
+              class="meta-option {{item.selected ? 'meta-option-selected' : ''}}"
+              data-id="{{item.id}}"
+              bindtap="onToggleTagInSelector"
+            >
+              {{item.name}}
+            </view>
+          </view>
+        </scroll-view>
+        <view class="tag-selector-footer">
+          <view class="tag-selector-btn btn-cancel" bindtap="onCloseTagSelector">取消</view>
+          <view class="tag-selector-btn btn-confirm" bindtap="onConfirmTagSelector">确定</view>
+        </view>
+      </view>
+    </view>
+  </t-overlay>
 </view>
 <tip-dialog id="tip-dialog" />

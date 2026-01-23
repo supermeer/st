@@ -48,7 +48,7 @@
           开会员直接<text class="point-item-desc-white">送积分</text>！还有<text class="point-item-desc-white">一堆福利</text>等你来薅！
         </view>
       </view>
-      <view class="point-item">
+      <view class="point-item" bindtap="invite">
         <view class="point-item-header">
           <view class="point-item-title">邀请好友赚积分<view class="point-item-title-tag gn">不限次</view></view>
           <view class="point-item-header-right">去邀请<t-icon name="chevron-right" size="20" /></view>
@@ -57,7 +57,7 @@
           积分充值，超划算~
         </view>
       </view>
-      <view class="point-item">
+      <view class="point-item" bindtap="author">
         <view class="point-item-header">
           <view class="point-item-title">创作者激励活动<view class="point-item-title-tag rd">超火热</view></view>
           <view class="point-item-header-right">查看活动<t-icon name="chevron-right" size="20" /></view>
@@ -118,3 +118,8 @@
     id="pointsRechargeDialog"
   />
 </view>
+
+<richtext-dialog
+  id="richtextDialog"
+  bind:action="richtextAction"
+/>

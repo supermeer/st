@@ -4,6 +4,7 @@
     <chat
       class="chat-container"
       bind:retryMessage="onRetryMessage"
+      bind:currentBgChange="onCurrentBgChange"
       roleInfo="{{roleForm}}"
       showBack="{{true}}"
       isShare="{{shareForm.isShare}}"

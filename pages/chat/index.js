@@ -1,5 +1,8 @@
 import SystemInfo from '../../utils/system'
-import { getCurrentPlotByCharacterId, getCharacterDetail } from '../../services/role/index'
+import {
+  getCurrentPlotByCharacterId,
+  getCharacterDetail
+} from '../../services/role/index'
 Page({
   data: {
     pageInfo: {},
@@ -51,7 +54,7 @@ Page({
     this.getCurrentPlotByCharacterId(this.data.shareForm.id)
   },
   getCurrentPlotByCharacterId(id) {
-    getCurrentPlotByCharacterId(id).then(res => {
+    getCurrentPlotByCharacterId(id).then((res) => {
       this.setData({
         roleForm: {
           ...this.data.roleForm,
@@ -72,6 +75,9 @@ Page({
       }
     })
   },
+  onCurrentBgChange(e) {
+    this.setCurrentBg(e.detail.bg)
+  },
   setCurrentBg(e) {
     this.setData({
       currentBg: e
@@ -89,5 +95,5 @@ Page({
       path,
       imageUrl: '/images/global-share.jpg'
     }
-  },
+  }
 })

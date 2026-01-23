@@ -7,7 +7,8 @@
     "t-icon": "tdesign-miniprogram/icon/icon",
     "custom-nav": "/components/custom-nav/index",
     "points-recharge-dialog": "/components/points-recharge-dialog/index",
-    "recharge-result-dialog": "/components/recharge-result-dialog/index"
+    "recharge-result-dialog": "/components/recharge-result-dialog/index",
+    "richtext-dialog": "/components/richtext-dialog/index"
   }
 }
 

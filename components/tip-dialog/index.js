@@ -3,6 +3,9 @@ Component({
 
   data: {
     visible: false,
+    hideTopIcon: false,
+    contentAlign: '',
+    title: null,
     content: '回溯后，该条消息之后的对话将被清除，且不可撤回。',
     cancelText: '取消',
     confirmText: '确认'
@@ -20,6 +23,9 @@ Component({
      */
     show(options = {}) {
       const {
+        title = null,
+        hideTopIcon = false,
+        contentAlign = '',
         content = '回溯后，该条消息之后的对话将被清除，且不可撤回。',
         cancelText = '取消',
         confirmText = '确认',
@@ -33,6 +39,9 @@ Component({
 
       this.setData({
         visible: true,
+        title,
+        contentAlign,
+        hideTopIcon,
         content,
         cancelText,
         confirmText

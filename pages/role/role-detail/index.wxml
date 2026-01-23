@@ -65,7 +65,7 @@
           </text>
         </view>
 
-        <view class="section-title-container" bind:tap="onNewChatStyle">
+        <!-- <view class="section-title-container" bind:tap="onNewChatStyle">
           <view class="section-title">对话风格</view>
           <t-icon wx:if="{{plotInfo.id}}" name="add-circle-filled" class="section-title-icon" size="18" />
         </view>
@@ -75,7 +75,7 @@
             <text class="style-right-text">选择风格</text>
             <t-icon name="chevron-right-s" class="section-title-icon" size="28" />
           </view>
-        </view>
+        </view> -->
       </view>
       <view wx:if="{{currentTab === '2'}}" class="content-section">
         <view class="section-title-container" bind:tap="onPlotSelect">

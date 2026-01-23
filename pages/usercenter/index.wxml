@@ -15,9 +15,15 @@
       <view class="user-info-name">
         <text>{{userInfo.nickname || '小柚子'}}</text>
         <!-- <view class="user-info-uid">UID:123321</view> -->
-        <view class="user-invite-code" catchtap="onInviteCodeClick">
-          <t-image class="user-invite-code-icon" src="/static/usercenter/score.png"/>
-          填写邀请码
+        <view class="user-invite-code">
+          <view class="user-invite-code-item" catchtap="onInviteCodeClick">
+            <t-image class="user-invite-code-icon" src="/static/usercenter/score.png"/>
+            填写邀请码
+          </view>
+          <view class="user-invite-code-item" catchtap="onInviteClick">
+            <t-icon name="share" class="user-invite-code-icon" size="16" />
+            邀请好有
+          </view>
         </view>
       </view>
       <t-icon class="user-info-arr" name="setting" size="24" color="#fff" />
@@ -110,5 +116,10 @@
 />
 
 <tip-dialog id="tip-dialog" />
+
+<richtext-dialog
+  id="richtextDialog"
+  bind:action="richtextAction"
+/>
 
 <t-toast id="t-toast" />

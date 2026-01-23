@@ -20,6 +20,10 @@ export function deleteCharacter(data) {
     return request.post('/api/v1/server/character/deleteCharacter', data)
 }
 
+export function applyCharacterPublished(data) {
+    return request.post('/api/v1/server/character/applyCharacterPublished', data)
+}
+
 export function createPersona(data) {
     return request.post('/api/v1/server/story/createPersona', data)
 }

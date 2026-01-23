@@ -1,7 +1,7 @@
 <view class="tip-dialog-mask" wx:if="{{visible}}" bindtap="handleMaskClick" catchtouchmove="{{true}}">
   <view class="tip-dialog-container" catchtap="">
     <!-- 顶部图标 -->
-    <view class="tip-dialog-icon">
+    <view wx:if="{{!hideTopIcon}}" class="tip-dialog-icon">
       <view class="icon-circle">
         <view class="icon-checkmark"></view>
       </view>
@@ -14,10 +14,14 @@
       <view class="deco-star star-3">✦</view>
     </view>
 
-    <!-- 提示文字 -->
-    <view class="tip-dialog-content">
-      {{content}}
+    <view wx:if="{{title && title.length > 0}}" class="tip-dialog-title">
+      {{title}}
     </view>
+
+    <!-- 提示文字 -->
+    <text class="tip-dialog-content" style="text-align: {{contentAlign}}">
+      {{content}}
+    </text>
 
     <!-- 按钮组 -->
     <view class="tip-dialog-buttons">

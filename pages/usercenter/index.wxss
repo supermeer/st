@@ -72,6 +72,11 @@ page {
   color: var(--magic-color);
   font-weight: normal;
   margin-top: 12rpx;
+  gap: 24rpx;
+}
+.user-invite-code-item {
+  display: flex;
+  align-items: center;
 }
 .user-invite-code-icon {
   width: 32rpx;

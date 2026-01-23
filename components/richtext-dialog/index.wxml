@@ -22,6 +22,10 @@
         </view>
       </view>
     </view>
+    <view wx:if="{{isShare}}" class="invite-line">
+      您的邀请码：{{inviteForm.code}}
+      <view class="copy-btn" bindtap="copyAction">复制</view>
+    </view>
     <view class="rich-dialog-btns">
       <button
         wx:for="{{(overrideButtons || buttons)}}"

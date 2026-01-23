@@ -5,6 +5,7 @@
       bind:hideTabbar="hideTabbar"
       bind:showTabbar="showTabbar"
       bind:retryMessage="onRetryMessage"
+      bind:currentBgChange="onCurrentBgChange"
       roleInfo="{{roleForm}}"
       id="chat"
     />

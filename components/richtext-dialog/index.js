@@ -27,11 +27,16 @@ Component({
   },
   data: {
     visible: false,
+    isShare: false,
     loading: false,
     overrideTitleNodes: '',
     overrideIconSrc: '',
     overrideContentNodes: '',
-    overrideButtons: null
+    overrideButtons: null,
+    shareForm: {
+      content:'',
+      code: ''
+    }
   },
   lifetimes: {
     created() {
@@ -41,6 +46,7 @@ Component({
   methods: {
     show(options = {}) {
       const {
+        isShare = false,
         titleNodes,
         iconSrc,
         contentNodes,
@@ -55,6 +61,7 @@ Component({
 
       this.setData({
         visible: true,
+        isShare,
         loading: shouldFetch,
         overrideTitleNodes: typeof titleNodes === 'string' ? titleNodes : '',
         overrideIconSrc: typeof iconSrc === 'string' ? iconSrc : '',
@@ -62,6 +69,18 @@ Component({
           typeof contentNodes === 'string' ? contentNodes : '',
         overrideButtons: Array.isArray(buttons) ? buttons : null
       })
+
+      if (isShare) {
+        const app = getApp()
+        const code = app.getInviteCode().then((res) => {
+          this.setData({
+            inviteForm: {
+              content: `重磅福利！\n小程序搜索「星语酒馆AI」并输入邀请码 【${res}】，立享积分福利！智能体超多，体验超绝！快冲吧！`,
+              code: res
+            }
+          })
+        })
+      }
 
       if (!shouldFetch) return
 
@@ -130,6 +149,18 @@ Component({
       const buttons = this.data.overrideButtons || this.data.buttons
       const button = Array.isArray(buttons) ? buttons[index] : undefined
       this.triggerEvent('action', button)
+      this.hide()
+    },
+    copyAction() {
+      wx.setClipboardData({
+        data: this.data.inviteForm.content,
+        success: () => {
+          wx.showToast({
+            title: '文案已复制到粘贴板',
+            icon: 'none'
+          })
+        }
+      })
       this.hide()
     }
   }

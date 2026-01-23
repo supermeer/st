@@ -124,6 +124,17 @@
   font-size: 16rpx;
 }
 
+.tip-dialog-title {
+  color: #ffffff;
+  font-size: 36rpx;
+  line-height: 44rpx;
+  text-align: center;
+  margin-bottom: 20rpx;
+  padding: 0 20rpx;
+  font-weight: bold;
+}
+
+
 /* 提示文字 */
 .tip-dialog-content {
   color: #ffffff;

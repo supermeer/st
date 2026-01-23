@@ -1,6 +1,7 @@
 import updateManager from './common/updateManager'
 import { config } from './config/index'
 import userStore from './store/user'
+import { generateInvitationCode } from './services/usercenter/index'
 // app.js（App() 外部）
 const originalPage = Page
 Page = function (pageConfig) {
@@ -52,6 +53,7 @@ App({
       city: '',
       state: ''
     },
+    inviteCode: '',
     // 微信客服
     wxCustomerService: {
       // url: 'https://work.weixin.qq.com/kfid/kfcf1d68a9b8fe22358',
@@ -95,7 +97,7 @@ App({
     let activeMark = wx.getStorageSync('activeMark')
     if (!activeMark) {
       activeMark = 1
-    } else if (activeMark < 6) {
+    } else if (activeMark < 7) {
       activeMark++
     }
     wx.setStorageSync('activeMark', activeMark)
@@ -116,6 +118,17 @@ App({
       aE = 1
     }
     wx.setStorageSync('aE', aE)
+  },
+  async getInviteCode() {
+    return new Promise(async (res, rej) => {
+      let inviteCode = wx.getStorageSync('inviteCode')
+      if (!inviteCode || inviteCode.length == 0) {
+        const res = await generateInvitationCode()
+        inviteCode = res.invitationCode
+        wx.setStorageSync('inviteCode', inviteCode)
+      }
+      res(inviteCode)
+    })
   },
   // 获取导航栏高度
   getNavHeight() {

@@ -13,7 +13,7 @@
 
   <!-- 顶部导航标签 -->
   <view class="top-nav">
-    <scroll-view class="nav-scroll" scroll-x enable-flex enhanced="{{true}}" show-scrollbar="{{false}}" scroll-left="{{navScrollLeft}}" scroll-with-animation>
+    <scroll-view class="nav-scroll" scroll-x enable-flex show-scrollbar="{{false}}" scroll-left="{{navScrollLeft}}" scroll-with-animation>
       <view class="nav-tabs">
         <view 
           class="nav-tab {{activeNav === item.id ? 'active' : ''}}" 
@@ -23,8 +23,7 @@
           data-value="{{item.id}}"
           data-index="{{index}}"
           id="nav-tab-{{index}}"
-        >
-          {{item.name}}
+        > 
           <view class="nav-underline" wx:if="{{activeNav === item.id}}"></view>
         </view>
       </view>
@@ -36,7 +35,7 @@
 
   <!-- 筛选标签 -->
   <view class="filter-tags">
-    <scroll-view class="tags-scroll" scroll-x enhanced="{{true}}" show-scrollbar="{{false}}" scroll-left="{{tagScrollLeft}}" scroll-with-animation>
+    <scroll-view class="tags-scroll" scroll-x show-scrollbar="{{false}}" scroll-left="{{tagScrollLeft}}" scroll-with-animation>
       <view class="tag-item {{utils.includes(activeTags, item.id) ? 'active' : ''}}" 
         wx:for="{{tagList}}" 
         wx:key="id"
@@ -81,7 +80,6 @@
               <text class="role-name">{{item.name}}</text>
               <t-icon name="check-circle-filled" size="32rpx" color="#4A9EFF" wx:if="{{item.verified}}" />
             </view>
-            <role-hot-container chatCount="{{item.messageCount}}" roleHot="{{item.browseCount}}" />
             <view class="role-tags">
               <text class="role-tag blur-glass" wx:for="{{item.tagNames}}" wx:key="index" wx:for-item="tag">#{{tag}}</text>
             </view>

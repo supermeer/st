@@ -4,6 +4,7 @@
   "usingComponents": {
     "custom-nav": "/components/custom-nav/index",
     "t-icon": "tdesign-miniprogram/icon/icon",
+    "t-overlay": "tdesign-miniprogram/overlay/overlay",
     "input-sheet": "/components/input-sheet/index",
     "background-sheet": "/components/background-sheet/index",
     "tip-dialog": "/components/tip-dialog/index",
@@ -12,4 +13,3 @@
   },
   "navigationBarTitleText": ""
 }
-

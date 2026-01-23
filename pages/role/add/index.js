@@ -1,5 +1,12 @@
 import SystemInfo from '../../../utils/system'
-import { createCharacter, updateCharacter, getCurrentPlotByCharacterId, getCharacterDetail } from '../../../services/role/index'
+import {
+  createCharacter,
+  updateCharacter,
+  getCurrentPlotByCharacterId,
+  getCharacterDetail,
+  getCharacterType,
+  getCharacterTag
+} from '../../../services/role/index'
 Page({
   /**
    * 页面的初始数据
@@ -24,7 +31,9 @@ Page({
       identity: '',
       personaGender: null,
       defaultBackgroundImage: null,
-      backgroundImage: null
+      backgroundImage: null,
+      typeIds: [],
+      tagIds: []
     },
     worldBookList: [],
     styleForm: {
@@ -34,7 +43,16 @@ Page({
     genderList: ['男', '女', '其他'],
     currentBg: '',
     showUploader: false,
-    showAdvancedSetting: false
+    showAdvancedSetting: false,
+
+    typeOptions: [],
+    tagOptions: [],
+    selectedTagList: [],
+    maxTypeSelect: 4,
+    maxTagSelect: 4,
+    showTagSelector: false,
+    tempTagIds: [],
+    tagSelectorOptions: []
   },
 
   /**
@@ -51,29 +69,239 @@ Page({
     this.setData({
       pageInfo: { ...this.data.pageInfo, ...SystemInfo.getPageInfo() }
     })
+
+    this.initMetaOptions()
+  },
+
+  initMetaOptions() {
+    Promise.all([getCharacterType(), getCharacterTag()])
+      .then(([typeOptions, tagOptions]) => {
+        this.setData(
+          {
+            typeOptions: Array.isArray(typeOptions) ? typeOptions : [],
+            tagOptions: Array.isArray(tagOptions) ? tagOptions : []
+          },
+          () => {
+            this.syncSelectedMeta()
+          }
+        )
+      })
+      .catch(() => {})
+  },
+
+  normalizeIdList(list) {
+    return (Array.isArray(list) ? list : [])
+      .map((v) => Number(v))
+      .filter((v) => !Number.isNaN(v))
+  },
+
+  buildSelectedOptions(options, selectedIds) {
+    const set = new Set(this.normalizeIdList(selectedIds))
+    return (Array.isArray(options) ? options : []).map((o) => ({
+      ...o,
+      selected: set.has(Number(o.id))
+    }))
+  },
+
+  syncSelectedMeta() {
+    const { tagOptions, formData } = this.data
+    const tagIds = this.normalizeIdList(formData.tagIds)
+    const typeIds = this.normalizeIdList(formData.typeIds)
+
+    const selectedTagList = (tagOptions || []).filter(
+      (t) => tagIds.indexOf(Number(t.id)) !== -1
+    )
+
+    const typeOptionsWithSelected = this.buildSelectedOptions(
+      this.data.typeOptions,
+      typeIds
+    )
+
+    const tagSelectorOptions = this.buildSelectedOptions(
+      this.data.tagOptions,
+      this.data.tempTagIds
+    )
+
+    this.setData({
+      selectedTagList,
+      typeOptions: typeOptionsWithSelected,
+      tagSelectorOptions,
+      'formData.tagIds': tagIds,
+      'formData.typeIds': typeIds
+    })
   },
 
   getCharacterById(id) {
-    getCharacterDetail(id)
-    .then(res => {
+    getCharacterDetail(id).then((res) => {
       const { userAddressedAs, identity, gender } = res.defaultPersona || {}
       const { scene, prologue } = res.defaultStoryDetail || {}
-      this.setData({
-        formData: {
-          ...this.data.formData,
-          ...res,
-          userAddressedAs: userAddressedAs || '',
-          identity: identity || '',
-          personaGender: gender || '',
-          scene: scene || '',
-          prologue: prologue || '',
-          descriptionPrompt: res.descriptionPrompt || res.description || '',
+
+      const typeIds = Array.isArray(res.typeIds)
+        ? res.typeIds
+        : Array.isArray(res.characterTypeIds)
+          ? res.characterTypeIds
+          : Array.isArray(res.types)
+            ? res.types.map((t) => t.id)
+            : []
+
+      const tagIds = Array.isArray(res.tagIds)
+        ? res.tagIds
+        : Array.isArray(res.characterTagIds)
+          ? res.characterTagIds
+          : Array.isArray(res.tags)
+            ? res.tags.map((t) => t.id)
+            : []
+
+      const normalizedTypeIds = (typeIds || [])
+        .map((v) => Number(v))
+        .filter((v) => !Number.isNaN(v))
+      const normalizedTagIds = (tagIds || [])
+        .map((v) => Number(v))
+        .filter((v) => !Number.isNaN(v))
+
+      this.setData(
+        {
+          formData: {
+            ...this.data.formData,
+            ...res,
+            userAddressedAs: userAddressedAs || '',
+            identity: identity || '',
+            personaGender: gender || '',
+            scene: scene || '',
+            prologue: prologue || '',
+            descriptionPrompt: res.descriptionPrompt || res.description || '',
+            typeIds: normalizedTypeIds,
+            tagIds: normalizedTagIds
+          },
+          currentBg: res.backgroundImage,
+          worldBookList: res.prompt ? JSON.parse(res.prompt) : []
         },
-        currentBg: res.backgroundImage,
-        worldBookList: res.prompt ? JSON.parse(res.prompt) : []
-      })
+        () => {
+          this.syncSelectedMeta()
+        }
+      )
     })
   },
+
+  onToggleType(e) {
+    const { id } = e.currentTarget.dataset
+    const normalizedId = Number(id)
+    if (Number.isNaN(normalizedId)) {
+      return
+    }
+    const typeIds = [...this.normalizeIdList(this.data.formData.typeIds)]
+    const idx = typeIds.indexOf(normalizedId)
+    if (idx !== -1) {
+      typeIds.splice(idx, 1)
+      this.setData({
+        'formData.typeIds': typeIds,
+        typeOptions: this.buildSelectedOptions(this.data.typeOptions, typeIds)
+      })
+      return
+    }
+    if (typeIds.length >= this.data.maxTypeSelect) {
+      wx.showToast({
+        title: `最多选择${this.data.maxTypeSelect}个类型`,
+        icon: 'none'
+      })
+      return
+    }
+    typeIds.push(normalizedId)
+    this.setData({
+      'formData.typeIds': typeIds,
+      typeOptions: this.buildSelectedOptions(this.data.typeOptions, typeIds)
+    })
+  },
+
+  onOpenTagSelector() {
+    const tagIds = this.normalizeIdList(this.data.formData.tagIds)
+    const tagSelectorOptions = this.buildSelectedOptions(
+      this.data.tagOptions,
+      tagIds
+    )
+    this.setData({
+      showTagSelector: true,
+      tempTagIds: tagIds,
+      tagSelectorOptions
+    })
+  },
+
+  onCloseTagSelector() {
+    this.setData({
+      showTagSelector: false
+    })
+  },
+
+  onToggleTagInSelector(e) {
+    const { id } = e.currentTarget.dataset
+    const normalizedId = Number(id)
+    if (Number.isNaN(normalizedId)) {
+      return
+    }
+    const tempTagIds = [...this.normalizeIdList(this.data.tempTagIds)]
+    const idx = tempTagIds.indexOf(normalizedId)
+    if (idx !== -1) {
+      tempTagIds.splice(idx, 1)
+      this.setData({
+        tempTagIds,
+        tagSelectorOptions: this.buildSelectedOptions(
+          this.data.tagOptions,
+          tempTagIds
+        )
+      })
+      return
+    }
+    if (tempTagIds.length >= this.data.maxTagSelect) {
+      wx.showToast({
+        title: `最多选择${this.data.maxTagSelect}个标签`,
+        icon: 'none'
+      })
+      return
+    }
+    tempTagIds.push(normalizedId)
+    this.setData({
+      tempTagIds,
+      tagSelectorOptions: this.buildSelectedOptions(
+        this.data.tagOptions,
+        tempTagIds
+      )
+    })
+  },
+
+  onConfirmTagSelector() {
+    this.setData(
+      {
+        'formData.tagIds': [...(this.data.tempTagIds || [])],
+        showTagSelector: false
+      },
+      () => {
+        this.syncSelectedMeta()
+      }
+    )
+  },
+
+  onRemoveSelectedTag(e) {
+    const { id } = e.currentTarget.dataset
+    const normalizedId = Number(id)
+    if (Number.isNaN(normalizedId)) {
+      return
+    }
+    const tagIds = [...(this.data.formData.tagIds || [])]
+    const idx = tagIds.indexOf(normalizedId)
+    if (idx !== -1) {
+      tagIds.splice(idx, 1)
+      this.setData(
+        {
+          'formData.tagIds': tagIds
+        },
+        () => {
+          this.syncSelectedMeta()
+        }
+      )
+    }
+  },
+
+  onTouchMove() {},
 
   /**
    * 输入框变化
@@ -119,7 +347,6 @@ Page({
    * 选择性别
    */
   onSelectGender() {
-    
     wx.showActionSheet({
       itemList: this.data.genderList,
       success: (res) => {
@@ -224,7 +451,10 @@ Page({
   },
   async onUploadSuccess(e) {
     const { tempFilePath, signature } = e.detail
-    const bg = signature && signature.uploadUrl ? signature.uploadUrl.split('?')[0] : tempFilePath
+    const bg =
+      signature && signature.uploadUrl
+        ? signature.uploadUrl.split('?')[0]
+        : tempFilePath
     this.setData({
       showUploader: false,
       currentBg: tempFilePath,
@@ -248,7 +478,7 @@ Page({
    */
   onSubmit() {
     const { formData } = this.data
-    
+
     // 表单验证
     if (!formData.name) {
       wx.showToast({
@@ -257,8 +487,7 @@ Page({
       })
       return
     }
-    
-    if (!formData.descriptionPrompt ) {
+    if (!formData.descriptionPrompt) {
       wx.showToast({
         title: '请输入智能体设定',
         icon: 'none'
@@ -273,18 +502,18 @@ Page({
     //   })
     //   return
     // }
-    
+
     const method = formData.id ? updateCharacter : createCharacter
 
     wx.showLoading({
       title: `${method === updateCharacter ? '更新中...' : '创建中...'}`,
       mask: true
     })
-    
+
     method({
       ...formData,
       description: formData.description || formData.descriptionPrompt
-    }).then(id => {
+    }).then((id) => {
       const characterId = formData.id || id
       wx.hideLoading()
       wx.showToast({
@@ -294,22 +523,28 @@ Page({
       })
 
       const tipDialog = this.selectComponent('#tip-dialog')
+      let content = '有任何问题，可添加客服微信咨询。'
       tipDialog.show({
-        content: `${method === updateCharacter ? '更新成功' : '创建成功'}`,
-        cancelText: '返回',
+        title: `${method === updateCharacter ? '更新成功' : '创建成功'}`,
+        content,
+        cancelText: '添加客服',
         confirmText: '去聊天',
         onCancel: () => {
           wx.navigateBack()
+          const app = getApp()
+          wx.openCustomerServiceChat({
+            extInfo: { url: app.globalData.wxCustomerService.url },
+            corpId: app.globalData.wxCustomerService.corpId,
+            success(res) {}
+          })
         },
         onConfirm: async () => {
           const res = await getCurrentPlotByCharacterId(characterId)
           wx.redirectTo({
-            url: `/pages/chat/index?plotId=${ res && res.plotId ? res.plotId : ''}&characterId=${characterId}`
+            url: `/pages/chat/index?plotId=${res && res.plotId ? res.plotId : ''}&characterId=${characterId}`
           })
         }
       })
-
     })
   }
 })
-

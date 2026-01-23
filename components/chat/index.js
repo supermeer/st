@@ -1,6 +1,11 @@
 import systemInfo from '../../utils/system'
 import ChatService from '../../services/ai/chat'
-import { getPlotMessage, createPlot, forkPlotFromMessage, rollbackPlotMessage } from '../../services/ai/chat'
+import {
+  getPlotMessage,
+  createPlot,
+  forkPlotFromMessage,
+  rollbackPlotMessage
+} from '../../services/ai/chat'
 import { getCharacterDetail } from '../../services/role/index'
 const { formatMessage } = require('../../utils/msgHandler')
 Component({
@@ -77,12 +82,12 @@ Component({
         this.getMessageList()
       } else {
         this.setData({
-          'pagination': {
+          pagination: {
             size: 10,
             current: 1,
             plotId: null
           },
-          'chatDetail': {
+          chatDetail: {
             ...this.data.chatDetail,
             plotId: null
           },
@@ -90,14 +95,14 @@ Component({
         })
       }
     },
-    'msgList': function (newVal) {
+    msgList: function (newVal) {
       if (newVal.length > 0) {
         this.setData({
           latestMsgId: newVal[newVal.length - 1].id
         })
       }
       // 检查是否有消息正在生成中
-      const isGenerating = newVal.some(msg => msg.loading === true)
+      const isGenerating = newVal.some((msg) => msg.loading === true)
       // 在加载更多或程序自动滚动期间，不调整 scrollAnimation，避免打断定位行为
       if (this.data.isLoadingMore || this._isAutoScrolling) {
         this.setData({
@@ -120,9 +125,7 @@ Component({
       description: ''
     },
     avatarUrl: null,
-    currentStoryDetail: {
-
-    },
+    currentStoryDetail: {},
     chatDetail: {
       plotId: null,
       updateTime: null
@@ -172,8 +175,15 @@ Component({
   methods: {
     // 处理子组件蒙版显示/隐藏事件
     onMaskShow(e) {
-      const { show, buttonTop, buttonLeft, buttonRight, messageId, messageType } = e.detail
-      
+      const {
+        show,
+        buttonTop,
+        buttonLeft,
+        buttonRight,
+        messageId,
+        messageType
+      } = e.detail
+
       if (show) {
         this.setData({
           maskVisible: true,
@@ -187,29 +197,32 @@ Component({
         this.hideMask()
       }
     },
-    
+
     // 滚动时隐藏蒙版，并检测用户手动滚动
     onScroll(e) {
       if (this.data.maskVisible) {
         this.hideMask()
       }
-      
+
       const { scrollTop, scrollHeight } = e.detail
-      
+
       // 获取 scroll-view 高度
       if (!this._scrollViewHeight) {
         const query = this.createSelectorQuery()
-        query.select('.message-list').boundingClientRect().exec((res) => {
-          if (res && res[0]) {
-            this._scrollViewHeight = res[0].height
-            this._handleScrollState(scrollTop, scrollHeight)
-          }
-        })
+        query
+          .select('.message-list')
+          .boundingClientRect()
+          .exec((res) => {
+            if (res && res[0]) {
+              this._scrollViewHeight = res[0].height
+              this._handleScrollState(scrollTop, scrollHeight)
+            }
+          })
       } else {
         this._handleScrollState(scrollTop, scrollHeight)
       }
     },
-    
+
     // 控制顶部渐隐切换：
     // - 开启：仅在用户滚动“空闲”一小段时间后再启用，避免中断阻尼/动量
     // - 关闭：立即生效
@@ -234,7 +247,7 @@ Component({
         if (this.data.isScrolledUp) this.setData({ isScrolledUp: false })
       }
     },
-    
+
     // 处理滚动状态（渐变效果 + 用户滚动检测）
     _handleScrollState(scrollTop, scrollHeight) {
       const viewHeight = this._scrollViewHeight || 500
@@ -245,7 +258,10 @@ Component({
         return
       }
 
-      const lastScrollTop = typeof this._lastScrollTop === 'number' ? this._lastScrollTop : scrollTop
+      const lastScrollTop =
+        typeof this._lastScrollTop === 'number'
+          ? this._lastScrollTop
+          : scrollTop
       const delta = scrollTop - lastScrollTop
 
       // 如果是程序自动滚动（包括加载更多后的定位滚动），不处理蒙版和用户滚动检测
@@ -269,13 +285,13 @@ Component({
       }
 
       this._lastScrollTop = scrollTop
-      
+
       // 检测用户是否手动滚动（仅在生成中时检测）
       if (this.data.isGenerating) {
         this._checkUserScroll(scrollTop, scrollHeight)
       }
     },
-    
+
     // 检查用户是否手动滚动
     _checkUserScroll(scrollTop, scrollHeight) {
       const viewHeight = this._scrollViewHeight || 500
@@ -288,13 +304,13 @@ Component({
         }
       }
     },
-    
+
     // 隐藏蒙版（带关闭动画）
     hideMask() {
       if (!this.data.maskVisible || this.data.maskClosing) return
-      
+
       this.setData({ maskClosing: true })
-      
+
       // 等待动画完成后真正隐藏
       setTimeout(() => {
         this.setData({
@@ -304,24 +320,24 @@ Component({
         })
       }, 200)
     },
-    
+
     // 阻止事件冒泡
     stopPropagation() {
       // 阻止点击事件传递到蒙版
     },
-    
+
     // 阻止滚动穿透
     preventMove() {
       return false
     },
-    
+
     // 蒙版按钮点击事件
     onMaskButtonClick(e) {
       const { action, id, include } = e.currentTarget.dataset
-      
+
       // 关闭蒙版
       this.hideMask()
-      
+
       // 触发按钮点击事件
       this.onButtonClick({
         detail: {
@@ -338,11 +354,11 @@ Component({
         }
       })
     },
-    
+
     onBack() {
       if (this.properties.isShare) {
         wx.switchTab({
-          url: '/pages/home/home',
+          url: '/pages/home/home'
         })
         return
       }
@@ -361,7 +377,7 @@ Component({
       if (!this.properties.roleInfo.id) {
         return
       }
-      getCharacterDetail(this.properties.roleInfo.id).then(res => {
+      getCharacterDetail(this.properties.roleInfo.id).then((res) => {
         this.setData({
           roleDetail: {
             ...this.data.roleDetail,
@@ -372,21 +388,27 @@ Component({
             ...res.defaultStoryDetail
           }
         })
-        let bg = res.backgroundImage || res.defaultStoryDetail.defaultBackgroundImage || ''
+        let bg =
+          res.backgroundImage ||
+          res.defaultStoryDetail.defaultBackgroundImage ||
+          ''
         if (!res.currentPlotId) {
           // 处理剧情文本折叠（默认故事）
           const scene = res.defaultStoryDetail?.scene || ''
           const needFold = scene.length > 60
-          const display = needFold && !this.data.sceneExpanded ? scene.slice(0, 60) + '…' : scene
-          
+          const display =
+            needFold && !this.data.sceneExpanded
+              ? scene.slice(0, 60) + '…'
+              : scene
+
           const defaultMsg = {
-            senderType: 2,  // AI/角色消息
-            content: this.data.currentStoryDetail.prologue,  
+            senderType: 2, // AI/角色消息
+            content: this.data.currentStoryDetail.prologue,
             htmlContent: formatMessage(this.data.currentStoryDetail.prologue),
             loading: false,
             time: Date.now()
           }
-          
+
           this.setData({
             msgList: defaultMsg.content ? [defaultMsg] : [],
             sceneNeedFold: needFold,
@@ -394,7 +416,10 @@ Component({
             hasMore: false
           })
         } else {
-          if (res.currentPlotId === this.data.chatDetail.plotId && res.plotDetailVO.updateTime > this.data.chatDetail.updateTime) {
+          if (
+            res.currentPlotId === this.data.chatDetail.plotId &&
+            res.plotDetailVO.updateTime > this.data.chatDetail.updateTime
+          ) {
             this.setData({
               'pagination.current': 1
             })
@@ -402,10 +427,14 @@ Component({
           }
           bg = res.plotDetailVO.backgroundImage
           // 处理剧情文本折叠（剧情详情，如果plotDetailVO没有scene则使用defaultStoryDetail的）
-          const plotScene = res.plotDetailVO?.scene || res.plotDetailVO?.story?.scene  || ''
+          const plotScene =
+            res.plotDetailVO?.scene || res.plotDetailVO?.story?.scene || ''
           const plotNeedFold = plotScene.length > 60
-          const plotDisplay = plotNeedFold && !this.data.sceneExpanded ? plotScene.slice(0, 60) + '…' : plotScene
-          
+          const plotDisplay =
+            plotNeedFold && !this.data.sceneExpanded
+              ? plotScene.slice(0, 60) + '…'
+              : plotScene
+
           this.setData({
             chatDetail: {
               ...this.data.chatDetail,
@@ -418,10 +447,10 @@ Component({
             sceneNeedFold: plotNeedFold,
             sceneDisplay: plotDisplay
           })
-
         }
-        const currentPage = getCurrentPages()[getCurrentPages().length - 1]
-        currentPage.setCurrentBg(bg)
+        this.triggerEvent('currentBgChange', {
+          bg
+        })
         this.setData({
           avatarUrl: bg
         })
@@ -436,12 +465,14 @@ Component({
       this.getMessageList()
     },
     async sendMessage(e) {
-      const { content, imageList = [] } = e.detail;
+      const { content, imageList = [] } = e.detail
       if (!content && (!imageList || imageList.length === 0)) {
         return
       }
       if (!this.data.chatDetail.plotId) {
-        const plotId = await ChatService.createPlot({ characterId: this.properties.roleInfo.id})
+        const plotId = await ChatService.createPlot({
+          characterId: this.properties.roleInfo.id
+        })
         this.setData({
           chatDetail: {
             ...this.data.chatDetail,
@@ -464,19 +495,19 @@ Component({
         imageList: imageList
       })
     },
-    
+
     generateRequest(type, requestData) {
-      const { content, imageList } = requestData;
-      let fileKeys = [];
+      const { content, imageList } = requestData
+      let fileKeys = []
       if (imageList && imageList.length > 0) {
-        fileKeys = imageList.map(item => item.fileKey);
+        fileKeys = imageList.map((item) => item.fileKey)
       }
       this.addAIMessage()
-      
+
       // 防抖计时器和标志
       let updateTimer = null
       let pendingUpdate = false
-      
+
       const flushUpdate = () => {
         if (pendingUpdate) {
           this.setData({
@@ -485,7 +516,7 @@ Component({
           pendingUpdate = false
         }
       }
-      
+
       const scheduleUpdate = () => {
         if (!updateTimer) {
           updateTimer = setTimeout(() => {
@@ -495,7 +526,7 @@ Component({
         }
         pendingUpdate = true
       }
-      
+
       ChatService.sendMessage(
         {
           userMessage: content || '',
@@ -503,41 +534,45 @@ Component({
           plotId: this.data.chatDetail.plotId
         },
         (eventData) => {
-        const msg = eventData.payload.msg
-        const url = eventData.payload.url
-        const type = eventData.payload.type
-        const latestMessage =
-          this.data.msgList[this.data.msgList.length - 1]
-        if (!latestMessage.loading) {
-          this.addAIMessage()
-        } else {
-          if (type === 'text') {
-            latestMessage.content += msg || ''
-            latestMessage.htmlContent = formatMessage(latestMessage.content || '')
-            latestMessage.url = url
-            latestMessage.isThinking = false
-            scheduleUpdate()
-          } 
-          if (type === 'thinking') {
-            latestMessage.thinkContent += msg || ''
-            latestMessage.thinkHtmlContent = formatMessage(latestMessage.thinkContent || '')
-            latestMessage.isThinking = true
-            latestMessage.hasThinking = true
-            scheduleUpdate()
+          const msg = eventData.payload.msg
+          const url = eventData.payload.url
+          const type = eventData.payload.type
+          const latestMessage = this.data.msgList[this.data.msgList.length - 1]
+          if (!latestMessage.loading) {
+            this.addAIMessage()
+          } else {
+            if (type === 'text') {
+              latestMessage.content += msg || ''
+              latestMessage.htmlContent = formatMessage(
+                latestMessage.content || ''
+              )
+              latestMessage.url = url
+              latestMessage.isThinking = false
+              scheduleUpdate()
+            }
+            if (type === 'thinking') {
+              latestMessage.thinkContent += msg || ''
+              latestMessage.thinkHtmlContent = formatMessage(
+                latestMessage.thinkContent || ''
+              )
+              latestMessage.isThinking = true
+              latestMessage.hasThinking = true
+              scheduleUpdate()
+            }
+            if (type === 'aiMessageId') {
+              latestMessage.id = msg
+            }
+            if (type === 'userMessageId' && this.data.msgList.length >= 2) {
+              const userMsg = this.data.msgList[this.data.msgList.length - 2]
+              userMsg.id = msg
+            }
           }
-          if (type === 'aiMessageId') {
-            latestMessage.id = msg
-          }
-          if (type === 'userMessageId' && this.data.msgList.length >= 2) {
-            const userMsg = this.data.msgList[this.data.msgList.length - 2]
-            userMsg.id = msg
-          }
-        }
-        // 仅在用户未手动滚动时自动滚动到底部
+          // 仅在用户未手动滚动时自动滚动到底部
           if (!this.data.userScrolled) {
             this.scrollToBottom()
           }
-      })
+        }
+      )
         .then((res) => {
           // 流式完成时，确保所有待处理的更新被刷新
           if (updateTimer) {
@@ -545,17 +580,17 @@ Component({
             updateTimer = null
           }
           flushUpdate()
-          
+
           this.setData({
             operatingForm: {
               operate: '',
               msgId: null
-            },
+            }
           })
           const lastMsg = this.data.msgList[this.data.msgList.length - 1]
           lastMsg.loading = false
           this.setData({
-              msgList: [...this.data.msgList]
+            msgList: [...this.data.msgList]
           })
           // 流式结束后，消息内部会渲染操作按钮，导致内容高度变化
           // 如果用户没有手动上滑，补一次滚动到底，确保仍然在最底部
@@ -567,7 +602,9 @@ Component({
         })
         .catch((err) => {
           // 找到要标记错误的消息
-          const msgIndex = this.data.msgList.findIndex(m => m.id === this.data.operatingForm.msgId)
+          const msgIndex = this.data.msgList.findIndex(
+            (m) => m.id === this.data.operatingForm.msgId
+          )
           if (msgIndex !== -1) {
             // 更新该消息的 error 状态
             const updatedMsgList = [...this.data.msgList]
@@ -596,9 +633,8 @@ Component({
             }
           }
         })
-
     },
-    
+
     goLogin() {
       this.setData({ isLogin: true })
     },
@@ -613,17 +649,18 @@ Component({
       return null
     },
     onKeyboardHeightChange(e) {
-      const keyboardHeight = typeof e.detail === 'number' ? e.detail : (e.detail.keyboardHeight || 0)
+      const keyboardHeight =
+        typeof e.detail === 'number' ? e.detail : e.detail.keyboardHeight || 0
       this.setData({
         keyboardHeight
       })
       if (keyboardHeight > 0) {
         this.setData({
-          contentHeight: `calc(100% - ${keyboardHeight}px + ${ !this.properties.showBack ? this.data.tabbarHeight : 0 }rpx + ${!this.properties.showBack ? this.data.safeAreaBottom : 0}px)`
+          contentHeight: `calc(100% - ${keyboardHeight}px + ${!this.properties.showBack ? this.data.tabbarHeight : 0}rpx + ${!this.properties.showBack ? this.data.safeAreaBottom : 0}px)`
         })
         setTimeout(() => {
           this.scrollToBottom(true)
-        }, 400);
+        }, 400)
       } else {
         this.setData({
           contentHeight: '100%'
@@ -633,7 +670,7 @@ Component({
     onInputLineChange() {
       this.scrollToBottom()
     },
-     // 滚动到底部（使用锚点方式更稳定）
+    // 滚动到底部（使用锚点方式更稳定）
     scrollToBottom(force = false) {
       const now = Date.now()
       if (!force) {
@@ -694,13 +731,13 @@ Component({
       if (this.data.isLoadingMore || !this.data.hasMore) {
         return
       }
-      
+
       // 如果没有plotId，无法加载消息
       if (!this.data.pagination.plotId) {
         this.noMoreHandle()
         return
       }
-      
+
       // 开始加载更多时，立即关闭顶部渐隐蒙版，并设置一小段冷却时间
       this._setMaskState(false)
       this._maskDisabledUntil = Date.now() + 600
@@ -710,7 +747,7 @@ Component({
         refresherTriggered: true,
         topMsg: this.data.msgList[0]
       })
-      
+
       // 加载下一页数据
       this.loadMoreMessages()
     },
@@ -718,7 +755,7 @@ Component({
     stopRefresh() {
       this.setData({
         refresherTriggered: false,
-        isLoadingMore: false,
+        isLoadingMore: false
       })
     },
     // 没有更多数据处理
@@ -739,22 +776,25 @@ Component({
       this._isAutoScrolling = true
       this._maskDisabledUntil = Date.now() + 600
 
-      this.setData({
-        scrollAnimation: false,
-        msgList: [...msgs, ...this.data.msgList],
-        isLoadingMore: false,
-        refresherTriggered: false,
-      }, () => {
-        // 使用 scrollToView 将视图锚定回原本的顶部消息，但由于 scrollAnimation 已关闭，不会有明显滚动动画
-        if (topMsgId) {
-          this.scrollToView(`msg-${topMsgId}`)
+      this.setData(
+        {
+          scrollAnimation: false,
+          msgList: [...msgs, ...this.data.msgList],
+          isLoadingMore: false,
+          refresherTriggered: false
+        },
+        () => {
+          // 使用 scrollToView 将视图锚定回原本的顶部消息，但由于 scrollAnimation 已关闭，不会有明显滚动动画
+          if (topMsgId) {
+            this.scrollToView(`msg-${topMsgId}`)
+          }
+          // 在短暂延迟后恢复自动滚动标记和动画配置
+          setTimeout(() => {
+            this._isAutoScrolling = false
+            this.setData({ scrollAnimation: true })
+          }, 200)
         }
-        // 在短暂延迟后恢复自动滚动标记和动画配置
-        setTimeout(() => { 
-          this._isAutoScrolling = false
-          this.setData({ scrollAnimation: true })
-        }, 200)
-      })
+      )
     },
     // 重置加载状态（供父组件调用，例如切换会话时）
     resetLoadStatus() {
@@ -779,61 +819,66 @@ Component({
         })
         return
       }
-      
+
       // 重置分页
       this.resetPagination()
       getPlotMessage({
         size: this.data.pagination.size,
         current: this.data.pagination.current,
         plotId: this.data.pagination.plotId
-      }).then(res => {
-        let messageList = []
-        if (res && res.records && Array.isArray(res.records)) {
-          messageList = res.records
-        } else if (Array.isArray(res)) {
-          messageList = res
-        }
-        
-        // 格式化消息内容
-        const formattedMessages = messageList.map(msg => {
-          if (msg.senderType === 2 && msg.content) {
-            return {
-              ...msg,
-              thinkContent: msg.reasoningContent || '',
-              thinkHtmlContent: formatMessage(msg.reasoningContent || ''),
-              htmlContent: formatMessage(msg.content),
-              mainContent: msg.content,
-              hasThinking: !!msg.reasoningContent
-            }
-          }
-          return msg
-        })
-        
-        // 更新分页状态
-        const pagination = {
-          current: res.current || this.data.pagination.current,
-          size: res.size || this.data.pagination.size,
-          plotId: this.data.pagination.plotId
-        }
-        
-        // 判断是否还有更多数据：current < pages
-        const hasMore = res.current && res.pages ? res.current < res.pages : messageList.length >= pagination.size
-        
-        this.setData({
-          msgList: formattedMessages,
-          pagination: pagination,
-          hasMore: hasMore
-        })
-        setTimeout(() => {
-          // 使用强制滚动，确保在撤回、重说、回溯等刷新消息列表后能滚动到底部
-          this.scrollToBottom(true)
-        }, 100)
-      }).catch(err => {
-        console.error('获取消息列表失败:', err)
-        this.setData({
-          msgList: []
-        })
       })
+        .then((res) => {
+          let messageList = []
+          if (res && res.records && Array.isArray(res.records)) {
+            messageList = res.records
+          } else if (Array.isArray(res)) {
+            messageList = res
+          }
+
+          // 格式化消息内容
+          const formattedMessages = messageList.map((msg) => {
+            if (msg.senderType === 2 && msg.content) {
+              return {
+                ...msg,
+                thinkContent: msg.reasoningContent || '',
+                thinkHtmlContent: formatMessage(msg.reasoningContent || ''),
+                htmlContent: formatMessage(msg.content),
+                mainContent: msg.content,
+                hasThinking: !!msg.reasoningContent
+              }
+            }
+            return msg
+          })
+
+          // 更新分页状态
+          const pagination = {
+            current: res.current || this.data.pagination.current,
+            size: res.size || this.data.pagination.size,
+            plotId: this.data.pagination.plotId
+          }
+
+          // 判断是否还有更多数据：current < pages
+          const hasMore =
+            res.current && res.pages
+              ? res.current < res.pages
+              : messageList.length >= pagination.size
+
+          this.setData({
+            msgList: formattedMessages,
+            pagination: pagination,
+            hasMore: hasMore
+          })
+          setTimeout(() => {
+            // 使用强制滚动，确保在撤回、重说、回溯等刷新消息列表后能滚动到底部
+            this.scrollToBottom(true)
+          }, 100)
+        })
+        .catch((err) => {
+          console.error('获取消息列表失败:', err)
+          this.setData({
+            msgList: []
+          })
+        })
     },
     // 加载更多消息
     loadMoreMessages() {
@@ -841,59 +886,64 @@ Component({
         this.noMoreHandle()
         return
       }
-      
+
       const nextPage = this.data.pagination.current + 1
-      
+
       getPlotMessage({
         size: this.data.pagination.size,
         current: nextPage,
         plotId: this.data.pagination.plotId
-      }).then(res => {
-        // 根据返回格式获取消息列表：res.records
-        let newMessages = []
-        if (res && res.records && Array.isArray(res.records)) {
-          newMessages = res.records
-        } else if (Array.isArray(res)) {
-          newMessages = res
-        }
-        
-        // 格式化消息内容
-        const formattedMessages = newMessages.map(msg => {
-          if (msg.senderType === 2 && msg.content) {
-            return {
-              ...msg,
-              htmlContent: formatMessage(msg.content)
-            }
-          }
-          return msg
-        })
-        
-        if (formattedMessages.length === 0) {
-          // 没有更多数据
-          this.noMoreHandle()
-        } else {
-          // 更新分页信息
-          const pagination = {
-            ...this.data.pagination,
-            current: res.current || nextPage,
-            size: res.size || this.data.pagination.size
-          }
-          
-          // 判断是否还有更多数据：current < pages
-          const hasMore = res.current && res.pages ? res.current < res.pages : formattedMessages.length >= pagination.size
-          
-          this.setData({
-            pagination: pagination,
-            hasMore: hasMore
-          })
-          
-          // 将新消息插入到列表前面
-          this.loadMoreHandle(formattedMessages)
-        }
-      }).catch(err => {
-        console.error('加载更多消息失败:', err)
-        this.stopRefresh()
       })
+        .then((res) => {
+          // 根据返回格式获取消息列表：res.records
+          let newMessages = []
+          if (res && res.records && Array.isArray(res.records)) {
+            newMessages = res.records
+          } else if (Array.isArray(res)) {
+            newMessages = res
+          }
+
+          // 格式化消息内容
+          const formattedMessages = newMessages.map((msg) => {
+            if (msg.senderType === 2 && msg.content) {
+              return {
+                ...msg,
+                htmlContent: formatMessage(msg.content)
+              }
+            }
+            return msg
+          })
+
+          if (formattedMessages.length === 0) {
+            // 没有更多数据
+            this.noMoreHandle()
+          } else {
+            // 更新分页信息
+            const pagination = {
+              ...this.data.pagination,
+              current: res.current || nextPage,
+              size: res.size || this.data.pagination.size
+            }
+
+            // 判断是否还有更多数据：current < pages
+            const hasMore =
+              res.current && res.pages
+                ? res.current < res.pages
+                : formattedMessages.length >= pagination.size
+
+            this.setData({
+              pagination: pagination,
+              hasMore: hasMore
+            })
+
+            // 将新消息插入到列表前面
+            this.loadMoreHandle(formattedMessages)
+          }
+        })
+        .catch((err) => {
+          console.error('加载更多消息失败:', err)
+          this.stopRefresh()
+        })
     },
     // 重置分页
     resetPagination() {
@@ -912,17 +962,17 @@ Component({
     addUserMessage(userMessage, imageList = []) {
       let images = []
       if (imageList && Array.isArray(imageList)) {
-        images = imageList.map(item => item.localUrl);
+        images = imageList.map((item) => item.localUrl)
       }
-      
+
       const userMsg = {
         id: Date.now(),
-        senderType: 1,  // 用户消息
+        senderType: 1, // 用户消息
         content: userMessage,
         images,
         time: Date.now()
       }
-      
+
       this.setData({
         msgList: [...this.data.msgList, userMsg]
       })
@@ -937,7 +987,7 @@ Component({
     addAIMessage() {
       const aiMsg = {
         id: Date.now(),
-        senderType: 2,  // AI/角色消息
+        senderType: 2, // AI/角色消息
         content: '',
         htmlContent: '',
         rawContent: '', // 原始内容（包含 <think> 标签）
@@ -949,7 +999,7 @@ Component({
         loading: true,
         time: Date.now()
       }
-      
+
       this.setData({
         msgList: [...this.data.msgList, aiMsg]
       })
@@ -961,7 +1011,7 @@ Component({
      */
     onRetry(e) {
       const { operate, msgId } = this.data.operatingForm
-      const msg = this.data.msgList.find(m => m.id === msgId)
+      const msg = this.data.msgList.find((m) => m.id === msgId)
       // 重试时重置用户滚动状态，恢复自动滚动
       this.setData({ userScrolled: false })
       switch (operate) {
@@ -972,19 +1022,19 @@ Component({
           this.setData({
             msgList: this.data.msgList
           })
-          break;
+          break
         case 'continue':
           this.generateRequest('continue', '', msgId)
           msg.error = false
           this.setData({
             msgList: this.data.msgList
           })
-          break;
+          break
         default:
-          break;
+          break
       }
     },
-    
+
     onButtonClick(e) {
       if (e.detail.action === 'rollback') {
         const include = e.detail.include
@@ -1022,11 +1072,12 @@ Component({
             // 取消操作，对话框会自动关闭
           },
           onConfirm: (inputValue) => {
-            forkPlotFromMessage ({
+            forkPlotFromMessage({
               title: inputValue,
               messageId: e.detail.messageId
-            }).then(res => {              
-              const currentPage = getCurrentPages()[getCurrentPages().length - 1]
+            }).then((res) => {
+              const currentPage =
+                getCurrentPages()[getCurrentPages().length - 1]
               currentPage.changePlot({
                 characterId: this.properties.roleInfo.id,
                 plotId: res,
@@ -1036,14 +1087,14 @@ Component({
           }
         })
       } else if (e.detail.action === 'like') {
-        e.detail.current.handleLike();
+        e.detail.current.handleLike()
       } else if (e.detail.action === 'dislike') {
-        e.detail.current.handleDislike();
+        e.detail.current.handleDislike()
       } else if (e.detail.action === 'play') {
-        e.detail.current.handlePlay();
+        e.detail.current.handlePlay()
       } else if (e.detail.action === 'retry') {
         const messageId = e.detail.messageId
-        
+
         const selectSheet = this.selectComponent('#select-sheet')
         selectSheet.show({
           mode: 'retry',
@@ -1059,7 +1110,6 @@ Component({
             console.log('关闭重说弹窗')
           }
         })
-        
       } else if (e.detail.action === 'continue') {
         // 继续生成时重置用户滚动状态，恢复自动滚动
         this.setData({
@@ -1084,11 +1134,12 @@ Component({
           },
           onConfirm: (inputValue) => {
             const characterId = this.properties.roleInfo.id
-            createPlot ({
+            createPlot({
               title: inputValue,
               characterId: characterId
-            }).then(res => {              
-              const currentPage = getCurrentPages()[getCurrentPages().length - 1]
+            }).then((res) => {
+              const currentPage =
+                getCurrentPages()[getCurrentPages().length - 1]
               currentPage.changePlot({
                 characterId: characterId,
                 plotId: res,
@@ -1099,7 +1150,7 @@ Component({
         })
       } else if (e.detail.action === 'copy') {
         const messageId = e.detail.messageId
-        const msg = this.data.msgList.find(m => m.id === messageId)
+        const msg = this.data.msgList.find((m) => m.id === messageId)
         wx.setClipboardData({
           data: msg.content,
           success: () => {
@@ -1116,7 +1167,8 @@ Component({
     toggleScene() {
       const expanded = !this.data.sceneExpanded
       const scene = this.data.currentStoryDetail.scene || ''
-      const display = this.data.sceneNeedFold && !expanded ? scene.slice(0, 60) + '…' : scene
+      const display =
+        this.data.sceneNeedFold && !expanded ? scene.slice(0, 60) + '…' : scene
       this.setData({
         sceneExpanded: expanded,
         sceneDisplay: display
@@ -1124,4 +1176,3 @@ Component({
     }
   }
 })
-
