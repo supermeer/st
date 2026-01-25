@@ -9,7 +9,7 @@ import {
 } from '../../services/role/index'
 import {
   redeemInviteCode,
-  generateInvitationCode
+  getActivity
 } from '../../services/usercenter/index'
 
 function getRoleStatusBadge(role) {
@@ -181,7 +181,9 @@ Page({
     })
   },
 
-  onActivityClick() {
+  async onActivityClick() {
+    const richtext = await getActivity({activityType: 1})
+    console.log(richtext)
     const richtextDialog = this.selectComponent('#richtextDialog')
     richtextDialog.show({
       buttons: [

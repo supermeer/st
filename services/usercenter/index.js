@@ -32,7 +32,7 @@ export function getMyVipInfo() {
 
 export function redeemInviteCode(data) {
   return request.post(
-    `/api/v1/user/vip/redeemInviteCode?invitationCode=${data.invitationCode}`,
+    `/api/v1/user/user/useInvitationCode?invitationCode=${data.invitationCode}`,
     data
   )
 }
@@ -58,6 +58,10 @@ export function generateInvitationCode() {
 
 export function getShareRecord() {
   return request.get('/api/v1/user/user/invitedUserList')
+}
+
+export function getActivity(params) {
+  return request.get('/api/v1/user/user/getActivity', params)
 }
 
 /**
