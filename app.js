@@ -1,7 +1,7 @@
 import updateManager from './common/updateManager'
 import { config } from './config/index'
 import userStore from './store/user'
-import { generateInvitationCode } from './services/usercenter/index'
+import { generateInvitationCode, visitPages } from './services/usercenter/index'
 // app.js（App() 外部）
 const originalPage = Page
 Page = function (pageConfig) {
@@ -72,17 +72,22 @@ App({
     if (pageLog !== 'DONE') {
       !pageLog && (pageLog = [])
       wx.onAppRoute((res) => {
+        console.log(res, '=====')
         if (pageLog.length >= 10) {
           wx.setStorageSync('pageLog', 'DONE')
           return
         }
-        pageLog.push(res)
+        pageLog.push(res.page.window.navigationBarTitleText)
         if (
           pageLog.length == 2 ||
           pageLog.length == 5 ||
           pageLog.length == 10
         ) {
           // 上报
+          visitPages({
+            count: pageLog.length,
+            pages: pageLog
+          })
         }
         wx.setStorageSync('pageLog', pageLog)
       })
@@ -113,7 +118,8 @@ App({
     }
     if (
       config.baseUrl === 'http://192.168.1.44:19000' ||
-      config.baseUrl === 'http://10.0.106.58:19000'
+      config.baseUrl === 'http://10.0.106.58:19000' ||
+      config.baseUrl === 'https://www.yours-x.com/character-test'
     ) {
       aE = 1
     }

@@ -19,7 +19,7 @@
         <view class="close-icon" bindtap="close">✕</view>
       </view>
 
-      <view wx:if="{{!pointInfo.pointBalance || pointInfo.pointBalance== 0}}" class="tips-text">积分不足，请尽快充值！</view>
+      <view class="tips-text">{{(!pointInfo.pointBalance || pointInfo.pointBalance== 0) ? '积分不足，请尽快充值！' : ' ' }}</view>
 
       <view class="plan-grid">
         <view

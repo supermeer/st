@@ -161,7 +161,7 @@ Component({
           })
         }
       })
-      this.hide()
+      // this.hide()
     }
   }
 })

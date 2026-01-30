@@ -1,7 +1,7 @@
 <view class="role-hot-container">
+  <t-image class="role-hot-icon" src="/static/chat/hot_fill.png" />
+  <text class="hot-text">{{roleHot}}</text>
+  <text class="divider"></text>
   <t-image class="role-hot-icon" src="/static/chat/chat_count.png" />
   <text>{{chatCount}}</text>
-  <text style="color: #999; font-weight: bold; font-size: 28rpx;">丨</text>
-  <t-image class="role-hot-icon" src="/static/chat/hot_fill.png" />
-  <text>{{roleHot}}</text>
 </view>

@@ -17,7 +17,8 @@ Component({
     selectedOption: null,
     currentCount: null, // 用于标记"当前"选中的选项
     loading: false,
-    plotId: null
+    plotId: null,
+    startTime: null
   },
 
   methods: {
@@ -55,6 +56,12 @@ Component({
      * @param {Function} options.onConfirm 确认回调，参数为选中的记忆选项对象
      */
     async show(options = {}) {
+      wx.reportEvent('memory_sheet_show', {
+        title: '智能体记忆力增强显示'
+      })
+      this.setData({
+        startTime: Date.now()
+      })
       const {
         title = '记忆力增强',
         subtitle = '最大对话长度，将影响每次对话所消耗的积分值。',
@@ -124,6 +131,11 @@ Component({
     
     // 确认按钮回调
     async handleConfirm() {
+      wx.reportEvent('memory_sheet_confirm', {
+        // 从打开到确认的耗时 秒
+        title: '智能体记忆力确认',
+        costTime: (Date.now() - this.data.startTime) / 1000
+      })
       console.log(this.data.selectedOption)
       if (!this.data.selectedOption) {
         wx.showToast({

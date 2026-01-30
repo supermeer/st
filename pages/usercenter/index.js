@@ -5,35 +5,36 @@ import {
   getCharacterList,
   getCurrentPlotByCharacterId,
   deleteCharacter,
-  applyCharacterPublished
+  applyCharacterPublished,
+  unpublishChar
 } from '../../services/role/index'
 import {
   redeemInviteCode,
   getActivity
 } from '../../services/usercenter/index'
+import Dialog from 'tdesign-miniprogram/dialog';
+
+function isPrivateRoleByPublishStatus(role) {
+  const ps = role?.publishStatus
+  return ps === 0 || ps === '0' || !ps
+}
 
 function getRoleStatusBadge(role) {
   const raw =
-    role?.auditStatus ??
-    role?.reviewStatus ??
-    role?.approveStatus ??
-    role?.checkStatus ??
-    role?.publishStatus ??
-    role?.onlineStatus ??
-    role?.status ??
-    role?.state
+    role?.publishStatus
 
   const value = raw === undefined || raw === null ? '' : String(raw)
 
   const statusMap = {
-    0: { text: '审核中', className: 'status-pending' },
-    1: { text: '已通过', className: 'status-approved' },
-    2: { text: '已驳回', className: 'status-rejected' },
-    3: { text: '已下线', className: 'status-offline' },
+    0: { text: '', className: '' },
+    1: { text: '审核中', className: 'status-pending' },
+    2: { text: '', className: '' },
+    3: { text: '已驳回', className: 'status-rejected' },
+    4: { text: '已下架', className: 'status-offline' },
     pending: { text: '审核中', className: 'status-pending' },
-    passed: { text: '已通过', className: 'status-approved' },
+    passed: { text: '', className: 'status-approved' },
     reject: { text: '已驳回', className: 'status-rejected' },
-    offline: { text: '已下线', className: 'status-offline' }
+    offline: { text: '已下架', className: 'status-offline' }
   }
 
   if (value && statusMap[value]) return statusMap[value]
@@ -45,12 +46,14 @@ function getRoleStatusBadge(role) {
   if (role?.statusText)
     return { text: String(role.statusText), className: 'status-pending' }
 
-  return { text: '审核中', className: 'status-pending' }
+  return { text: '', className: '' }
 }
 
 Page({
   data: {
     roleList: [],
+    privateRoleList: [],
+    publicRoleList: [],
     isDev: false,
     pageInfo: {},
     editingRole: null,
@@ -87,27 +90,58 @@ Page({
     })
   },
 
-  onShow() {
+  onShow(e) {
+    const inviteCode = wx.getStorageSync('friend_inviteCode')
+    if (inviteCode && inviteCode.length > 0) {
+      this.selectComponent('#inviteCodeDialog').show({
+        code: inviteCode
+      })
+      wx.removeStorageSync('friend_inviteCode')
+    }
     this.getTabBar().init()
     userStore.refreshVipInfo()
     userStore.refreshPointInfo()
     this.getCharacterList()
   },
+
+  syncRoleListByPublishStatus(allRoleList) {
+    const privateRoleList = (allRoleList || []).filter(
+      (item) => item && isPrivateRoleByPublishStatus(item)
+    )
+    const publicRoleList = (allRoleList || []).filter(
+      (item) => !item || !isPrivateRoleByPublishStatus(item)
+    )
+
+    const roleTypeList = (this.data.roleTypeList || []).map((t) => {
+      if (t.value === '1') return { ...t, count: privateRoleList.length }
+      if (t.value === '2') return { ...t, count: publicRoleList.length }
+      return t
+    })
+
+    const roleList = this.data.activeRoleType === '1' ? privateRoleList : publicRoleList
+
+    this.setData({
+      privateRoleList,
+      publicRoleList,
+      roleTypeList,
+      roleList
+    })
+  },
+
   getCharacterList() {
     getCharacterList({
       ifSystem: false,
       size: 10000,
       current: 1
     }).then((res) => {
-      const roleList = (res?.records || []).map((role) => {
+      const allRoleList = (res?.records || []).map((role) => {
         return {
           ...role,
           _statusBadge: getRoleStatusBadge(role)
         }
       })
-      this.setData({
-        roleList
-      })
+
+      this.syncRoleListByPublishStatus(allRoleList)
     })
   },
 
@@ -173,19 +207,24 @@ Page({
 
   onRoleTypeChange(e) {
     const value = e.currentTarget.dataset.value
-    const index = e.currentTarget.dataset.index
     if (value === this.data.activeRoleType) return
 
+    const roleList = value === '1'
+      ? (this.data.privateRoleList || [])
+      : (this.data.publicRoleList || [])
+
     this.setData({
-      activeRoleType: value
+      activeRoleType: value,
+      roleList
     })
   },
 
   async onActivityClick() {
-    const richtext = await getActivity({activityType: 1})
-    console.log(richtext)
+    const richtext = await getActivity({activityType: 2})
+    console.log(richtext.content)
     const richtextDialog = this.selectComponent('#richtextDialog')
     richtextDialog.show({
+      contentNodes: richtext.content || '',
       buttons: [
         { text: '添加客服', variant: 'outline', type: 'cs' },
         { text: '去创建', type: 'create' }
@@ -193,10 +232,12 @@ Page({
     })
   },
 
-  onInviteClick() {
+  async onInviteClick() {
+    const richtext = await getActivity({activityType: 1})
     const richtextDialog = this.selectComponent('#richtextDialog')
     richtextDialog.show({
       isShare: true,
+      contentNodes: richtext.content || '',
       buttons: [
         { text: '添加客服', variant: 'outline', type: 'cs' },
         { text: '去分享', type: 'share' }
@@ -230,16 +271,47 @@ Page({
   onLongPress(e) {
     const id = e.currentTarget.dataset.id
     const info = this.data.roleList.find((item) => item.id == id)
+
+    let publishStatus = info.publishStatus
+
     this.setData({
       editingRole: id,
       editingRoleInfo: info || {}
     })
+    let items = []
+    if (publishStatus == 0 || !publishStatus) {
+      items = [
+        ...items,
+        '编辑',
+        '发布智能体',
+        '删除'
+      ]
+    }
+    if (publishStatus == 1) {
+      wx.showToast({
+        title: '智能体正在审核中，无法进行操作',
+        icon: 'none',
+        duration: 2500
+      })
+      return
+    }
+    if (publishStatus == 2) {
+      items.push('下架智能体')
+    }
+    if (publishStatus == 3) {
+      items = [
+        ...items,
+        '编辑',
+        '发布智能体',
+        '删除'
+      ]
+    }
     ActionSheet.show({
       theme: ActionSheetTheme.List,
       selector: '#actionSheet',
       context: this,
       cancelText: '取消',
-      items: ['编辑', '删除', '发布']
+      items
     })
   },
   handleSelected(e) {
@@ -267,46 +339,80 @@ Page({
 
     if (type === '编辑') {
       wx.navigateTo({
-        url: `/pages/role/add/index?id=${this.data.editingRole}`
+        url: `/pages/role/add/index?id=${this.data.editingRole}&publishStatus=${this.data.editingRoleInfo.publishStatus}`
       })
       return
     }
 
-    if (type === '发布') {
-      console.log(this.data.editingRoleInfo)
+    if (type === '发布智能体') {
       if (!this.data.editingRoleInfo.backgroundImage) {
-        wx.showToast({
-          title: '智能体发布需要专属形象，请先给智能体创建专属形象',
-          icon: 'none',
-          duration: 1500
-        })
+        const dialogConfig = {
+          context: this,
+          title: '提示',
+          closeOnOverlayClick: true,
+          content: '智能体发布需要专属形象，请先给智能体创建专属形象',
+          confirmBtn: '确定'
+        };
+
+        Dialog.confirm(dialogConfig)
         return
       }
       if (
         !this.data.editingRoleInfo.tagNames ||
         this.data.editingRoleInfo.tagNames.length == 0 ||
-        this.data.editingRoleInfo.typeIds ||
-        this.data.editingRoleInfo.typeIds.length == 0 
+        !this.data.editingRoleInfo.typeNames ||
+        this.data.editingRoleInfo.typeNames.length == 0 
       ) {
-        wx.showToast({
-          title:
-            '智能体发布需要补充标签和类型，请先在编辑页的高级设定中添加智能体标签和类型',
-          icon: 'none',
-          duration: 1500
-        })
+        const dialogConfig = {
+          context: this,
+          title: '提示',
+          closeOnOverlayClick: true,
+          content: '智能体发布需要补充标签和类型，请先在编辑页的【高级设定】中添加智能体标签和类型',
+          confirmBtn: '确定'
+        };
+
+        Dialog.confirm(dialogConfig)
         return
       }
       const tipDialog = this.selectComponent('#tip-dialog')
       tipDialog.show({
         hideTopIcon: true,
-        contentAlign: 'left',
+        contentAlign: 'justify',
         content:
-          '版权声明：\n请确认次智能体是您的原创智能体，不侵犯他人的图像、IP或其他权益。侵犯他人权益的智能体无法获得认证，严重的情况可能会影响您在该平台的服务。\n\n1、创建的智能体为本人独立创作，不存在抄袭、剽窃等任何形式的侵权，也不侵犯他人权益。\n2、同意平台管理规则，如因智能体引发的法律纠纷或争议均由本人承担责任。\n\n',
+          '版权声明：\n请确认此智能体是您的原创智能体，不侵犯他人的图像、IP或其他权益。侵犯他人权益的智能体无法获得认证，影响您使用本平台的服务。\n\n1、创建的智能体为本人独立创作，不存在抄袭、剽窃等任何形式的侵权，也不侵犯肖像权等他人权益。\n2、同意平台管理规则，如因智能体引发的法律纠纷或争议均由本人承担责任。\n\n',
         cancelText: '取消',
         confirmText: '同意并发布',
         onConfirm: () => {
           applyCharacterPublished({characterId: this.data.editingRole})
           .then(res => {
+            wx.showToast({
+              title: '发布成功',
+              icon: 'none',
+              duration: 2500
+            })
+            this.getCharacterList()
+          })
+        }
+      })
+    }
+
+    if (type === '下架智能体') {
+      const tipDialog = this.selectComponent('#tip-dialog')
+      tipDialog.show({
+        hideTopIcon: true,
+        contentAlign: 'left',
+        content:
+          '下架智能体，所有人将无法搜索TA。但不影响已聊天用户。',
+        cancelText: '取消',
+        confirmText: '继续下架',
+        onConfirm: () => {
+          unpublishChar({characterId: this.data.editingRole})
+          .then(res => {
+            wx.showToast({
+              title: '下架成功',
+              icon: 'none',
+              duration: 2500
+            })
             this.getCharacterList()
           })
         }

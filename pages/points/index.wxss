@@ -98,6 +98,7 @@ page {
   justify-content: space-between;
   font-weight: bold;
   color: #ddd;
+  font-size: 28rpx;
 }
 
 .point-item-title {

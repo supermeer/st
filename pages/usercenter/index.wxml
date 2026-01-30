@@ -10,7 +10,7 @@
   </custom-nav>
 
   <view class="usercenter-content" style="height: {{contentHeight}}">
-    <view class="user-info" bindtap="onUserInfoClick">
+    <view class="user-info">
       <t-image class="user-info-avatar" src="{{userInfo.avatarUrl}}" />
       <view class="user-info-name">
         <text>{{userInfo.nickname || '小柚子'}}</text>
@@ -22,11 +22,11 @@
           </view>
           <view class="user-invite-code-item" catchtap="onInviteClick">
             <t-icon name="share" class="user-invite-code-icon" size="16" />
-            邀请好有
+            邀请好友
           </view>
         </view>
       </view>
-      <t-icon class="user-info-arr" name="setting" size="24" color="#fff" />
+      <t-icon class="user-info-arr" name="setting" size="24" color="#fff" bindtap="onUserInfoClick" />
     </view>
     <view class="score-box" bind:tap="onScoreClick">
       <t-image class="score-box-icon" src="/static/vip/score.png" />
@@ -42,13 +42,13 @@
           <t-button wx:if="{{!vipInfo.ifVip && !isDev}}" class="open-vip-btn" bind:catchtap="onVipRenewClick">立即开通</t-button>
         </view>
         <view wx:if="{{vipInfo.ifVip}}" class="open-vip-btm-line">{{vipInfo.formattedMonthlyExpireTime}}</view>
-        <view wx:else class="open-vip-btm-line">无线畅聊 记忆增强 更多灵感回复</view>
+        <view wx:else class="open-vip-btm-line">无限畅聊 记忆增强 更多灵感回复</view>
       </view>
       <t-image wx:if="{{vipInfo.ifVip}}" class="vip-box-icon" src="/static/vip/vip.png"/>
     </view>                                                        
     <view class="roles-title">
       智能体
-      <view wx:if="{{roleList && roleList.length > 0}}" class="roles-title-desc">(长按智能体卡片可以编辑哦~)</view>
+      <view class="roles-title-desc">(长按智能体卡片可以发布、编辑等)</view>
     </view>
     <view class="role-type-tabs">
       <view 
@@ -83,7 +83,7 @@
           <view class="role-name-row">
             <text class="role-name">{{item.name}}</text>
           </view>
-            <role-hot-container chatCount="{{item.messageCount}}" roleHot="{{item.browseCount}}" />
+            <role-hot-container wx:if="{{item.publishStatus && item.publishStatus != 0}}" chatCount="{{item.messageCount}}" roleHot="{{item.browseCount}}" />
         </view>
       </view>
       <view wx:if="{{roleList.length === 0}}" class="role-empty-state">
@@ -123,3 +123,5 @@
 />
 
 <t-toast id="t-toast" />
+
+<t-dialog id="t-dialog" />

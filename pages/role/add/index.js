@@ -5,6 +5,7 @@ import {
   getCurrentPlotByCharacterId,
   getCharacterDetail,
   getCharacterType,
+  getAuditRejectReason,
   getCharacterTag
 } from '../../../services/role/index'
 Page({
@@ -52,19 +53,27 @@ Page({
     maxTagSelect: 4,
     showTagSelector: false,
     tempTagIds: [],
-    tagSelectorOptions: []
+    tagSelectorOptions: [],
+    rejectReason: null
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-    const { id } = options
+    wx.reportEvent('role_add_page_enter', {
+      isCreate: !options.id
+    })
+    const { id, publishStatus } = options
     if (id) {
       this.setData({
         'formData.id': id
       })
       this.getCharacterById(id)
+
+      if (publishStatus == '3') {
+        this.getRejectReason(id)
+      }
     }
     this.setData({
       pageInfo: { ...this.data.pageInfo, ...SystemInfo.getPageInfo() }
@@ -128,6 +137,16 @@ Page({
       tagSelectorOptions,
       'formData.tagIds': tagIds,
       'formData.typeIds': typeIds
+    })
+  },
+
+  getRejectReason(id) {
+    getAuditRejectReason({
+      characterId: id
+    }).then((res) => {
+      this.setData({
+        rejectReason: res
+      })
     })
   },
 
@@ -477,12 +496,22 @@ Page({
    * 提交表单
    */
   onSubmit() {
+    wx.reportEvent('role_add_page_submit', {
+      isCreate: !this.data.formData.id
+    })
     const { formData } = this.data
 
     // 表单验证
     if (!formData.name) {
       wx.showToast({
         title: '请输入名称',
+        icon: 'none'
+      })
+      return
+    }
+    if (!formData.gender) {
+      wx.showToast({
+        title: '请选择性别',
         icon: 'none'
       })
       return
@@ -495,13 +524,20 @@ Page({
       return
     }
 
-    // if (!formData.description) {
-    //   wx.showToast({
-    //     title: '请输入角色描述',
-    //     icon: 'none'
-    //   })
-    //   return
-    // }
+    if (!formData.description) {
+      wx.showToast({
+        title: '请输入角色描述',
+        icon: 'none'
+      })
+      return
+    }
+    if (!formData.prologue) {
+      wx.showToast({
+        title: '请输入开场白',
+        icon: 'none'
+      })
+      return
+    }
 
     const method = formData.id ? updateCharacter : createCharacter
 

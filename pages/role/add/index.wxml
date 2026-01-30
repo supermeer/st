@@ -16,6 +16,10 @@
     <!-- 表单内容 -->
     <view class="form-content" style="padding-bottom: calc({{ pageInfo.safeAreaBottom}}px + 100rpx);">
       
+      <view wx:if="{{rejectReason}}" class="reject-info">
+        <t-icon name="error-circle" size="20" color="#ff4d4f" />
+        <text>驳回理由：{{rejectReason}}</text>
+      </view>
       <!-- 头像上传 -->
       <view class="avatar-section">
         <view wx:if="{{!currentBg}}" class="bg-empty" bindtap="onChatBackground">
@@ -91,11 +95,11 @@
 
         <view class="form-item textarea-item">
           <view class="form-label">
-            <!-- <text class="label-required">*</text> -->
+            <text class="label-required">*</text>
             <text>角色描述</text>
           </view>
           <view class="textarea-counter">{{formData.description.length}}/10000</view>
-          <view class="label-placeholder">不影响对话效果，仅用于对角色的描述，便于了解智能体。</view>
+          <view class="label-placeholder">不影响对话效果，仅用于用户快速了解智能体，会对外展示。</view>
           <textarea 
             class="form-textarea" 
             placeholder="主要包含但不限于智能体的人设、性格、身份、背景、经历、聊天风格、与用户的关系等。" 
@@ -133,9 +137,11 @@
         <!-- 开场白 -->
         <view class="form-item textarea-item">
           <view class="form-label">
+            <text class="label-required">*</text>
             <text>开场白</text>
           </view>
           <view class="textarea-counter">{{formData.prologue.length}}/10000</view>
+          <view class="label-placeholder">决定智能体的效果，引起用户的对话兴趣。</view>
           <textarea 
             class="form-textarea" 
             placeholder="与用户开启聊天的第一句话。" 

@@ -33,7 +33,7 @@
 }
 
 .rich-dialog-body {
-  padding: 54rpx 48rpx 64rpx;
+  padding: 84rpx 48rpx 24rpx;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -60,8 +60,7 @@
   font-size: 32rpx;
   line-height: 1.9;
   max-height: 680rpx;
-  overflow: auto;
-  margin-bottom: 56rpx;
+  overflow: hidden;
 }
 
 .invite-line {

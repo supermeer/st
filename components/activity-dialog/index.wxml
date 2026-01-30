@@ -12,11 +12,12 @@
         mode="aspectFit"
       />
 
-      <text class="activity-content">{{overrideContent || content}}</text>
+      <rich-text class="activity-content">{{overrideContent || content}}</rich-text>
 
       <view class="activity-btn" bindtap="handleConfirm">
         <view class="activity-btn-text">{{overrideButtonText || buttonText}}</view>
       </view>
     </view>
   </view>
+  <t-icon class="activity-title-close" size="28" name="close-circle-filled" bindtap="handleClose"></t-icon>
 </view>

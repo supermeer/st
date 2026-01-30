@@ -24,6 +24,14 @@ export function applyCharacterPublished(data) {
     return request.post('/api/v1/server/character/applyCharacterPublished', data)
 }
 
+export function unpublishChar(data) {
+    return request.post('/api/v1/server/character/unpublishChar', data)
+}
+
+export function getAuditRejectReason(params) {
+    return request.get('/api/v1/server/character/getAuditRejectReason', params)
+}
+
 export function createPersona(data) {
     return request.post('/api/v1/server/story/createPersona', data)
 }

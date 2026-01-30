@@ -78,7 +78,8 @@ Component({
 
     // 点击遮罩层
     handleMaskClick() {
-      this.handleCancel()
+      // this.handleCancel()
+      this.hide()
     }
   }
 })

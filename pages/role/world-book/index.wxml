@@ -42,9 +42,9 @@
               <!-- 类型标签 -->
               <view 
                 class="type-tag" 
-                style="background: {{typeOptions[item.type === 'system' ? 0 : (item.type === 'ai' ? 1 : 2)].color}};"
+                style="background: {{typeOptions[item.msgType === 'system' ? 0 : (item.msgType === 'ai' ? 1 : 2)].color}};"
               >
-                {{typeOptions[item.type === 'system' ? 0 : (item.type === 'ai' ? 1 : 2)].label}}
+                {{typeOptions[item.msgType === 'system' ? 0 : (item.msgType === 'ai' ? 1 : 2)].label}}
               </view>
               <!-- 标题 -->
               <view class="item-title text-line1">{{item.title || '未命名条目'}}</view>

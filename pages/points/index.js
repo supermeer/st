@@ -1,6 +1,9 @@
 import userStore from '../../store/user'
 import { createOrderAndPrepay, getPricingPlan } from '../../services/order/index'
-
+import {
+  redeemInviteCode,
+  getActivity
+} from '../../services/usercenter/index'
 Page({
   data: {
     expireDate: '2025.04.12',
@@ -107,22 +110,26 @@ Page({
       url: "/pages/vip/packages/index"
     })
   },
-  invite() {
+  async invite() {
+    const richtext = await getActivity({activityType: 1})
     const richtextDialog = this.selectComponent('#richtextDialog')
     richtextDialog.show({
       isShare: true,
+      contentNodes: richtext.content || '',
       buttons: [
         { text: '添加客服', variant: 'outline', type: 'cs' },
-        { text: '分享邀请码', type: 'share' }
+        { text: '去分享', type: 'share' }
       ]
     })
   },
-  author() {
+  async author() {
+    const richtext = await getActivity({activityType: 2})
     const richtextDialog = this.selectComponent('#richtextDialog')
     richtextDialog.show({
+      contentNodes: richtext.content || '',
       buttons: [
         { text: '添加客服', variant: 'outline', type: 'cs' },
-        { text: '去发布', type: 'publish' }
+        { text: '去发布', type: 'create' }
       ]
     })
   },
@@ -141,7 +148,7 @@ Page({
         isInvite: true
       })
     }
-    if (type === 'publish') {
+    if (type === 'create') {
       wx.switchTab({
         url: '/pages/usercenter/index'
       })

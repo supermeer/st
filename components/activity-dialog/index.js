@@ -53,7 +53,11 @@ Component({
       this.triggerEvent('confirm', payload)
     },
     handleMaskClick() {
-      if (!this.data.maskClosable) return
+      // if (!this.data.maskClosable) return
+      // this.hide()
+      // this.triggerEvent('close')
+    },
+    handleClose() {
       this.hide()
       this.triggerEvent('close')
     }

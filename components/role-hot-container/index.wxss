@@ -6,8 +6,17 @@
   color: #ccc;
 }
 
+.divider {
+  margin: 0 6rpx;
+}
+
 .role-hot-icon {
   width: 30rpx;
   height: 30rpx;
   margin-right: 4rpx;
+}
+
+.hot-text {
+  /* font-size: 26rpx; */
+  font-weight: bold;
 }

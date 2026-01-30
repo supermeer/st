@@ -6,10 +6,10 @@ Component({
     errorMsg: ''
   },
   methods: {
-    show() {
+    show(options) {
       this.setData({ 
-        visible: true, 
-        inviteCode: '',
+        visible: true,
+        inviteCode: options?.code || '',
         errorMsg: ''
       })
     },

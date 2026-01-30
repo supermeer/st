@@ -54,7 +54,7 @@
           <view class="point-item-header-right">去邀请<t-icon name="chevron-right" size="20" /></view>
         </view>
         <view class="point-item-desc">
-          积分充值，超划算~
+          邀新福利来啦！好友充值，你赚积分！
         </view>
       </view>
       <view class="point-item" bindtap="author">
@@ -63,7 +63,7 @@
           <view class="point-item-header-right">查看活动<t-icon name="chevron-right" size="20" /></view>
         </view>
         <view class="point-item-desc">
-          积分充值，超划算~
+          创作爆款智能体，<text class="point-item-desc-white">超值积分</text>轻松赚！
         </view>
       </view>
     </view>

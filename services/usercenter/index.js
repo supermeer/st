@@ -53,7 +53,7 @@ export function logoff() {
 }
 
 export function generateInvitationCode() {
-  return request.post('/api/v1/user/user/generateInvitationCode')
+  return request.get('/api/v1/user/user/generateInvitationCode')
 }
 
 export function getShareRecord() {
@@ -62,6 +62,10 @@ export function getShareRecord() {
 
 export function getActivity(params) {
   return request.get('/api/v1/user/user/getActivity', params)
+}
+
+export function visitPages(data) {
+  return request.post('/api/v1/user/user/visitPages', data)
 }
 
 /**

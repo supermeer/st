@@ -1,7 +1,7 @@
 import SystemInfo from '../../utils/system'
 import { getHomePlotMessage } from '../../services/ai/chat'
 import { getCharacterDetail } from '../../services/role/index'
-import { redeemInviteCode } from '../../services/usercenter/index'
+import { redeemInviteCode, getActivity } from '../../services/usercenter/index'
 
 Page({
   data: {
@@ -43,6 +43,7 @@ Page({
         getPageInfo()
       }, 300)
     }
+    this.activeHandle()
   },
   onShow() {
     this.getTabBar().init()
@@ -61,10 +62,9 @@ Page({
       authRef && authRef.login()
       return
     }
+    this.redeemInviteCodeFun()
     this.setData({ isLogin: true })
     this.getHomePlotMessage()
-
-    this.activeHandle()
   },
   activeHandle() {
     let activeMark = wx.getStorageSync('activeMark')
@@ -88,20 +88,24 @@ Page({
       dialog.show(options)
     }
   },
-  onActivityConfirm() {
+  async onActivityConfirm() {
     const activeMark = wx.getStorageSync('activeMark')
     const richtextDialog = this.selectComponent('#richtextDialog')
     if (activeMark == 6) {
+      const richtext = await getActivity({activityType: 1})
       richtextDialog.show({
         isShare: true,
+        contentNodes: richtext.content || '',
         buttons: [
           { text: '添加客服', variant: 'outline', type: 'cs' },
-          { text: '分享邀请码', type: 'share' }
+          { text: '去分享', type: 'share' }
         ]
       })
     }
     if (activeMark == 3) {
+      const richtext = await getActivity({activityType: 2})
       richtextDialog.show({
+        contentNodes: richtext.content || '',
         buttons: [
           { text: '添加客服', variant: 'outline', type: 'cs' },
           { text: '去发布', type: 'publish' }
@@ -153,15 +157,22 @@ Page({
   async loginSuccess() {
     this.setData({ isLogin: true })
     this.getHomePlotMessage()
+    this.redeemInviteCodeFun()
+  },
+  async redeemInviteCodeFun() {
     if (this.data.inviteForm.isInvite) {
-      await redeemInviteCode({
-        invitationCode: this.data.inviteForm.inviteCode
-      })
-      this.setData({
-        inviteForm: {
-          isInvite: false,
-          inviteCode: null
-        }
+      // await redeemInviteCode({
+      //   invitationCode: this.data.inviteForm.inviteCode
+      // })
+      // this.setData({
+      //   inviteForm: {
+      //     isInvite: false,
+      //     inviteCode: null
+      //   }
+      // })
+      wx.setStorageSync('friend_inviteCode', this.data.inviteForm.inviteCode)
+      wx.switchTab({
+        url: '/pages/usercenter/index',
       })
     }
   },

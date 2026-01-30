@@ -1,5 +1,5 @@
 <view class="rich-dialog-mask" wx:if="{{visible}}" bindtap="handleMaskClick" catchtouchmove="{{true}}">
-  <view class="rich-dialog-container" catchtap="">
+  <view class="rich-dialog-container" catchtap="" catchtouchmove="{{true}}">
     <view class="rich-dialog-top-icon">
       <t-icon name="notification-filled" color="#fff" size="32" />
     </view>
@@ -17,14 +17,14 @@
       </view>
 
       <view wx:else>
-        <view class="rich-dialog-content">
+        <scroll-view class="rich-dialog-content" scroll-y="true">
           <rich-text nodes="{{overrideContentNodes || contentNodes}}"></rich-text>
-        </view>
+        </scroll-view>
       </view>
     </view>
     <view wx:if="{{isShare}}" class="invite-line">
       您的邀请码：{{inviteForm.code}}
-      <view class="copy-btn" bindtap="copyAction">复制</view>
+      <view class="copy-btn" catchtap="copyAction">复制</view>
     </view>
     <view class="rich-dialog-btns">
       <button

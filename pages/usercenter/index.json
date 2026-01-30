@@ -15,7 +15,8 @@
     "t-action-sheet": "tdesign-miniprogram/action-sheet/action-sheet",
     "tip-dialog": "/components/tip-dialog/index",
     "role-hot-container": "/components/role-hot-container/index",
-    "richtext-dialog": "/components/richtext-dialog/index"
+    "richtext-dialog": "/components/richtext-dialog/index",
+    "t-dialog": "tdesign-miniprogram/dialog/dialog"
   },
   "enablePullDownRefresh": false
 }
