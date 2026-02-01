@@ -85,9 +85,11 @@ Page({
   initMetaOptions() {
     Promise.all([getCharacterType(), getCharacterTag()])
       .then(([typeOptions, tagOptions]) => {
+        // 去掉type.name === 推荐的 item
+        const typesList = (typeOptions || []).filter(item => item.name !== '推荐')
         this.setData(
           {
-            typeOptions: Array.isArray(typeOptions) ? typeOptions : [],
+            typeOptions: typesList,
             tagOptions: Array.isArray(tagOptions) ? tagOptions : []
           },
           () => {

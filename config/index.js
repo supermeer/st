@@ -1,10 +1,17 @@
+// baseUrl: 'http://10.189.3.50:19000'
+// baseUrl: 'http://10.0.106.58:19000'
+// baseUrl: 'https://www.yours-x.com/character'
+const accountInfo = wx.getAccountInfoSync();
+const version = accountInfo.miniProgram.version;
+let baseUrl = 'https://www.yours-x.com/character-test'
+// let baseUrl = 'https://www.yours-x.com/character-audit'
+if (version) {
+  baseUrl = 'https://www.yours-x.com/character'
+}
+
 export const config = {
-  /** 是否使用mock代替api返回 */
   useMock: false,
-  // baseUrl: 'http://10.189.3.50:19000'
-  // baseUrl: 'http://10.0.106.58:19000'
-  // baseUrl: 'https://www.yours-x.com/character'
-  baseUrl: 'https://www.yours-x.com/character-test'
+  baseUrl: baseUrl
 }
 
 export const cdnBase =

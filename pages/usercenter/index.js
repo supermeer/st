@@ -306,6 +306,12 @@ Page({
         '删除'
       ]
     }
+    if (publishStatus == 4) {
+      items = [
+        ...items,
+        '发布智能体'
+      ]
+    }
     ActionSheet.show({
       theme: ActionSheetTheme.List,
       selector: '#actionSheet',
@@ -386,7 +392,7 @@ Page({
           applyCharacterPublished({characterId: this.data.editingRole})
           .then(res => {
             wx.showToast({
-              title: '发布成功',
+              title: '提交发布成功！',
               icon: 'none',
               duration: 2500
             })

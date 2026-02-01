@@ -30,7 +30,7 @@
       <view class="role-tags">
         <text class="tag" wx:for="{{roleInfo.tags}}" wx:key="index">#{{item.name}}</text>
       </view>
-      <view class="role-hot-container">
+      <view wx:if="{{roleInfo.publishStatus && roleInfo.publishStatus > 0}}" class="role-hot-container">
         <role-hot-container chatCount="{{roleInfo.messageCount}}" roleHot="{{roleInfo.browseCount}}" />
       </view>
     </view>

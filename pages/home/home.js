@@ -18,9 +18,16 @@ Page({
       isInvite: false,
       inviteCode: null
     },
-    currentBg: null
+    currentBg: null,
+    showBG: true
   },
   onLoad(e) {
+    const ev = wx.getStorageSync('aE')
+    if (ev == '0') {
+      this.setData({
+        showBG: false
+      })
+    }
     const { isInvite, inviteCode } = e
     this.setData({
       inviteForm: {

@@ -83,7 +83,7 @@
           <view class="role-name-row">
             <text class="role-name">{{item.name}}</text>
           </view>
-            <role-hot-container wx:if="{{item.publishStatus && item.publishStatus != 0}}" chatCount="{{item.messageCount}}" roleHot="{{item.browseCount}}" />
+          <role-hot-container wx:if="{{item.publishStatus && item.publishStatus != 0}}" chatCount="{{item.messageCount}}" roleHot="{{item.browseCount}}" />
         </view>
       </view>
       <view wx:if="{{roleList.length === 0}}" class="role-empty-state">

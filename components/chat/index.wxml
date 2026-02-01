@@ -38,7 +38,7 @@
         <view class="plot-title">
           <t-image class="plot-icon" src="/static/chat/juqing.png" />
           <text>剧情</text>
-          <view style="padding-left: 20rpx;">
+          <view wx:if="{{roleDetail && roleDetail.publishStatus > 0}}" style="padding-left: 20rpx;">
             <role-hot-container chatCount="{{roleDetail.messageCount}}" roleHot="{{roleDetail.browseCount}}" />
           </view>
         </view>

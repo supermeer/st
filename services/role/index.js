@@ -25,7 +25,7 @@ export function applyCharacterPublished(data) {
 }
 
 export function unpublishChar(data) {
-    return request.post('/api/v1/server/character/unpublishChar', data)
+    return request.post('/api/v1/server/character/unpublishCharacter', data)
 }
 
 export function getAuditRejectReason(params) {

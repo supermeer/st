@@ -1,4 +1,4 @@
-<view class="chat-page-container" style="background-image: url('{{currentBg}}'); background-repeat: no-repeat; background-position: center center; background-size: cover;">
+<view class="chat-page-container" style="background-image: url('{{showBG ? currentBg : ''}}'); background-repeat: no-repeat; background-position: center center; background-size: cover;">
   <!-- <view class="chat-content" style="padding-bottom: {{paddingBtm}}"> -->
   <view class="chat-content">
     <chat

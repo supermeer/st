@@ -12,7 +12,7 @@
             <view class="user-name">{{userInfo.nickname}}</view>
             <view class="user-score">
               <t-image class="points-icon" src="/static/vip/score.png"></t-image>
-              <text class="points-text">{{pointInfo.pointBalance || 0}}</text>
+              <text class="points-text">{{(pointInfo.pointBalance || 0) + (pointInfo.dailyFreeBalance || 0)}}</text>
             </view>
           </view>
         </view>

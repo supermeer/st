@@ -192,7 +192,7 @@ page {
 }
 
 .role-card {
-  width: calc(50% - 8rpx);
+  width: calc(50% - 10rpx);
   aspect-ratio: 0.618;
   background-size: cover;
   background-position: center;

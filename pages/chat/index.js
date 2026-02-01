@@ -18,9 +18,16 @@ Page({
       plotId: null,
       isShare: false
     },
-    currentBg: ''
+    currentBg: '',
+    showBG: true
   },
   onLoad(e) {
+    const ev = wx.getStorageSync('aE')
+    if (ev == '0') {
+      this.setData({
+        showBG: false
+      })
+    }
     const { plotId, characterId, isShare, id } = e
     const pageInfo = SystemInfo.getPageInfo()
     if (!isShare) {
