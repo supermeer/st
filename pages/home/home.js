@@ -181,6 +181,13 @@ Page({
       wx.switchTab({
         url: '/pages/usercenter/index',
       })
+      this.setData({
+        inviteForm: {
+          isInvite: false,
+          inviteCode: null
+        }
+      })
+
     }
   },
   hideTabbar() {

@@ -72,7 +72,6 @@ App({
     if (pageLog !== 'DONE') {
       !pageLog && (pageLog = [])
       wx.onAppRoute((res) => {
-        console.log(res, '=====')
         if (pageLog.length >= 10) {
           wx.setStorageSync('pageLog', 'DONE')
           return
