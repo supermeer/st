@@ -36,7 +36,10 @@
 
   <!-- 筛选标签 -->
   <view class="filter-tags">
-    <scroll-view class="tags-scroll" scroll-x show-scrollbar="{{false}}" scroll-left="{{tagScrollLeft}}" scroll-with-animation>
+    <van-dropdown-menu class="order-dropdown">
+      <van-dropdown-item value="{{ orderValue }}" options="{{ orderOptions }}" />
+    </van-dropdown-menu>
+    <scroll-view class="tags-scroll" scroll-x show-scrollbar="{{false}}" scroll-left="{{tagScrollLeft}}" scroll-with-animation>    
       <view class="tag-item {{utils.includes(activeTags, item.id) ? 'active' : ''}}" 
         wx:for="{{tagList}}" 
         wx:key="id"
@@ -68,6 +71,37 @@
     >
       <!-- 角色卡片列表 -->
       <view class="role-list">
+        <view 
+          class="role-card role-card_active"
+          bindtap="onRoleClick"
+        >
+          <swiper
+            class="role-swiper"
+            current="{{activeForm.current}}"
+            indicator-dots="{{true}}"
+            autoplay="{{activeForm.autoplay}}"
+            interval="{{activeForm.interval}}"
+            duration="{{activeForm.duration}}"
+            circular="{{true}}"
+            layout-type="transformer"
+            transformer-type="scaleAndFade"
+            previous-margin="18px"
+            next-margin="18px"
+            bindchange="onActiveChange"
+          >
+            <swiper-item
+              wx:for="{{activeForm.list}}"
+              class="role-swiper-item {{index === activeForm.current ? 'role-swiper-item__active' : ''}}"
+              wx:key="index"
+              data-index="{{index}}"
+              bindtap="onRoleClick"
+            >
+              <view class="role-swiper-content">{{index}}</view>
+            </swiper-item>
+          </swiper>
+        </view>
+
+
         <view 
           class="role-card" 
           wx:for="{{roleList}}" 

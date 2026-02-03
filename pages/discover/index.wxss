@@ -92,16 +92,45 @@ page {
   height: 64rpx;
 }
 
+.order-dropdown {
+  width: 280rpx;
+  display: inline-block;
+  z-index: 100;
+  margin-right: 10rpx;
+  border-radius: 32rpx;
+  /* overflow: hidden; */
+}
+
+.van-dropdown-menu {
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.2) !important;
+  height: 56rpx !important;
+  border-radius: 32rpx !important;
+}
+.van-dropdown-menu__title {
+  color: #999 !important;
+  font-size: 22rpx !important;
+}
+.order-dropdown .van-cell {
+  color: #fff;
+  background: var(--theme-color-black) !important;
+}
+
+
 /* 筛选标签 */
 .filter-tags {
   padding: 0rpx 32rpx;
   background-color: var(--theme-color-black);
   height: 80rpx;
+  display: flex;
+  align-items: center;
 }
 
 .tags-scroll {
   height: 64rpx;
   white-space: nowrap;
+  flex-shrink: 1;
+  width: calc(100% - 162rpx);
 }
 
 .tag-item {
@@ -165,6 +194,51 @@ page {
   transform: scale(0.95);
   opacity: 0.8;
 }
+
+.role-card_active .card-theme-nav {
+  bottom: -12px;
+}
+
+.role-card_active .scale-candidate {
+  height: 90% !important;
+}
+
+.role-card_active {
+  --td-swiper-radius: 0;
+  --td-swiper-item-padding: 0 12rpx;
+  --td-swiper-nav-dot-color: var(--td-bg-color-component, #e7e7e7);
+  --td-swiper-nav-dot-active-color: var(--td-brand-color, #0052d9);
+}
+
+.role-card_active .card-theme-nav {
+  bottom: -18px;
+}
+
+.role-swiper {
+  height: 100%;
+  width: 100%;
+}
+.role-swiper-item {
+  width: 100%;
+  height: 100%;
+  padding: 24rpx;
+  box-sizing: border-box;
+}
+.role-swiper-item__active {
+  transform: scale(1.1);
+  padding: 0;
+}
+.role-swiper-item__active .role-swiper-content {
+  transform: scale(1);
+}
+.role-swiper-content {
+  width: 100%;
+  height: 100%;
+  border: 1px solid #f00;
+  transform: scale(0.96);
+  transition: transform 0.25s ease-in-out;
+}
+
 
 .role-info {
   padding: 16rpx;

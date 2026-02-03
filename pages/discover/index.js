@@ -18,11 +18,32 @@ Page(
       activeNav: '',
       navScrollLeft: 0,
 
+      orderValue: 'recommend',
+      orderOptions: [
+        {
+          value: 'recommend',
+          text: '热门推荐',
+        },
+        {
+          value: 'hot',
+          text: '热门角色',
+        },
+        {
+          value: 'new',
+          text: '最新角色',
+        }
+      ],
       // 筛选标签
       tagList: [],
       activeTags: [], // 改为数组支持多选
       tagScrollLeft: 0,
-
+      activeForm: {
+        current: 0,
+        list: [1,2,3],
+        duration: 500,
+        interval: 3000,
+        autoplay: true,
+      },
       // 角色列表
       roleList: [],
       
@@ -167,6 +188,10 @@ Page(
       if (activeTags.length > 0 && activeTags.includes(value)) {
         this.scrollToTag(index)
       }
+    },
+
+    onOrderChange(e) {
+      console.log(e, '------')
     },
 
     // 滚动标签到中间
@@ -339,6 +364,15 @@ Page(
           message: '加载失败，请重试',
         })
       }
+    },
+
+    onActiveChange(e) {
+      this.setData({
+        activeForm: {
+          ...this.data.activeForm,
+          current: e.detail.current,
+        }
+      })
     },
 
     // 点击角色卡片

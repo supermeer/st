@@ -12,6 +12,9 @@
     "t-toast": "tdesign-miniprogram/toast/toast",
     "load-more": "/components/load-more/index",
     "custom-nav": "/components/custom-nav/index",
-    "role-hot-container": "/components/role-hot-container/index"
+    "role-hot-container": "/components/role-hot-container/index",
+    "van-dropdown-menu": "@vant/weapp/dropdown-menu/index",
+    "van-dropdown-item": "@vant/weapp/dropdown-item/index",
+    "t-swiper": "tdesign-miniprogram/swiper/swiper"
   }
 }
