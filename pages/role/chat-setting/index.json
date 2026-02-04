@@ -11,7 +11,9 @@
     "memory-desc-overlay": "/components/memory-desc-overlay/index",
     "memory-display": "/components/memory-display/index",
     "image-uploader": "/components/image-uploader/index",
-    "t-switch": "tdesign-miniprogram/switch/switch"
+    "t-switch": "tdesign-miniprogram/switch/switch",
+    "model-sheet": "/components/model-sheet/index",
+    "model-display": "/components/model-display/index"
   },
   "navigationBarTitleText": "对话设定"
 }

@@ -1,0 +1,8 @@
+{
+  "component": true,
+  "usingComponents": {
+    "t-radio": "tdesign-miniprogram/radio/radio",
+    "t-rate": "tdesign-miniprogram/rate/rate",
+    "t-icon": "tdesign-miniprogram/icon/icon"
+  }
+}

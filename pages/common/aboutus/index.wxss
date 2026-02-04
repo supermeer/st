@@ -65,6 +65,13 @@ page {
   background: transparent;
   margin-left: auto !important;
 }
+.aboutus-item-dot {
+  width: 16rpx;
+  height: 16rpx;
+  background-color: #FF4D4F;
+  border-radius: 50%;
+  margin-left: 12rpx;
+}
 .aboutus-item-arr {
   background: transparent;
 }

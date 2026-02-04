@@ -52,10 +52,15 @@ Page({
     // 背景列表
     backgroundList: [],
     showUploader: false,
+    // 模型选择弹窗
+    showModelSheet: false,
+    // 模型选项列表
+    modelOptions: [],
     // 记忆力说明遮罩层
     showMemoryDescOverlay: false,
     // 记忆选项列表
-    memoryOptions: []
+    memoryOptions: [],
+    showModelDot: false
   },
 
   // 防抖定时器
@@ -88,6 +93,15 @@ Page({
       pageInfo: { ...this.data.pageInfo, ...SystemInfo.getPageInfo() }
     })
     this.getMemoryType()
+    this.getModelList()
+    const newModelMark = wx.getStorageSync('newModelMark')
+    console.log('newModelMark------------', newModelMark)
+    if (!newModelMark) {
+      wx.setStorageSync('newModelMark', true)
+      this.setData({
+        showModelDot: true
+      })
+    }
   },
   onShow() {
     const savedId = wx.getStorageSync('quoteGradient') || 'gold-cyan'
@@ -108,6 +122,14 @@ Page({
         currentBg: res.backgroundImage
       })
     })
+  },
+
+  getModelList() {
+    // return getModelList().then(res => {
+    //   this.setData({
+    //     modelOptions: res || []
+    //   })
+    // })
   },
 
   getMemoryType() {
@@ -174,6 +196,52 @@ Page({
       // 请求失败，回滚状态
       this.setData({
         'chatMode.longConversation': oldValue
+      })
+    }
+  },
+
+  onModelSelect() {
+    this.setData({
+      showModelDot: false
+    })
+    const options = [
+      { value: 'gpt-4o', label: '模型A', description: '流畅的不行的模型', speedLevel: 5, qualityLevel: 5 },
+      { value: 'gpt-4o-pro', label: '模型Pro', description: '维护中', speedLevel: 5, qualityLevel: 5, disabled: true }
+    ] 
+    const modelSheet = this.selectComponent('#modelSheet')
+    if (modelSheet) {
+      modelSheet.show({
+        currentValue: this.data.plotInfo.memoryCount,
+        modelOptions: options,//[...this.data.modelOptions || options],
+        onConfirm: async (count) => {
+          try {
+            wx.showLoading({
+              title: '保存中...',
+              mask: true
+            })
+            // await updatePlot({
+            //   id: this.data.plotInfo.id,
+            //   memoryCount: count
+            // })
+            // this.setData({
+            //   'plotInfo.memoryCount': count
+            // })
+            wx.hideLoading()
+            wx.showToast({
+              title: '保存成功',
+              icon: 'success',
+              duration: 1200
+            })
+          } catch (error) {
+            wx.hideLoading()
+            wx.showToast({
+              title: '保存失败',
+              icon: 'error',
+              duration: 1500
+            })
+            console.error('更新记忆选项失败:', error)
+          }
+        }
       })
     }
   },

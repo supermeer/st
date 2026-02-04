@@ -1,0 +1,71 @@
+<view class="memory-sheet-mask" wx:if="{{visible}}" bindtap="handleMaskClick" catchtouchmove="preventMove">
+  <view class="memory-sheet-container {{visible ? 'show' : ''}}" catchtap="preventMove">
+    <view class="memory-sheet-close" bindtap="handleClose">
+      <text class="close-icon">×</text>
+    </view>
+
+    <view class="memory-sheet-title">{{title}}</view>
+
+    <view class="memory-sheet-subtitle">{{subtitle}}</view>
+
+    <scroll-view class="memory-list" scroll-y>
+      <view wx:if="{{loading}}" class="loading-container">
+        <text class="loading-text">加载中...</text>
+      </view>
+
+      <view 
+        class="memory-item memory-item-{{index}} {{item.disabled ? 'disabled' : ''}} {{selectedOption && selectedOption.value === item.value ? 'selected selected-' + index : ''}}"
+        wx:for="{{modelOptions}}"
+        wx:key="value"
+        data-index="{{index}}"
+        bindtap="handleSelectOption"
+      >
+        <view class="memory-radio">
+          <t-radio 
+            class="memory-radio-item memory-radio-{{index}}"
+            block="{{false}}"
+            checked="{{selectedOption && selectedOption.value === item.value}}"
+            disabled="{{item.disabled}}"
+            icon="dot"
+          />
+        </view>
+
+        <view class="ms-content">
+          <view class="ms-name-row">
+            <text class="ms-name ms-name-{{index}}">{{item.label}}</text>
+            <view wx:if="{{item.disabled}}" class="disabled-tag"><t-icon class="disabled-icon" name="unhappy" size="16" />模型开小差了，我去把它叫回来！</view>
+          </view>
+          <text class="ms-description">{{item.description}}</text>
+
+          <view class="ms-metrics">
+            <view class="ms-metric">
+              <text class="ms-metric-label">响应速度</text>
+              <t-rate value="{{item.speedLevel}}" count="5" variant="filled" size="14" gap="4" readonly />
+            </view>
+            <view class="ms-metric">
+              <text class="ms-metric-label">对话质量</text>
+              <t-rate value="{{item.qualityLevel}}" count="5" variant="filled" size="14" gap="4" readonly />
+            </view>
+          </view>
+        </view>
+
+        <view class="current-tag current-tag-{{index}}" wx:if="{{currentValue === item.value}}">
+          <text>当前</text>
+        </view>
+      </view>
+
+      <view wx:if="{{!loading && modelOptions.length === 0}}" class="empty-container">
+        <text class="empty-text">暂无模型选项</text>
+      </view>
+    </scroll-view>
+
+    <view class="memory-sheet-buttons">
+      <view class="memory-sheet-btn cancel-btn" bindtap="handleCancel">
+        {{cancelText}}
+      </view>
+      <view class="memory-sheet-btn confirm-btn" bindtap="handleConfirm">
+        {{confirmText}}
+      </view>
+    </view>
+  </view>
+</view>

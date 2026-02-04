@@ -7,9 +7,10 @@
     showHome="{{false}}">
   </custom-nav>
   <view class="aboutus-content">
-    <view wx:for="{{itemList}}" wx:key="index" class="{{item.header ? 'aboutus-header' : 'aboutus-item blur-glass'}}" bindtap="{{item.isGradientPicker ? 'onGradientPicker' : 'onClickCell'}}" data-url="{{item.url}}">
+    <view wx:for="{{itemList}}" wx:key="index" class="{{item.header ? 'aboutus-header' : 'aboutus-item blur-glass'}}" bindtap="{{item.isGradientPicker ? 'onGradientPicker' : 'onClickCell'}}" data-url="{{item.url}}" data-index="{{index}}">
       <view class="aboutus-item-title">{{item.title}}</view>
       <view class="aboutus-item-desc">{{item.desc}}</view>
+      <view wx:if="{{item.showDot}}" class="aboutus-item-dot" />
       <t-icon wx:if="{{item.url || item.isGradientPicker}}" class="aboutus-item-arr" name="chevron-right" size="18" color="#999" />
       <t-switch wx:if="{{item.isSwitch}}" class="aboutus-item-switch" value="{{item.switchOptions.checked}}" data-index="{{index}}" bindchange="onSwitchChange" />
     </view>
@@ -26,3 +27,5 @@
   bindconfirm="confirmLogoffDialog"
 />
 <t-toast id="t-toast" />
+
+ <model-sheet id="modelSheet" />

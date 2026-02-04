@@ -71,7 +71,7 @@
   font-size: 28rpx;
   font-weight: bold;
   color: #fff;
-  margin-bottom: 24rpx;
+  /* margin-bottom: 24rpx; */
   display: flex;
   align-items: center;
 }
@@ -94,7 +94,7 @@
   cursor: pointer;
 }
 
-.memory-link {
+.setting-section-link {
   display: flex;
   align-items: center;
   gap: 8rpx;
@@ -102,6 +102,20 @@
   color: #fff;
   padding: 8rpx;
   cursor: pointer;
+}
+
+.new-tip {
+  font-size: 26rpx;
+  color: #f00;
+  display: flex;
+  align-items: center;
+}
+
+.new-tip-dot {
+  width: 20rpx;
+  height: 20rpx;
+  border-radius: 50%;
+  background-color: #f00;
 }
 
 /* 今日对话配额 */

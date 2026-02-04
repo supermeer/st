@@ -18,7 +18,10 @@
         </view>
         <view class="close-icon" bindtap="close">✕</view>
       </view>
-
+      <view class="active-tips">
+        <t-image class="lantern" src="/static/vip/lantern.jpg" mode="aspectFill"/>
+        新年特惠，大额充值，限时加赠！
+      </view>
       <view class="tips-text">{{(!pointInfo.pointBalance || pointInfo.pointBalance== 0) ? '积分不足，请尽快充值！' : ' ' }}</view>
 
       <view class="plan-grid">
@@ -34,6 +37,7 @@
             <text class="plan-points-num">{{item.point}}</text>
           </view>
           <view class="plan-price">￥{{item.price}}</view>
+          <view class="give-away">加赠2000</view>
         </view>
       </view>
 

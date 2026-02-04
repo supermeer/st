@@ -1,0 +1,47 @@
+@import "../memory-sheet/index.wxss";
+
+.ms-metrics {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12rpx;
+  margin-top: 16rpx;
+  flex-wrap: wrap;
+}
+
+.ms-metric {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+}
+
+.ms-metric-label {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 20rpx;
+  flex-shrink: 0;
+}
+
+.memory-item.disabled {
+  opacity: 0.45;
+}
+
+.memory-item.disabled:active {
+  opacity: 0.45;
+}
+
+.memory-item.disabled.selected {
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.disabled-tag {
+  color: rgba(255, 0, 0);
+  font-size: 20rpx;
+  margin-left: 12rpx;
+  display: flex;
+  align-items: center;
+}
+
+.disabled-icon {
+  margin-right: 4rpx;
+  font-weight: bold;
+}

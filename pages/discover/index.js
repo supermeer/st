@@ -16,21 +16,18 @@ Page(
       // 导航标签
       navList: [],
       activeNav: '',
+      showSwiper: false,
       navScrollLeft: 0,
 
-      orderValue: 'recommend',
+      orderValue: 'hot',
       orderOptions: [
         {
-          value: 'recommend',
-          text: '热门推荐',
-        },
-        {
           value: 'hot',
-          text: '热门角色',
+          text: '热门排序',
         },
         {
           value: 'new',
-          text: '最新角色',
+          text: '最新排序',
         }
       ],
       // 筛选标签
@@ -97,11 +94,14 @@ Page(
       // 默认选中第一个
       if (res && res.length > 0 && !this.data.activeNav) {
         this.setData({
-          activeNav: res[0].id
+          activeNav: res[0].id,
+          showSwiper: true,
         })
         // 重新加载列表
         this.data.pageNo = 1
         this.loadRoleList(true)
+      } else {
+        this.updateShowSwiper()
       }
     },
     async getCharacterTag() {
@@ -121,6 +121,8 @@ Page(
         activeNav: value,
         roleList: [],
         loadMoreStatus: 0,
+      }, () => {
+        this.updateShowSwiper()
       })
       this.data.pageNo = 1
       this.loadRoleList(true)
@@ -373,6 +375,17 @@ Page(
           current: e.detail.current,
         }
       })
+    },
+
+    updateShowSwiper() {
+      const firstNavId = this.data.navList && this.data.navList.length > 0 ? this.data.navList[0].id : ''
+      const showSwiper = !!firstNavId && this.data.activeNav === firstNavId
+
+      if (this.data.showSwiper !== showSwiper) {
+        this.setData({
+          showSwiper,
+        })
+      }
     },
 
     // 点击角色卡片

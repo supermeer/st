@@ -10,6 +10,13 @@ Page({
         title: '我的',
       },
       {
+        title: '对话模型',
+        desc: '豆包1.8',
+        isModel: true,
+        showDot: false,
+        url: '/pages/role/my-setting/index?isGlobal=true'
+      },
+      {
         title: '全局设定',
         desc: '设置所有智能体对你的称呼',
         url: '/pages/role/my-setting/index?isGlobal=true'
@@ -76,6 +83,14 @@ Page({
 
   onLoad() {
     this.updateItemList()
+    const newModelMark = wx.getStorageSync('newModelMark')
+    if (!newModelMark) {
+      wx.setStorageSync('newModelMark', true)
+      this.data.itemList[1].showDot = true
+      this.setData({
+        itemList: [...this.data.itemList]
+      })
+    }
   },
   updateItemList() {
     const accountInfo = wx.getAccountInfoSync();
@@ -130,10 +145,23 @@ Page({
       })
   },
   onClickCell(e) {
-    const { url } = e.currentTarget.dataset
+    const { url, index } = e.currentTarget.dataset
+    if (index === 1) {
+      this.onModelSelect()
+      return
+    }
     if (url) {
       wx.navigateTo({ url })
     }
+  },
+  onModelSelect() {
+    this.modelSheetRef = this.selectComponent('#modelSheet')
+    this.modelSheetRef.show()
+    this.data.itemList[1].showDot = false
+    this.setData({
+      itemList: [...this.data.itemList]
+    })
+    wx.setStorageSync('newModelMark', true)
   },
   onSwitchChange(e) {
     const { index } = e.currentTarget.dataset

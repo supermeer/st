@@ -71,7 +71,8 @@
     >
       <!-- 角色卡片列表 -->
       <view class="role-list">
-        <view 
+        <view
+          wx:if="{{showSwiper}}"
           class="role-card role-card_active"
           bindtap="onRoleClick"
         >

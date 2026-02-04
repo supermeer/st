@@ -1,0 +1,8 @@
+<view class="model-card model-card-{{selectedIndex}}">
+  <view class="model-card-content">
+    <view class="model-card-top">
+      <view class="model-card-label">{{selectedOption.label || '模型'}}</view>
+    </view>
+    <view class="model-card-description">{{selectedOption.description || ''}}</view>
+  </view>
+</view>

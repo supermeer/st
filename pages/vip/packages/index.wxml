@@ -19,7 +19,7 @@
     enhanced
     show-scrollbar="{{false}}"
     scroll-top="{{scrollTop}}"
-    style="height: calc(100% - {{ pageInfo.navHeight + pageInfo.safeAreaBottom}}px - 320rpx)"
+    style="height: calc(100% - {{ pageInfo.navHeight + pageInfo.safeAreaBottom}}px)"
   >
     
     <!-- 会员权益卡片 -->
@@ -80,6 +80,7 @@
         bindtap="onSelectPackage" 
         data-id="{{item.id}}"
       >
+        <view class="origin-price {{!item.originPrice ? 'line-through' : ''}}">￥{{item.originPrice}}</view>
         <view class="package-price-text">¥{{item.amountInYuan}}</view>
         <view class="package-name-text">{{item.title}}</view>
       </view>

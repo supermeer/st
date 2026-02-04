@@ -24,7 +24,7 @@
   width: 100%;
   height: 100vh;
   z-index: 1;
-  padding: 40rpx 32rpx;
+  padding: 20rpx 32rpx 500rpx;
   box-sizing: border-box;
 }
 
@@ -210,6 +210,14 @@
 .package-card-selected {
   background-color: #fff;
   border: 2rpx solid #6c5ce7;
+}
+
+.origin-price {
+  font-size: 24rpx;
+}
+
+.origin-price.line-through {
+  text-decoration: line-through;
 }
 
 .package-price-text {
