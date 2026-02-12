@@ -1,5 +1,6 @@
 import systemInfo from '../../utils/system'
 import ChatService from '../../services/ai/chat'
+import { getModelList, getGlobalModelId } from '../../services/usercenter/index'
 import {
   getPlotMessage,
   createPlot,
@@ -541,6 +542,7 @@ Component({
           if (!latestMessage.loading) {
             this.addAIMessage()
           } else {
+            console.log(type, '000000', msg)
             if (type === 'text') {
               latestMessage.content += msg || ''
               latestMessage.htmlContent = formatMessage(
@@ -565,6 +567,44 @@ Component({
             if (type === 'userMessageId' && this.data.msgList.length >= 2) {
               const userMsg = this.data.msgList[this.data.msgList.length - 2]
               userMsg.id = msg
+            }
+            // {"type":"modelStatus","msg":{"modelId":1,"status":0}}
+            if (type === 'modelStatus') {
+              const { modelId, status } = msg
+              if (status == 1) {
+                const modelErrDialog = this.selectComponent('#modelErrDialog')
+                modelErrDialog.show({
+                  content: '抱歉！我走神啦！\n原谅我这一次好不好呀~',
+                  confirmText: '再给你一次机会',
+                  onConfirm: () => {
+                    this.onRetry()
+                  }
+                })
+              }
+              if (status === 0) {
+                const modelErrDialog = this.selectComponent('#modelErrDialog')
+                modelErrDialog.show({
+                  content: '抱歉！我的大脑宕机了！\n请为我换个大脑吧~',
+                  confirmText: '切换对话模型',
+                  onConfirm: () => {
+                    Promise.all([getGlobalModelId(), getModelList()]).then(res => {
+                      const [id , list] = res
+                      const modelSheetRef = this.selectComponent('#modelSheet')
+                      modelSheetRef.show({
+                        modelOptions: [...list],
+                        currentValue: id,
+                        onConfirm: (id, item) => {
+                          wx.showToast({
+                          title: '保存成功！',
+                          icon: 'none',
+                          duration: 1500
+                        })
+                        }
+                      })
+                    })
+                  }
+                })
+              }
             }
           }
           // 仅在用户未手动滚动时自动滚动到底部

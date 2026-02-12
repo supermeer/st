@@ -24,7 +24,7 @@
           <t-radio 
             class="memory-radio-item memory-radio-{{index}}"
             block="{{false}}"
-            checked="{{selectedOption && selectedOption.value === item.value}}"
+            checked="{{selectedOption && selectedOption.id === item.id}}"
             disabled="{{item.disabled}}"
             icon="dot"
           />
@@ -32,24 +32,25 @@
 
         <view class="ms-content">
           <view class="ms-name-row">
-            <text class="ms-name ms-name-{{index}}">{{item.label}}</text>
+            <text class="ms-name ms-name-{{index}}">{{item.modelName}}</text>
             <view wx:if="{{item.disabled}}" class="disabled-tag"><t-icon class="disabled-icon" name="unhappy" size="16" />模型开小差了，我去把它叫回来！</view>
+            <rich-text wx:if="{{!item.disabled && item.activity}}" class="disabled-tag" nodes="{{item.activity}}"></rich-text>
           </view>
-          <text class="ms-description">{{item.description}}</text>
+          <text class="ms-description">{{item.description || ''}}</text>
 
           <view class="ms-metrics">
             <view class="ms-metric">
               <text class="ms-metric-label">响应速度</text>
-              <t-rate value="{{item.speedLevel}}" count="5" variant="filled" size="14" gap="4" readonly />
+              <t-rate value="{{item.speed}}" count="3" variant="filled" size="14" gap="4" readonly />
             </view>
             <view class="ms-metric">
               <text class="ms-metric-label">对话质量</text>
-              <t-rate value="{{item.qualityLevel}}" count="5" variant="filled" size="14" gap="4" readonly />
+              <t-rate value="{{item.quality}}" count="3" variant="filled" size="14" gap="4" readonly />
             </view>
           </view>
         </view>
 
-        <view class="current-tag current-tag-{{index}}" wx:if="{{currentValue === item.value}}">
+        <view class="current-tag current-tag-{{index}}" wx:if="{{currentValue === item.id}}">
           <text>当前</text>
         </view>
       </view>

@@ -36,66 +36,19 @@
         </view>
       </view> -->
 
-      <!-- 对话模式 -->
-      <view class="setting-section blur-glass">
-        <view class="section-title">对话模式</view>
-        
-        <!-- 角色扮演基础模型 -->
-        <view class="mode-item switch-item">
-          <view class="mode-content">
-            <view class="mode-title">角色扮演基础模型</view>
-            <view class="mode-desc">默认角色扮演模型</view>
-          </view>
-          <t-radio 
-            class="mode-radio" 
-            checked="{{!plotInfo.ifReasoning}}"
-            bind:change="onDeepThinkingChange"
-            icon="dot"
-          />
-        </view>
-
-        <!-- 深度思考模型 -->
-        <view class="mode-item switch-item">
-          <view class="mode-content">
-            <view class="mode-title">深度思考模型</view>
-            <view class="mode-desc">专为角色设计的思考模型，更亲密</view>
-          </view>
-          <t-radio 
-            class="mode-radio" 
-            checked="{{plotInfo.ifReasoning}}"
-            bind:change="onDeepThinkingChange"
-            icon="dot"
-          />
-        </view>
-
-        <!-- 长对话模式 -->
-        <!-- <view class="mode-item switch-item">
-          <view class="mode-content">
-            <view class="mode-title">长对话模式</view>
-            <view class="mode-desc">专为角色设计的思考模型，更亲密</view>
-          </view>
-          <switch 
-            class="mode-switch" 
-            checked="{{chatMode.longConversation}}"
-            bindchange="onLongConversationChange"
-            color="#6C5CE7"
-          />
-        </view> -->
-      </view>
-
       <view class="setting-section blur-glass">
         <view class="section-header">
           <view class="section-title">
             对话模型
           </view>
           <view class="setting-section-link" bindtap="onModelSelect">
-            <view class="new-tip">上新模型啦！显示优惠哦！<view wx:if="{{showModelDot}}" class="new-tip-dot" /></view>
+            <view class="new-tip">上新模型啦！限时优惠哦！<view wx:if="{{showModelDot}}" class="new-tip-dot" /></view>
             <t-icon name="chevron-right" size="40rpx" color="rgba(255,255,255,0.6)" />
           </view>
         </view>
         <model-display 
-          currentValue="{{plotInfo.memoryCount}}"
-          modelOptions="{{modelOptions}}"
+          currentValue="{{currentModel.id}}"
+          modelOptions="{{modelList}}"
         />
       </view>
 

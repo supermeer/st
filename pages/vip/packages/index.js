@@ -1,16 +1,19 @@
 import { Toast } from 'tdesign-miniprogram'
 import { createOrderAndPrepay, getPricingPlan } from '../../../services/order/index'
+import { isSpringFestivalExpired } from '../../../services/usercenter/index'
 import userStore from '../../../store/user'
 import SystemInfo from '../../../utils/system'
 Page({
   data: {
     selectedPackage: null,
     packages: [],
+    isSpringFestival: false,
     scrollTop: 0,
     pageInfo: {
       safeAreaBottom: 0,
       navHeight: 0
-    }
+    },
+    test: '<p style="position: absolute; right: 0; top: 0; background: #ffc107; color: #FFFFFF;font-size: 12px;padding: 2px 12px; border-bottom-left-radius: 12px; border-top-right-radius: 8px;">推荐</p>'
   },
 
   onLoad: function (options) {
@@ -18,6 +21,7 @@ Page({
       pageInfo: { ...this.data.pageInfo, ...SystemInfo.getPageInfo() }
     })
     this.getPricingPlan()
+    this.getIfSpringFestival()
     userStore.bind(this)
   },
 
@@ -34,6 +38,14 @@ Page({
           packages: data
         })
       }
+    })
+  },
+
+  getIfSpringFestival() {
+    isSpringFestivalExpired().then(res => {
+      this.setData({
+        isSpringFestival: !res
+      })
     })
   },
 

@@ -36,10 +36,9 @@ Component({
         return
       }
 
-      const index = modelOptions.findIndex(opt => opt.value === currentValue)
+      const index = modelOptions.findIndex(opt => opt.id == currentValue)
       const selectedIndex = index >= 0 ? index : 0
       const selectedOption = modelOptions[selectedIndex] || null
-
       this.setData({
         selectedIndex,
         selectedOption

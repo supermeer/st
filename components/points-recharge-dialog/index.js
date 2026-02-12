@@ -1,4 +1,5 @@
 import { createOrderAndPrepay, getPricingPlan } from '../../services/order/index'
+import { isSpringFestivalExpired } from '../../services/usercenter/index'
 import userStore from '../../store/user'
 
 Component({
@@ -10,16 +11,13 @@ Component({
     userName: {
       type: String,
       value: ''
-    },
-    remainPoints: {
-      type: String,
-      value: ''
     }
   },
   data: {
     visible: false,
     selectedIndex: 0,
-    plans: []
+    plans: [],
+    isSpringFestival: false
   },
   lifetimes: {
     attached() {
@@ -31,6 +29,7 @@ Component({
     show(options = {}) {
       this.setData({ visible: true, selectedIndex: 0 })
       this.getPricingPlan()
+      this.getIfSpringFestival()
     },
     getPricingPlan() {
       getPricingPlan({
@@ -45,6 +44,13 @@ Component({
         .catch((err) => {
           console.error(err)
         })
+    },
+    getIfSpringFestival() {
+      isSpringFestivalExpired().then(res => {
+        this.setData({
+          isSpringFestival: !res
+        })
+      })
     },
     hide() {
       this.setData({ visible: false })

@@ -1,0 +1,20 @@
+<view class="tip-dialog-mask" wx:if="{{visible}}" bindtap="handleMaskClick" catchtouchmove="{{true}}">
+  <view class="tip-dialog-container" catchtap="">
+    <!-- 顶部图标 -->
+    <view class="tip-dialog-icon">
+      <t-icon class="top-icon" name="unhappy" size="72" />
+    </view>
+
+    <!-- 提示文字 -->
+    <text class="tip-dialog-content" style="text-align: {{contentAlign}}">
+      {{content}}
+    </text>
+
+    <view class="tip-dialog-buttons">
+      <view class="tip-dialog-btn confirm-btn" bindtap="handleConfirm">
+        {{confirmText}}
+      </view>
+    </view>
+  </view>
+</view>
+

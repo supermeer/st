@@ -18,7 +18,7 @@
         </view>
         <view class="close-icon" bindtap="close">✕</view>
       </view>
-      <view class="active-tips">
+      <view wx:if="{{isSpringFestival}}" class="active-tips">
         <t-image class="lantern" src="/static/vip/lantern.jpg" mode="aspectFill"/>
         新年特惠，大额充值，限时加赠！
       </view>
@@ -37,7 +37,7 @@
             <text class="plan-points-num">{{item.point}}</text>
           </view>
           <view class="plan-price">￥{{item.price}}</view>
-          <view class="give-away">加赠2000</view>
+          <view wx:if="{{isSpringFestival && item.gift}}" class="give-away">加赠{{item.gift}}</view>
         </view>
       </view>
 

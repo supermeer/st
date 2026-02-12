@@ -1,3 +1,4 @@
+import { setGlobalModel } from '../../services/usercenter/index'
 Component({
   options: {
     styleIsolation: 'apply-shared'
@@ -39,11 +40,11 @@ Component({
           ...opt,
           speedLevel: Number.isFinite(speedLevel) ? speedLevel : 0,
           qualityLevel: Number.isFinite(qualityLevel) ? qualityLevel : 0,
-          disabled: Boolean(opt.disabled)
+          disabled: Boolean(opt.status != 1)
         }
       })
 
-      const byCurrent = finalModelOptions.find(opt => opt.value === currentValue && !opt.disabled) || null
+      const byCurrent = finalModelOptions.find(opt => opt.id === currentValue && !opt.disabled) || null
       const firstEnabled = finalModelOptions.find(opt => !opt.disabled) || null
       const selectedOption = byCurrent || firstEnabled
 
@@ -87,7 +88,7 @@ Component({
       this.hide()
     },
 
-    handleConfirm() {
+    async handleConfirm() {
       if (!this.data.selectedOption) {
         wx.showToast({
           title: '请选择模型',
@@ -104,11 +105,13 @@ Component({
         return
       }
 
+      await setGlobalModel({modelId: this.data.selectedOption.id})
+
       if (typeof this._onConfirm === 'function') {
-        this._onConfirm(this.data.selectedOption.value, this.data.selectedOption)
+        this._onConfirm(this.data.selectedOption.id, this.data.selectedOption)
       } else {
         this.triggerEvent('confirm', {
-          value: this.data.selectedOption.value,
+          value: this.data.selectedOption.id,
           option: this.data.selectedOption
         })
       }

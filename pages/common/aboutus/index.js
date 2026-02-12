@@ -1,4 +1,4 @@
-import { logoff } from '../../../services/usercenter/index'
+import { logoff, getModelList, getGlobalModelId } from '../../../services/usercenter/index'
 import userStore from '../../../store/user'
 import { QUOTE_GRADIENT_OPTIONS } from '../../../utils/msgHandler'
 const app = getApp()
@@ -11,7 +11,7 @@ Page({
       },
       {
         title: '对话模型',
-        desc: '豆包1.8',
+        desc: '',
         isModel: true,
         showDot: false,
         url: '/pages/role/my-setting/index?isGlobal=true'
@@ -78,7 +78,9 @@ Page({
         desc: '',
         url: ''
       }
-    ]
+    ],
+    currentModel: null,
+    modelList: []
   },
 
   onLoad() {
@@ -89,6 +91,37 @@ Page({
       this.data.itemList[1].showDot = true
       this.setData({
         itemList: [...this.data.itemList]
+      })
+    }
+    getModelList().then(res => {
+      this.setData({
+        modelList: res || []
+      })
+      this.setCurrentModel()
+    })
+  },
+  onShow() {
+    getGlobalModelId().then(res => {
+      this.setData({
+        currentModel: {
+          ...(this.data.currentModel || {}),
+          id: res
+        }
+      })
+      this.setCurrentModel()
+    })
+  },
+  setCurrentModel() {
+    if (!this.data.currentModel || !this.data.currentModel.id || this.data.modelList.length === 0) {
+      return
+    }
+    const res = this.data.modelList.filter(item => item.id === this.data.currentModel.id)
+    if (res && res.length > 0) {
+      this.updateItemModelName(res[0].modelName) 
+      this.setData({
+        currentModel: {
+          ...res[0]
+        }
       })
     }
   },
@@ -154,14 +187,27 @@ Page({
       wx.navigateTo({ url })
     }
   },
-  onModelSelect() {
+  async onModelSelect() {
     this.modelSheetRef = this.selectComponent('#modelSheet')
-    this.modelSheetRef.show()
+    this.modelSheetRef.show({
+      modelOptions: [...this.data.modelList],
+      currentValue: this.data.currentModel.id,
+      onConfirm: (id, item) => {
+        this.updateItemModelName(item.modelName)
+      }
+    })
     this.data.itemList[1].showDot = false
     this.setData({
       itemList: [...this.data.itemList]
     })
     wx.setStorageSync('newModelMark', true)
+  },
+  updateItemModelName(name) {
+    const itemList = [...this.data.itemList]
+    itemList[1].desc = name
+    this.setData({
+      itemList: [...itemList]
+    })
   },
   onSwitchChange(e) {
     const { index } = e.currentTarget.dataset

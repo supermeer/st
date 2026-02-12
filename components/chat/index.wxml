@@ -126,3 +126,6 @@
 <points-recharge-dialog
   id="pointsRechargeDialog"
 />
+
+<model-err-dialog id="modelErrDialog" />
+<model-sheet id="modelSheet" />

@@ -43,6 +43,7 @@
       </view>
       <view class="consume-right">
         <text class="consume-points">-{{item.changeAmount}}</text>
+        <text wx:if="{{item.originalAmount}}" class="consume-points__origin">-{{item.originalAmount}}</text>
       </view>
     </view>
 

@@ -71,6 +71,7 @@
   </scroll-view>
 
   <view class="bottom-container">
+    <view wx:if="{{isSpringFestival}}" class="activity-tip">新年特惠，限时折扣</view>
     <!-- 套餐选择 -->
     <view class="package-selection">
       <view 
@@ -80,7 +81,8 @@
         bindtap="onSelectPackage" 
         data-id="{{item.id}}"
       >
-        <view class="origin-price {{!item.originPrice ? 'line-through' : ''}}">￥{{item.originPrice}}</view>
+        <rich-text wx:if="{{item.discountInfo}}" nodes="{{item.discountInfo}}" />
+        <view class="origin-price {{item.originAmount ? 'line-through' : ''}}">￥{{item.originAmount / 100}}</view>
         <view class="package-price-text">¥{{item.amountInYuan}}</view>
         <view class="package-name-text">{{item.title}}</view>
       </view>

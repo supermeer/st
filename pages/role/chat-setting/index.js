@@ -1,6 +1,7 @@
 import SystemInfo from '../../../utils/system'
 import Message from 'tdesign-miniprogram/message/index';
 import { getPlotDetail, updatePlot, getMemoryType } from '../../../services/ai/chat'
+import { getModelList, getGlobalModelId } from '../../../services/usercenter/index'
 import { QUOTE_GRADIENT_OPTIONS } from '../../../utils/msgHandler'
 Page({
   /**
@@ -54,13 +55,13 @@ Page({
     showUploader: false,
     // 模型选择弹窗
     showModelSheet: false,
-    // 模型选项列表
-    modelOptions: [],
     // 记忆力说明遮罩层
     showMemoryDescOverlay: false,
     // 记忆选项列表
     memoryOptions: [],
-    showModelDot: false
+    showModelDot: false,
+    currentModel: null,
+    modelList: []
   },
 
   // 防抖定时器
@@ -95,7 +96,6 @@ Page({
     this.getMemoryType()
     this.getModelList()
     const newModelMark = wx.getStorageSync('newModelMark')
-    console.log('newModelMark------------', newModelMark)
     if (!newModelMark) {
       wx.setStorageSync('newModelMark', true)
       this.setData({
@@ -110,6 +110,28 @@ Page({
       keepFullScreen: wx.getStorageSync('alwaysFullScreen') === 'true',
       quoteGradientName: option ? option.name : '金青渐变'
     })
+    getGlobalModelId().then(res => {
+      this.setData({
+        currentModel: {
+          ...(this.data.currentModel || {}),
+          id: res
+        }
+      })
+      this.setCurrentModel()
+    })
+  },
+  setCurrentModel() {
+    if (!this.data.currentModel || !this.data.currentModel.id || this.data.modelList.length === 0) {
+      return
+    }
+    const res = this.data.modelList.filter(item => item.id === this.data.currentModel.id)
+    if (res && res.length > 0) {
+      this.setData({
+        currentModel: {
+          ...res[0]
+        }
+      })
+    }
   },
 
   getPlotInfo(plotId) {
@@ -125,11 +147,12 @@ Page({
   },
 
   getModelList() {
-    // return getModelList().then(res => {
-    //   this.setData({
-    //     modelOptions: res || []
-    //   })
-    // })
+    getModelList().then(res => {
+      this.setData({
+        modelList: res || []
+      })
+      this.setCurrentModel()
+    })
   },
 
   getMemoryType() {
@@ -204,43 +227,22 @@ Page({
     this.setData({
       showModelDot: false
     })
-    const options = [
-      { value: 'gpt-4o', label: '模型A', description: '流畅的不行的模型', speedLevel: 5, qualityLevel: 5 },
-      { value: 'gpt-4o-pro', label: '模型Pro', description: '维护中', speedLevel: 5, qualityLevel: 5, disabled: true }
-    ] 
     const modelSheet = this.selectComponent('#modelSheet')
     if (modelSheet) {
       modelSheet.show({
-        currentValue: this.data.plotInfo.memoryCount,
-        modelOptions: options,//[...this.data.modelOptions || options],
-        onConfirm: async (count) => {
-          try {
-            wx.showLoading({
-              title: '保存中...',
-              mask: true
-            })
-            // await updatePlot({
-            //   id: this.data.plotInfo.id,
-            //   memoryCount: count
-            // })
-            // this.setData({
-            //   'plotInfo.memoryCount': count
-            // })
-            wx.hideLoading()
-            wx.showToast({
-              title: '保存成功',
-              icon: 'success',
-              duration: 1200
-            })
-          } catch (error) {
-            wx.hideLoading()
-            wx.showToast({
-              title: '保存失败',
-              icon: 'error',
-              duration: 1500
-            })
-            console.error('更新记忆选项失败:', error)
-          }
+        modelOptions: [...this.data.modelList],
+        currentValue: this.data.currentModel.id,
+        onConfirm: (id, item) => {
+          wx.showToast({
+            title: '切换成功！',
+            icon: 'none'
+          })
+          this.setData({
+            currentModel: {
+              ...this.currentModel,
+              id
+            }
+          })
         }
       })
     }

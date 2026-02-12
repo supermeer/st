@@ -221,22 +221,21 @@ page {
 .role-swiper-item {
   width: 100%;
   height: 100%;
-  padding: 24rpx;
+  /* padding: 24rpx; */
   box-sizing: border-box;
 }
 .role-swiper-item__active {
-  transform: scale(1.1);
+  /* transform: scale(1.1); */
   padding: 0;
 }
-.role-swiper-item__active .role-swiper-content {
+/* .role-swiper-item__active .role-swiper-content {
   transform: scale(1);
-}
+} */
 .role-swiper-content {
   width: 100%;
   height: 100%;
-  border: 1px solid #f00;
-  transform: scale(0.96);
-  transition: transform 0.25s ease-in-out;
+  /* transform: scale(0.96); */
+  /* transition: transform 0.25s ease-in-out; */
 }
 
 

@@ -95,12 +95,21 @@ page {
 .consume-right {
   flex-shrink: 0;
   margin-left: 24rpx;
+  display: inline-flex;
+  align-items: center;
 }
 
 .consume-points {
   font-size: 36rpx;
   font-weight: 600;
   color: #fff;
+}
+
+.consume-points__origin {
+  margin-left: 8rpx;
+  font-size: 28rpx;
+  text-decoration: line-through;
+  color: #ddd;
 }
 
 /* 加载状态 */

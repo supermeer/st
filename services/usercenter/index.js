@@ -68,6 +68,26 @@ export function visitPages(data) {
   return request.post('/api/v1/user/user/visitPages', data)
 }
 
+export function getModelList() {
+  return request.get('/api/v1/server/model/getModelList')
+}
+
+export function getGlobalModelId() {
+  return request.get('/api/v1/server/model/getGlobalModelId')
+}
+
+export function setGlobalModel(data) {
+  return request.post('/api/v1/server/model/setGlobalModel', data)
+}
+
+export function getIfSpringFestival() {
+  return request.get('/api/v1/server/model/getGlobalModelId')
+}
+
+export function isSpringFestivalExpired() {
+  return request.get('/api/v1/user/user/isSpringFestivalExpired')
+}
+
 /**
  * 检查用户是否绑定手机号
  * @returns {Promise}

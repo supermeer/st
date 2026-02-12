@@ -173,6 +173,7 @@
 }
 
 .bottom-container {
+  z-index: 100;
   position: fixed;
   bottom: 0;
   left: 0;
@@ -181,6 +182,19 @@
   box-sizing: border-box;
   background: #fff;
   border-radius: 42rpx 42rpx 0 0;
+}
+
+.activity-tip {
+  background: #d81e06;
+  color: #fff;
+  display: inline-block;
+  padding: 4rpx 10rpx;
+  border-bottom-left-radius: 16rpx;
+  border-top-right-radius: 16rpx;
+  position: absolute;
+  top: 0;
+  left: 40rpx;
+  transform: translateY(-50%);
 }
 
 /* 套餐选择 */
@@ -194,9 +208,10 @@
 
 .package-card {
   display: inline-flex;
+  vertical-align: top;
   background-color: rgba(245, 245, 245, 1);
   border-radius: 24rpx;
-  padding: 32rpx 20rpx;
+  padding: 52rpx 20rpx;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -224,7 +239,7 @@
   font-size: 48rpx;
   font-weight: bold;
   color: #000;
-  margin-bottom: 8rpx;
+  margin-bottom: 12rpx;
 }
 
 .package-card-selected .package-price-text {

@@ -15,6 +15,10 @@
     "role-hot-container": "/components/role-hot-container/index",
     "van-dropdown-menu": "@vant/weapp/dropdown-menu/index",
     "van-dropdown-item": "@vant/weapp/dropdown-item/index",
-    "t-swiper": "tdesign-miniprogram/swiper/swiper"
+    "t-swiper": "tdesign-miniprogram/swiper/swiper",
+    "t-overlay": "tdesign-miniprogram/overlay/overlay",
+    "points-recharge-dialog": "/components/points-recharge-dialog/index",
+    "model-sheet": "/components/model-sheet/index",
+    "richtext-dialog": "/components/richtext-dialog/index"
   }
 }

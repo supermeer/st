@@ -2,6 +2,7 @@ import userStore from '../../store/user'
 import SystemInfo from '../../utils/system'
 import Toast from 'tdesign-miniprogram/toast/index'
 import { getCharacterType, getCharacterTag, getCharacterList, getCurrentPlotByCharacterId } from '../../services/role/index'
+import { getModelList, getGlobalModelId, isSpringFestivalExpired, getActivity } from '../../services/usercenter/index'
 
 Page(
   Object.assign({}, userStore.data, {
@@ -19,14 +20,15 @@ Page(
       showSwiper: false,
       navScrollLeft: 0,
 
-      orderValue: 'hot',
+      sortField: 'browseCount',
+      sortOrder: 'desc',
       orderOptions: [
         {
-          value: 'hot',
+          value: 'browseCount',
           text: '热门排序',
         },
         {
-          value: 'new',
+          value: 'publishTime',
           text: '最新排序',
         }
       ],
@@ -36,7 +38,12 @@ Page(
       tagScrollLeft: 0,
       activeForm: {
         current: 0,
-        list: [1,2,3],
+        list: [
+          {
+            url: 'https://character-static-1371529546.cos.ap-guangzhou.myqcloud.com/SpringFestival_26/invite.jpg',
+            type: 'invite'
+          }
+        ],
         duration: 500,
         interval: 3000,
         autoplay: true,
@@ -60,6 +67,10 @@ Page(
       pageNo: 1,
       pageSize: 10,
       totalCount: 0,
+      discountForm: {
+        visible: false,
+        picUrl: 'https://character-static-1371529546.cos.ap-guangzhou.myqcloud.com/SpringFestival_26/gemini_activity.png'
+      }
     },
 
 
@@ -77,6 +88,8 @@ Page(
       this.getCharacterType()
       this.getCharacterTag()
       // 注意：loadRoleList会在getCharacterType中设置第一个nav后自动调用
+      this.getSpringFestivalExpired()
+      userStore.refreshPointInfo()
     },
 
     onShow: function () {
@@ -84,6 +97,53 @@ Page(
       if (typeof this.getTabBar === 'function' && this.getTabBar()) {
         this.getTabBar().init()
       }
+
+      setTimeout(() => {
+        this.setData({
+        activeForm: {
+          ...this.data.activeForm,
+          autoplay: true
+        }
+      })
+      }, 300);
+    },
+
+    onHide() {
+      this.setData({
+        activeForm: {
+          ...this.data.activeForm,
+          autoplay: false
+        }
+      })
+    },
+
+    getSpringFestivalExpired() {
+      isSpringFestivalExpired().then(res => {
+        if(!res) {
+          const list = [
+            {
+              url: 'https://character-static-1371529546.cos.ap-guangzhou.myqcloud.com/SpringFestival_26/banner_1.jpg',
+              type: 'discount'
+              // url: 'https://character-static-1371529546.cos.ap-guangzhou.myqcloud.com/SpringFestival_26/activity.gif'
+            },
+            {
+              url: 'https://character-static-1371529546.cos.ap-guangzhou.myqcloud.com/SpringFestival_26/banner_2.jpg',
+              type: 'point'
+            },
+            {
+              url: 'https://character-static-1371529546.cos.ap-guangzhou.myqcloud.com/SpringFestival_26/banner_3.jpg',
+              type: 'vip'
+            },
+            ...this.data.activeForm.list
+          ]
+          this.setData({
+            activeForm: {
+              ...this.data.activeForm,
+              list: [...list]
+            }
+          })
+        }
+      })
     },
 
     async getCharacterType() {
@@ -193,7 +253,10 @@ Page(
     },
 
     onOrderChange(e) {
-      console.log(e, '------')
+      this.setData({
+        sortField: e.detail
+      })
+      this.loadRoleList(true)
     },
 
     // 滚动标签到中间
@@ -337,6 +400,8 @@ Page(
           current: this.data.pageNo,
           size: this.data.pageSize,
           ifSystem: true,
+          sortOrder: this.data.sortOrder,
+          sortField: this.data.sortField,
           characterTypeIds: this.data.activeNav,
           characterTagIds: this.data.activeTags.join(','),
         }
@@ -388,6 +453,83 @@ Page(
       }
     },
 
+    async onActivityClick() {
+      const {list, current} = this.data.activeForm
+      const item = list[current]
+      const { type } = item
+      if (type === 'discount') {
+        this.setData({
+          discountForm: {
+            ...this.data.discountForm,
+            visible: true
+          }
+        })
+      }
+      if (type === 'vip') {
+        wx.navigateTo({
+          url: '/pages/vip/packages/index'
+        })
+      }
+      if (type === 'point') {
+        const dialog = this.selectComponent('#pointsRechargeDialog')
+        if (dialog) {
+          dialog.show()
+        }
+      }
+      if (type === 'invite') {
+        const richtext = await getActivity({activityType: 1})
+        const richtextDialog = this.selectComponent('#richtextDialog')
+        richtextDialog.show({
+          isShare: true,
+          contentNodes: richtext.content || '',
+          buttons: [
+            { text: '添加客服', variant: 'outline', type: 'cs' },
+            { text: '去分享', type: 'share' }
+          ]
+        })
+      }
+    },
+    discountOverlayClick() {
+      this.setData({
+        discountForm: {
+          ...this.data.discountForm,
+          visible: false
+        }
+      })
+    },
+    handleDiscountClick() {
+      Promise.all([getGlobalModelId(), getModelList()]).then(res => {
+        const [id , list] = res
+        const modelSheetRef = this.selectComponent('#modelSheet')
+        modelSheetRef.show({
+          modelOptions: [...list],
+          currentValue: id,
+          onConfirm: (id, item) => {
+            wx.showToast({
+            title: '保存成功！',
+            icon: 'none',
+            duration: 1500
+          })
+          }
+        })
+      })
+    },
+    richtextAction({ detail }) {
+      const { type } = detail
+      if (type === 'cs') {
+        const app = getApp()
+        wx.openCustomerServiceChat({
+          extInfo: { url: app.globalData.wxCustomerService.url },
+          corpId: app.globalData.wxCustomerService.corpId,
+          success(res) {}
+        })
+      }
+      if (type === 'share') {
+        this.setData({
+          isInvite: true
+        })
+      }
+    },
     // 点击角色卡片
     async onRoleClick(e) {
       const id = e.currentTarget.dataset.id

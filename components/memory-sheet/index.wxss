@@ -219,6 +219,10 @@
   display: block;
 }
 
+.ms-metric-label {
+  font-size: 26rpx;
+}
+
 /* 当前标签 - 右上角角标 */
 .current-tag {
   position: absolute;

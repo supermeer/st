@@ -36,8 +36,8 @@
 
   <!-- 筛选标签 -->
   <view class="filter-tags">
-    <van-dropdown-menu class="order-dropdown">
-      <van-dropdown-item value="{{ orderValue }}" options="{{ orderOptions }}" />
+    <van-dropdown-menu class="order-dropdown" active-color="#1989fa">
+      <van-dropdown-item value="{{ sortField }}" options="{{ orderOptions }}" bind:change="onOrderChange" />
     </van-dropdown-menu>
     <scroll-view class="tags-scroll" scroll-x show-scrollbar="{{false}}" scroll-left="{{tagScrollLeft}}" scroll-with-animation>    
       <view class="tag-item {{utils.includes(activeTags, item.id) ? 'active' : ''}}" 
@@ -74,7 +74,6 @@
         <view
           wx:if="{{showSwiper}}"
           class="role-card role-card_active"
-          bindtap="onRoleClick"
         >
           <swiper
             class="role-swiper"
@@ -86,8 +85,6 @@
             circular="{{true}}"
             layout-type="transformer"
             transformer-type="scaleAndFade"
-            previous-margin="18px"
-            next-margin="18px"
             bindchange="onActiveChange"
           >
             <swiper-item
@@ -95,9 +92,10 @@
               class="role-swiper-item {{index === activeForm.current ? 'role-swiper-item__active' : ''}}"
               wx:key="index"
               data-index="{{index}}"
-              bindtap="onRoleClick"
+              bindtap="onActivityClick"
             >
-              <view class="role-swiper-content">{{index}}</view>
+              <t-image class="role-swiper-content"  src="{{item.url}}" />
+              <!-- <view class="role-swiper-content">{{index}}</view> -->
             </swiper-item>
           </swiper>
         </view>
@@ -142,3 +140,23 @@
 </view>
 
 <t-toast id="t-toast" />
+
+<points-recharge-dialog
+  id="pointsRechargeDialog"
+/>
+
+<t-overlay
+  visible="{{discountForm.visible}}"
+  duration="{{500}}"
+  bind:click="discountOverlayClick"
+>
+  <!-- <t-image style="width: 100%; height: 100%; display: flex; align-items: center;" mode="widthFix" src="{{discountForm.picUrl}}"  /> -->
+   <image src="{{discountForm.picUrl}}" mode="widthFix" style="width: 100%;transform: translateY(-50%); top: 50%; position: relative;"  bindtap="handleDiscountClick"/>
+</t-overlay>
+
+<model-sheet id="modelSheet" />
+
+<richtext-dialog
+  id="richtextDialog"
+  bind:action="richtextAction"
+/>
