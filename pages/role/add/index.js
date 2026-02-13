@@ -153,7 +153,7 @@ Page({
   },
 
   getCharacterById(id) {
-    getCharacterDetail(id).then((res) => {
+    getCharacterDetail(id, 0).then((res) => {
       const { userAddressedAs, identity, gender } = res.defaultPersona || {}
       const { scene, prologue } = res.defaultStoryDetail || {}
 

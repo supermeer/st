@@ -21,13 +21,20 @@ Page({
     },
     plotList: [],
     currentPlotId: null,
-    currentBg: ''
+    currentBg: '',
+    showBG: true
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
+    const ev = wx.getStorageSync('aE')
+    if (ev == '0') {
+      this.setData({
+        showBG: false
+      })
+    }
     // 获取传递的参数
     if (options.roleId) {
       this.setData({

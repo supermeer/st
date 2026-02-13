@@ -59,7 +59,8 @@ Page({
     currentBg: '',
     // 记忆力说明遮罩层
     showMemoryDescOverlay: false,
-    memoryOptions: []
+    memoryOptions: [],
+    showBG: true
   },
 
   // 防抖定时器（记忆力滑块）
@@ -71,6 +72,12 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
+    const ev = wx.getStorageSync('aE')
+    if (ev == '0') {
+      this.setData({
+        showBG: false
+      })
+    }
     // 获取传递的参数
     if (options.characterId) {
       this.setData({

@@ -60,8 +60,8 @@ export function getPlotListByCharacterId(characterId) {
     return request.get(`/api/v1/server/plot/getPlotListByCharacterId?characterId=${characterId}`)
 }
 
-export function getCharacterDetail(characterId) {
-    return request.get(`/api/v1/server/character/getCharacterDetail?characterId=${characterId}`)
+export function getCharacterDetail(characterId, ifReplace = 1) {
+    return request.get(`/api/v1/server/character/getCharacterDetail?characterId=${characterId}&ifReplace=${ifReplace}`)
 }
 
 export function restorePlotChatStyle(data) {

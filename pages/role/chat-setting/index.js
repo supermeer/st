@@ -61,7 +61,8 @@ Page({
     memoryOptions: [],
     showModelDot: false,
     currentModel: null,
-    modelList: []
+    modelList: [],
+    showBG: true
   },
 
   // 防抖定时器
@@ -73,6 +74,12 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
+    const ev = wx.getStorageSync('aE')
+    if (ev == '0') {
+      this.setData({
+        showBG: false
+      })
+    }
     if (options.plotId) {
       this.setData({
         plotInfo: {

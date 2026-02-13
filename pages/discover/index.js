@@ -70,11 +70,18 @@ Page(
       discountForm: {
         visible: false,
         picUrl: 'https://character-static-1371529546.cos.ap-guangzhou.myqcloud.com/SpringFestival_26/gemini_activity.png'
-      }
+      },
+      showBG: true
     },
 
 
     onLoad: function () {
+      const ev = wx.getStorageSync('aE')
+      if (ev == '0') {
+        this.setData({
+          showBG: false
+        })
+      }
       userStore.bind(this)
       
       // 获取页面信息
@@ -119,7 +126,7 @@ Page(
 
     getSpringFestivalExpired() {
       isSpringFestivalExpired().then(res => {
-        if(!res) {
+        if(!res && this.data.showBG) {
           const list = [
             {
               url: 'https://character-static-1371529546.cos.ap-guangzhou.myqcloud.com/SpringFestival_26/banner_1.jpg',

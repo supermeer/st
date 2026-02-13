@@ -18,13 +18,20 @@ Page({
     templateList: [],
     // 我创建的列表
     myStyleList: [],
-    currentBg: ''
+    currentBg: '',
+    showBG: true
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
+    const ev = wx.getStorageSync('aE')
+    if (ev == '0') {
+      this.setData({
+        showBG: false
+      })
+    }
     this.setData({
       plotId: options.plotId,
       currentBg: options.currentBg || '',

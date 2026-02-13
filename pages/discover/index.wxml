@@ -107,7 +107,7 @@
           wx:key="id"
           bindtap="onRoleClick"
           data-id="{{item.id}}"
-          style="background-image: url('{{item.backgroundImage}}');"
+          style="background-image: url('{{showBG ? item.backgroundImage : ''}}');"
         >
           <view class="role-info">
             <view class="role-name-row">

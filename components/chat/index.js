@@ -570,7 +570,8 @@ Component({
             }
             // {"type":"modelStatus","msg":{"modelId":1,"status":0}}
             if (type === 'modelStatus') {
-              const { modelId, status } = msg
+              const obj = JSON.parse(msg || '{}')
+              const { modelId, status } = obj
               if (status == 1) {
                 const modelErrDialog = this.selectComponent('#modelErrDialog')
                 modelErrDialog.show({

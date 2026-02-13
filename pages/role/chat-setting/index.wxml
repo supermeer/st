@@ -1,6 +1,6 @@
 <view class="chat-setting-page">
   <!-- 固定背景图 -->
-  <image class="page-bg" src="{{currentBg}}" mode="aspectFill"></image>
+  <image class="page-bg" src="{{showBG ? currentBg : ''}}" mode="aspectFill"></image>
   
   <!-- 固定顶部导航栏 -->
   <custom-nav title="" showBack="{{true}}" showHome="{{false}}" transparent="{{true}}" />
