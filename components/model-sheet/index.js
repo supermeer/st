@@ -129,6 +129,8 @@ Component({
 
     preventMove() {
       return false
-    }
+    },
+
+    noop() {}
   }
 })

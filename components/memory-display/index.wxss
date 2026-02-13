@@ -31,6 +31,30 @@
   background: rgba(255, 193, 7, 0.1);
 }
 
+/* 卡片背景颜色区分 - 第五项：绿色 */
+.memory-card-4 {
+  border-color: rgba(52, 211, 153, 0.5);
+  background: rgba(52, 211, 153, 0.1);
+}
+
+/* 卡片背景颜色区分 - 第六项：青色 */
+.memory-card-5 {
+  border-color: rgba(34, 211, 238, 0.5);
+  background: rgba(34, 211, 238, 0.1);
+}
+
+/* 卡片背景颜色区分 - 第七项：粉色 */
+.memory-card-6 {
+  border-color: rgba(251, 113, 133, 0.5);
+  background: rgba(251, 113, 133, 0.1);
+}
+
+/* 卡片背景颜色区分 - 第八项：橙色 */
+.memory-card-7 {
+  border-color: rgba(251, 146, 60, 0.5);
+  background: rgba(251, 146, 60, 0.1);
+}
+
 /* 卡片内容 */
 .memory-card-content {
   display: flex;
@@ -76,6 +100,26 @@
 /* 数值颜色区分 - 第四项：黄色 */
 .memory-card-3 .memory-card-value {
   color: var(--yellow-btn-color);
+}
+
+/* 数值颜色区分 - 第五项：绿色 */
+.memory-card-4 .memory-card-value {
+  color: #34d399;
+}
+
+/* 数值颜色区分 - 第六项：青色 */
+.memory-card-5 .memory-card-value {
+  color: #22d3ee;
+}
+
+/* 数值颜色区分 - 第七项：粉色 */
+.memory-card-6 .memory-card-value {
+  color: #fb7185;
+}
+
+/* 数值颜色区分 - 第八项：橙色 */
+.memory-card-7 .memory-card-value {
+  color: #fb923c;
 }
 
 /* 卡片描述 */

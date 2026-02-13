@@ -169,7 +169,8 @@ Component({
     // 阻止事件冒泡
     preventMove() {
       return false
-    }
+    },
+
+    noop() {}
   }
 })
-

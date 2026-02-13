@@ -8,7 +8,7 @@
 
     <view class="memory-sheet-subtitle">{{subtitle}}</view>
 
-    <scroll-view class="memory-list" scroll-y>
+    <scroll-view class="memory-list" scroll-y catchtouchmove="noop">
       <view wx:if="{{loading}}" class="loading-container">
         <text class="loading-text">加载中...</text>
       </view>
