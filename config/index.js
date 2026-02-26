@@ -3,8 +3,8 @@
 // baseUrl: 'https://www.yours-x.com/character'
 const accountInfo = wx.getAccountInfoSync();
 const version = accountInfo.miniProgram.version;
-// let baseUrl = 'https://www.yours-x.com/character-test'
-let baseUrl = 'https://www.yours-x.com/character-audit'
+let baseUrl = 'https://www.yours-x.com/character-test'
+// let baseUrl = 'https://www.yours-x.com/character-audit'
 if (version) {
   baseUrl = 'https://www.yours-x.com/character'
 }
