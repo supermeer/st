@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "聊天",
+  "navigationBarTitleText": "聊天记录",
   "onReachBottomDistance": 10,
   "backgroundTextStyle": "light",
   "enablePullDownRefresh": false,

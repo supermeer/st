@@ -371,7 +371,7 @@ Page({
     try {
       const res = await getCurrentPlotByCharacterId(id)
       wx.navigateTo({
-        url: `/pages/chat/index?plotId=${res && res.plotId ? res.plotId : ''}&characterId=${id}`
+        url: `/pages/chat/index?plotId=${res && res.plotId ? res.plotId : ''}&characterId=${id}&isDiscover=${true}`
       })
     } catch (error) {
       console.error('获取角色信息失败:', error)

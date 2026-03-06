@@ -6,5 +6,5 @@
     "t-icon": "tdesign-miniprogram/icon/icon",
     "tip-dialog": "/components/tip-dialog/index"
   },
-  "navigationBarTitleText": ""
+  "navigationBarTitleText": "世界书列表"
 }

@@ -1,7 +1,8 @@
 import SystemInfo from '../../utils/system'
 import {
   getCurrentPlotByCharacterId,
-  getCharacterDetail
+  getCharacterDetail,
+  enterFromDiscover
 } from '../../services/role/index'
 Page({
   data: {
@@ -28,8 +29,9 @@ Page({
         showBG: false
       })
     }
-    const { plotId, characterId, isShare, id } = e
+    const { plotId, characterId, isShare, id, isDiscover = false } = e
     const pageInfo = SystemInfo.getPageInfo()
+    isDiscover && enterFromDiscover({id, characterId: id})
     if (!isShare) {
       this.setData({
         roleForm: {

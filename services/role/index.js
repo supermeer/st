@@ -48,6 +48,10 @@ export function getCharacterList(params) {
     return request.get('/api/v1/server/character/getCharacterList', params)
 }
 
+export function enterFromDiscover(data) {
+    return request.post('/api/v1/server/character/enterFromDiscover', data)
+}
+
 export function createChatStyle(data) {
     return request.post('/api/v1/server/story/createChatStyle', data)
 }

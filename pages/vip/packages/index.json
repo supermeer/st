@@ -1,4 +1,5 @@
 {
+  "navigationBarTitleText": "开通会员",
   "usingComponents": {
     "custom-nav": "/components/custom-nav/index",
     "t-toast": "tdesign-miniprogram/toast/toast",

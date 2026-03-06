@@ -11,5 +11,5 @@
     "image-uploader": "/components/image-uploader/index",
     "t-image": "tdesign-miniprogram/image/image"
   },
-  "navigationBarTitleText": ""
+  "navigationBarTitleText": "添加角色"
 }
