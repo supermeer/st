@@ -98,6 +98,10 @@
       <t-icon name="copy" size="40rpx" class="action-icon" />
       <text>复制</text>
     </view>
+    <view class="action-btn" catchtap="onFreeCopy" data-id="{{currentMaskMessageId}}">
+      <t-icon name="edit-1" size="40rpx" class="action-icon" />
+      <text>选取</text>
+    </view>
   </view>
   
   <!-- 用户消息按钮弹窗（右侧） -->
@@ -117,6 +121,23 @@
     </view>
   </view>
 </block>
+
+<!-- 自由复制弹窗 -->
+<view wx:if="{{freeCopyVisible}}" class="free-copy-mask" catchtap="hideFreeCopy" catchtouchmove="preventMove"></view>
+<view wx:if="{{freeCopyVisible}}" class="free-copy-popup" catchtap="stopPropagation">
+  <view class="free-copy-header">
+    <text class="free-copy-title">选取复制</text>
+    <view class="free-copy-close" catchtap="hideFreeCopy">
+      <t-icon name="close" size="36rpx" color="#aaa" />
+    </view>
+  </view>
+  <view class="free-copy-tip">
+    <text>长按选择你想复制的内容</text>
+  </view>
+  <scroll-view scroll-y class="free-copy-scroll">
+    <text class="free-copy-content" user-select="{{true}}" space="nbsp">{{freeCopyContent}}</text>
+  </scroll-view>
+</view>
 
 <tip-dialog id="tip-dialog" />
 <input-sheet id="input-sheet" />

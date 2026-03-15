@@ -83,6 +83,7 @@
             interval="{{activeForm.interval}}"
             duration="{{activeForm.duration}}"
             circular="{{true}}"
+            indicator-dots="{{activeForm.list && activeForm.list.length > 1}}"
             layout-type="transformer"
             transformer-type="scaleAndFade"
             bindchange="onActiveChange"

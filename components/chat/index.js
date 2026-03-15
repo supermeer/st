@@ -162,6 +162,8 @@ Component({
     maskButtonRight: 0, // 蒙版按钮 right 位置（用户消息）
     currentMaskMessageId: null, // 当前显示蒙版的消息 ID
     currentMessageType: 'role', // 当前消息类型：role 或 user
+    freeCopyVisible: false, // 自由复制弹窗是否显示
+    freeCopyContent: '', // 自由复制的文本内容
     operatingForm: {
       operate: '',
       msgId: null // 只存储消息 ID，不存储引用
@@ -1204,6 +1206,34 @@ Component({
       }
       // e.detail.current.closeSwipeCell();
     },
+    // 自由复制按钮点击事件
+    onFreeCopy(e) {
+      const messageId = e.currentTarget.dataset.id
+      const msg = this.data.msgList.find((m) => m.id === messageId)
+      if (!msg) return
+
+      // 关闭长按蓙版
+      this.hideMask()
+
+      // 获取纯文本内容
+      const content = msg.content || ''
+
+      setTimeout(() => {
+        this.setData({
+          freeCopyVisible: true,
+          freeCopyContent: content
+        })
+      }, 250)
+    },
+
+    // 隐藏自由复制弹窗
+    hideFreeCopy() {
+      this.setData({
+        freeCopyVisible: false,
+        freeCopyContent: ''
+      })
+    },
+
     // 折叠/展开：剧情文本
     toggleScene() {
       const expanded = !this.data.sceneExpanded

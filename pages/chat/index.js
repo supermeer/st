@@ -31,7 +31,7 @@ Page({
     }
     const { plotId, characterId, isShare, id, isDiscover = false } = e
     const pageInfo = SystemInfo.getPageInfo()
-    isDiscover && enterFromDiscover({id, characterId: id})
+    isDiscover && enterFromDiscover({id: characterId, characterId})
     if (!isShare) {
       this.setData({
         roleForm: {

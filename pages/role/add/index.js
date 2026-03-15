@@ -49,7 +49,6 @@ Page({
     typeOptions: [],
     tagOptions: [],
     selectedTagList: [],
-    maxTypeSelect: 4,
     maxTagSelect: 4,
     showTagSelector: false,
     tempTagIds: [],
@@ -210,24 +209,13 @@ Page({
     if (Number.isNaN(normalizedId)) {
       return
     }
-    const typeIds = [...this.normalizeIdList(this.data.formData.typeIds)]
-    const idx = typeIds.indexOf(normalizedId)
+    const currentTypeIds = [...this.normalizeIdList(this.data.formData.typeIds)]
+    const idx = currentTypeIds.indexOf(normalizedId)
+    // 单选：点击新的类型直接替换；点击已选中的类型保持不变（类似 tab 切换）
     if (idx !== -1) {
-      typeIds.splice(idx, 1)
-      this.setData({
-        'formData.typeIds': typeIds,
-        typeOptions: this.buildSelectedOptions(this.data.typeOptions, typeIds)
-      })
       return
     }
-    if (typeIds.length >= this.data.maxTypeSelect) {
-      wx.showToast({
-        title: `最多选择${this.data.maxTypeSelect}个类型`,
-        icon: 'none'
-      })
-      return
-    }
-    typeIds.push(normalizedId)
+    const typeIds = [normalizedId]
     this.setData({
       'formData.typeIds': typeIds,
       typeOptions: this.buildSelectedOptions(this.data.typeOptions, typeIds)

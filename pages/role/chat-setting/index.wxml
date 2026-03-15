@@ -37,13 +37,13 @@
       </view> -->
 
       <view class="setting-section blur-glass">
-        <view class="section-header">
+        <view class="section-header" bindtap="onModelSelect">
           <view class="section-title">
             对话模型
           </view>
-          <view class="setting-section-link" bindtap="onModelSelect">
-            <!-- <view class="new-tip">上新模型啦！限时优惠哦！<view wx:if="{{showModelDot}}" class="new-tip-dot" /></view>
-            <t-icon name="chevron-right" size="40rpx" color="rgba(255,255,255,0.6)" /> -->
+          <view class="setting-section-link">
+            <!-- <view class="new-tip">上新模型啦！限时优惠哦！<view wx:if="{{showModelDot}}" class="new-tip-dot" /></view> -->
+            <t-icon name="chevron-right" size="40rpx" color="rgba(255,255,255,0.6)" />
           </view>
         </view>
         <model-display 

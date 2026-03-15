@@ -87,9 +87,8 @@
 
 /* 记忆选项列表 */
 .memory-list {
-  flex: 1;
-  height: 0;
-  margin-bottom: 32rpx;
+  height: 60vh;
+  padding-bottom: 32rpx;
   overflow-y: auto;
 }
 
