@@ -8,6 +8,7 @@ import {
   getAuditRejectReason,
   getCharacterTag
 } from '../../../services/role/index'
+import { verifyUrls } from '../../../services/file/index'
 Page({
   /**
    * 页面的初始数据
@@ -79,6 +80,27 @@ Page({
     })
 
     this.initMetaOptions()
+
+    const nav = this.selectComponent('#roleAddNav')
+    if (nav) {
+      nav.setBackAction(this.backAction)
+    }
+  },
+
+  backAction() {
+    const tipDialog = this.selectComponent('#tip-dialog')
+    let content = '退出当前页面后，编辑的内容不会被保存，确认退出？'
+    tipDialog.show({
+      title: '提示',
+      content,
+      cancelText: '取消',
+      confirmText: '确认',
+      onCancel: () => {
+      },
+      onConfirm: async () => {
+        wx.navigateBack()
+      }
+    })
   },
 
   initMetaOptions() {
@@ -464,12 +486,27 @@ Page({
       signature && signature.uploadUrl
         ? signature.uploadUrl.split('?')[0]
         : tempFilePath
-    this.setData({
-      showUploader: false,
-      currentBg: tempFilePath,
-      'formData.defaultBackgroundImage': bg,
-      'formData.backgroundImage': bg
-    })
+    const res = await verifyUrls([signature.fileKey])
+    const fileRes = res && res[0] ? res[0] : {}
+    if (fileRes && fileRes.suggestion === 'Pass') {
+      this.setData({
+        showUploader: false,
+        currentBg: tempFilePath,
+        'formData.defaultBackgroundImage': bg,
+        'formData.backgroundImage': bg
+      })
+    } else {
+      wx.showModal({
+        title: '提示',
+        content: '您上传的图片包含敏感信息。'
+      })
+      this.setData({
+        showUploader: false,
+        currentBg: null,
+        'formData.defaultBackgroundImage': null,
+        'formData.backgroundImage': null
+      })
+    }
   },
 
   onUploadFail(e) {

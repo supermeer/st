@@ -68,7 +68,8 @@ Component({
   data: {
     statusBarHeight: 20,
     navContentHeight: 44,
-    navHeight: 64
+    navHeight: 64,
+    customBkAction: null
   },
 
   lifetimes: {
@@ -103,8 +104,18 @@ Component({
       }
     },
 
+    setBackAction(bkAction) {
+      this.setData({
+        customBkAction: bkAction
+      })
+    },
+
     // 返回上一页
     onBack: function () {
+      if (this.data.customBkAction) {
+        this.data.customBkAction()
+        return
+      }
       this.triggerEvent('back')
       wx.navigateBack({
         delta: 1

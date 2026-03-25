@@ -3,7 +3,7 @@
   <image class="page-bg" src="{{currentBg}}" mode="aspectFill"></image>
   
   <!-- 固定顶部导航栏 -->
-  <custom-nav title="" showBack="{{true}}" showHome="{{false}}" transparent="{{true}}" />
+  <custom-nav id="roleAddNav" title="" showBack="{{true}}" showHome="{{false}}" transparent="{{true}}" />
 
   <!-- 可滚动内容区域 -->
   <scroll-view
@@ -174,13 +174,13 @@
         </view>
 
         <!-- 对话风格 -->
-        <view class="setting-item" bindtap="onChatStyle">
+        <!-- <view class="setting-item" bindtap="onChatStyle">
           <view class="setting-label">对话风格</view>
           <view class="setting-action">
             <text class="setting-value">{{styleForm.title || '请设置'}}</text>
             <t-icon name="chevron-right" size="40rpx" color="rgba(255,255,255,0.6)" />
           </view>
-        </view>
+        </view> -->
 
         <view class="setting-item" bindtap="onWorldBook">
           <view class="setting-label">世界书</view>

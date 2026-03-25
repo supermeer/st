@@ -75,7 +75,8 @@ Component({
         const code = app.getInviteCode().then((res) => {
           this.setData({
             inviteForm: {
-              content: `重磅福利！\n小程序搜索「星语酒馆AI」并输入邀请码 【${res}】，立享积分福利！智能体超多，体验超绝！快冲吧！`,
+              // content: `重磅福利！\n小程序搜索「星语酒馆AI」并输入邀请码 【${res}】，立享积分福利！智能体超多，体验超绝！快冲吧！`,
+              content: `${res}`,
               code: res
             }
           })
@@ -156,7 +157,7 @@ Component({
         data: this.data.inviteForm.content,
         success: () => {
           wx.showToast({
-            title: '文案已复制到粘贴板',
+            title: '已复制到粘贴板',
             icon: 'none'
           })
         }
