@@ -4,6 +4,7 @@
       "t-icon": "tdesign-miniprogram/icon/icon",
       "t-image": "tdesign-miniprogram/image/image",
       "t-textarea": "tdesign-miniprogram/textarea/textarea",
-      "image-uploader": "/components/image-uploader/index"
+      "image-uploader": "/components/image-uploader/index",
+      "tip-dialog": "/components/tip-dialog/index"
     }
   }

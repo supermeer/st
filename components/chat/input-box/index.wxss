@@ -516,5 +516,23 @@
       transform: scale(1);
     }
   }
+
+  .wx-container {
+    color: #fff;
+  }
+  .wx-copy-line {
+    display: flex;
+    justify-content: space-between;
+  }
  
- 
+  .copy-btn {
+    color: var(--theme-color);
+    flex-shrink: 0;
+  }
+
+  .wx-qr-code {
+    width: 100%;
+    height: auto;
+    display: block;
+    margin-bottom: 24rpx;
+  }

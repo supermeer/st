@@ -136,3 +136,13 @@
   bind:fail="onUploadFail"
   bind:cancel="onUploadCancel"
 />
+
+<tip-dialog id="tipDialog">
+  <view slot="btns-top" class="wx-container">
+    <image class="wx-qr-code" mode="widthFix" src="https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/qr-code.jpg" />
+    <view class="wx-copy-line" slot="btns-top">
+      添加客服微信：{{wxCode}}
+      <view class="copy-btn" catchtap="copyAction">复制</view>
+    </view>
+  </view>
+</tip-dialog>

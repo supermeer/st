@@ -8,7 +8,8 @@
     "memory-sheet": "/components/memory-sheet/index",
     "memory-desc-overlay": "/components/memory-desc-overlay/index",
     "memory-display": "/components/memory-display/index",
-    "role-hot-container": "/components/role-hot-container/index"
+    "role-hot-container": "/components/role-hot-container/index",
+    "tip-dialog": "/components/tip-dialog/index"
   },
   "navigationBarTitleText": "角色详情"
 }
