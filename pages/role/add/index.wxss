@@ -176,6 +176,12 @@
   align-items: center;
 }
 
+.auto-generate {
+  margin-left: 24rpx;
+  font-size: 24rpx;
+  color: var(--theme-color-purple);
+}
+
 .form-item-row .form-label {
   margin-bottom: 0;
   flex-shrink: 0;

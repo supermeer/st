@@ -516,6 +516,15 @@ Page({
     this.setData({ showUploader: false })
   },
 
+  autoGenerate() {
+    if (!this.data.formData.descriptionPrompt) {
+      return
+    }
+    /**
+     * todo list
+     */
+  },
+
   /**
    * 提交表单
    */
