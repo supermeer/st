@@ -187,8 +187,11 @@
           </view>
         </view>
 
-        <view class="setting-item" bindtap="onWorldBook">
-          <view class="setting-label">角色声音</view>
+        <view class="setting-item" bindtap="onRoleVoice">
+          <view class="setting-label">
+            角色声音
+            <view wx:if="{{voiceForm.showMark}}" class="setting-item-new_mark">new</view>
+          </view>
           <view class="setting-action">
             <text class="setting-value">{{worldBookList && worldBookList.length ? '修改设置' : '请设置'}}</text>
             <t-icon name="chevron-right" size="40rpx" color="rgba(255,255,255,0.6)" />

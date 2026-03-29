@@ -88,9 +88,35 @@ Page({
       },
       value: options.value ? decodeURIComponent(options.value) : ''
     })
-    console.log(options, '===========')
     this.measureHeaderHeight(() => {
       this.updateKeyboardLayout(0)
+    })
+    const nav = this.selectComponent('#roleSettingNav')
+    if (nav) {
+      nav.setBackAction(this.backAction)
+    }
+  },
+
+  backAction() {
+    const tipDialog = this.selectComponent('#tip-dialog')
+    let content = '是否保存角色当前设置？'
+    tipDialog.show({
+      title: '',
+      content,
+      cancelText: '取消',
+      confirmText: '保存',
+      onCancel: () => {
+        wx.navigateBack()
+      },
+      onConfirm: async () => {
+        const prevPage = getCurrentPages()[getCurrentPages().length - 2]
+        if (prevPage && typeof prevPage.confirmRoleSetting === 'function') {
+          prevPage.confirmRoleSetting({
+            value: this.data.value || ''
+          })
+        }
+        wx.navigateBack()
+      }
     })
   },
 

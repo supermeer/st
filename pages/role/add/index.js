@@ -37,6 +37,9 @@ Page({
       tagIds: []
     },
     worldBookList: [],
+    voiceForm: {
+      showMark: false
+    },
     styleForm: {
       id: null,
       name: ''
@@ -59,6 +62,12 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
+    const voiceMark = wx.getStorageSync('voiceNewMark')
+    if (!voiceMark) {
+      this.setData({
+        showAutoPlayAudioNew: true
+      })
+    }
     wx.reportEvent('role_add_page_enter', {
       isCreate: !options.id
     })
@@ -477,6 +486,17 @@ Page({
       'formData.prompt': JSON.stringify(list || [])
     })
   },
+
+  onRoleVoice() {
+    wx.setStorageSync('voiceNewMark', true)
+    this.setData({
+      'voiceForm.showMark': false
+    })
+  },
+  confirmRoleVoice(voice) {
+
+  },
+
   async onUploadSuccess(e) {
     const { tempFilePath, signature } = e.detail
     const bg =

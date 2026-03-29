@@ -324,6 +324,17 @@
   font-size: 28rpx;
   font-weight: 500;
   color: #fff;
+  display: flex;
+  align-items: center;
+}
+
+.setting-item-new_mark {
+  color: #fff;
+  font-size: 24rpx;
+  background: #FF4D4F;
+  border-radius: 20rpx;
+  padding: 4rpx 12rpx 6rpx;
+  margin-left: 24rpx;
 }
 
 .setting-action {

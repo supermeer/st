@@ -1,6 +1,6 @@
 <view class="role-setting-page">
   <view class="nav-shell">
-    <custom-nav title="" showBack="{{true}}" showHome="{{false}}" transparent="{{true}}" />
+    <custom-nav id="roleSettingNav" title="" showBack="{{true}}" showHome="{{false}}" transparent="{{true}}" />
   </view>
 
   <view class="page-body" style="top: {{pageInfo.navHeight}}px; bottom: {{pageBodyBottom}};">
@@ -72,3 +72,5 @@
     <view class="submit-btn" bindtap="onSubmit">保存</view>
   </view>
 </view>
+
+<tip-dialog id="tip-dialog" />
