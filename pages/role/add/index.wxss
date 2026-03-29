@@ -226,6 +226,20 @@
   flex: 1;
 }
 
+.setting-entry {
+  width: 100%;
+  min-height: 200rpx;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 20rpx;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 16rpx;
+  box-sizing: border-box;
+}
+.setting-entry-empty {
+  color: #999;
+}
+
 .select-placeholder {
   font-size: 28rpx;
   color: rgba(255, 255, 255, 0.4);
@@ -256,6 +270,15 @@
   padding-bottom: 8rpx;
 }
 
+.setting-textarea-wrapper {
+  width: 100%;
+  min-height: 200rpx;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 16rpx;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
 .form-textarea {
   width: 100%;
   min-height: 200rpx;
@@ -266,6 +289,12 @@
   padding: 20rpx;
   box-sizing: border-box;
   line-height: 1.6;
+}
+
+.setting-textarea {
+  display: block;
+  background: transparent;
+  border-radius: 0;
 }
 
 .textarea-placeholder {

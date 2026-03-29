@@ -45,6 +45,7 @@
       "pages": [
         "role-detail/index",
         "add/index",
+        "add/role-setting/index",
         "story/index",
         "my-setting/index",
         "chat-setting/index",

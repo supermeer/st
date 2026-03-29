@@ -77,15 +77,16 @@
           </view>
           <view class="textarea-counter">{{formData.descriptionPrompt.length}}/10000</view>
           <view class="label-placeholder">决定智能体的对话效果，且仅创作者可见，不会对外展示。</view>
-          <textarea 
-            class="form-textarea" 
-            placeholder="填写智能体的信息，包含但不限于智能体的人设、性格、身份、背景、经历、聊天风格、与用户的关系等。" 
-            placeholder-class="textarea-placeholder"
-            value="{{formData.descriptionPrompt}}"
-            data-field="descriptionPrompt"
-            bindinput="onTextareaChange"
-            maxlength="10000"
-          />
+          <view class="setting-textarea-wrapper {{!formData.descriptionPrompt ? 'setting-entry-empty' : ''}}" bindtap="onRoleSetting">
+            <textarea
+              class="form-textarea setting-textarea"
+              placeholder="填写智能体的信息，包含但不限于智能体的人设、性格、身份、背景、经历、与用户的关系等。"
+              placeholder-class="textarea-placeholder"
+              value="{{formData.descriptionPrompt}}"
+              maxlength="10000"
+              disabled
+            />
+          </view>
         </view>
 
         <view class="form-item textarea-item">

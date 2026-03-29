@@ -1,0 +1,8 @@
+{
+  "enablePullDownRefresh": false,
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "custom-nav": "/components/custom-nav/index"
+  },
+  "navigationBarTitleText": "智能体设定"
+}

@@ -378,6 +378,19 @@ Page({
     })
   },
 
+  onRoleSetting() {
+    wx.navigateTo({
+      url: `/pages/role/add/role-setting/index?value=${encodeURIComponent(this.data.formData.descriptionPrompt)}`
+    })
+  },
+
+  confirmRoleSetting(e) {
+    const value = e && typeof e.value === 'string' ? e.value.trim() : ''
+    this.setData({
+      'formData.descriptionPrompt': value || ''
+    })
+  },
+
   /**
    * 对我的设定
    */
