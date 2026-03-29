@@ -8,7 +8,10 @@
   </custom-nav>
   <view class="aboutus-content">
     <view wx:for="{{itemList}}" wx:key="index" class="{{item.header ? 'aboutus-header' : 'aboutus-item blur-glass'}}" bindtap="{{item.isGradientPicker ? 'onGradientPicker' : 'onClickCell'}}" data-url="{{item.url}}" data-index="{{index}}">
-      <view class="aboutus-item-title">{{item.title}}</view>
+      <view class="aboutus-item-title">
+        {{item.title}}
+        <view wx:if="{{item.showNew}}" class="aboutus-item-new">new</view>
+      </view>
       <view class="aboutus-item-desc">{{item.desc}}</view>
       <view wx:if="{{item.showDot}}" class="aboutus-item-dot" />
       <t-icon wx:if="{{item.url || item.isGradientPicker}}" class="aboutus-item-arr" name="chevron-right" size="18" color="#999" />

@@ -57,6 +57,17 @@ page {
   font-weight: bold;
   margin-left: 32rpx;
   background: transparent;
+  display: inline-flex;
+  align-items: center;
+}
+
+.aboutus-item-new {
+  color: #fff;
+  font-size: 24rpx;
+  background: #FF4D4F;
+  border-radius: 20rpx;
+  padding: 4rpx 12rpx 6rpx;
+  margin-left: 24rpx;
 }
 
 .aboutus-item-desc {

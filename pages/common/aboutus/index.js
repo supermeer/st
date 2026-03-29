@@ -37,6 +37,22 @@ Page({
         }
       },
       {
+        title: '自动播放语音',
+        desc: '',
+        url: '',
+        isSwitch: true,
+        showNew: false,
+        switchOptions: {
+          checked: false,
+          getChecked: () => {
+            return wx.getStorageSync('autoPlayAudio') === 'true'
+          },
+          onChange: (checked) => {
+            wx.setStorageSync('autoPlayAudio', checked ? 'true' : 'false')
+          }
+        }
+      },
+      {
         title: '对话字体颜色',
         desc: '',
         url: '',
@@ -47,7 +63,6 @@ Page({
           return option ? option.name : '金青渐变'
         }
       },
-      
       {
         title: '我的订单',
         desc: '',
@@ -86,9 +101,16 @@ Page({
   onLoad() {
     this.updateItemList()
     const newModelMark = wx.getStorageSync('newModelMark')
+    const newAutoPlayAudioMark = wx.getStorageSync('newAutoPlayAudioMark')
     if (!newModelMark) {
       wx.setStorageSync('newModelMark', true)
       this.data.itemList[1].showDot = true
+      this.setData({
+        itemList: [...this.data.itemList]
+      })
+    }
+    if (!newAutoPlayAudioMark) {
+      this.data.itemList[4].showNew = true
       this.setData({
         itemList: [...this.data.itemList]
       })
@@ -143,6 +165,15 @@ Page({
       }
       return newItem
     })
+    this.setData({ itemList })
+  },
+  updateAutoPlayAudioNewMark(showNew) {
+    const itemList = [...this.data.itemList]
+    const autoPlayAudioItem = itemList.find(item => item.title === '自动播放语音')
+    if (!autoPlayAudioItem || autoPlayAudioItem.showNew === showNew) {
+      return
+    }
+    autoPlayAudioItem.showNew = showNew
     this.setData({ itemList })
   },
   logoff() {
@@ -218,6 +249,10 @@ Page({
       const itemList = [...this.data.itemList]
       itemList[index].switchOptions.checked = value
       this.setData({ itemList })
+      if (item.title === '自动播放语音' && !wx.getStorageSync('newAutoPlayAudioMark')) {
+        wx.setStorageSync('newAutoPlayAudioMark', true)
+        this.updateAutoPlayAudioNewMark(false)
+      }
     }
   },
   onGradientPicker() {

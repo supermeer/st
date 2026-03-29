@@ -145,6 +145,12 @@
   padding: 0 20rpx;
 }
 
+.btns-top-container {
+  margin-bottom: 36rpx;
+  padding: 0 20rpx;
+  width: 100%;
+}
+
 /* 按钮组 */
 .tip-dialog-buttons {
   display: flex;

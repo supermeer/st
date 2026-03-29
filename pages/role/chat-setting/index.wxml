@@ -90,6 +90,22 @@
             <t-switch
               class="setting-switch"
               value="{{keepFullScreen}}"
+              data-key="keepFullScreen"
+              bindchange="onSwitchChange"
+            />
+          </view>
+        </view>
+
+        <view class="setting-item">
+          <view class="setting-label">
+            自动播放语音
+            <view wx:if="{{showAutoPlayAudioNew}}" class="setting-item-new">new</view>
+          </view>
+          <view class="setting-action">
+            <t-switch
+              class="setting-switch"
+              value="{{autoPlayAudio}}"
+              data-key="autoPlayAudio"
               bindchange="onSwitchChange"
             />
           </view>

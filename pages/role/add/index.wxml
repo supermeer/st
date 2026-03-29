@@ -15,11 +15,6 @@
   >
     <!-- 表单内容 -->
     <view class="form-content" style="padding-bottom: calc({{ pageInfo.safeAreaBottom}}px + 100rpx);">
-      
-      <view wx:if="{{rejectReason}}" class="reject-info">
-        <t-icon name="error-circle" size="20" color="#ff4d4f" />
-        <text>驳回理由：{{rejectReason}}</text>
-      </view>
       <!-- 头像上传 -->
       <view class="avatar-section">
         <view wx:if="{{!currentBg}}" class="bg-empty" bindtap="onChatBackground">

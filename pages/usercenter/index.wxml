@@ -73,6 +73,7 @@
         bind:longpress="onLongPress"
         data-id="{{item.id}}"
       >
+        <view wx:if="{{item.publishStatus == 3}}" class="reject-reason-btn" catch:tap="showRejectReason" data-role="{{item}}">查看原因</view>
         <view
           wx:if="{{item._statusBadge && item._statusBadge.text}}"
           class="role-status-ribbon {{item._statusBadge.className}}"
@@ -116,6 +117,13 @@
 />
 
 <tip-dialog id="tip-dialog" />
+
+<tip-dialog id="reject-dialog">
+  <view class="wx-copy-line" slot="btns-top">
+    添加客服微信：{{wxCode}}
+    <view class="copy-btn" catchtap="copyAction">复制</view>
+  </view>
+</tip-dialog>
 
 <richtext-dialog
   id="richtextDialog"

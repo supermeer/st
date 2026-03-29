@@ -1,14 +1,21 @@
 <view class="btns-container {{disabled ? 'btns-disabled' : ''}}">
   <!-- <image class="btn-image" src="/static/chat/bf.svg" data-action="play" bind:tap="onBtnClick" /> -->
-  <view class="btn-container" data-action="retry" bind:tap="onBtnClick">
+  <view wx:if="{{isLatest}}" class="btn-container" data-action="retry" bind:tap="onBtnClick">
     <image class="btn-image" src="/static/chat/cs.svg" />
     <text class="btn-text">重说</text>
   </view>
-  <view class="btn-container" data-action="continue" bind:tap="onBtnClick" >
+  <view wx:if="{{isLatest}}" class="btn-container" data-action="continue" bind:tap="onBtnClick" >
     <image class="btn-image" src="/static/chat/jx.svg" />
     <text class="btn-text">继续</text>
   </view>
-  <view wx:if="{{showTip}}" class="bottom-line">
+
+  <view class="btn-container" data-action="play" bind:tap="onBtnClick" >
+    <van-icon wx:if="{{!isPlaying}}" class="btn-image" color="#fff" name="play-circle-o" />
+    <van-icon wx:else class="btn-image" color="#fff" name="pause-circle-o" />
+    <text class="btn-text">播放</text>
+  </view>
+
+  <view wx:if="{{showTip && isLatest}}" class="bottom-line">
     <text class="btm-text">如果不知道回什么，可以点击</text>
     <image class="btm-image" src="/static/chat/linggan.png" />
     <text class="btm-close-text" catch:tap="closeTip">不再提示</text>

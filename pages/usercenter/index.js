@@ -6,6 +6,7 @@ import {
   getCurrentPlotByCharacterId,
   deleteCharacter,
   applyCharacterPublished,
+  getAuditRejectReason,
   unpublishChar
 } from '../../services/role/index'
 import {
@@ -71,7 +72,8 @@ Page({
       }
     ],
     activeRoleType: '1',
-    contentHeight: '100vh'
+    contentHeight: '100vh',
+    wxCode: 'XYJG_8647902'
   },
 
   onLoad() {
@@ -424,5 +426,36 @@ Page({
         }
       })
     }
+  },
+  async showRejectReason(e) {
+    const { role = {} } = e.currentTarget.dataset
+    const res = await getAuditRejectReason({
+      characterId: role.id
+    })
+    const tipDialog = this.selectComponent('#reject-dialog')
+    tipDialog.show({
+      title: '驳回原因',
+      hideTopIcon: true,
+      content: res,
+      cancelText: '取消',
+      confirmText: '去修改',
+      onConfirm: () => {
+        wx.navigateTo({
+          url: `/pages/role/add/index?id=${role.id}&publishStatus=${role.publishStatus}`
+        })
+      }
+    })
+  },
+  copyAction() {
+    wx.setClipboardData({
+      data: this.data.wxCode,
+      success: () => {
+        wx.showToast({
+          title: '已复制到粘贴板',
+          icon: 'none'
+        })
+      }
+    })
+    // this.hide()
   }
 })

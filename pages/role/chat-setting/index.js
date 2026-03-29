@@ -9,6 +9,8 @@ Page({
    */
   data: {
     keepFullScreen: false,
+    autoPlayAudio: false,
+    showAutoPlayAudioNew: false,
     quoteGradientName: '金青渐变',
     pageInfo: {
       safeAreaBottom: 0,
@@ -103,10 +105,16 @@ Page({
     this.getMemoryType()
     this.getModelList()
     const newModelMark = wx.getStorageSync('newModelMark')
+    const newAutoPlayAudioMark = wx.getStorageSync('newAutoPlayAudioMark')
     if (!newModelMark) {
       wx.setStorageSync('newModelMark', true)
       this.setData({
         showModelDot: true
+      })
+    }
+    if (!newAutoPlayAudioMark) {
+      this.setData({
+        showAutoPlayAudioNew: true
       })
     }
   },
@@ -115,6 +123,8 @@ Page({
     const option = QUOTE_GRADIENT_OPTIONS.find(opt => opt.id === savedId)
     this.setData({
       keepFullScreen: wx.getStorageSync('alwaysFullScreen') === 'true',
+      autoPlayAudio: wx.getStorageSync('autoPlayAudio') === 'true',
+      showAutoPlayAudioNew: !wx.getStorageSync('newAutoPlayAudioMark'),
       quoteGradientName: option ? option.name : '金青渐变'
     })
     getGlobalModelId().then(res => {
@@ -445,7 +455,19 @@ Page({
   },
 
   onSwitchChange(e) {
+    const { key } = e.currentTarget.dataset
     const { value } = e.detail
+    if (key === 'autoPlayAudio') {
+      this.setData({
+        autoPlayAudio: value,
+        showAutoPlayAudioNew: false
+      })
+      wx.setStorageSync('autoPlayAudio', value ? 'true' : 'false')
+      if (!wx.getStorageSync('newAutoPlayAudioMark')) {
+        wx.setStorageSync('newAutoPlayAudioMark', true)
+      }
+      return
+    }
     this.setData({
       keepFullScreen: value
     })

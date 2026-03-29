@@ -239,6 +239,18 @@ page {
   justify-content: flex-end;
 }
 
+.reject-reason-btn {
+  position: absolute;
+  left: 12rpx;
+  top: 12rpx;
+  padding: 4rpx;
+  border: 1rpx solid #ee5a6f;
+  background: rgba(248, 113, 113, 0.1);
+  color: #ee5a6f;
+  border-radius: 12rpx;
+  font-size: 20rpx;
+}
+
 .role-status-ribbon {
   position: absolute;
   top: 18rpx;
@@ -341,4 +353,18 @@ page {
 
 .role-create-btn {
   margin-right: 12rpx;
+}
+
+.wx-copy-line {
+  color: #fff;
+  text-align: left;
+  width: 100%;
+  font-weight: bold;
+  font-size: 26rpx;
+  display: flex;
+  justify-content: space-between;
+}
+.copy-btn {
+  color: var(--theme-color);
+  flex-shrink: 0;
 }

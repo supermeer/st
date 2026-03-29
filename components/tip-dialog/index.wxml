@@ -22,6 +22,9 @@
     <text class="tip-dialog-content" style="text-align: {{contentAlign}}">
       {{content}}
     </text>
+    <view class="btns-top-container">
+      <slot name="btns-top" />
+    </view>
 
     <!-- 按钮组 -->
     <view class="tip-dialog-buttons">

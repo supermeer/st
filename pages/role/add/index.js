@@ -5,7 +5,6 @@ import {
   getCurrentPlotByCharacterId,
   getCharacterDetail,
   getCharacterType,
-  getAuditRejectReason,
   getCharacterTag
 } from '../../../services/role/index'
 import { verifyUrls } from '../../../services/file/index'
@@ -53,8 +52,7 @@ Page({
     maxTagSelect: 4,
     showTagSelector: false,
     tempTagIds: [],
-    tagSelectorOptions: [],
-    rejectReason: null
+    tagSelectorOptions: []
   },
 
   /**
@@ -70,10 +68,6 @@ Page({
         'formData.id': id
       })
       this.getCharacterById(id)
-
-      if (publishStatus == '3') {
-        this.getRejectReason(id)
-      }
     }
     this.setData({
       pageInfo: { ...this.data.pageInfo, ...SystemInfo.getPageInfo() }
@@ -160,16 +154,6 @@ Page({
       tagSelectorOptions,
       'formData.tagIds': tagIds,
       'formData.typeIds': typeIds
-    })
-  },
-
-  getRejectReason(id) {
-    getAuditRejectReason({
-      characterId: id
-    }).then((res) => {
-      this.setData({
-        rejectReason: res
-      })
     })
   },
 

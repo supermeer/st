@@ -82,7 +82,7 @@
         data-id="{{item.id}}"
       >
         <rich-text wx:if="{{item.discountInfo}}" nodes="{{item.discountInfo}}" />
-        <view class="origin-price {{item.originAmount ? 'line-through' : ''}}">￥{{item.originAmount / 100}}</view>
+        <!-- <view class="origin-price {{item.originAmount ? 'line-through' : ''}}">￥{{item.originAmount / 100}}</view> -->
         <view class="package-price-text">¥{{item.amountInYuan}}</view>
         <view class="package-name-text">{{item.title}}</view>
       </view>

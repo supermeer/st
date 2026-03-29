@@ -203,12 +203,24 @@
   font-size: 28rpx;
   font-weight: 500;
   color: #fff;
+  display: flex;
+  align-items: center;
 }
 
 .setting-action {
   display: flex;
   align-items: center;
   gap: 8rpx;
+}
+
+.setting-item-new {
+  color: #fff;
+  font-size: 24rpx;
+  background: #FF4D4F;
+  border-radius: 20rpx;
+  padding: 4rpx 12rpx 6rpx;
+  margin-left: 24rpx;
+  line-height: 1;
 }
 
 .setting-switch {
