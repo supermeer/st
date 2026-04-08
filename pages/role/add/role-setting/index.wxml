@@ -23,7 +23,7 @@
         cursor-spacing="24"
         adjust-position="false"
         hold-keyboard="true"
-        focus
+        focus="{{textareaFocus}}"
         cursor="{{cursorPosition}}"
         bindinput="onInput"
         bindfocus="onFocus"

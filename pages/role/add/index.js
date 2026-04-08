@@ -28,6 +28,8 @@ Page({
       scene: '',
       prologue: '',
       styleId: null,
+      voiceId: null,
+      voiceName: '',
       userAddressedAs: '',
       identity: '',
       personaGender: null,
@@ -38,8 +40,13 @@ Page({
     },
     worldBookList: [],
     voiceForm: {
-      showMark: false
+      showMark: false,
+      id: null,
+      name: '',
+      gender: '',
+      tags: []
     },
+    showDescNewMark: false,
     styleForm: {
       id: null,
       name: ''
@@ -63,9 +70,15 @@ Page({
    */
   onLoad(options) {
     const voiceMark = wx.getStorageSync('voiceNewMark')
+    const descNewMark = wx.getStorageSync('descNewMark')
     if (!voiceMark) {
       this.setData({
-        showAutoPlayAudioNew: true
+        'voiceForm.showMark': true
+      })
+    }
+    if (!descNewMark) {
+      this.setData({
+        showDescNewMark: true
       })
     }
     wx.reportEvent('role_add_page_enter', {
@@ -205,8 +218,21 @@ Page({
             scene: scene || '',
             prologue: prologue || '',
             descriptionPrompt: res.descriptionPrompt || res.description || '',
+            voiceId: res.voiceId || res.roleVoiceId || null,
+            voiceName: res.voiceName || res.roleVoiceName || '',
             typeIds: normalizedTypeIds,
             tagIds: normalizedTagIds
+          },
+          voiceForm: {
+            ...this.data.voiceForm,
+            id: res.voiceId || res.roleVoiceId || null,
+            name: res.voiceName || res.roleVoiceName || '',
+            gender: res.voiceGender || res.roleVoiceGender || '',
+            tags: Array.isArray(res.voiceTags)
+              ? res.voiceTags
+              : Array.isArray(res.roleVoiceTags)
+                ? res.roleVoiceTags
+                : []
           },
           currentBg: res.backgroundImage,
           worldBookList: res.prompt ? JSON.parse(res.prompt) : []
@@ -492,9 +518,37 @@ Page({
     this.setData({
       'voiceForm.showMark': false
     })
+    wx.navigateTo({
+      url: `/pages/role/voice-list/index?currentBg=${encodeURIComponent(this.data.currentBg || '')}&selectedVoice=${encodeURIComponent(JSON.stringify({
+        id: this.data.voiceForm.id,
+        name: this.data.voiceForm.name,
+        gender: this.data.voiceForm.gender,
+        tags: this.data.voiceForm.tags
+      }))}`
+    })
   },
   confirmRoleVoice(voice) {
-
+    const nextVoice = voice && voice.id
+      ? {
+          id: voice.id,
+          name: voice.name || '',
+          gender: voice.gender || '',
+          tags: Array.isArray(voice.tags) ? voice.tags : []
+        }
+      : {
+          id: null,
+          name: '',
+          gender: '',
+          tags: []
+        }
+    this.setData({
+      voiceForm: {
+        ...this.data.voiceForm,
+        ...nextVoice
+      },
+      'formData.voiceId': nextVoice.id,
+      'formData.voiceName': nextVoice.name
+    })
   },
 
   async onUploadSuccess(e) {
@@ -540,6 +594,10 @@ Page({
     if (!this.data.formData.descriptionPrompt) {
       return
     }
+    this.setData({
+      showDescNewMark: false
+    })
+    wx.setStorageSync('descNewMark', true)
     /**
      * todo list
      */

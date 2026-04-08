@@ -299,6 +299,11 @@ Page({
     }
     if (publishStatus == 2) {
       items.push('下架智能体')
+
+
+      // 智能体音色
+
+      // item.push('添加音色(只能修改1次)')
     }
     if (publishStatus == 3) {
       items = [
@@ -425,6 +430,9 @@ Page({
           })
         }
       })
+    }
+    if (type === '添加音色(只能修改1次)') {
+      wx.navigateTo(`/pages/role/voice-list?characterId=${this.data.editingRole}`)
     }
   },
   async showRejectReason(e) {

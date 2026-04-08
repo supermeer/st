@@ -177,9 +177,15 @@
 }
 
 .auto-generate {
-  margin-left: 24rpx;
-  font-size: 24rpx;
+  margin-left: auto;
+  font-size: 26rpx;
   color: var(--theme-color-purple);
+  padding-right: 120rpx;
+  display: flex;
+  align-items: center;
+}
+.new-mark {
+  margin-right: 12rpx;
 }
 
 .form-item-row .form-label {

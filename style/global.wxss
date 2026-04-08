@@ -950,3 +950,12 @@ h6 {
   top: 20rpx;
   left: 10rpx;
 }
+
+.new-mark {
+  color: #fff;
+  font-size: 24rpx;
+  background: #FF4D4F;
+  border-radius: 20rpx;
+  padding: 4rpx 12rpx 6rpx;
+  margin-left: 24rpx;
+}

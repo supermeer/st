@@ -51,6 +51,7 @@
         "chat-setting/index",
         "chat-style/index",
         "chat-style/add/index",
+        "voice-list/index",
         "world-book/index",
         "world-book-edit/index"
       ]
