@@ -121,6 +121,7 @@ const VOICE_LIST = [
 
 Page({
   data: {
+    characterId: null,
     scrollTop: 0,
     pageInfo: {
       safeAreaBottom: 0,
