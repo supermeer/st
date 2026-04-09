@@ -99,3 +99,7 @@ export function getDefaultPersona() {
 export function updateDefaultPersona(data) {
     return request.post(`/api/v1/server/story/updateDefaultPersona`, data)
 }
+
+export function generateDescription(data) {
+    return request.post(`/api/v1/server/character/generateDescription`, data)
+}

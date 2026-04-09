@@ -5,7 +5,8 @@ import {
   getCurrentPlotByCharacterId,
   getCharacterDetail,
   getCharacterType,
-  getCharacterTag
+  getCharacterTag,
+  generateDescription
 } from '../../../services/role/index'
 import { verifyUrls } from '../../../services/file/index'
 Page({
@@ -601,6 +602,16 @@ Page({
     /**
      * todo list
      */
+    wx.showLoading({title: '生成中'})
+    generateDescription({characterSetting: this.data.formData.descriptionPrompt})
+    .then(res => {
+      this.setData({
+        "formData.description": res || ''
+      })
+    })
+    .finally(() => {
+      wx.hideLoading()
+    })
   },
 
   /**
