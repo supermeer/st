@@ -559,7 +559,7 @@ Page({
         : tempFilePath
     const res = await verifyUrls([signature.fileKey])
     const fileRes = res && res[0] ? res[0] : {}
-    if (fileRes && fileRes.suggestion === 'Pass') {
+    if (fileRes && !fileRes.illegal) {
       this.setData({
         showUploader: false,
         currentBg: tempFilePath,
