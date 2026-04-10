@@ -1,7 +1,10 @@
 import SystemInfo from '../../../utils/system'
 
-const FAVORITE_STORAGE_KEY = 'roleVoiceFavoriteIds'
-const DEFAULT_BG = '/static/images/empty-data.png'
+import {
+  getCharacterDetail
+} from '../../../services/role/index'
+import { getVoiceList, setCharacterVoice } from '../../../services/tts/index'
+
 const DEFAULT_AUDIO_URL = 'https://img.tukuppt.com/newpreview_music/08/98/74/5c88b75889c744149.mp3'
 
 const VOICE_LIST = [
@@ -128,21 +131,17 @@ Page({
       navHeight: 0
     },
     currentBg: '',
-    backgroundPlaceholder: DEFAULT_BG,
     showBG: true,
     activeTab: 0,
     genderTabs: ['男声', '女声', '其他声'],
     activeGender: '男声',
     availableTags: ['全部'],
     activeTag: '全部',
-    allVoiceList: [],
-    visibleVoiceList: [],
+    voiceList: [],
     favoriteIds: [],
     currentVoiceId: null,
     selectedVoiceId: null,
     playingVoiceId: null,
-    selectedVoice: null,
-    initialVoice: null,
     emptyTip: '暂无声音'
   },
 
@@ -154,40 +153,13 @@ Page({
       })
     }
 
-    const selectedVoice = this.parseSelectedVoice(options.selectedVoice)
-    const favoriteIds = this.getFavoriteIds()
-    const mergedVoiceList = this.mergeSelectedVoice(VOICE_LIST, selectedVoice)
-    const allVoiceList = this.decorateVoiceList(mergedVoiceList, favoriteIds)
-    const preferredGender = selectedVoice && selectedVoice.gender
-      ? this.normalizeGender(selectedVoice.gender)
-      : allVoiceList[0]
-        ? allVoiceList[0].gender
-        : '男声'
-    const nextGender = this.getFallbackGender(allVoiceList, preferredGender)
-    const listState = this.buildVisibleVoiceState({
-      allVoiceList,
-      activeTab: 0,
-      activeGender: nextGender,
-      activeTag: '全部',
-      currentVoiceId: selectedVoice ? selectedVoice.id : null,
-      selectedVoiceId: selectedVoice ? selectedVoice.id : null
-    })
+    const { characterId } = options
+    characterId && this.setData({characterId})
 
-    this.setData({
-      currentBg: options.currentBg || DEFAULT_BG,
-      pageInfo: { ...this.data.pageInfo, ...SystemInfo.getPageInfo() },
-      favoriteIds,
-      allVoiceList,
-      currentVoiceId: selectedVoice ? selectedVoice.id : null,
-      selectedVoiceId: selectedVoice ? selectedVoice.id : null,
-      selectedVoice: selectedVoice,
-      initialVoice: selectedVoice,
-      activeGender: nextGender,
-      availableTags: listState.availableTags,
-      activeTag: listState.activeTag,
-      visibleVoiceList: listState.visibleVoiceList,
-      emptyTip: listState.emptyTip
-    })
+    if (characterId) {
+      this.getRoleInfo()
+    }
+    this.getVoiceList()
 
     const nav = this.selectComponent('#roleVoiceNav')
     if (nav) {
@@ -195,148 +167,27 @@ Page({
     }
   },
 
-  parseSelectedVoice(selectedVoice) {
-    if (!selectedVoice) {
-      return null
-    }
-    try {
-      const voice = JSON.parse(decodeURIComponent(selectedVoice))
-      if (!voice || voice.id === undefined || voice.id === null) {
-        return null
+  getRoleInfo() {
+    getCharacterDetail({id: this.data.characterId})
+    .then(res => {
+      console.log(res, '========')
+      if (res.voiceId) {
+        this.setData({
+          selectedVoiceId: res.voiceId
+        })
       }
-      return {
-        ...voice,
-        gender: this.normalizeGender(voice.gender),
-        tags: Array.isArray(voice.tags) ? voice.tags : [],
-        audioUrl: voice.audioUrl || DEFAULT_AUDIO_URL
-      }
-    } catch (error) {
-      return null
-    }
+    })
   },
-
-  normalizeGender(gender) {
-    if (gender === '男' || gender === '男性' || gender === '男生') {
-      return '男声'
-    }
-    if (gender === '女' || gender === '女性' || gender === '女生') {
-      return '女声'
-    }
-    if (gender === '其他' || gender === '中性' || gender === '未知') {
-      return '其他声'
-    }
-    return gender || '男声'
-  },
-
-  mergeSelectedVoice(list, selectedVoice) {
-    const normalizedList = (Array.isArray(list) ? list : []).map((item) => ({
-      ...item,
-      gender: this.normalizeGender(item.gender),
-      tags: Array.isArray(item.tags) ? item.tags : [],
-      audioUrl: item.audioUrl || DEFAULT_AUDIO_URL
-    }))
-    if (!selectedVoice || !selectedVoice.id) {
-      return normalizedList
-    }
-    const exists = normalizedList.some((item) => Number(item.id) === Number(selectedVoice.id))
-    if (exists) {
-      return normalizedList
-    }
-    return [
-      {
-        id: selectedVoice.id,
-        name: selectedVoice.name || '当前已选声音',
-        gender: this.normalizeGender(selectedVoice.gender),
-        tags: Array.isArray(selectedVoice.tags) ? selectedVoice.tags : [],
-        audioUrl: selectedVoice.audioUrl || DEFAULT_AUDIO_URL
-      },
-      ...normalizedList
-    ]
+  getVoiceList() {
+    getVoiceList().then(res => {
+      console.log(res, 'voiceList -------')
+    })
   },
 
   getFavoriteIds() {
-    const ids = wx.getStorageSync(FAVORITE_STORAGE_KEY)
     return Array.isArray(ids) ? ids.map((item) => Number(item)).filter((item) => !Number.isNaN(item)) : []
   },
 
-  decorateVoiceList(list, favoriteIds) {
-    const favoriteSet = new Set(favoriteIds)
-    return (Array.isArray(list) ? list : []).map((item) => ({
-      ...item,
-      favorite: favoriteSet.has(Number(item.id))
-    }))
-  },
-
-  getCurrentBaseList() {
-    const { allVoiceList, activeTab } = this.data
-    if (activeTab === 1) {
-      return allVoiceList.filter((item) => item.favorite)
-    }
-    return allVoiceList
-  },
-
-  getAvailableTags(list, gender) {
-    const tagMap = {}
-    ;(Array.isArray(list) ? list : [])
-      .filter((item) => item.gender === gender)
-      .forEach((item) => {
-        ;(item.tags || []).forEach((tag) => {
-          tagMap[tag] = true
-        })
-      })
-    return ['全部', ...Object.keys(tagMap)]
-  },
-
-  getFallbackGender(list, preferredGender) {
-    const sourceList = Array.isArray(list) ? list : []
-    if (sourceList.some((item) => item.gender === preferredGender)) {
-      return preferredGender
-    }
-    const firstItem = sourceList[0]
-    return firstItem ? firstItem.gender : preferredGender || '男声'
-  },
-
-  buildVisibleVoiceState({ allVoiceList, activeTab, activeGender, activeTag, currentVoiceId, selectedVoiceId }) {
-    const baseList = activeTab === 1
-      ? (Array.isArray(allVoiceList) ? allVoiceList : []).filter((item) => item.favorite)
-      : (Array.isArray(allVoiceList) ? allVoiceList : [])
-    const nextGender = this.getFallbackGender(baseList, activeGender)
-    const availableTags = this.getAvailableTags(baseList, nextGender)
-    const nextActiveTag = availableTags.indexOf(activeTag) === -1 ? '全部' : activeTag
-    const visibleVoiceList = baseList
-      .filter((item) => {
-        const matchGender = item.gender === nextGender
-        const matchTag = nextActiveTag === '全部' || (item.tags || []).indexOf(nextActiveTag) !== -1
-        return matchGender && matchTag
-      })
-      .map((item) => ({
-        ...item,
-        isCurrent: Number(item.id) === Number(currentVoiceId),
-        selected: Number(item.id) === Number(selectedVoiceId),
-        isPlaying: Number(item.id) === Number(this.data.playingVoiceId)
-      }))
-
-    return {
-      activeGender: nextGender,
-      availableTags,
-      activeTag: nextActiveTag,
-      visibleVoiceList,
-      emptyTip: activeTab === 1 ? '暂未收藏声音，长按卡片即可收藏' : '当前筛选条件下暂无声音'
-    }
-  },
-
-  refreshVisibleVoiceList() {
-    const listState = this.buildVisibleVoiceState({
-      allVoiceList: this.data.allVoiceList,
-      activeTab: this.data.activeTab,
-      activeGender: this.data.activeGender,
-      activeTag: this.data.activeTag,
-      currentVoiceId: this.data.currentVoiceId,
-      selectedVoiceId: this.data.selectedVoiceId
-    })
-
-    this.setData(listState)
-  },
 
   onTabChange(event) {
     const { index } = event.currentTarget.dataset
@@ -371,15 +222,8 @@ Page({
 
   onSelectVoice(event) {
     const { id } = event.currentTarget.dataset
-    const selectedVoice = this.data.allVoiceList.find((item) => Number(item.id) === Number(id))
-    if (!selectedVoice) {
-      return
-    }
     this.setData({
-      selectedVoiceId: selectedVoice.id,
-      selectedVoice
-    }, () => {
-      this.refreshVisibleVoiceList()
+      selectedVoiceId: id
     })
   },
 
@@ -397,7 +241,6 @@ Page({
     } else {
       currentIds.push(targetId)
     }
-    wx.setStorageSync(FAVORITE_STORAGE_KEY, currentIds)
     this.setData({
       favoriteIds: currentIds,
       allVoiceList: this.decorateVoiceList(this.data.allVoiceList, currentIds)
@@ -502,13 +345,34 @@ Page({
   },
 
   onSaveSettings() {
-    const prevPage = getCurrentPages()[getCurrentPages().length - 2]
-    if (!prevPage || typeof prevPage.confirmRoleVoice !== 'function') {
-      wx.navigateBack()
+    if (!this.data.selectedVoiceId) {
+      wx.showToast({
+        title: '您还未选择语音',
+        icon: 'none'
+      })
       return
     }
-    prevPage.confirmRoleVoice(this.data.selectedVoice || null)
-    wx.navigateBack()
+    const callBack = () => {
+      const prevPage = getCurrentPages()[getCurrentPages().length - 2]
+      if (!prevPage || typeof prevPage.confirmRoleVoice !== 'function') {
+        wx.navigateBack()
+        return
+      }
+      prevPage.confirmRoleVoice(this.data.selectedVoiceId || null)
+      wx.navigateBack()
+    }
+    if (this.data.characterId) {
+      // 直接保存
+      setCharacterVoice({
+        voiceId: this.data.selectedVoiceId,
+        characterId: this.data.characterId
+      })
+      .then(res => {
+        callBack()
+      })
+    } else {
+      callBack()
+    }
   },
   backAction() {
     const tipDialog = this.selectComponent('#tip-dialog')

@@ -1,5 +1,5 @@
 <view class="voice-page">
-  <image class="page-bg" src="{{showBG ? currentBg : backgroundPlaceholder}}" mode="aspectFill"></image>
+  <image class="page-bg" src="{{showBG ? currentBg : ''}}" mode="aspectFill"></image>
   <view class="page-bg page-bg-mask"></view>
 
   <custom-nav title="" id="roleVoiceNav" showBack="{{true}}" showHome="{{false}}" transparent="{{true}}" />
@@ -55,22 +55,21 @@
       <view wx:if="{{!visibleVoiceList.length}}" class="empty-state blur-glass">
         <image class="empty-image" src="{{backgroundPlaceholder}}" mode="aspectFit"></image>
         <text class="empty-text">{{emptyTip}}</text>
-        <text class="empty-sub">tips：长按声音卡片，可收藏自己喜欢的声音哦~</text>
+        <text class="empty-sub">tips：可收藏自己喜欢的声音哦~</text>
       </view>
 
       <view
         wx:for="{{visibleVoiceList}}"
         wx:key="id"
-        class="voice-item blur-glass {{item.selected ? 'voice-item-selected' : ''}}"
+        class="voice-item blur-glass {{item.id === selectedVoiceId ? 'voice-item-selected' : ''}}"
         data-id="{{item.id}}"
         bind:tap="onSelectVoice"
-        bind:longpress="onToggleFavorite"
       >
         <view class="voice-item-main">
           <view class="voice-header">
             <view class="voice-title-wrap">
               <text class="voice-name">{{item.name}}</text>
-              <text wx:if="{{item.isCurrent}}" class="voice-selected-mark">当前声音</text>
+              <text wx:if="{{item.id === selectedVoiceId}}" class="voice-selected-mark">当前声音</text>
             </view>
             <view class="voice-actions">
               <view class="voice-play {{item.isPlaying ? 'active' : ''}}" data-id="{{item.id}}" catch:tap="onPlayVoice">

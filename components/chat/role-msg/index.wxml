@@ -37,6 +37,6 @@
       <text wx:else>{{message.content}}</text>
     </view>
     
-    <btns wx:if="{{!message.loading && !message.error && message.id}}" isLatest="{{isLatest}}" btns="{{message.btns}}" disabled="{{disabled}}" bind:buttonClick="onButtonClick" audioUrl="https://img.tukuppt.com/newpreview_music/08/98/74/5c88b75889c744149.mp3" />
+    <btns wx:if="{{!message.loading && !message.error && message.id}}" isLatest="{{isLatest}}" btns="{{message.btns}}" disabled="{{disabled}}" bind:buttonClick="onButtonClick" message="{{message}}" />
   </view>
 </view>

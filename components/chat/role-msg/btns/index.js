@@ -1,11 +1,12 @@
+import { ttsMessage } from '../../../../services/tts/index'
 Component({
   properties: {
     btns: Array,
+    message: Object,
     disabled: {
       type: Boolean,
       value: false
     },
-    audioUrl: String,
     isLatest: {
       type: Boolean,
       value: false
@@ -19,9 +20,19 @@ Component({
       })
     }
   },
+  observers: {
+    'message.loading': function (newVal, oldVal) {
+      if (newVal === false && oldVal === true) {
+        if (wx.getStorageSync('autoPlayAudio') === 'true') {
+          this.playAudio()
+        }
+      }
+    },
+  },
   data: {
     showTip: false,
-    isPlaying: false
+    isPlaying: false,
+    audioUrl: null
   },
   methods: {
     onBtnClick(e) {
@@ -33,17 +44,25 @@ Component({
       }
       this.triggerEvent('buttonClick', { action, current: this });
     },
-    playAudio() {
-      if (!this.properties.audioUrl) {
+    async playAudio() {
+      if (!this.properties.message.id) {
         return
       }
+      let audioUrl = this.data.audioUrl || this.properties.message.audioUrl
+      if (!audioUrl) {
+        audioUrl = await ttsMessage({messageId: this.properties.message.id})
+        this.setData({
+          audioUrl
+        })
+      }
+
       this.setData({
         isPlaying: true
       })
       const innerAudioContext = wx.createInnerAudioContext({
         useWebAudioImplement: true
       })
-      innerAudioContext.src = this.properties.audioUrl
+      innerAudioContext.src = audioUrl
       innerAudioContext.play() // 播放
       innerAudioContext.onEnded(() => {
         this.setData({
