@@ -17,18 +17,18 @@
     <scroll-view class="filter-scroll" scroll-x show-scrollbar="{{false}}">
       <view class="filter-row">
         <view
-          wx:for="{{genderTabs}}"
+          wx:for="{{voiceTypes}}"
           wx:key="*this"
-          class="filter-chip {{activeGender === item ? 'active' : ''}}"
-          data-gender="{{item}}"
-          bind:tap="onGenderChange"
+          class="filter-chip {{activeType == item.id ? 'active' : ''}}"
+          data-type="{{item.id}}"
+          bind:tap="onTypeChange"
         >
-          {{item}}
+          {{item.name}}
         </view>
       </view>
     </scroll-view>
 
-    <scroll-view class="filter-scroll" scroll-x show-scrollbar="{{false}}">
+    <!-- <scroll-view class="filter-scroll" scroll-x show-scrollbar="{{false}}">
       <view class="filter-row compact-row">
         <view
           wx:for="{{availableTags}}"
@@ -40,7 +40,7 @@
           {{'#' + item}}
         </view>
       </view>
-    </scroll-view>
+    </scroll-view> -->
   </view>
 
   <scroll-view
@@ -52,31 +52,31 @@
     style="height: calc(100vh - {{ pageInfo.navHeight }}px - 300rpx);"
   >
     <view class="voice-list" style="padding-bottom: calc({{ pageInfo.safeAreaBottom }}px + 160rpx);">
-      <view wx:if="{{!visibleVoiceList.length}}" class="empty-state blur-glass">
+      <view wx:if="{{!voiceList.length}}" class="empty-state blur-glass">
         <image class="empty-image" src="{{backgroundPlaceholder}}" mode="aspectFit"></image>
         <text class="empty-text">{{emptyTip}}</text>
         <text class="empty-sub">tips：可收藏自己喜欢的声音哦~</text>
       </view>
 
       <view
-        wx:for="{{visibleVoiceList}}"
+        wx:for="{{voiceList}}"
         wx:key="id"
-        class="voice-item blur-glass {{item.id === selectedVoiceId ? 'voice-item-selected' : ''}}"
+        class="voice-item blur-glass {{item.id == selectedVoiceId ? 'voice-item-selected' : ''}}"
         data-id="{{item.id}}"
         bind:tap="onSelectVoice"
       >
         <view class="voice-item-main">
           <view class="voice-header">
             <view class="voice-title-wrap">
-              <text class="voice-name">{{item.name}}</text>
-              <text wx:if="{{item.id === selectedVoiceId}}" class="voice-selected-mark">当前声音</text>
+              <text class="voice-name">{{item.voiceName}}</text>
+              <text wx:if="{{item.id == currentVoiceId}}" class="voice-selected-mark">当前声音</text>
             </view>
             <view class="voice-actions">
-              <view class="voice-play {{item.isPlaying ? 'active' : ''}}" data-id="{{item.id}}" catch:tap="onPlayVoice">
-                <text class="voice-play-text">{{item.isPlaying ? '暂停' : '试听'}}</text>
+              <view class="voice-play {{playingVoiceId == item.id ? 'active' : ''}}" data-id="{{item.id}}" catch:tap="onPlayVoice">
+                <text class="voice-play-text">{{playingVoiceId == item.id  ? '暂停' : '试听'}}</text>
               </view>
-              <view class="voice-favorite {{item.favorite ? 'active' : ''}}" data-id="{{item.id}}" catch:tap="onToggleFavorite">
-                <t-icon name="star" size="34rpx" color="{{item.favorite ? '#8b5cf6' : 'rgba(255,255,255,0.72)'}}" />
+              <view class="voice-favorite {{item.isFavorite ? 'active' : ''}}" data-id="{{item.id}}" catch:tap="onToggleFavorite">
+                <t-icon name="star" size="34rpx" color="{{item.isFavorite ? '#8b5cf6' : 'rgba(255,255,255,0.72)'}}" />
               </view>
             </view>
           </view>

@@ -18,6 +18,7 @@ Page({
       safeAreaBottom: 0,
       navHeight: 0
     },
+    typeDesc: null,
     formData: {
       id: null,
       name: '',
@@ -42,10 +43,8 @@ Page({
     worldBookList: [],
     voiceForm: {
       showMark: false,
-      id: null,
-      name: '',
-      gender: '',
-      tags: []
+      voiceId: null,
+      voiceName: ''
     },
     showDescNewMark: false,
     styleForm: {
@@ -219,21 +218,15 @@ Page({
             scene: scene || '',
             prologue: prologue || '',
             descriptionPrompt: res.descriptionPrompt || res.description || '',
-            voiceId: res.voiceId || res.roleVoiceId || null,
-            voiceName: res.voiceName || res.roleVoiceName || '',
+            voiceId: res.userVoiceId || res.voiceId || null,
+            voiceName: res.userVoiceName || res.voiceName || '',
             typeIds: normalizedTypeIds,
             tagIds: normalizedTagIds
           },
           voiceForm: {
             ...this.data.voiceForm,
-            id: res.voiceId || res.roleVoiceId || null,
-            name: res.voiceName || res.roleVoiceName || '',
-            gender: res.voiceGender || res.roleVoiceGender || '',
-            tags: Array.isArray(res.voiceTags)
-              ? res.voiceTags
-              : Array.isArray(res.roleVoiceTags)
-                ? res.roleVoiceTags
-                : []
+            voiceId: res.userVoiceId || res.voiceId || null,
+            voiceName: res.userVoiceName || res.voiceName || '',
           },
           currentBg: res.backgroundImage,
           worldBookList: res.prompt ? JSON.parse(res.prompt) : []
@@ -261,7 +254,21 @@ Page({
     this.setData({
       'formData.typeIds': typeIds,
       typeOptions: this.buildSelectedOptions(this.data.typeOptions, typeIds)
+    }, () => {
+      this.updateTypeDesc()
     })
+  },
+
+  updateTypeDesc() {
+    if (this.data.formData.typeIds && this.data.formData.typeIds.length > 0) {
+      const typeId = this.data.formData.typeIds[0]
+      const type = this.data.typeOptions.find(item => item.id === typeId)
+      if (type) {
+        this.setData({
+          typeDesc: type.description
+        })
+      }
+    }
   },
 
   onOpenTagSelector() {
@@ -520,35 +527,15 @@ Page({
       'voiceForm.showMark': false
     })
     wx.navigateTo({
-      url: `/pages/role/voice-list/index?currentBg=${encodeURIComponent(this.data.currentBg || '')}&selectedVoice=${encodeURIComponent(JSON.stringify({
-        id: this.data.voiceForm.id,
-        name: this.data.voiceForm.name,
-        gender: this.data.voiceForm.gender,
-        tags: this.data.voiceForm.tags
-      }))}`
+      url: `/pages/role/voice-list/index?characterId=${this.data.formData.id || ''}&voiceId=${this.data.voiceForm.voiceId || ''}`
     })
   },
   confirmRoleVoice(voice) {
-    const nextVoice = voice && voice.id
-      ? {
-          id: voice.id,
-          name: voice.name || '',
-          gender: voice.gender || '',
-          tags: Array.isArray(voice.tags) ? voice.tags : []
-        }
-      : {
-          id: null,
-          name: '',
-          gender: '',
-          tags: []
-        }
     this.setData({
       voiceForm: {
         ...this.data.voiceForm,
-        ...nextVoice
-      },
-      'formData.voiceId': nextVoice.id,
-      'formData.voiceName': nextVoice.name
+        ...voice
+      }
     })
   },
 
@@ -593,6 +580,10 @@ Page({
 
   autoGenerate() {
     if (!this.data.formData.descriptionPrompt) {
+      wx.showToast({
+        title: '请先补充智能体设定',
+        icon: 'none'
+      })
       return
     }
     this.setData({
@@ -670,6 +661,7 @@ Page({
 
     method({
       ...formData,
+      voiceId: this.data.voiceForm.voiceId,
       description: formData.description || formData.descriptionPrompt
     }).then((id) => {
       const characterId = formData.id || id

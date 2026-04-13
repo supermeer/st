@@ -196,7 +196,7 @@
             <view wx:if="{{voiceForm.showMark}}" class="setting-item-new_mark">new</view>
           </view>
           <view class="setting-action">
-            <text class="setting-value">{{voiceForm.name || '请设置'}}</text>
+            <text class="setting-value">{{voiceForm.voiceName || '请设置'}}</text>
             <t-icon name="chevron-right" size="40rpx" color="rgba(255,255,255,0.6)" />
           </view>
         </view>
@@ -219,6 +219,7 @@
               {{item.name}}
             </view>
           </view>
+          <view wx:if="{{typeDesc}}" class="meta-desc">{{typeDesc}}</view>
         </view>
 
         <view class="advanced-meta-block">

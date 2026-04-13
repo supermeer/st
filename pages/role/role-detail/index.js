@@ -287,6 +287,34 @@ Page({
   //     }
   //   })
   // },
+  onChatVoice() {
+    wx.navigateTo({
+      url: `/pages/role/voice-list/index?characterId=${this.data.roleInfo.id || ''}&voiceId=${this.data.roleInfo.userVoiceId || this.data.roleInfo.voiceId || ''}`
+    })
+  },
+
+  confirmRoleVoice(voice) {
+    let voiceForm = {}
+    if (voice.voiceId === this.data.roleInfo.voiceId) {
+      voiceForm = {
+        userVoiceId: null,
+        uservoiceName: null,
+        ...voice
+      }
+    } else {
+      voiceForm = {
+        userVoiceId: voice.voiceId,
+        uservoiceName: voice.voiceName
+      }
+    }
+    this.setData({
+      roleInfo: {
+        ...this.data.roleInfo,
+        ...voiceForm
+      }
+    })
+  },
+
   onMySetting() {
     if (!this.data.plotInfo.id) {
       return

@@ -544,7 +544,6 @@ Component({
           if (!latestMessage.loading) {
             this.addAIMessage()
           } else {
-            console.log(type, '000000', msg)
             if (type === 'text') {
               latestMessage.content += msg || ''
               latestMessage.htmlContent = formatMessage(
@@ -1080,11 +1079,16 @@ Component({
 
     onButtonClick(e) {
       if (e.detail.action === 'rollback') {
-        const include = e.detail.include
+        let include = e.detail.include
+        let messageId = e.detail.messageId
+
+        const aiMsg = this.data.msgList[this.data.msgList.length - 2]
+
+        console.log(aiMsg)
         const rollbackRequest = () => {
           rollbackPlotMessage({
             includeCurrent: include,
-            messageId: e.detail.messageId
+            messageId
           }).then(() => {
             this.getNewMessage()
           })
@@ -1100,6 +1104,16 @@ Component({
             }
           })
         } else {
+          if (!e.detail.messageId && this.data.msgList.length > 1) {
+            const aiMsg = this.data.msgList[this.data.msgList.length - 2]
+            if (aiMsg.messageId && aiMsg.senderType === 2) {
+              messageId = aiMsg.id
+              include = false
+            } else {
+              this.getNewMessage()
+              return
+            }
+          }
           rollbackRequest()
         }
       } else if (e.detail.action === 'newPlot') {

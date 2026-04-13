@@ -28,6 +28,7 @@
         bindinput="onInput"
         bindfocus="onFocus"
         bindblur="onBlur"
+        bindconfirm="onConfirm"
         bindkeyboardheightchange="onKeyboardHeightChange"
       />
     </view>
@@ -36,7 +37,7 @@
   <view wx:if="{{isKeyboardVisible}}" class="shortcut-panel" style="bottom: {{shortcutBottom}}; height: {{shortcutPanelHeight}};">
     <view class="shortcut-row">
       <view class="shortcut-label">常用</view>
-      <scroll-view class="shortcut-scroll" scroll-x enhanced show-scrollbar="{{false}}">
+      <view class="shortcut-scroll">
         <view class="shortcut-list inline-list">
           <view
             wx:for="{{commonTemplates}}"
@@ -48,7 +49,7 @@
             {{item.name}}
           </view>
         </view>
-      </scroll-view>
+      </view>
     </view>
     <view class="shortcut-row quick-row">
       <view class="shortcut-label">快捷</view>

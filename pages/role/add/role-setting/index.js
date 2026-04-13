@@ -1,17 +1,9 @@
 import SystemInfo from '../../../../utils/system'
 
-const SHORTCUT_PANEL_HEIGHT_RPX = 164
+const SHORTCUT_PANEL_HEIGHT_RPX = 230
 const SAVE_FOOTER_HEIGHT_RPX = 120
 const DEFAULT_EDITOR_BOTTOM_GAP_RPX = 24
 const MIN_EDITOR_HEIGHT_PX = 160
-
-const QUICK_TEMPLATES = [
-  '状态栏',
-  '基础信息',
-  '外貌描写',
-  '人生经历',
-  '关系网'
-]
 
 Page({
   data: {
@@ -22,6 +14,7 @@ Page({
       windowWidth: 375
     },
     value: '',
+    textareaFocus: false,
     keyboardHeight: 0,
     isKeyboardVisible: false,
     pageBodyBottom: '0px',
@@ -40,6 +33,14 @@ Page({
         name: '{{user}}',
         value: '{{user}}'
       },
+      {
+        name: '“”',
+        value: '“”'
+      },
+      {
+        name: '（）',
+        value: '（）'
+      }
     ],
     quickTemplates: [
       {
@@ -209,14 +210,25 @@ Page({
 
   onFocus(event) {
     this.setData({
+      textareaFocus: true,
       cursorPosition: typeof event.detail.cursor === 'number'
         ? event.detail.cursor
         : this.data.value.length
     })
     this.updateKeyboardLayout(event.detail.height || this.data.keyboardHeight || 0)
   },
-
+  
   onBlur() {
+    this.setData({
+      textareaFocus: false
+    })
+    this.updateKeyboardLayout(0)
+  },
+  
+  onConfirm() {
+    this.setData({
+      textareaFocus: false
+    })
     this.updateKeyboardLayout(0)
   },
 

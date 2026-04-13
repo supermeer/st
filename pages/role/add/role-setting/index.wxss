@@ -50,7 +50,7 @@
  .editor-card {
    min-height: 0;
    border-radius: 18rpx;
-   background: #424242;
+   background: rgba(255, 255, 255, 0.1);
    overflow: hidden;
  }
 
@@ -101,16 +101,15 @@
  }
 
 .shortcut-scroll {
-  flex: 1;
+  /* flex: 1;
   min-width: 0;
   height: 56rpx;
-  white-space: nowrap;
+  white-space: nowrap; */
 }
 
  .shortcut-list {
-   display: inline-flex;
-   align-items: center;
-   gap: 12rpx;
+  width: 100%;
+   /* gap: 12rpx; */
  }
 
  .inline-list {
@@ -129,6 +128,8 @@
    color: #fff;
    font-size: 24rpx;
    font-weight: 600;
+   margin-right: 12rpx;
+   margin-bottom: 12rpx;
  }
 
  .submit-footer {

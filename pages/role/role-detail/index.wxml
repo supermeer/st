@@ -65,14 +65,14 @@
           </text>
         </view>
 
-        <view class="section-title-container" bind:tap="onNewChatStyle">
+        <view class="section-title-container" bind:tap="onChatVoice">
           <view class="section-title">角色声音</view>
-          <t-icon name="chevron-right-s" class="section-title-icon" size="28" />
+          <t-icon wx:if="{{plotInfo.id}}" name="chevron-right-s" class="section-title-icon" size="28" />
         </view>
         <view class="style-content like-blur-glass" bind:tap="onChatStyle">
-          <text>{{plotInfo.chatStyle.title || '温柔沉稳女声'}}</text>
-          <view wx:if="{{plotInfo.id}}" class="style-right-content">
-            <text class="style-right-text">默认设置</text>
+          <text>{{roleInfo.userVoiceName || roleInfo.voiceName || ''}}</text>
+          <view class="style-right-content">
+            <text class="style-right-text">{{roleInfo.userVoiceName ? '' : '默认设置'}}</text>
           </view>
         </view>
 

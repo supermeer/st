@@ -44,16 +44,20 @@ request.useResponseInterceptor(
         return res.data.data
       } else {
         const { code } = res.data
-        if (code === 10006 || code === 10007) {
+        if (code === 10006 || code === 10007 || code === 10008) {
           const ev = wx.getStorageSync('aE')
           if (ev == '0') {
+            let tip = "能量不足，明天再来吧！"
+            if (code == 10008) {
+              tip = "抱歉，您暂时无法使用该功能"
+            }
             wx.showToast({
-              title: '能量不足，明天再来吧！',
+              title: tip,
               icon: 'none'
             })
             return Promise.reject({
               code,
-              msg: '能量不足，明天子啊来吧！'
+              msg: tip
             })
           } else {
             const pages = getCurrentPages()
