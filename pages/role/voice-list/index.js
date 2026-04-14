@@ -6,6 +6,7 @@ import {
 import {
   getVoiceList,
   setCharacterVoice,
+  updateCharacterVoice,
   getVoiceTypes,
   getVoiceTags,
   addFavoriteVoice,
@@ -21,6 +22,7 @@ Page({
       navHeight: 0
     },
     currentBg: '',
+    from: '',
     showBG: true,
     activeTab: 0,
     voiceTypes: [],
@@ -48,10 +50,11 @@ Page({
       pageInfo: { ...this.data.pageInfo, ...SystemInfo.getPageInfo() }
     })
 
-    const { characterId, voiceId } = options
+    const { characterId, voiceId, from } = options
     characterId && this.setData({characterId})
     !characterId && voiceId && this.setData({currentVoiceId: voiceId, selectedVoiceId: voiceId}) 
     if (characterId) {
+      this.setData({from: from || ''})
       this.getRoleInfo(characterId)
     }
     this.getVoiceList()
@@ -230,6 +233,13 @@ Page({
   },
 
   onResetSettings() {
+    if (this.data.from === 'usercenter') {
+      wx.showToast({
+        title: '无法恢复默认设置',
+        icon: 'none'
+      })
+      return
+    }
     const tipDialog = this.selectComponent('#tip-dialog')
     tipDialog.show({
       content: '确认恢复默认设置？',
@@ -272,9 +282,14 @@ Page({
       return
     }
     if (this.data.characterId) {
+      let req = setCharacterVoice
+      if (this.data.from === 'usercenter') {
+        req = updateCharacterVoice
+      }
       // 直接保存
-      setCharacterVoice({
+      req({
         voiceId: this.data.selectedVoiceId,
+        id: this.data.characterId,
         characterId: this.data.characterId
       })
       .then(res => {
@@ -301,7 +316,11 @@ Page({
       },
       onConfirm: async () => {
         if (this.data.characterId) {
-          await setCharacterVoice({ voiceId:this.data.selectedVoiceId,characterId: this.data.characterId })
+          let req = setCharacterVoice
+          if (this.data.from === 'usercenter') {
+            req = updateCharacterVoice
+          }
+          await req({ voiceId:this.data.selectedVoiceId,id: this.data.characterId, characterId: this.data.characterId })
         }
         this.callBack({voiceId: this.data.defaultVoiceId, voiceName: this.data.defaultVoiceName})
       }

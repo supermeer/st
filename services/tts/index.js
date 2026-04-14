@@ -21,7 +21,9 @@ export function removeFavoriteVoice(data) {
 export function setCharacterVoice(data) {
     return request.post('/api/v1/server/tts/setCharacterVoice', data)
 }
-
+export function updateCharacterVoice(data) {
+    return request.post('/api/v1/server/character/updateCharacterVoice', data)
+}
 export function ttsMessage(data) {
     return request.post('/api/v1/server/plot/ttsMessage', data)
 }

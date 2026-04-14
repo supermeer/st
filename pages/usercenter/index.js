@@ -280,7 +280,7 @@ Page({
       editingRole: id,
       editingRoleInfo: info || {}
     })
-    let items = []
+    let items = ['音色设置']
     if (publishStatus == 0 || !publishStatus) {
       items = [
         ...items,
@@ -299,12 +299,6 @@ Page({
     }
     if (publishStatus == 2) {
       items.push('下架智能体')
-
-
-      // 智能体音色
-      if (!info.voiceId) {
-        items.push('添加音色(只能修改1次)')
-      }
     }
     if (publishStatus == 3) {
       items = [
@@ -432,9 +426,9 @@ Page({
         }
       })
     }
-    if (type === '添加音色(只能修改1次)') {
+    if (type === '音色设置') {
       wx.navigateTo({
-        url: `/pages/role/voice-list/index?characterId=${this.data.editingRole}`
+        url: `/pages/role/voice-list/index?characterId=${this.data.editingRole}&from=usercenter`
       })
     }
   },

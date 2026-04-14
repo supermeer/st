@@ -44,7 +44,7 @@ request.useResponseInterceptor(
         return res.data.data
       } else {
         const { code } = res.data
-        if (code === 10006 || code === 10007 || code === 9) {
+        if (code === 10006 || code === 10007 || code === 10009) {
           const ev = wx.getStorageSync('aE')
           if (ev == '0') {
             let tip = "能量不足，明天再来吧！"
