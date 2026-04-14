@@ -9,6 +9,7 @@ Page({
     packages: [],
     isSpringFestival: false,
     scrollTop: 0,
+    paying: false,
     pageInfo: {
       safeAreaBottom: 0,
       navHeight: 0
@@ -61,6 +62,17 @@ Page({
 
   // 立即开通
   onPurchase: function () {
+    if (this.data.paying) {
+      return
+    }
+    this.setData({
+      paying: true
+    })
+    setTimeout(() => {
+      this.setData({
+        paying: false
+      })
+    }, 3000);
     const selectedPackage = this.data.selectedPackage
 
     if (!selectedPackage) {
