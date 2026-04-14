@@ -19,13 +19,12 @@
         show-confirm-bar="false"
         cursor-spacing="24"
         adjust-position="false"
-        hold-keyboard="true"
         focus="{{textareaFocus}}"
-        cursor="{{cursorPosition}}"
         bindinput="onInput"
         bindfocus="onFocus"
         bindblur="onBlur"
         bindconfirm="onConfirm"
+        disable-default-padding="true"
       />
     </view>
   </view>
