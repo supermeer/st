@@ -10,8 +10,9 @@
   </view>
 
   <view wx:if="{{roleDetail.userVoiceId || roleDetail.voiceId}}" class="btn-container" data-action="play" catchtap="onBtnClick" >
-    <van-icon wx:if="{{!isPlaying}}" class="btn-image" color="#fff" name="play-circle-o" />
-    <van-icon wx:else class="btn-image" color="#fff" name="pause-circle-o" />
+    <van-icon wx:if="{{!isPlaying && !loadingVoice}}" class="btn-image" color="#fff" name="play-circle-o" />
+    <van-icon wx:if="{{isPlaying}}" class="btn-image" color="#fff" name="pause-circle-o" />
+    <van-loading wx:if="{{loadingVoice}}" style="margin-right: 4rpx;" size="12px"  />
     <text class="btn-text">播放</text>
   </view>
 

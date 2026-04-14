@@ -80,8 +80,8 @@ Page({
       const voiceId = res.userVoiceId || res.voiceId
       if (voiceId) {
         this.setData({
-          currentVoiceId: voiceId || '',
-          selectedVoiceId: voiceId || ''
+          currentVoiceId: this.data.from === 'usercenter' ? res.voiceId : voiceId,
+          selectedVoiceId: this.data.from === 'usercenter' ? res.voiceId : voiceId || ''
         })
       }
     })

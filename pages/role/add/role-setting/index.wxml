@@ -1,6 +1,6 @@
 <view class="role-setting-page">
   <custom-nav id="roleSettingNav" title="" showBack="{{true}}" showHome="{{false}}" transparent="{{true}}" />
-  <view class="page-body" style="height: {{contentHeight}};">
+  <view class="page-body">
     <view class="header-block">
       <view class="header-title">
         <text class="required-star">*</text>
@@ -9,9 +9,49 @@
       <view class="header-desc">决定智能体的对话效果，且仅创作者可见，不会对外展示。</view>
     </view>
 
+    <view
+      class="shortcut-panel"
+      style="height: {{shortcutPanelHeight}};"
+    >
+      <view class="shortcut-row">
+        <view class="shortcut-label">常用</view>
+        <view class="shortcut-scroll">
+          <view class="shortcut-list inline-list">
+            <view
+              wx:for="{{commonTemplates}}"
+              wx:key="name"
+              class="shortcut-chip"
+              data-value="{{item}}"
+              bindtap="onInsertTemplate"
+            >
+              {{item.name}}
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view class="shortcut-row quick-row">
+        <view class="shortcut-label">快捷</view>
+        <scroll-view class="shortcut-scroll" scroll-x enhanced show-scrollbar="{{false}}">
+          <view class="shortcut-list inline-list">
+            <view
+              wx:for="{{quickTemplates}}"
+              wx:key="name"
+              class="shortcut-chip"
+              data-value="{{item}}"
+              bindtap="onInsertTemplate"
+            >
+              {{item.name}}
+            </view>
+          </view>
+        </scroll-view>
+      </view>
+    </view>
+    
     <view class="editor-card">
       <textarea
         class="editor-textarea"
+        style="height: {{contentHeight}};"
         placeholder="{{placeholder}}"
         placeholder-class="editor-placeholder"
         value="{{value}}"
@@ -26,46 +66,6 @@
         bindconfirm="onConfirm"
         disable-default-padding="true"
       />
-    </view>
-  </view>
-
-  <view
-    wx:if="{{keyboardHeight > 0}}"
-    class="shortcut-panel"
-    style="height: {{shortcutPanelHeight}};"
-  >
-    <view class="shortcut-row">
-      <view class="shortcut-label">常用</view>
-      <view class="shortcut-scroll">
-        <view class="shortcut-list inline-list">
-          <view
-            wx:for="{{commonTemplates}}"
-            wx:key="name"
-            class="shortcut-chip"
-            data-value="{{item}}"
-            bindtap="onInsertTemplate"
-          >
-            {{item.name}}
-          </view>
-        </view>
-      </view>
-    </view>
-
-    <view class="shortcut-row quick-row">
-      <view class="shortcut-label">快捷</view>
-      <scroll-view class="shortcut-scroll" scroll-x enhanced show-scrollbar="{{false}}">
-        <view class="shortcut-list inline-list">
-          <view
-            wx:for="{{quickTemplates}}"
-            wx:key="name"
-            class="shortcut-chip"
-            data-value="{{item}}"
-            bindtap="onInsertTemplate"
-          >
-            {{item.name}}
-          </view>
-        </view>
-      </scroll-view>
     </view>
   </view>
 <!-- 80rpx + safeAreaBottom -->

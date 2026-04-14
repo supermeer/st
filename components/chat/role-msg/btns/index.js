@@ -47,6 +47,7 @@ Component({
   data: {
     showTip: false,
     isPlaying: false,
+    loadingVoice: false,
     audioUrl: null
   },
   methods: {
@@ -91,6 +92,9 @@ Component({
     //   // innerAudioContext.destroy()
     // },
     async playAudio() {
+      if (this.data.loadingVoice) {
+        return
+      }
       const messageId = this.properties.message.id
       const voiceId = this.properties.roleDetail.userVoiceId || this.properties.roleDetail.voiceId
       if (!messageId || !voiceId) return
@@ -121,7 +125,14 @@ Component({
       // 获取音频URL（注意：异步，可能乱序返回）
       let audioUrl = this.data.audioUrl || this.properties.message.audioUrl
       if (!audioUrl) {
-        const { fileUrl } = await ttsMessage({ messageId })
+        this.setData({
+          loadingVoice: true
+        })
+        const { fileUrl } = await ttsMessage({ messageId }).finally(() => {
+          this.setData({ 
+            loadingVoice: false
+          })
+        })
         // 如果在等待期间用户又点了别的消息，直接放弃（不播放、不抢状态）
         if (myToken !== globalPlayToken) return
 

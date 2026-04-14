@@ -2,6 +2,7 @@
     "component": true,
     "usingComponents": {
         "t-icon": "tdesign-miniprogram/icon/icon",
+        "van-loading": "@vant/weapp/loading/index",
         "t-image": "tdesign-miniprogram/image/image",
         "van-popover": "@vant/weapp/popup/index",
         "van-icon": "@vant/weapp/icon/index"
