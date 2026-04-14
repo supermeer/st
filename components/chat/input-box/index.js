@@ -37,17 +37,44 @@ Component({
     imageList: [],
     wxCode: 'XYJG_8647902'
   },
+  // lifetimes: {
+  //   attached() {
+  //     this.initRecorder()
+  //   },
+  //   detached() {
+  //     // 组件销毁时释放录音管理器
+  //     if (this.data.recorderManager) {
+  //       this.data.recorderManager.stop()
+  //     }
+  //   }
+  // },
+
   lifetimes: {
     attached() {
+      this._destroyed = false
+      this._pageVisible = true
+      this._recorderClosing = false
       this.initRecorder()
     },
     detached() {
-      // 组件销毁时释放录音管理器
-      if (this.data.recorderManager) {
-        this.data.recorderManager.stop()
-      }
+      this._destroyed = true
+      this.releaseRecorder({ fromDetach: true })
     }
   },
+
+  pageLifetimes: {
+    show() {
+      this._pageVisible = true
+      if (!this.data.recorderManager) {
+        this.initRecorder()
+      }
+    },
+    hide() {
+      this._pageVisible = false
+      this.releaseRecorder()
+    }
+  },
+
   methods: {
     // 统一处理禁用状态的点击事件
     onDisabledTap() {
@@ -58,6 +85,45 @@ Component({
       })
     },
 
+    releaseRecorder({ fromDetach = false } = {}) {
+      const { recorderManager } = this.data
+
+      // 标记为页面切换/组件销毁引起的收尾，不应提示失败
+      this._recorderClosing = true
+      this.isTouching = false
+      this.isCancelled = true
+
+      this.stopTimer()
+
+      if (!fromDetach) {
+        this.setData({
+          isRecording: false,
+          voiceStatus: '',
+          recordTime: 0,
+          isTouchMoving: false
+        })
+      }
+
+      if (recorderManager) {
+        try {
+          recorderManager.stop()
+        } catch (err) {
+          console.log('释放录音管理器失败', err)
+        }
+
+        if (fromDetach) {
+          recorderManager.onStart = null
+          recorderManager.onRecognize = null
+          recorderManager.onStop = null
+          recorderManager.onError = null
+
+          this.setData({
+            recorderManager: null
+          })
+        }
+      }
+    },
+
     // 初始化录音管理器
     initRecorder() {
       try {
@@ -66,10 +132,40 @@ Component({
         const manager = plugin.getRecordRecognitionManager()
 
         // 监听识别开始
+        // manager.onStart = (res) => {
+        //   console.log('录音识别开始', res)
+
+        //   // 检查用户是否已经松手（快速点击的情况）
+        //   if (this.isCancelled || !this.isTouching) {
+        //     console.log('用户已松手，立即停止录音')
+        //     this.isCancelled = true
+        //     manager.stop()
+        //     return
+        //   }
+
+        //   this.setData({
+        //     isRecording: true,
+        //     voiceStatus: 'recording',
+        //     recordTime: 0
+        //   })
+        //   // 开始计时
+        //   this.startTimer()
+        // }
+
         manager.onStart = (res) => {
           console.log('录音识别开始', res)
 
-          // 检查用户是否已经松手（快速点击的情况）
+          // 页面已隐藏 / 组件已销毁 / 正在做静默收尾时，忽略本次启动
+          if (this._destroyed || !this._pageVisible || this._recorderClosing) {
+            try {
+              manager.stop()
+            } catch (err) {
+              console.log('页面切换时停止录音失败', err)
+            }
+            return
+          }
+
+          // 检查用户是否已经松手（快速点击）
           if (this.isCancelled || !this.isTouching) {
             console.log('用户已松手，立即停止录音')
             this.isCancelled = true
@@ -82,7 +178,7 @@ Component({
             voiceStatus: 'recording',
             recordTime: 0
           })
-          // 开始计时
+
           this.startTimer()
         }
 
@@ -93,11 +189,62 @@ Component({
         }
 
         // 监听识别结束
+        // manager.onStop = (res) => {
+        //   console.log('识别结束', res)
+        //   this.stopTimer()
+
+        //   // 清除录音状态
+        //   this.setData({
+        //     isRecording: false,
+        //     voiceStatus: '',
+        //     recordTime: 0,
+        //     isTouchMoving: false
+        //   })
+
+        //   // 检查是否是取消操作
+        //   if (this.isCancelled) {
+        //     this.isCancelled = false
+        //     wx.showToast({
+        //       title: '已取消',
+        //       icon: 'none',
+        //       duration: 1000
+        //     })
+        //     return
+        //   }
+
+        //   // 检查识别结果
+        //   if (res.result) {
+        //     // 识别成功，填充到输入框
+        //     this.setData({
+        //       inputValue: res.result,
+        //       inputType: 1,
+        //       focus: true
+        //     })
+
+        //     wx.showToast({
+        //       title: '识别成功',
+        //       icon: 'success',
+        //       duration: 1500
+        //     })
+        //   } else {
+        //     // 识别结果为空
+        //     wx.showToast({
+        //       title: '未识别到内容，请重试',
+        //       icon: 'none',
+        //       duration: 2000
+        //     })
+        //   }
+        // }
+
         manager.onStop = (res) => {
           console.log('识别结束', res)
           this.stopTimer()
 
-          // 清除录音状态
+          // 页面切换/组件销毁触发的 stop，直接忽略
+          if (this._destroyed || !this._pageVisible || this._recorderClosing) {
+            return
+          }
+
           this.setData({
             isRecording: false,
             voiceStatus: '',
@@ -105,7 +252,6 @@ Component({
             isTouchMoving: false
           })
 
-          // 检查是否是取消操作
           if (this.isCancelled) {
             this.isCancelled = false
             wx.showToast({
@@ -116,9 +262,7 @@ Component({
             return
           }
 
-          // 检查识别结果
           if (res.result) {
-            // 识别成功，填充到输入框
             this.setData({
               inputValue: res.result,
               inputType: 1,
@@ -131,7 +275,6 @@ Component({
               duration: 1500
             })
           } else {
-            // 识别结果为空
             wx.showToast({
               title: '未识别到内容，请重试',
               icon: 'none',
@@ -141,9 +284,44 @@ Component({
         }
 
         // 监听识别错误
+        // manager.onError = (err) => {
+        //   console.log('识别错误', err)
+        //   this.stopTimer()
+        //   this.setData({
+        //     isRecording: false,
+        //     voiceStatus: '',
+        //     recordTime: 0,
+        //     isTouchMoving: false
+        //   })
+
+        //   // 检查是否是用户取消操作
+        //   if (this.isCancelled) {
+        //     this.isCancelled = false
+        //     wx.showToast({
+        //       title: '已取消',
+        //       icon: 'none',
+        //       duration: 1000
+        //     })
+        //     return
+        //   }
+
+        //   // 真实的识别错误
+        //   wx.showToast({
+        //     title: '识别失败，请重试',
+        //     icon: 'none',
+        //     duration: 2000
+        //   })
+        // }
+
         manager.onError = (err) => {
           console.log('识别错误', err)
           this.stopTimer()
+
+          // 页面切走 / 组件销毁 / 主动静默收尾导致的错误，直接忽略
+          if (this._destroyed || !this._pageVisible || this._recorderClosing) {
+            return
+          }
+
           this.setData({
             isRecording: false,
             voiceStatus: '',
@@ -151,7 +329,6 @@ Component({
             isTouchMoving: false
           })
 
-          // 检查是否是用户取消操作
           if (this.isCancelled) {
             this.isCancelled = false
             wx.showToast({
@@ -162,7 +339,6 @@ Component({
             return
           }
 
-          // 真实的识别错误
           wx.showToast({
             title: '识别失败，请重试',
             icon: 'none',
@@ -198,7 +374,7 @@ Component({
           // 达到最大时长，自动停止录音
           this.stopRecord()
         }
-        if (recordtime >= this.data.inputDuration - 5) {
+        if (recordTime >= this.data.inputDuration - 5) {
           wx.vibrateShort({
             type: 'light'
           })
@@ -280,6 +456,7 @@ Component({
 
       // 清除之前的状态，确保干净的开始
       this.stopTimer() // 确保之前的定时器已清除
+      this._recorderClosing = false
       this.setData({
         voiceStatus: '',
         isRecording: false,

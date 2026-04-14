@@ -44,11 +44,11 @@ request.useResponseInterceptor(
         return res.data.data
       } else {
         const { code } = res.data
-        if (code === 10006 || code === 10007 || code === 10008) {
+        if (code === 10006 || code === 10007 || code === 9) {
           const ev = wx.getStorageSync('aE')
           if (ev == '0') {
             let tip = "能量不足，明天再来吧！"
-            if (code == 10008) {
+            if (code == 10009) {
               tip = "抱歉，您暂时无法使用该功能"
             }
             wx.showToast({

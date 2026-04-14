@@ -48,7 +48,7 @@
         </text>
       </view>
       <view wx:for="{{msgList}}" wx:key="id" id="msg-{{item.id}}">
-        <role-msg wx:if="{{item.senderType === 2}}" class="message-item" message="{{item}}" isLatest="{{index === msgList.length - 1}}" disabled="{{isGenerating}}" bind:buttonClick="onButtonClick" bind:maskShow="onMaskShow" />
+        <role-msg wx:if="{{item.senderType === 2}}" class="message-item" message="{{item}}" isLatest="{{index === msgList.length - 1}}" disabled="{{isGenerating}}" bind:buttonClick="onButtonClick" bind:maskShow="onMaskShow" roleDetail="{{roleDetail}}" />
         <user-msg wx:if="{{item.senderType === 1}}" class="message-item" message="{{item}}" disabled="{{isGenerating}}" bind:buttonClick="onButtonClick" bind:maskShow="onMaskShow" />
       </view>
       <view wx:if="{{msgList.length > 0 && msgList[msgList.length - 1].error}}" class="retry-container">

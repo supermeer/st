@@ -1,9 +1,6 @@
 <view class="role-setting-page">
-  <view class="nav-shell">
-    <custom-nav id="roleSettingNav" title="" showBack="{{true}}" showHome="{{false}}" transparent="{{true}}" />
-  </view>
-
-  <view class="page-body" style="top: {{pageInfo.navHeight}}px; bottom: {{pageBodyBottom}};">
+  <custom-nav id="roleSettingNav" title="" showBack="{{true}}" showHome="{{false}}" transparent="{{true}}" />
+  <view class="page-body" style="height: {{contentHeight}};">
     <view class="header-block">
       <view class="header-title">
         <text class="required-star">*</text>
@@ -12,7 +9,7 @@
       <view class="header-desc">决定智能体的对话效果，且仅创作者可见，不会对外展示。</view>
     </view>
 
-    <view class="editor-card" style="{{editorCardStyle}}">
+    <view class="editor-card">
       <textarea
         class="editor-textarea"
         placeholder="{{placeholder}}"
@@ -29,12 +26,15 @@
         bindfocus="onFocus"
         bindblur="onBlur"
         bindconfirm="onConfirm"
-        bindkeyboardheightchange="onKeyboardHeightChange"
       />
     </view>
   </view>
 
-  <view wx:if="{{isKeyboardVisible}}" class="shortcut-panel" style="bottom: {{shortcutBottom}}; height: {{shortcutPanelHeight}};">
+  <view
+    wx:if="{{keyboardHeight > 0}}"
+    class="shortcut-panel"
+    style="height: {{shortcutPanelHeight}};"
+  >
     <view class="shortcut-row">
       <view class="shortcut-label">常用</view>
       <view class="shortcut-scroll">
@@ -51,6 +51,7 @@
         </view>
       </view>
     </view>
+
     <view class="shortcut-row quick-row">
       <view class="shortcut-label">快捷</view>
       <scroll-view class="shortcut-scroll" scroll-x enhanced show-scrollbar="{{false}}">
@@ -68,8 +69,8 @@
       </scroll-view>
     </view>
   </view>
-
-  <view class="submit-footer" style="padding-bottom: {{pageInfo.safeAreaBottom}}px;">
+<!-- 80rpx + safeAreaBottom -->
+  <view wx:if="{{keyboardHeight <= 0}}" class="submit-footer" style="padding-bottom: {{pageInfo.safeAreaBottom}}px;">
     <view class="submit-btn" bindtap="onSubmit">保存</view>
   </view>
 </view>

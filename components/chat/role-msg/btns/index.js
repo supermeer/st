@@ -9,6 +9,7 @@ Component({
   properties: {
     btns: Array,
     message: Object,
+    roleDetail: Object,
     disabled: {
       type: Boolean,
       value: false
@@ -91,7 +92,8 @@ Component({
     // },
     async playAudio() {
       const messageId = this.properties.message.id
-      if (!messageId) return
+      const voiceId = this.properties.roleDetail.userVoiceId || this.properties.roleDetail.voiceId
+      if (!messageId || !voiceId) return
 
       const myToken = ++globalPlayToken
 

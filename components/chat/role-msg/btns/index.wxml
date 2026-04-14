@@ -9,7 +9,7 @@
     <text class="btn-text">继续</text>
   </view>
 
-  <view class="btn-container" data-action="play" catchtap="onBtnClick" >
+  <view wx:if="{{roleDetail.userVoiceId || roleDetail.voiceId}}" class="btn-container" data-action="play" catchtap="onBtnClick" >
     <van-icon wx:if="{{!isPlaying}}" class="btn-image" color="#fff" name="play-circle-o" />
     <van-icon wx:else class="btn-image" color="#fff" name="pause-circle-o" />
     <text class="btn-text">播放</text>

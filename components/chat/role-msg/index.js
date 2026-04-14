@@ -1,6 +1,7 @@
 Component({
   properties: {
     message: Object,
+    roleDetail: Object,
     isLatest: Boolean,
     disabled: {
       type: Boolean,
