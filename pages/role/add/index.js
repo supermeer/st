@@ -18,6 +18,7 @@ Page({
       safeAreaBottom: 0,
       navHeight: 0
     },
+    from: '',
     typeDesc: null,
     formData: {
       id: null,
@@ -84,10 +85,11 @@ Page({
     wx.reportEvent('role_add_page_enter', {
       isCreate: !options.id
     })
-    const { id, publishStatus } = options
+    const { id, publishStatus, from='' } = options
     if (id) {
       this.setData({
-        'formData.id': id
+        'formData.id': id,
+        from
       })
       this.getCharacterById(id)
     }
@@ -527,7 +529,7 @@ Page({
       'voiceForm.showMark': false
     })
     wx.navigateTo({
-      url: `/pages/role/voice-list/index?characterId=${this.data.formData.id || ''}&voiceId=${this.data.voiceForm.voiceId || ''}`
+      url: `/pages/role/voice-list/index?characterId=${this.data.formData.id || ''}&voiceId=${this.data.voiceForm.voiceId || ''}&from=${this.data.from}`
     })
   },
   confirmRoleVoice(voice) {

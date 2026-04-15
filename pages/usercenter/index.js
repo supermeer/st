@@ -347,7 +347,7 @@ Page({
 
     if (type === '编辑') {
       wx.navigateTo({
-        url: `/pages/role/add/index?id=${this.data.editingRole}&publishStatus=${this.data.editingRoleInfo.publishStatus}`
+        url: `/pages/role/add/index?id=${this.data.editingRole}&publishStatus=${this.data.editingRoleInfo.publishStatus}&from=usercenter`
       })
       return
     }
