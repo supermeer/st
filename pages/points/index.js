@@ -8,11 +8,18 @@ Page({
   data: {
     expireDate: '2025.04.12',
     selectedIndex: -1,
-    plans: []
+    plans: [],
+    isIos: false
   },
 
   onLoad() {
     userStore.bind(this)
+    const ev = wx.getStorageSync('aE')
+    if (ev == '0') {
+      this.setData({
+        isIos: true
+      })
+    }
   },
 
   onShow() {

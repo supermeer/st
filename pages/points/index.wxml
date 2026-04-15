@@ -30,7 +30,7 @@
     <view class="section-title">积分获取方式</view>
 
     <view class="point-items">
-      <view class="point-item" bindtap="pointCharge">
+      <view wx:if="{{!isIos}}" class="point-item" bindtap="pointCharge">
         <view class="point-item-header">
           充值积分
           <view class="point-item-header-right">去充值<t-icon name="chevron-right" size="20" /></view>
@@ -39,7 +39,7 @@
           积分充值，超划算~
         </view>
       </view>
-      <view class="point-item" bindtap="vipCharge">
+      <view wx:if="{{!isIos}}" class="point-item" bindtap="vipCharge">
         <view class="point-item-header">
           开通会员
           <view class="point-item-header-right">去开通<t-icon name="chevron-right" size="20" /></view>
