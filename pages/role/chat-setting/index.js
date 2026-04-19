@@ -3,6 +3,7 @@ import Message from 'tdesign-miniprogram/message/index';
 import { getPlotDetail, updatePlot, getMemoryType } from '../../../services/ai/chat'
 import { getModelList, getGlobalModelId } from '../../../services/usercenter/index'
 import { QUOTE_GRADIENT_OPTIONS } from '../../../utils/msgHandler'
+import { verifyUrls } from '../../../services/file/index'
 Page({
   /**
    * 页面的初始数据
@@ -397,6 +398,17 @@ Page({
     this.setData({
       showUploader: false
     })
+
+    const res = await verifyUrls([signature.fileKey])
+    const fileRes = res && res[0] ? res[0] : {}
+    if (fileRes && fileRes.illegal) {
+      wx.showModal({
+        title: '提示',
+        content: '您上传的图片包含敏感信息。'
+      })
+      return
+    }
+
     await updatePlot({
       id: this.data.plotInfo.id,
       backgroundImage: signature.uploadUrl.split('?')[0]
