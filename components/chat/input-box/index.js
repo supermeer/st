@@ -53,12 +53,13 @@ Component({
       this.initRecorder()
     },
     hide() {
-      if (this.data.recorderManager) {
-        this.data.recorderManager.stop()
-        this.setData({
-          recorderManager: null
-        })
+      const { recorderManager, isRecording } = this.data
+      if (recorderManager && isRecording) {
+        try {
+          recorderManager.stop()
+        } catch (e) {}
       }
+      this.setData({ recorderManager: null })
     }
   },
   methods: {
@@ -211,7 +212,7 @@ Component({
           // 达到最大时长，自动停止录音
           this.stopRecord()
         }
-        if (recordtime >= this.data.inputDuration - 5) {
+        if (recordTime >= this.data.inputDuration - 5) {
           wx.vibrateShort({
             type: 'light'
           })
