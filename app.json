@@ -2,7 +2,7 @@
   "pages": [
     "pages/home/home",
     "pages/discover/index",
-    "pages/discover/search/index",
+
     "pages/chat-list/index",
     "pages/usercenter/index",
     "pages/points/index",
@@ -10,16 +10,6 @@
     "pages/points/role-detail/index"
   ],
   "subpackages": [
-    {
-      "root": "pages/share",
-      "name": "share",
-      "pages": ["index", "record/index"]
-    },
-    {
-      "root": "pages/contentadd",
-      "name": "contentadd",
-      "pages": ["index", "blog/index", "theme/index", "style/index"]
-    },
     {
       "root": "pages/goods",
       "name": "goods",
