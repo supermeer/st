@@ -1,0 +1,189 @@
+page {
+  background: #0f0f1a;
+  height: 100%;
+}
+
+.lock-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 48rpx;
+  padding-top: env(safe-area-inset-top);
+  box-sizing: border-box;
+  background: linear-gradient(180deg, #1a1030 0%, #0f0f1a 50%, #0a0a14 100%);
+}
+
+/* Header */
+.lock-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 120rpx;
+  padding-bottom: 60rpx;
+}
+
+.lock-icon-wrap {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  background: rgba(139, 92, 246, 0.15);
+  border: 2rpx solid rgba(139, 92, 246, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24rpx;
+}
+
+.lock-app-name {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #ffffff;
+  letter-spacing: 4rpx;
+}
+
+.lock-app-sub {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.4);
+  margin-top: 12rpx;
+}
+
+/* Gesture */
+.gesture-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.gesture-canvas-wrap {
+  width: 600rpx;
+  height: 600rpx;
+  margin-top: 20rpx;
+}
+
+.gesture-canvas {
+  width: 100%;
+  height: 100%;
+}
+
+/* PIN */
+.pin-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.pin-dots {
+  display: flex;
+  gap: 32rpx;
+  margin-top: 20rpx;
+  margin-bottom: 8rpx;
+}
+
+.pin-dot {
+  width: 24rpx;
+  height: 24rpx;
+  border-radius: 50%;
+  border: 2rpx solid rgba(255, 255, 255, 0.35);
+  transition: all 0.15s;
+}
+
+.pin-dot.filled {
+  background: #8B5CF6;
+  border-color: #8B5CF6;
+  box-shadow: 0 0 12rpx rgba(139, 92, 246, 0.6);
+}
+
+.pin-dot.dot-error {
+  border-color: #EF4444;
+}
+
+.pin-dot.dot-error.filled {
+  background: #EF4444;
+  border-color: #EF4444;
+  box-shadow: 0 0 12rpx rgba(239, 68, 68, 0.6);
+}
+
+.pin-dot.dot-success.filled {
+  background: #10B981;
+  border-color: #10B981;
+  box-shadow: 0 0 12rpx rgba(16, 185, 129, 0.6);
+}
+
+/* Tip text */
+.lock-tip {
+  font-size: 28rpx;
+  color: rgba(255, 255, 255, 0.5);
+  text-align: center;
+  min-height: 60rpx;
+  line-height: 60rpx;
+  margin-top: 16rpx;
+}
+
+.lock-tip.tip-error {
+  color: #EF4444;
+}
+
+.lock-tip.tip-success {
+  color: #10B981;
+}
+
+/* PIN pad */
+.pin-pad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24rpx;
+  margin-top: 48rpx;
+  width: 600rpx;
+}
+
+.pin-key {
+  height: 120rpx;
+  border-radius: 20rpx;
+  background: rgba(255, 255, 255, 0.07);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 44rpx;
+  font-weight: 500;
+  color: #ffffff;
+  transition: background 0.15s;
+}
+
+.pin-key:active {
+  background: rgba(139, 92, 246, 0.25);
+}
+
+.pin-key-empty {
+  background: transparent;
+  pointer-events: none;
+}
+
+.pin-key-del {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* Footer */
+.lock-footer {
+  margin-top: auto;
+  padding-bottom: calc(60rpx + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28rpx;
+}
+
+.lock-switch-btn {
+  font-size: 28rpx;
+  color: #8B5CF6;
+  padding: 16rpx 40rpx;
+  border: 1rpx solid rgba(139, 92, 246, 0.4);
+  border-radius: 40rpx;
+}
+
+.lock-forgot-btn {
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.35);
+}

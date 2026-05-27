@@ -1,0 +1,125 @@
+<view class="set-page">
+
+  <!-- 设置主界面 -->
+  <block wx:if="{{mode === 'settings'}}">
+    <view class="section">
+      <view class="section-row">
+        <view class="row-left">
+          <t-icon name="lock-on" size="36" color="#8B5CF6" />
+          <text class="row-label">屏幕锁</text>
+        </view>
+        <t-switch
+          value="{{lockEnabled}}"
+          colors="{{['#8B5CF6', 'rgba(255,255,255,0.15)']}}"
+          bindchange="toggleLock"
+        />
+      </view>
+      <view class="section-desc">开启后每次进入小程序需验证身份</view>
+    </view>
+
+    <view class="section" style="margin-top: 32rpx;">
+      <view class="section-title">锁屏方式</view>
+
+      <view class="type-card {{hasGesture ? 'type-card-active' : ''}}" bindtap="startSetGesture">
+        <view class="type-card-left">
+          <view class="type-icon-wrap">
+            <t-icon name="menu-application" size="32" color="{{hasGesture ? '#8B5CF6' : 'rgba(255,255,255,0.5)'}}" />
+          </view>
+          <view class="type-info">
+            <text class="type-name">手势解锁</text>
+            <text class="type-desc">{{hasGesture ? '已设置，点击重新设置' : '绘制图案解锁'}}</text>
+          </view>
+        </view>
+        <view class="type-actions">
+          <t-icon wx:if="{{hasGesture}}" name="check-circle" size="28" color="#10B981" />
+          <view wx:if="{{hasGesture}}" class="clear-btn" catchtap="clearGesture">清除</view>
+          <t-icon wx:else name="chevron-right" size="28" color="rgba(255,255,255,0.3)" />
+        </view>
+      </view>
+
+      <view class="type-card {{hasPin ? 'type-card-active' : ''}}" style="margin-top: 20rpx;" bindtap="startSetPin">
+        <view class="type-card-left">
+          <view class="type-icon-wrap">
+            <t-icon name="lock-on" size="32" color="{{hasPin ? '#8B5CF6' : 'rgba(255,255,255,0.5)'}}" />
+          </view>
+          <view class="type-info">
+            <text class="type-name">数字密码</text>
+            <text class="type-desc">{{hasPin ? '已设置，点击重新设置' : '设置6位数字密码'}}</text>
+          </view>
+        </view>
+        <view class="type-actions">
+          <t-icon wx:if="{{hasPin}}" name="check-circle" size="28" color="#10B981" />
+          <view wx:if="{{hasPin}}" class="clear-btn" catchtap="clearPin">清除</view>
+          <t-icon wx:else name="chevron-right" size="28" color="rgba(255,255,255,0.3)" />
+        </view>
+      </view>
+    </view>
+
+    <view class="tips-section">
+      <text class="tips-title">温馨提示</text>
+      <text class="tips-item">• 忘记密码可在锁屏页面点击「忘记密码」重置</text>
+      <text class="tips-item">• 重置密码将关闭屏幕锁</text>
+      <text class="tips-item">• 可同时设置手势和密码两种方式</text>
+    </view>
+  </block>
+
+  <!-- 设置手势密码 -->
+  <block wx:if="{{mode === 'set_gesture'}}">
+    <view class="setup-header">
+      <view class="back-btn" bindtap="cancelSetMode">
+        <t-icon name="chevron-left" size="36" color="rgba(255,255,255,0.7)" />
+      </view>
+      <text class="setup-title">设置手势密码</text>
+    </view>
+    <view class="setup-step-hint">
+      <text class="step-badge">{{gestureStep === 'first' ? '1' : '2'}}</text>
+      <text class="step-text">{{gestureStep === 'first' ? '第一步：绘制图案' : '第二步：再次确认'}}</text>
+    </view>
+    <text class="lock-tip {{gestureStatus === 'error' ? 'tip-error' : gestureStatus === 'success' ? 'tip-success' : ''}}">{{gestureHint}}</text>
+    <view class="gesture-canvas-wrap">
+      <canvas
+        type="2d"
+        id="set-canvas"
+        class="gesture-canvas"
+        bindtouchstart="onTouchStart"
+        catchtouchmove="onTouchMove"
+        bindtouchend="onTouchEnd"
+      />
+    </view>
+  </block>
+
+  <!-- 设置数字密码 -->
+  <block wx:if="{{mode === 'set_pin'}}">
+    <view class="setup-header">
+      <view class="back-btn" bindtap="cancelSetMode">
+        <t-icon name="chevron-left" size="36" color="rgba(255,255,255,0.7)" />
+      </view>
+      <text class="setup-title">设置数字密码</text>
+    </view>
+    <view class="setup-step-hint">
+      <text class="step-badge">{{pinStep === 'first' ? '1' : '2'}}</text>
+      <text class="step-text">{{pinStep === 'first' ? '第一步：输入密码' : '第二步：再次确认'}}</text>
+    </view>
+    <view class="pin-dots">
+      <view
+        wx:for="{{pinDots}}"
+        wx:key="*this"
+        class="pin-dot {{index < pinInput.length ? 'filled' : ''}} {{pinStatus === 'error' ? 'dot-error' : ''}} {{pinStatus === 'success' ? 'dot-success' : ''}}"
+      />
+    </view>
+    <text class="lock-tip {{pinStatus === 'error' ? 'tip-error' : pinStatus === 'success' ? 'tip-success' : ''}}">{{pinHint}}</text>
+    <view class="pin-pad">
+      <view
+        wx:for="{{numPad}}"
+        wx:key="index"
+        class="pin-key {{item === '' ? 'pin-key-empty' : ''}} {{item === 'del' ? 'pin-key-del' : ''}}"
+        bindtap="onNumTap"
+        data-num="{{item}}"
+      >
+        <text wx:if="{{item !== 'del' && item !== ''}}">{{item}}</text>
+        <t-icon wx:elif="{{item === 'del'}}" name="delete" size="28" color="rgba(255,255,255,0.7)" />
+      </view>
+    </view>
+  </block>
+
+</view>

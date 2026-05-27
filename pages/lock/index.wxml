@@ -1,0 +1,62 @@
+<view class="lock-page">
+  <view class="lock-header">
+    <view class="lock-icon-wrap">
+      <t-icon name="lock-on" size="44" color="#8B5CF6" />
+    </view>
+    <text class="lock-app-name">星语酒馆</text>
+    <text class="lock-app-sub">屏幕已锁定</text>
+  </view>
+
+  <!-- 手势解锁 -->
+  <view wx:if="{{lockType === 'gesture'}}" class="gesture-section">
+    <text class="lock-tip {{gestureStatus === 'error' ? 'tip-error' : gestureStatus === 'success' ? 'tip-success' : ''}}">
+      {{gestureHint}}
+    </text>
+    <view class="gesture-canvas-wrap">
+      <canvas
+        type="2d"
+        id="lock-canvas"
+        class="gesture-canvas"
+        bindtouchstart="onTouchStart"
+        catchtouchmove="onTouchMove"
+        bindtouchend="onTouchEnd"
+      />
+    </view>
+  </view>
+
+  <!-- 密码解锁 -->
+  <view wx:if="{{lockType === 'pin'}}" class="pin-section">
+    <view class="pin-dots">
+      <view
+        wx:for="{{pinDots}}"
+        wx:key="*this"
+        class="pin-dot {{index < pinInput.length ? 'filled' : ''}} {{pinStatus === 'error' ? 'dot-error' : ''}} {{pinStatus === 'success' ? 'dot-success' : ''}}"
+      />
+    </view>
+    <text class="lock-tip {{pinStatus === 'error' ? 'tip-error' : pinStatus === 'success' ? 'tip-success' : ''}}">
+      {{pinHint}}
+    </text>
+    <view class="pin-pad">
+      <view
+        wx:for="{{numPad}}"
+        wx:key="index"
+        class="pin-key {{item === '' ? 'pin-key-empty' : ''}} {{item === 'del' ? 'pin-key-del' : ''}}"
+        bindtap="onNumTap"
+        data-num="{{item}}"
+      >
+        <text wx:if="{{item !== 'del' && item !== ''}}">{{item}}</text>
+        <t-icon wx:elif="{{item === 'del'}}" name="delete" size="28" color="rgba(255,255,255,0.7)" />
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部操作 -->
+  <view class="lock-footer">
+    <text
+      wx:if="{{lockType === 'pin' && hasGesture || lockType === 'gesture' && hasPin}}"
+      class="lock-switch-btn"
+      bindtap="switchLockType"
+    >{{lockType === 'gesture' ? '使用密码解锁' : '使用手势解锁'}}</text>
+    <text class="lock-forgot-btn" bindtap="onForgot">忘记密码</text>
+  </view>
+</view>

@@ -68,6 +68,11 @@ Page({
         desc: '',
         url: '/pages/order/myOrders/index'
       },
+      {
+        title: '屏幕锁',
+        desc: '未开启',
+        url: '/pages/lock/set/index'
+      },
 
       {
         header: true,
@@ -123,6 +128,13 @@ Page({
     })
   },
   onShow() {
+    // 刷新屏幕锁状态
+    const itemList = [...this.data.itemList]
+    const lockIdx = itemList.findIndex(item => item.title === '屏幕锁')
+    if (lockIdx >= 0) {
+      itemList[lockIdx] = { ...itemList[lockIdx], desc: wx.getStorageSync('lockEnabled') ? '已开启' : '未开启' }
+      this.setData({ itemList })
+    }
     getGlobalModelId().then(res => {
       this.setData({
         currentModel: {

@@ -7,7 +7,9 @@
     "pages/usercenter/index",
     "pages/points/index",
     "pages/points/detail/index",
-    "pages/points/role-detail/index"
+    "pages/points/role-detail/index",
+    "pages/lock/index",
+    "pages/lock/set/index"
   ],
   "subpackages": [
     {

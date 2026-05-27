@@ -6,7 +6,7 @@
     showBack="{{true}}"
     showHome="{{false}}">
   </custom-nav>
-  <view class="aboutus-content">
+  <scroll-view class="aboutus-content" scroll-y>
     <view wx:for="{{itemList}}" wx:key="index" class="{{item.header ? 'aboutus-header' : 'aboutus-item blur-glass'}}" bindtap="{{item.isGradientPicker ? 'onGradientPicker' : 'onClickCell'}}" data-url="{{item.url}}" data-index="{{index}}">
       <view class="aboutus-item-title">
         {{item.title}}
@@ -20,7 +20,7 @@
     <view class="logoff-item" bindtap="logoff">
       <view class="logoff-item-title">注销账号</view>
     </view>
-  </view>
+  </scroll-view>
   
 </view>
 

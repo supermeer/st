@@ -3,8 +3,32 @@ import { config } from './config/index'
 import userStore from './store/user'
 import { generateInvitationCode, visitPages } from './services/usercenter/index'
 // app.js（App() 外部）
+let _isFirstAppShow = true  // 首次启动标志
+let _appWasHidden = false   // App 进入后台标志
+let _pendingLockCheck = false // 待处理的锁屏检测
+
+function checkAndShowLock() {
+  const lockEnabled = wx.getStorageSync('lockEnabled')
+  if (!lockEnabled) return false
+  const pages = getCurrentPages()
+  if (pages.length === 0) return false
+  const currentRoute = pages[pages.length - 1].route
+  if (currentRoute === 'pages/lock/index' || currentRoute === 'pages/lock/set/index') return false
+  wx.navigateTo({ url: '/pages/lock/index' })
+  return true
+}
+
 const originalPage = Page
 Page = function (pageConfig) {
+  // 全局注入锁屏检查：仅在 _pendingLockCheck 为 true 时触发（首次启动或从后台返回）
+  const originalOnShow = pageConfig.onShow
+  pageConfig.onShow = function () {
+    if (_pendingLockCheck) {
+      _pendingLockCheck = false
+      if (checkAndShowLock()) return
+    }
+    if (originalOnShow) originalOnShow.call(this)
+  }
   // 原始页面配置
   const originalOnShareAppMessage = pageConfig.onShareAppMessage
   // 全局注入分享配置
@@ -96,6 +120,18 @@ App({
     userStore.initFromLocal()
   },
   onShow: function () {
+    // 屏幕锁检测：仅在首次启动或 App 从后台返回时触发
+    if (_isFirstAppShow || _appWasHidden) {
+      _isFirstAppShow = false
+      _appWasHidden = false
+      const pages = getCurrentPages()
+      if (pages.length === 0) {
+        // 页面尚未加载，延迟到第一个页面 onShow 处理
+        _pendingLockCheck = true
+      } else {
+        if (checkAndShowLock()) return
+      }
+    }
     updateManager()
     // 获取系统信息和导航栏高度
     this.getNavHeight()
@@ -124,6 +160,9 @@ App({
       aE = 1
     }
     wx.setStorageSync('aE', aE)
+  },
+  onHide: function () {
+    _appWasHidden = true
   },
   async getInviteCode() {
     return new Promise(async (res, rej) => {
