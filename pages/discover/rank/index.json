@@ -1,0 +1,14 @@
+{
+  "navigationBarTitleText": "排行榜",
+  "navigationStyle": "custom",
+  "disableScroll": true,
+  "usingComponents": {
+    "t-icon": "tdesign-miniprogram/icon/icon",
+    "t-image": "tdesign-miniprogram/image/image",
+    "t-loading": "tdesign-miniprogram/loading/loading",
+    "t-toast": "tdesign-miniprogram/toast/toast",
+    "load-more": "/components/load-more/index",
+    "custom-nav": "/components/custom-nav/index",
+    "role-hot-container": "/components/role-hot-container/index"
+  }
+}

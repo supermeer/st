@@ -3,6 +3,7 @@
     "pages/home/home",
     "pages/discover/index",
     "pages/discover/search/index",
+    "pages/discover/rank/index",
     "pages/chat-list/index",
     "pages/usercenter/index",
     "pages/points/index",

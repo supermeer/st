@@ -70,6 +70,64 @@
           </view>
         </view>
       </view>
+
+      <!-- 近期人气崽 -->
+      <view class="rank-preview" wx:if="{{preview.hot.length}}">
+        <view class="section-header">
+          <view class="section-title">近期人气崽</view>
+          <view class="see-all" data-type="hot" bindtap="gotoRank">完整榜单</view>
+        </view>
+        <scroll-view class="h-scroll" scroll-x show-scrollbar="{{false}}">
+          <view class="h-scroll-inner">
+            <view class="role-card" wx:for="{{preview.hot}}" wx:key="id" bindtap="onRoleClick" data-id="{{item.id}}" style="background-image: url('{{item.backgroundImage}}');">
+              <view class="role-info">
+                <view class="role-name-row">
+                  <text class="role-name">{{item.name}}</text>
+                </view>
+                <role-hot-container chatCount="{{item.messageCount}}" roleHot="{{item.browseCount}}" />
+              </view>
+            </view>
+          </view>
+        </scroll-view>
+      </view>
+
+      <!-- 隐藏宝藏崽 -->
+      <view class="rank-preview" wx:if="{{preview.treasure.length}}">
+        <view class="section-header">
+          <view class="section-title">隐藏宝藏崽</view>
+          <view class="see-all" data-type="treasure" bindtap="gotoRank">完整榜单</view>
+        </view>
+        <scroll-view class="h-scroll" scroll-x show-scrollbar="{{false}}">
+          <view class="h-scroll-inner">
+            <view class="role-card" wx:for="{{preview.treasure}}" wx:key="id" bindtap="onRoleClick" data-id="{{item.id}}" style="background-image: url('{{item.backgroundImage}}');">
+              <view class="role-info">
+                <view class="role-name-row">
+                  <text class="role-name">{{item.name}}</text>
+                </view>
+              </view>
+            </view>
+          </view>
+        </scroll-view>
+      </view>
+
+      <!-- 新崽集合站 -->
+      <view class="rank-preview" wx:if="{{preview.newest.length}}">
+        <view class="section-header">
+          <view class="section-title">新崽集合站</view>
+          <view class="see-all" data-type="newest" bindtap="gotoRank">完整榜单</view>
+        </view>
+        <scroll-view class="h-scroll" scroll-x show-scrollbar="{{false}}">
+          <view class="h-scroll-inner">
+            <view class="role-card" wx:for="{{preview.newest}}" wx:key="id" bindtap="onRoleClick" data-id="{{item.id}}" style="background-image: url('{{item.backgroundImage}}');">
+              <view class="role-info">
+                <view class="role-name-row">
+                  <text class="role-name">{{item.name}}</text>
+                </view>
+              </view>
+            </view>
+          </view>
+        </scroll-view>
+      </view>
     </view>
 
     <view style="height: {{pageInfo.safeAreaBottom}}px;"></view>

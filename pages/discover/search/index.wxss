@@ -149,6 +149,31 @@ page {
   margin-right: 8rpx;
 }
 
+/* 榜单预览 */
+.rank-preview {
+  padding-top: 24rpx;
+}
+.see-all {
+  color: #9aa4b2;
+  font-size: 24rpx;
+}
+
+/* 横向滚动容器 */
+.h-scroll {
+  width: 100%;
+  overflow: hidden;
+}
+.h-scroll-inner {
+  display: flex;
+  gap: 16rpx;
+  padding: 0 8rpx;
+}
+/* 横向卡片宽度（比网格稍窄，适配一行滚动）*/
+.h-scroll .role-card {
+  width: 300rpx;
+  flex: 0 0 300rpx;
+}
+
 /* 搜索结果区域 */
 .result-content {
   width: 100%;

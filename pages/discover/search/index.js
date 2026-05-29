@@ -58,6 +58,13 @@ Page({
     pageNo: 1,
     pageSize: 10,
     totalCount: 0,
+
+    // 榜单预览
+    preview: {
+      hot: [],
+      treasure: [],
+      newest: [],
+    },
   },
 
   onLoad: function (options) {
@@ -71,6 +78,7 @@ Page({
     // 加载历史搜索记录
     this.loadHistory()
     this.loadHot()
+    this.loadPreviews()
 
     // 如果传入了搜索关键词，自动填充
     if (options.keyword) {
@@ -105,6 +113,25 @@ Page({
         hotList: res || []
       })
     })
+  },
+  // 加载默认态下的三类榜单预览
+  async loadPreviews() {
+    try {
+      const [hotRes, treasureRes, newestRes] = await Promise.all([
+        getCharacterList({ current: 1, size: 6, ifSystem: true, sortField: 'browseCount', sortOrder: 'desc' }),
+        getCharacterList({ current: 1, size: 6, ifSystem: true, sortField: 'browseCount', sortOrder: 'asc' }),
+        getCharacterList({ current: 1, size: 6, ifSystem: true, sortField: 'publishTime', sortOrder: 'desc' }),
+      ])
+      this.setData({
+        preview: {
+          hot: (hotRes && hotRes.records) || [],
+          treasure: (treasureRes && treasureRes.records) || [],
+          newest: (newestRes && newestRes.records) || [],
+        }
+      })
+    } catch (error) {
+      console.warn('加载榜单预览失败', error)
+    }
   },
   // 保存历史搜索记录
   saveHistory(keyword) {
@@ -381,6 +408,12 @@ Page({
         message: '加载失败，请重试',
       })
     }
+  },
+
+  // 完整榜单跳转
+  gotoRank(e) {
+    const { type } = e.currentTarget.dataset
+    wx.navigateTo({ url: `/pages/discover/rank/index?type=${type || 'hot'}` })
   },
 
   // 取消搜索，返回上一页
