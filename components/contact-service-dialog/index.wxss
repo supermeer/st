@@ -1,0 +1,21 @@
+.cs-container {
+  color: #fff;
+}
+
+.cs-qr-code {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin-bottom: 24rpx;
+}
+
+.cs-copy-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cs-copy-btn {
+  color: var(--theme-color);
+  flex-shrink: 0;
+}

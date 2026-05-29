@@ -1,0 +1,6 @@
+{
+  "component": true,
+  "usingComponents": {
+    "tip-dialog": "/components/tip-dialog/index"
+  }
+}

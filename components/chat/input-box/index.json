@@ -5,6 +5,6 @@
       "t-image": "tdesign-miniprogram/image/image",
       "t-textarea": "tdesign-miniprogram/textarea/textarea",
       "image-uploader": "/components/image-uploader/index",
-      "tip-dialog": "/components/tip-dialog/index"
+      "contact-service-dialog": "/components/contact-service-dialog/index"
     }
   }

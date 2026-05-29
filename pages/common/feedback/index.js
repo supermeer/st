@@ -13,8 +13,18 @@ Page({
     formData: {
       content: ''
     },
+    categories: [
+      { label: '对话内容，有报错', checked: false },
+      { label: '回应慢、加载久、等半天', checked: false },
+      { label: '回复字数太长了，看不下去', checked: false },
+      { label: '回应太敷衍、太短、太模板化', checked: false },
+      { label: '我都说过了，还记不住，毫无“陪伴感”', checked: false },
+      { label: '回答的太“机器”，没有情绪温度', checked: false },
+      { label: '功能问题', checked: false },
+      { label: '其他', checked: false }
+    ],
     imageFiles: [],
-    maxLength: 500,
+    maxLength: 5000,
     isSubmitting: false
   },
 
@@ -34,6 +44,25 @@ Page({
     this.setData({
       'formData.content': event.detail.value
     })
+  },
+
+  /**
+   * 切换反馈分类选中状态
+   */
+  onCategoryToggle(event) {
+    const index = event.currentTarget.dataset.index
+    const categories = this.data.categories.map((item, i) => {
+      if (i === index) return { ...item, checked: !item.checked }
+      return item
+    })
+    this.setData({ categories })
+  },
+
+  /**
+   * 联系客服
+   */
+  onContactService() {
+    this.selectComponent('#csDialog').show()
   },
 
   /**

@@ -64,14 +64,19 @@ Page({
         }
       },
       {
-        title: '我的订单',
-        desc: '',
-        url: '/pages/order/myOrders/index'
-      },
-      {
         title: '屏幕锁',
         desc: '未开启',
         url: '/pages/lock/set/index'
+      },
+      {
+        title: '意见反馈',
+        desc: '',
+        url: '/pages/common/feedback/index'
+      },
+      {
+        title: '我的订单',
+        desc: '',
+        url: '/pages/order/myOrders/index'
       },
 
       {

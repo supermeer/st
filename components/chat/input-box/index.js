@@ -34,8 +34,7 @@ Component({
     isTouchMoving: false, // 是否正在移动（取消录音）
     recorderManager: null, // 录音管理器
     showUploader: false,
-    imageList: [],
-    wxCode: 'XYJG_8647902'
+    imageList: []
   },
   lifetimes: {
     // attached() {
@@ -657,32 +656,7 @@ Component({
       this.triggerEvent('showTabbar')
     },
     cs() {
-      // const app = getApp()
-      // wx.openCustomerServiceChat({
-      //   extInfo: { url: app.globalData.wxCustomerService.url },
-      //   corpId: app.globalData.wxCustomerService.corpId,
-      //   success(res) {}
-      // })
-      const tipDialog = this.selectComponent('#tipDialog')
-      tipDialog.show({
-        title: '添加微信客服',
-        hideTopIcon: true,
-        content: '',
-        cancelText: '关闭',
-        confirmText: ''
-      })
-    },
-    copyAction() {
-      wx.setClipboardData({
-        data: this.data.wxCode,
-        success: () => {
-          wx.showToast({
-            title: '已复制到粘贴板',
-            icon: 'none'
-          })
-        }
-      })
-      // this.hide()
+      this.selectComponent('#csDialog').show()
     }
   }
 })

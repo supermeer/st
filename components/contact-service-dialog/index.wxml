@@ -1,0 +1,9 @@
+<tip-dialog id="dialog">
+  <view slot="btns-top" class="cs-container">
+    <image class="cs-qr-code" mode="widthFix" src="https://yoursx-static-1371529546.cos.ap-guangzhou.myqcloud.com/qr-code.jpg" />
+    <view class="cs-copy-line">
+      添加客服微信：{{wxCode}}
+      <view class="cs-copy-btn" catchtap="copyAction">复制</view>
+    </view>
+  </view>
+</tip-dialog>
