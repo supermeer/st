@@ -32,7 +32,7 @@
           <role-hot-container chatCount="{{item.messageCount}}" roleHot="{{item.browseCount}}" />
           <view class="desc">{{item.signature || ''}}</view>
         </view>
-        <view class="rank-badge">TOP {{index + 1 < 10 ? '0' + (index + 1) : index + 1}}</view>
+        <view class="rank-badge {{index < 3 ? 'top3' : ''}}">TOP {{index + 1 < 10 ? '0' + (index + 1) : index + 1}}</view>
       </view>
     </view>
 
@@ -40,7 +40,7 @@
     <view wx:elif="{{activeTab==='treasure'}}" class="list-grid">
       <view class="grid-card" wx:for="{{list}}" wx:key="id" bindtap="onRoleClick" data-id="{{item.id}}">
         <image class="grid-cover" src="{{item.backgroundImage}}" mode="aspectFill" />
-        <view class="grid-info">
+        <view class="grid-info blur-glass">
           <view class="grid-name">{{item.name}}</view>
           <view class="grid-sub">{{item.signature || ''}}</view>
         </view>
