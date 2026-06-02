@@ -160,6 +160,11 @@ Page({
       url: '/pages/common/aboutus/index'
     })
   },
+  goEditProfile() {
+    wx.navigateTo({
+      url: '/pages/usercenter/edit/index'
+    })
+  },
   onInviteCodeClick() {
     this.selectComponent('#inviteCodeDialog').show()
   },

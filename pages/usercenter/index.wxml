@@ -11,9 +11,9 @@
 
   <view class="usercenter-content" style="height: {{contentHeight}}">
     <view class="user-info">
-      <t-image class="user-info-avatar" src="{{userInfo.avatarUrl}}" />
+      <t-image class="user-info-avatar" src="{{userInfo.avatarUrl}}" catchtap="goEditProfile" />
       <view class="user-info-name">
-        <text>{{userInfo.nickname || '小柚子'}}</text>
+        <text catchtap="goEditProfile">{{userInfo.nickname || '小柚子'}}</text>
         <!-- <view class="user-info-uid">UID:123321</view> -->
         <view class="user-invite-code">
           <view class="user-invite-code-item" catchtap="onInviteCodeClick">

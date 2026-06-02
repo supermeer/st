@@ -6,6 +6,7 @@
     "pages/discover/rank/index",
     "pages/chat-list/index",
     "pages/usercenter/index",
+    "pages/usercenter/edit/index",
     "pages/points/index",
     "pages/points/detail/index",
     "pages/points/role-detail/index",
