@@ -1,6 +1,6 @@
 import SystemInfo from '../../../utils/system'
 import Toast from 'tdesign-miniprogram/toast/index'
-import { getCharacterList, getCurrentPlotByCharacterId, getHotSearchKeywords } from '../../../services/role/index'
+import { getCharacterList, getCurrentPlotByCharacterId, getHotSearchKeywords, getCharacterRanking } from '../../../services/role/index'
 
 const HISTORY_KEY = 'search_history'
 const MAX_HISTORY = 10 // 最多保存10条历史记录
@@ -62,8 +62,8 @@ Page({
     // 榜单预览
     preview: {
       hot: [],
-      treasure: [],
-      newest: [],
+      wow: [],
+      new: [],
     },
   },
 
@@ -117,16 +117,24 @@ Page({
   // 加载默认态下的三类榜单预览
   async loadPreviews() {
     try {
-      const [hotRes, treasureRes, newestRes] = await Promise.all([
-        getCharacterList({ current: 1, size: 6, ifSystem: true, sortField: 'browseCount', sortOrder: 'desc' }),
-        getCharacterList({ current: 1, size: 6, ifSystem: true, sortField: 'browseCount', sortOrder: 'asc' }),
-        getCharacterList({ current: 1, size: 6, ifSystem: true, sortField: 'publishTime', sortOrder: 'desc' }),
+      const [hotRes, wowRes, newRes] = await Promise.all([
+        getCharacterRanking({ type: 'hot' }),
+        getCharacterRanking({ type: 'wow' }),
+        getCharacterRanking({ type: 'new' }),
       ])
+      const mapList = (list) => {
+        return list.map(item => {
+          return {
+            ...item,
+            tagList: (item.tags || '').split(',')
+          }
+        })
+      }
       this.setData({
         preview: {
-          hot: (hotRes && hotRes.records) || [],
-          treasure: (treasureRes && treasureRes.records) || [],
-          newest: (newestRes && newestRes.records) || [],
+          hot: mapList((hotRes && hotRes.list) || []),
+          wow: mapList((wowRes && wowRes.list) || []),
+          new: mapList((newRes && newRes.list) || [])
         }
       })
     } catch (error) {

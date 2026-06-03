@@ -79,12 +79,15 @@
         </view>
         <scroll-view class="h-scroll" scroll-x show-scrollbar="{{false}}">
           <view class="h-scroll-inner">
-            <view class="role-card" wx:for="{{preview.hot}}" wx:key="id" bindtap="onRoleClick" data-id="{{item.id}}" style="background-image: url('{{item.backgroundImage}}');">
+            <view class="role-card" wx:for="{{preview.hot}}" wx:key="id" bindtap="onRoleClick" data-id="{{item.id}}" style="background-image: url('{{item.url}}');">
               <view class="role-info">
                 <view class="role-name-row">
                   <text class="role-name">{{item.name}}</text>
                 </view>
-                <role-hot-container chatCount="{{item.messageCount}}" roleHot="{{item.browseCount}}" />
+                <role-hot-container chatCount="{{item.chatCount}}" roleHot="{{item.heat}}" />
+                <view class="role-tags">
+                  <text class="role-tag blur-glass" wx:for="{{item.tagList}}" wx:key="index" wx:for-item="tag">#{{tag}}</text>
+                </view>
               </view>
             </view>
           </view>
@@ -92,17 +95,21 @@
       </view>
 
       <!-- 隐藏宝藏崽 -->
-      <view class="rank-preview" wx:if="{{preview.treasure.length}}">
+      <view class="rank-preview" wx:if="{{preview.wow.length}}">
         <view class="section-header">
           <view class="section-title">隐藏宝藏崽</view>
-          <view class="see-all" data-type="treasure" bindtap="gotoRank">完整榜单</view>
+          <view class="see-all" data-type="wow" bindtap="gotoRank">完整榜单</view>
         </view>
         <scroll-view class="h-scroll" scroll-x show-scrollbar="{{false}}">
           <view class="h-scroll-inner">
-            <view class="role-card" wx:for="{{preview.treasure}}" wx:key="id" bindtap="onRoleClick" data-id="{{item.id}}" style="background-image: url('{{item.backgroundImage}}');">
+            <view class="role-card" wx:for="{{preview.wow}}" wx:key="id" bindtap="onRoleClick" data-id="{{item.id}}" style="background-image: url('{{item.url}}');">
               <view class="role-info">
                 <view class="role-name-row">
                   <text class="role-name">{{item.name}}</text>
+                </view>
+                <role-hot-container chatCount="{{item.chatCount}}" roleHot="{{item.heat}}" />
+                <view class="role-tags">
+                  <text class="role-tag blur-glass" wx:for="{{item.tagList}}" wx:key="index" wx:for-item="tag">#{{tag}}</text>
                 </view>
               </view>
             </view>
@@ -111,17 +118,21 @@
       </view>
 
       <!-- 新崽集合站 -->
-      <view class="rank-preview" wx:if="{{preview.newest.length}}">
+      <view class="rank-preview" wx:if="{{preview.new.length}}">
         <view class="section-header">
           <view class="section-title">新崽集合站</view>
-          <view class="see-all" data-type="newest" bindtap="gotoRank">完整榜单</view>
+          <view class="see-all" data-type="new" bindtap="gotoRank">完整榜单</view>
         </view>
         <scroll-view class="h-scroll" scroll-x show-scrollbar="{{false}}">
           <view class="h-scroll-inner">
-            <view class="role-card" wx:for="{{preview.newest}}" wx:key="id" bindtap="onRoleClick" data-id="{{item.id}}" style="background-image: url('{{item.backgroundImage}}');">
+            <view class="role-card" wx:for="{{preview.new}}" wx:key="id" bindtap="onRoleClick" data-id="{{item.id}}" style="background-image: url('{{item.url}}');">
               <view class="role-info">
                 <view class="role-name-row">
                   <text class="role-name">{{item.name}}</text>
+                </view>
+                <role-hot-container chatCount="{{item.chatCount}}" roleHot="{{item.heat}}" />
+                <view class="role-tags">
+                  <text class="role-tag blur-glass" wx:for="{{item.tagList}}" wx:key="index" wx:for-item="tag">#{{tag}}</text>
                 </view>
               </view>
             </view>
@@ -177,7 +188,7 @@
                 <text class="role-name">{{item.name}}</text>
                 <t-icon name="check-circle-filled" size="32rpx" color="#4A9EFF" wx:if="{{item.verified}}" />
               </view>
-              <role-hot-container chatCount="{{item.messageCount}}" roleHot="{{item.browseCount}}" />
+              <role-hot-container chatCount="{{item.chatCount}}" roleHot="{{item.heat}}" />
               <view class="role-tags">
                 <text class="role-tag blur-glass" wx:for="{{item.tagNames}}" wx:key="index" wx:for-item="tag">{{tag}}</text>
               </view>

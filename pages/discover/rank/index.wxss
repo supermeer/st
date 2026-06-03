@@ -17,7 +17,7 @@
 .tabs{display:flex;gap:16rpx;padding:0 24rpx 16rpx}
 .tab{padding:12rpx 24rpx;border-radius:999rpx;color:#c7d2fe;background:rgba(99,102,241,.15)}
 .tab.active{background:#6366f1;color:#fff}
-.content{padding:0 24rpx}
+.content{padding:0 24rpx 100rpx}
 /* 热榜样式 */
 .list-hot{display:flex;flex-direction:column;gap:16rpx}
 .hot-item{display:flex;gap:16rpx;background:linear-gradient(90deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border-radius:16rpx;overflow:hidden;position:relative}

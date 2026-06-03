@@ -1,6 +1,7 @@
 import SystemInfo from '../../../utils/system'
 import {
   getCharacterDetail,
+  shareCharacter,
   getStoryDetail
 } from '../../../services/role/index'
 import {
@@ -364,5 +365,18 @@ Page({
       identityExpanded: expanded,
       identityDisplay: display
     })
+  },
+  async onShareAppMessage() {
+    const { id, isSystem } = this.data.roleInfo || {}
+    shareCharacter({characterId: id})
+    let path = `/pages/chat/index?characterId=${id}&isShare=${true}`
+    if (isSystem != 1) {
+      path = '/pages/home/home'
+    }
+    return {
+      title: '星语酒馆',
+      path,
+      imageUrl: '/images/global-share.jpg'
+    }
   }
 })

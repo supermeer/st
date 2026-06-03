@@ -1,6 +1,6 @@
 import SystemInfo from '../../../utils/system'
 import Toast from 'tdesign-miniprogram/toast/index'
-import { getCharacterList, getCurrentPlotByCharacterId } from '../../../services/role/index'
+import { getCurrentPlotByCharacterId, getCharacterRanking } from '../../../services/role/index'
 
 Page({
   data: {
@@ -8,7 +8,7 @@ Page({
       navHeight: 0,
       safeAreaBottom: 0,
     },
-    activeTab: 'hot', // hot | treasure | newest
+    activeTab: 'hot', // hot | wow | new
     dateText: '',
 
     list: [],
@@ -44,19 +44,6 @@ Page({
     this.loadList(true)
   },
 
-  // 依据tab构造排序
-  buildParams() {
-    const { activeTab, pageNo, pageSize } = this.data
-    if (activeTab === 'hot') {
-      return { current: pageNo, size: pageSize, ifSystem: true, sortField: 'browseCount', sortOrder: 'desc' }
-    }
-    if (activeTab === 'treasure') {
-      return { current: pageNo, size: pageSize, ifSystem: true, sortField: 'browseCount', sortOrder: 'asc' }
-    }
-    // newest
-    return { current: pageNo, size: pageSize, ifSystem: true, sortField: 'publishTime', sortOrder: 'desc' }
-  },
-
   async loadList(isRefresh = false) {
     if (isRefresh) {
       this.data.pageNo = 1
@@ -68,9 +55,8 @@ Page({
     this.setData({ loadMoreStatus: 1 })
 
     try {
-      const params = this.buildParams()
-      const res = await getCharacterList(params)
-      const newList = isRefresh ? (res.records || []) : [...this.data.list, ...(res.records || [])]
+      const res = await getCharacterRanking({type: this.data.activeTab})
+      const newList = isRefresh ? (res.list || []) : [...this.data.list, ...(res.list || [])]
       this.setData({
         list: newList,
         totalCount: res.total || 0,

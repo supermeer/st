@@ -17,8 +17,8 @@
 
   <view class="tabs">
     <view class="tab {{activeTab==='hot'?'active':''}}" data-type="hot" bindtap="onTabChange">近期人气崽</view>
-    <view class="tab {{activeTab==='treasure'?'active':''}}" data-type="treasure" bindtap="onTabChange">隐藏宝藏崽</view>
-    <view class="tab {{activeTab==='newest'?'active':''}}" data-type="newest" bindtap="onTabChange">新崽集合站</view>
+    <view class="tab {{activeTab==='wow'?'active':''}}" data-type="wow" bindtap="onTabChange">隐藏宝藏崽</view>
+    <view class="tab {{activeTab==='new'?'active':''}}" data-type="new" bindtap="onTabChange">新崽集合站</view>
   </view>
 
   <scroll-view class="content" scroll-y style="height: calc(100vh - {{pageInfo.navHeight}}px - 180rpx);" bindscrolltolower="onLoadMore">
@@ -26,7 +26,7 @@
     <!-- 人气：纵向榜单样式（带TOP徽标） -->
     <view wx:if="{{activeTab==='hot'}}" class="list-hot">
       <view class="hot-item" wx:for="{{list}}" wx:key="id" bindtap="onRoleClick" data-id="{{item.id}}">
-        <image class="cover" src="{{item.backgroundImage}}" mode="aspectFill" />
+        <image class="cover" src="{{item.url}}" mode="aspectFill" />
         <view class="meta">
           <view class="name">{{item.name}}</view>
           <role-hot-container chatCount="{{item.messageCount}}" roleHot="{{item.browseCount}}" />
@@ -37,9 +37,9 @@
     </view>
 
     <!-- 宝藏：两列卡片网格 -->
-    <view wx:elif="{{activeTab==='treasure'}}" class="list-grid">
+    <view wx:elif="{{activeTab==='wow'}}" class="list-grid">
       <view class="grid-card" wx:for="{{list}}" wx:key="id" bindtap="onRoleClick" data-id="{{item.id}}">
-        <image class="grid-cover" src="{{item.backgroundImage}}" mode="aspectFill" />
+        <image class="grid-cover" src="{{item.url}}" mode="aspectFill" />
         <view class="grid-info blur-glass">
           <view class="grid-name">{{item.name}}</view>
           <view class="grid-sub">{{item.signature || ''}}</view>
@@ -48,9 +48,9 @@
     </view>
 
     <!-- 新崽：全屏海报流 -->
-    <view wx:elif="{{activeTab==='newest'}}" class="list-poster">
+    <view wx:elif="{{activeTab==='new'}}" class="list-poster">
       <view class="poster" wx:for="{{list}}" wx:key="id" bindtap="onRoleClick" data-id="{{item.id}}">
-        <image class="poster-cover" src="{{item.backgroundImage}}" mode="widthFix" />
+        <image class="poster-cover" src="{{item.url}}" mode="widthFix" />
         <view class="poster-info">
           <view class="poster-name">{{item.name}}</view>
           <view class="poster-sub">{{item.signature || ''}}</view>

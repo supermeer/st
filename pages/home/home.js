@@ -1,6 +1,6 @@
 import SystemInfo from '../../utils/system'
 import { getHomePlotMessage } from '../../services/ai/chat'
-import { getCharacterDetail } from '../../services/role/index'
+import { getCharacterDetail, shareCharacter } from '../../services/role/index'
 import { redeemInviteCode, getActivity } from '../../services/usercenter/index'
 
 Page({
@@ -223,6 +223,7 @@ Page({
   },
   async onShareAppMessage() {
     const { id } = this.data.roleForm || {}
+    shareCharacter({characterId: id})
     let path = `/pages/chat/index?characterId=${id}&isShare=${true}`
     if (this.data.isInvite) {
       const code = await getApp().getInviteCode()

@@ -44,6 +44,14 @@ export function deleteDefaultPersona() {
     return request.post('/api/v1/server/story/deleteDefaultPersona')
 }
 
+export function getCharacterRanking(params) {
+    return request.get('/api/v1/server/character/getCharacterRanking', params)
+}
+
+export function shareCharacter(data) {
+    return request.post('/api/v1/server/character/shareCharacter', data)
+}
+
 export function getCharacterList(params) {
     return request.get('/api/v1/server/character/getCharacterList', params)
 }

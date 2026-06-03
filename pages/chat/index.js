@@ -2,6 +2,7 @@ import SystemInfo from '../../utils/system'
 import {
   getCurrentPlotByCharacterId,
   getCharacterDetail,
+  shareCharacter,
   enterFromDiscover
 } from '../../services/role/index'
 Page({
@@ -94,6 +95,7 @@ Page({
   },
   async onShareAppMessage() {
     const { id } = this.data.roleForm || {}
+    shareCharacter({characterId: id})
     let path = `/pages/chat/index?characterId=${id}&isShare=${true}`
     const characterDetail = await getCharacterDetail(id)
     if (characterDetail.isSystem != 1) {
