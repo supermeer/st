@@ -4,7 +4,9 @@
   "usingComponents": {
     "custom-nav": "/components/custom-nav/index",
     "uploader": "/components/uploader/index",
-    "contact-service-dialog": "/components/contact-service-dialog/index"
+    "t-icon": "tdesign-miniprogram/icon/icon",
+    "contact-service-dialog": "/components/contact-service-dialog/index",
+    "image-uploader": "/components/image-uploader/index"
   },
   "navigationBarTitleText": "意见反馈"
 }

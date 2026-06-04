@@ -11,3 +11,6 @@ export function submitFeedback(data) {
   return request.post('/api/v1/server/feedback/submit', data)
 }
 
+export function getFeedbackTypes(param) {
+  return request.get('/api/v1/user/user/getFeedbackTypes', param)
+}

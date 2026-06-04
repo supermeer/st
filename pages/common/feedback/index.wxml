@@ -56,12 +56,26 @@
       <!-- 上传图片 -->
       <view class="form-item blur-glass">
         <view class="form-label">上传图片</view>
-        <uploader
-          files="{{imageFiles}}"
-          max="{{3}}"
-          bind:success="onImageSuccess"
-          bind:change="onImageChange"
-          bind:remove="onImageRemove"
+        <view class="upload-grid">
+          <view
+            wx:for="{{imageFiles}}"
+            wx:key="index"
+            class="upload-item"
+          >
+            <image class="upload-image" src="{{item.url || item.localUrl}}" mode="aspectFill" />
+            <t-icon name="close" size="32rpx" color="#fff" class="upload-remove" data-index="{{index}}" bindtap="onImageRemove" />
+          </view>
+          <view wx:if="{{!imageFiles || imageFiles.length < 1}}" class="upload-add-btn" bindtap="onOpenUploader">
+            <t-icon name="add" size="56rpx" color="var(--yellow-btn-color)" />
+            <text class="upload-add-text">添加图片</text>
+          </view>
+        </view>
+        <image-uploader
+          visible="{{showUploader}}"
+          isPublic="true"
+          bind:success="onUploadSuccess"
+          bind:fail="onUploadFail"
+          bind:cancel="onUploadCancel"
         />
       </view>
 

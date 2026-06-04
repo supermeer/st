@@ -1,5 +1,5 @@
 import SystemInfo from '../../../utils/system'
-import { submitFeedback } from '../../../services/feedback/index'
+import { submitFeedback, getFeedbackTypes } from '../../../services/feedback/index'
 
 Page({
   /**
@@ -25,7 +25,8 @@ Page({
     ],
     imageFiles: [],
     maxLength: 5000,
-    isSubmitting: false
+    isSubmitting: false,
+    showUploader: false
   },
 
   /**
@@ -34,6 +35,9 @@ Page({
   onLoad(options) {
     this.setData({
       pageInfo: { ...this.data.pageInfo, ...SystemInfo.getPageInfo() }
+    })
+    getFeedbackTypes().then(res => {
+      console.log(res, '========')
     })
   },
 
@@ -87,12 +91,60 @@ Page({
    * 删除图片
    */
   onImageRemove(event) {
-    const { index } = event.detail
+    const detailIndex = event && event.detail && typeof event.detail.index === 'number' ? event.detail.index : undefined
+    const datasetIndex = event && event.currentTarget && typeof event.currentTarget.dataset.index === 'number' ? event.currentTarget.dataset.index : undefined
+    const index = typeof detailIndex === 'number' ? detailIndex : datasetIndex
+    if (typeof index !== 'number') return
     const newFiles = [...this.data.imageFiles]
     newFiles.splice(index, 1)
     this.setData({
       imageFiles: newFiles
     })
+  },
+
+  /**
+   * 打开图片上传器
+   */
+  onOpenUploader() {
+    this.setData({ showUploader: true })
+  },
+
+  /**
+   * 自定义图片上传成功（image-uploader）
+   */
+  onUploadSuccess(e) {
+    const { tempFilePath, signature } = e.detail || {}
+    const remoteUrl = signature && signature.uploadUrl ? (signature.uploadUrl.split('?')[0]) : ''
+    const fileKey = signature && signature.fileKey
+    const files = [...(this.data.imageFiles || [])]
+    if (remoteUrl || tempFilePath) {
+      files.push({
+        url: remoteUrl || '',
+        localUrl: tempFilePath || '',
+        fileKey,
+        status: 'done'
+      })
+    }
+    this.setData({
+      imageFiles: files,
+      showUploader: false
+    })
+  },
+
+  /**
+   * 自定义图片上传失败
+   */
+  onUploadFail(e) {
+    const message = (e && e.message) || '上传失败'
+    wx.showToast({ title: message, icon: 'none' })
+    this.setData({ showUploader: false })
+  },
+
+  /**
+   * 取消上传
+   */
+  onUploadCancel() {
+    this.setData({ showUploader: false })
   },
 
   /**
@@ -140,12 +192,15 @@ Page({
     try {
       // 获取已上传成功的图片URL
       const images = imageFiles
-        .filter(file => file.status === 'done' && file.remoteUrl)
-        .map(file => file.remoteUrl)
+        .filter(file => file.status === 'done' && file.url)
+        .map(file => file.url)
+
+      const typeIds = this.data.categories.filter(item => item.checked)
 
       const data = {
         content: content.trim(),
-        images
+        typeId: typeIds,
+        imageUrl: ''
       }
 
       await submitFeedback(data)
