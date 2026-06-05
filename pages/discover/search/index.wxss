@@ -104,6 +104,14 @@ page {
   font-size: 28rpx;
   color: #ffffff;
   font-weight: 600;
+  display: flex;
+  align-items: center;
+}
+
+.section-title-icon {
+  width: 50rpx;
+  height: 50rpx;
+  margin-right: 12rpx;
 }
 
 .clear-btn {
@@ -154,7 +162,7 @@ page {
   padding-top: 24rpx;
 }
 .see-all {
-  color: #9aa4b2;
+  color: var(--yellow-btn-color);
   font-size: 24rpx;
 }
 
@@ -232,6 +240,19 @@ page {
   flex-direction: column;
   justify-content: flex-end;
 }
+
+/* Rank badge for horizontal cards */
+.rank-badge{
+  position:absolute;
+  left:16rpx;
+  top:16rpx;
+  background:#aaa;
+  color:#3b2e11;
+  font-size:22rpx;
+  border-radius:8rpx;
+  padding:6rpx 10rpx;
+}
+.top3{background:#f5d0a0;}
 
 .role-card:active {
   transform: scale(0.95);

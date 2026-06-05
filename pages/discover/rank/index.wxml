@@ -40,7 +40,7 @@
     <view wx:elif="{{activeTab==='wow'}}" class="list-grid">
       <view class="grid-card" wx:for="{{list}}" wx:key="id" bindtap="onRoleClick" data-id="{{item.characterId}}">
         <image class="grid-cover" src="{{item.url}}" mode="aspectFill" />
-        <view class="grid-info blur-glass">
+        <view class="grid-info">
           <view class="grid-name">{{item.name}}</view>
           <view class="grid-sub">{{item.signature || ''}}</view>
         </view>
