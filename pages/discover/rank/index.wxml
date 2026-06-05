@@ -25,7 +25,7 @@
 
     <!-- 人气：纵向榜单样式（带TOP徽标） -->
     <view wx:if="{{activeTab==='hot'}}" class="list-hot">
-      <view class="hot-item" wx:for="{{list}}" wx:key="id" bindtap="onRoleClick" data-id="{{item.id}}">
+      <view class="hot-item" wx:for="{{list}}" wx:key="id" bindtap="onRoleClick" data-id="{{item.characterId}}">
         <image class="cover" src="{{item.url}}" mode="aspectFill" />
         <view class="meta">
           <view class="name">{{item.name}}</view>
@@ -38,7 +38,7 @@
 
     <!-- 宝藏：两列卡片网格 -->
     <view wx:elif="{{activeTab==='wow'}}" class="list-grid">
-      <view class="grid-card" wx:for="{{list}}" wx:key="id" bindtap="onRoleClick" data-id="{{item.id}}">
+      <view class="grid-card" wx:for="{{list}}" wx:key="id" bindtap="onRoleClick" data-id="{{item.characterId}}">
         <image class="grid-cover" src="{{item.url}}" mode="aspectFill" />
         <view class="grid-info blur-glass">
           <view class="grid-name">{{item.name}}</view>
@@ -49,7 +49,7 @@
 
     <!-- 新崽：全屏海报流 -->
     <view wx:elif="{{activeTab==='new'}}" class="list-poster">
-      <view class="poster" wx:for="{{list}}" wx:key="id" bindtap="onRoleClick" data-id="{{item.id}}">
+      <view class="poster" wx:for="{{list}}" wx:key="id" bindtap="onRoleClick" data-id="{{item.characterId}}">
         <image class="poster-cover" src="{{item.url}}" mode="widthFix" />
         <view class="poster-info">
           <view class="poster-name">{{item.name}}</view>

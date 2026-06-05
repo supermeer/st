@@ -13,17 +13,8 @@ Page({
     formData: {
       content: ''
     },
-    categories: [
-      { label: '对话内容，有报错', checked: false },
-      { label: '回应慢、加载久、等半天', checked: false },
-      { label: '回复字数太长了，看不下去', checked: false },
-      { label: '回应太敷衍、太短、太模板化', checked: false },
-      { label: '我都说过了，还记不住，毫无“陪伴感”', checked: false },
-      { label: '回答的太“机器”，没有情绪温度', checked: false },
-      { label: '功能问题', checked: false },
-      { label: '其他', checked: false }
-    ],
-    imageFiles: [],
+    categories: [],
+    imageUrl: '',
     maxLength: 5000,
     isSubmitting: false,
     showUploader: false
@@ -37,7 +28,9 @@ Page({
       pageInfo: { ...this.data.pageInfo, ...SystemInfo.getPageInfo() }
     })
     getFeedbackTypes().then(res => {
-      console.log(res, '========')
+      this.setData({
+        categories: res
+      })
     })
   },
 
@@ -70,35 +63,11 @@ Page({
   },
 
   /**
-   * 图片上传成功
-   */
-  onImageSuccess(event) {
-    const { remoteUrl, fileKey } = event.detail
-    console.log('图片上传成功:', remoteUrl)
-  },
-
-  /**
-   * 图片列表变化
-   */
-  onImageChange(event) {
-    const files = event.detail.files || []
-    this.setData({
-      imageFiles: files
-    })
-  },
-
-  /**
    * 删除图片
    */
   onImageRemove(event) {
-    const detailIndex = event && event.detail && typeof event.detail.index === 'number' ? event.detail.index : undefined
-    const datasetIndex = event && event.currentTarget && typeof event.currentTarget.dataset.index === 'number' ? event.currentTarget.dataset.index : undefined
-    const index = typeof detailIndex === 'number' ? detailIndex : datasetIndex
-    if (typeof index !== 'number') return
-    const newFiles = [...this.data.imageFiles]
-    newFiles.splice(index, 1)
     this.setData({
-      imageFiles: newFiles
+      imageUrl: null
     })
   },
 
@@ -115,18 +84,8 @@ Page({
   onUploadSuccess(e) {
     const { tempFilePath, signature } = e.detail || {}
     const remoteUrl = signature && signature.uploadUrl ? (signature.uploadUrl.split('?')[0]) : ''
-    const fileKey = signature && signature.fileKey
-    const files = [...(this.data.imageFiles || [])]
-    if (remoteUrl || tempFilePath) {
-      files.push({
-        url: remoteUrl || '',
-        localUrl: tempFilePath || '',
-        fileKey,
-        status: 'done'
-      })
-    }
     this.setData({
-      imageFiles: files,
+      imageUrl: remoteUrl || '',
       showUploader: false
     })
   },
@@ -152,7 +111,7 @@ Page({
    */
   async onSubmit() {
     const { content } = this.data.formData
-    const { imageFiles, isSubmitting } = this.data
+    const { imageUrl, isSubmitting } = this.data
 
     // 防止重复提交
     if (isSubmitting) {
@@ -177,30 +136,15 @@ Page({
       return
     }
 
-    // 检查是否有图片正在上传
-    const uploading = imageFiles.some(file => file.status === 'loading')
-    if (uploading) {
-      wx.showToast({
-        title: '图片上传中，请稍候',
-        icon: 'none'
-      })
-      return
-    }
-
     this.setData({ isSubmitting: true })
 
     try {
-      // 获取已上传成功的图片URL
-      const images = imageFiles
-        .filter(file => file.status === 'done' && file.url)
-        .map(file => file.url)
-
-      const typeIds = this.data.categories.filter(item => item.checked)
+      const typeIds = this.data.categories.filter(item => item.checked).map(item => item.id)
 
       const data = {
         content: content.trim(),
-        typeId: typeIds,
-        imageUrl: ''
+        typeIds,
+        imageUrl: this.data.imageUrl
       }
 
       await submitFeedback(data)

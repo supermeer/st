@@ -8,7 +8,7 @@ import request from '../request/http'
  * @returns {Promise}
  */
 export function submitFeedback(data) {
-  return request.post('/api/v1/server/feedback/submit', data)
+  return request.post('/api/v1/user/user/submi', data)
 }
 
 export function getFeedbackTypes(param) {

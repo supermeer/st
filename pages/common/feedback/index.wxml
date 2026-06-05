@@ -45,7 +45,7 @@
             bindtap="onCategoryToggle"
             data-index="{{index}}"
           >
-            <text class="category-label">{{item.label}}</text>
+            <text class="category-label">{{item.description}}</text>
             <view class="category-checkbox {{item.checked ? 'checked' : ''}}">
               <text wx:if="{{item.checked}}" class="checkbox-icon">✓</text>
             </view>
@@ -58,14 +58,13 @@
         <view class="form-label">上传图片</view>
         <view class="upload-grid">
           <view
-            wx:for="{{imageFiles}}"
-            wx:key="index"
+            wx:if="{{imageUrl}}"
             class="upload-item"
           >
-            <image class="upload-image" src="{{item.url || item.localUrl}}" mode="aspectFill" />
+            <image class="upload-image" src="{{imageUrl}}" mode="aspectFill" />
             <t-icon name="close" size="32rpx" color="#fff" class="upload-remove" data-index="{{index}}" bindtap="onImageRemove" />
           </view>
-          <view wx:if="{{!imageFiles || imageFiles.length < 1}}" class="upload-add-btn" bindtap="onOpenUploader">
+          <view wx:else class="upload-add-btn" bindtap="onOpenUploader">
             <t-icon name="add" size="56rpx" color="var(--yellow-btn-color)" />
             <text class="upload-add-text">添加图片</text>
           </view>
