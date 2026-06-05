@@ -113,3 +113,7 @@ function mockCheckPhoneStatus() {
     hasBindPhone: false
   }))
 }
+
+export function updateUserInfo(data) {
+  return request.post('/api/v1/user/user/updateUserInfo', data)
+}

@@ -1,5 +1,6 @@
 import userStore from '../../../store/user'
 import { verifyUrls } from '../../../services/file/index'
+import { updateUserInfo } from '../../../services/usercenter/index'
 
 Page({
   data: {
@@ -64,11 +65,10 @@ Page({
 
     this.setData({ saving: true })
     try {
-      const patch = { nickname }
-      if (this.data.uploaded.remoteUrl) {
-        patch.avatarUrl = this.data.uploaded.remoteUrl
-      }
-      userStore.updateUser(patch)
+      const avatarUrl = this.data.uploaded.remoteUrl || this.data.userInfo.avatarUrl || ''
+      const payload = { nickname, avatarUrl }
+      await updateUserInfo(payload)
+      userStore.updateUser(payload)
       wx.showToast({ title: '已保存', icon: 'success' })
       setTimeout(() => wx.navigateBack(), 500)
     } catch (e) {
