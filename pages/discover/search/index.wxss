@@ -300,6 +300,19 @@ page {
   max-width: 160rpx;
 }
 
+.increase-box {
+  display: flex;
+  align-items: center;
+  color: var(--success-color);
+  font-size: 24rpx;
+}
+
+.increase-icon {
+  width: 24rpx;
+  height: 24rpx;
+  margin-right: 8rpx;
+}
+
 /* 空态提示 */
 .empty-container {
   display: flex;

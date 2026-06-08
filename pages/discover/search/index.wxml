@@ -118,6 +118,10 @@
                 <view class="role-tags">
                   <text class="role-tag blur-glass" wx:for="{{item.tagList}}" wx:key="index" wx:for-item="tag">#{{tag}}</text>
                 </view>
+                <view class="increase-box">
+                   <t-image src="/static/discover/increase.png" class="increase-icon" mode="aspectFill" />
+                   对话暴涨{{ item.ratioStr }}
+                </view>
               </view>
             </view>
           </view>

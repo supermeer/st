@@ -124,8 +124,10 @@ Page({
       ])
       const mapList = (list) => {
         return list.map(item => {
+          const ratio = item.ratio || 0
           return {
             ...item,
+            ratioStr: `+${Math.round(ratio * 100)}%`,
             tagList: (item.tags || '').split(',')
           }
         })

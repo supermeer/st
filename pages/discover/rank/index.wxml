@@ -30,7 +30,7 @@
         <view class="meta">
           <view class="name">{{item.name}}</view>
           <role-hot-container chatCount="{{item.messageCount}}" roleHot="{{item.browseCount}}" />
-          <view class="desc">{{item.signature || ''}}</view>
+          <view class="desc">{{item.description || ''}}</view>
         </view>
         <view class="rank-badge {{index < 3 ? 'top3' : ''}}">TOP {{index + 1 < 10 ? '0' + (index + 1) : index + 1}}</view>
       </view>
