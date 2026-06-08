@@ -24,7 +24,16 @@
 .hot-item .cover{height:160rpx;width:99rpx;border-radius:12rpx;margin:12rpx}
 .hot-item .meta{flex:1;display:flex;flex-direction:column;justify-content:center;padding-right:24rpx}
 .hot-item .name{color:#fff;font-size:30rpx;font-weight:600}
-.hot-item .desc{color:#9aa4b2;font-size:24rpx;margin-top:6rpx}
+.hot-item .desc{
+    color:#9aa4b2;
+    font-size:24rpx;
+    margin-top:6rpx;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2; /* 控制行数 */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 .rank-badge{
     position:absolute;
     right:16rpx;
