@@ -11,10 +11,17 @@
 
   <view class="usercenter-content" style="height: {{contentHeight}}">
     <view class="user-info">
-      <t-image class="user-info-avatar" src="{{userInfo.avatarUrl}}" catchtap="goEditProfile" />
+      <view class="user-info-avatar-wrapper" catchtap="goEditProfile">
+        <t-image class="user-info-avatar" src="{{userInfo.avatarUrl}}" />
+        <view class="user-info-avatar-edit">
+          <t-icon name="edit" size="18" color="#fff" />
+        </view>
+      </view>
       <view class="user-info-name">
         <text catchtap="goEditProfile">{{userInfo.nickname || '小柚子'}}</text>
-        <!-- <view class="user-info-uid">UID:123321</view> -->
+        <view class="user-info-uid">
+          ID：{{userInfo.id}}
+          <view class="id-copy-btn" catchtap="idCopyAction">复制</view></view>
         <view class="user-invite-code">
           <view class="user-invite-code-item" catchtap="onInviteCodeClick">
             <t-image class="user-invite-code-icon" src="/static/usercenter/score.png"/>

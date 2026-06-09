@@ -470,5 +470,16 @@ Page({
       }
     })
     // this.hide()
+  },
+  idCopyAction() {
+    wx.setClipboardData({
+      data: userStore.data.userInfo.id + "",
+      success: () => {
+        wx.showToast({
+          title: '已复制到粘贴板',
+          icon: 'none'
+        })
+      }
+    })
   }
 })

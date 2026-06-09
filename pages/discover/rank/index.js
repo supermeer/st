@@ -57,8 +57,16 @@ Page({
     try {
       const res = await getCharacterRanking({type: this.data.activeTab})
       const newList = isRefresh ? (res.list || []) : [...this.data.list, ...(res.list || [])]
+      const mapList = newList.map(item => {
+        const ratio = item.ratio || 0
+        return {
+          ...item,
+          ratioStr: `+${Math.round(ratio * 100)}%`,
+          tagList: (item.tags || '').split(',')
+        }
+      })
       this.setData({
-        list: newList,
+        list: mapList,
         totalCount: res.total || 0,
         loadMoreStatus: newList.length >= (res.total || 0) ? 2 : 0,
         listIsEmpty: newList.length === 0,

@@ -101,16 +101,16 @@ page {
 }
 
 .section-title {
-  font-size: 28rpx;
+  font-size: 30rpx;
   color: #ffffff;
   font-weight: 600;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
 }
 
 .section-title-icon {
-  width: 50rpx;
-  height: 50rpx;
+  width: 48rpx;
+  height: 48rpx;
   margin-right: 12rpx;
 }
 
