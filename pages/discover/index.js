@@ -124,6 +124,12 @@ Page(
       })
     },
 
+    onRank() {
+      wx.navigateTo({
+        url: '/pages/discover/rank/index'
+      })
+    },
+
     getSpringFestivalExpired() {
       isSpringFestivalExpired().then(res => {
         if(!res && this.data.showBG) {

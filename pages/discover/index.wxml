@@ -5,10 +5,12 @@
     class="custom-nav"
     show-back="{{false}}"
     show-left-logo="{{false}}"
+    custom-left="{{true}}"
     show-home="{{false}}"
     transparent="{{true}}"
   >
     <t-image slot="center" src="/static/discover/discover_nav.jpg" width="112rpx" height="50rpx" />
+    <t-image slot="left" bindtap="onRank" src="/static/discover/rank-enter-icon.png" width="60rpx" height="60rpx" />
   </custom-nav>
 
   <!-- 顶部导航标签 -->
