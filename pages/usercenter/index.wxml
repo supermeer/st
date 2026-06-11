@@ -20,7 +20,7 @@
       <view class="user-info-name">
         <text catchtap="goEditProfile">{{userInfo.nickname || '小柚子'}}</text>
         <view class="user-info-uid">
-          ID：{{userInfo.id}}
+          ID：{{userInfo.uid}}
           <view class="id-copy-btn" catchtap="idCopyAction">复制</view></view>
         <view class="user-invite-code">
           <view class="user-invite-code-item" catchtap="onInviteCodeClick">
