@@ -29,7 +29,7 @@
         <image class="cover" src="{{item.url}}" mode="aspectFill" />
         <view class="meta">
           <view class="name">{{item.name}}</view>
-          <role-hot-container chatCount="{{item.messageCount}}" roleHot="{{item.browseCount}}" />
+          <role-hot-container chatCount="{{item.chatCount}}" roleHot="{{item.heat}}" />
           <view class="desc">{{item.description || ''}}</view>
         </view>
         <view class="rank-badge {{index < 3 ? 'top3' : ''}}">TOP {{index + 1 < 10 ? '0' + (index + 1) : index + 1}}</view>
@@ -60,7 +60,7 @@
           <image class="grid-cover" src="{{item.url}}" mode="widthFix" />
           <view class="grid-info">
             <view class="grid-name">{{item.name}}</view>
-            <role-hot-container chatCount="{{item.messageCount}}" roleHot="{{item.browseCount}}" />
+            <role-hot-container chatCount="{{item.chatCount}}" roleHot="{{item.heat}}" />
             <view class="role-tags">
               <text class="role-tag blur-glass" wx:for="{{item.tagList}}" wx:key="index" wx:for-item="tag">#{{tag}}</text>
             </view>
