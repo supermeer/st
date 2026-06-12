@@ -1,3 +1,4 @@
+import userStore from '../../store/user'
 import SystemInfo from '../../utils/system'
 import { getHomePlotMessage } from '../../services/ai/chat'
 import { getCharacterDetail, shareCharacter } from '../../services/role/index'
@@ -62,7 +63,7 @@ Page({
       return true
     })
     const token = wx.getStorageSync('token')
-    if (!token) {
+    if (!token || !userStore.data.userInfo.uid) {
       this.setData({ isLogin: false })
       const authRef =
         this.selectComponent('auth') || this.selectComponent('#auth')

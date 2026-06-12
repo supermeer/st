@@ -5,6 +5,7 @@ import { getMyPointInfo } from '../services/vip/index'
 const DEFAULT_USER = {
   avatarUrl: '',
   nickname: '',
+  uid: '',
   phone: '',
   state: '',
   id: null,

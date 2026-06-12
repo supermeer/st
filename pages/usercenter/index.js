@@ -473,7 +473,7 @@ Page({
   },
   idCopyAction() {
     wx.setClipboardData({
-      data: userStore.data.userInfo.id + "",
+      data: userStore.data.userInfo.uid + "",
       success: () => {
         wx.showToast({
           title: '已复制到粘贴板',
