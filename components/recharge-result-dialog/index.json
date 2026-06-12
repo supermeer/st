@@ -1,6 +1,7 @@
 {
   "component": true,
   "usingComponents": {
-    "t-image": "tdesign-miniprogram/image/image"
+    "t-image": "tdesign-miniprogram/image/image",
+    "contact-service-dialog": "/components/contact-service-dialog/index"
   }
 }

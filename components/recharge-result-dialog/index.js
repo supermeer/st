@@ -83,13 +83,14 @@ Component({
       this.triggerEvent('close', { success: this.data.status === 1 })
     },
     handleCs() {
-      const app = getApp()
-      wx.openCustomerServiceChat({
-        extInfo: { url: app.globalData.wxCustomerService.url },
-        corpId: app.globalData.wxCustomerService.corpId,
-        success(res) {}
-      })
+      // const app = getApp()
+      // wx.openCustomerServiceChat({
+      //   extInfo: { url: app.globalData.wxCustomerService.url },
+      //   corpId: app.globalData.wxCustomerService.corpId,
+      //   success(res) {}
+      // })
       this.hide()
+      this.selectComponent('#csDialog').show()
     },
     handleMaskClick() {
       //   this.hide()
