@@ -57,7 +57,7 @@
     <block wx:elif="{{activeTab==='new'}}">
       <view class="list-grid" wx:if="{{!listIsEmpty}}">
         <view class="grid-card" wx:for="{{list}}" wx:key="id" bindtap="onRoleClick" data-id="{{item.characterId}}">
-          <image class="grid-cover" src="{{item.url}}" mode="widthFix" />
+          <image class="grid-cover" src="{{item.url}}" mode="aspectFill" />
           <view class="grid-info">
             <view class="grid-name">{{item.name}}</view>
             <role-hot-container chatCount="{{item.chatCount}}" roleHot="{{item.heat}}" />
