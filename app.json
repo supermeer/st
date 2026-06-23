@@ -61,6 +61,13 @@
       ]
     },
     {
+      "root": "pages/group",
+      "name": "group",
+      "pages": [
+        "add/index"
+      ]
+    },
+    {
       "root": "pages/vip",
       "name": "vip",
       "pages": ["packages/index", "payment-status/index", "order-confirm/index", "times-detail/index"]

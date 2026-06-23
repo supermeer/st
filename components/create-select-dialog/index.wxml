@@ -1,0 +1,39 @@
+<view class="create-select-mask" wx:if="{{visible}}" bindtap="handleMaskClick" catchtouchmove="{{true}}">
+  <view class="create-select-container" catchtap="preventBubble">
+    <!-- 关闭按钮 -->
+    <view class="close-btn" bindtap="handleClose">
+      <text class="close-icon">✕</text>
+    </view>
+
+    <!-- 标题 -->
+    <view class="create-select-title">请选择</view>
+
+    <!-- 选项列表 -->
+    <view class="create-options">
+      <view 
+        class="create-option {{item.disabled ? 'disabled' : ''}}" 
+        wx:for="{{options}}" 
+        wx:key="type"
+        data-item="{{item}}"
+        bindtap="handleSelect"
+      >
+        <!-- <view class="option-icon-wrapper">
+          <image class="option-icon" src="{{item.icon}}" mode="aspectFit" wx:if="{{item.icon}}" />
+          <view class="option-icon-placeholder" wx:else>
+            <text class="option-icon-text">{{item.label}}</text>
+          </view>
+        </view> -->
+        <view class="option-info">
+          <view class="option-label-row">
+            <text class="option-label">{{item.label}}</text>
+            <view class="new-badge" wx:if="{{item.isNew}}">new</view>
+          </view>
+          <text class="option-desc">{{item.description}}</text>
+        </view>
+        <view class="option-arrow">
+          <text class="arrow-icon">›</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

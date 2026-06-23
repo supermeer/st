@@ -33,10 +33,21 @@ Component({
     onChange(event) {
       const index = event.currentTarget.dataset.id
       const item = this.data.list[index]
-      // if (this.data.interceptor && !this.data.interceptor()) {
-      //   return
-      // }
-      
+
+      // 拦截器判断是否可以跳转
+      if (this.data.interceptor && !this.data.interceptor()) {
+        return
+      }
+
+      // 中心创建按钮：显示创建选择弹窗
+      if (item.isNavigate && index === 2) {
+        const dialog = this.selectComponent('#createSelectDialog')
+        if (dialog) {
+          dialog.show()
+        }
+        return
+      }
+
       // 根据配置决定使用哪种跳转方式
       if (item.isNavigate) {
         wx.navigateTo({ url: item.url })

@@ -19,3 +19,4 @@
   </view>
 </view>
 
+<create-select-dialog id="createSelectDialog" />

@@ -263,16 +263,26 @@ Page({
       })
     }
     if (type === 'create') {
-      wx.navigateTo({
-        url: '/pages/role/add/index'
-      })
+      // 通过 TabBar 显示创建选择弹窗
+      const tabBar = this.getTabBar()
+      if (tabBar) {
+        const dialog = tabBar.selectComponent('#createSelectDialog')
+        if (dialog) {
+          dialog.show()
+        }
+      }
     }
   },
 
   createRole() {
-    wx.navigateTo({
-      url: '/pages/role/add/index'
-    })
+    // 用户中心空状态的创建按钮，通过 TabBar 显示创建选择弹窗
+    const tabBar = this.getTabBar()
+    if (tabBar) {
+      const dialog = tabBar.selectComponent('#createSelectDialog')
+      if (dialog) {
+        dialog.show()
+      }
+    }
   },
 
   onLongPress(e) {
