@@ -14,7 +14,7 @@ Page({
       safeAreaBottom: 0,
       navHeight: 0
     },
-    test: '<p style="position: absolute; right: 0; top: 0; background: #ffc107; color: #FFFFFF;font-size: 12px;padding: 2px 12px; border-bottom-left-radius: 12px; border-top-right-radius: 8px;">推荐</p>'
+    show: true
   },
 
   onLoad: function (options) {
@@ -23,6 +23,13 @@ Page({
     })
     this.getPricingPlan()
     this.getIfSpringFestival()
+
+    const ev = wx.getStorageSync('aE')
+    if (ev == '0') {
+      this.setData({
+        show: false
+      })
+    }
     userStore.bind(this)
   },
 

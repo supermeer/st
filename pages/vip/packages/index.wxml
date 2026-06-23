@@ -14,6 +14,7 @@
   
   <!-- 可滚动内容区域 -->
   <scroll-view
+    wx:if="{{show}}"
     class="scroll-content"
     scroll-y
     enhanced
@@ -70,7 +71,7 @@
     </view>
   </scroll-view>
 
-  <view class="bottom-container">
+  <view wx:if="{{show}}" class="bottom-container">
     <view wx:if="{{isSpringFestival}}" class="activity-tip">新年特惠，限时折扣</view>
     <!-- 套餐选择 -->
     <view class="package-selection">
