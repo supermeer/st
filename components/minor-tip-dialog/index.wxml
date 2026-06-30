@@ -1,0 +1,61 @@
+<view class="minor-tip-mask" wx:if="{{visible}}" catchtouchmove="{{true}}">
+  <view class="minor-tip-container">
+    <!-- 顶部卡通图标 -->
+    <view class="top-icon-wrapper">
+      <text class="top-icon-emoji">👏</text>
+    </view>
+
+    <!-- 标题 -->
+    <view class="minor-tip-title">❗ 星语准入须知 ❗</view>
+
+    <!-- 内容卡片 1 -->
+    <view class="content-card">
+      <view class="card-icon">
+        <text>☕</text>
+      </view>
+      <view class="card-text">
+        <text>星语酒馆只接待</text>
+        <text class="highlight-text">年满18岁</text>
+        <text>的成年人哦！\n未成年小朋友要等长大再来呀～</text>
+      </view>
+    </view>
+
+    <!-- 内容卡片 2 -->
+    <view class="content-card">
+      <view class="card-icon">
+        <text>🤖</text>
+      </view>
+      <view class="card-text">
+        <text>这里的AI都是</text>
+        <text class="highlight-text">'戏精'</text>
+        <text>，内容都是AI生成的，别太上头，也别让它干坏事！</text>
+      </view>
+    </view>
+
+    <!-- 协议勾选区域 -->
+    <view class="agreement-section">
+      <view class="agreement-item" bindtap="toggleAgreement1">
+        <view class="checkbox {{isChecked1 ? 'checked' : ''}}">
+          <view wx:if="{{isChecked1}}" class="check-mark"></view>
+        </view>
+        <text class="agreement-text">我已经满 18 岁，已阅读并严格遵守上述内容</text>
+      </view>
+      <view class="agreement-item" bindtap="toggleAgreement2">
+        <view class="checkbox {{isChecked2 ? 'checked' : ''}}">
+          <view wx:if="{{isChecked2}}" class="check-mark"></view>
+        </view>
+        <text class="agreement-text">已阅读 <text class="link" catchtap="viewAgreement2">《星语酒馆AI用户协议》</text></text>
+      </view>
+    </view>
+
+    <!-- 按钮区域 -->
+    <view class="btn-wrapper">
+      <view class="btn-primary" bindtap="handleConfirm">
+        懂了，冲!
+      </view>
+      <view class="btn-secondary" bindtap="handleCancel">
+        下次再冲
+      </view>
+    </view>
+  </view>
+</view>

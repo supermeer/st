@@ -25,7 +25,8 @@ Page({
     showUploader: false,
     currentBg: '',
     
-    selectedCharacters: []
+    selectedCharacters: [],
+    prologueCharacterId: null
   },
 
   /**
@@ -93,11 +94,27 @@ Page({
   /**
    * 选择开场白角色
    */
-  onSelectPrologueCharacter() {
-    wx.showToast({
-      title: '角色选择组件待接入',
-      icon: 'none'
-    })
+  onSelectPrologueCharacter(e) {
+    const { id, name } = e.currentTarget.dataset
+    
+    if (id === 'player') {
+      // 选择玩家作为开场白
+      this.setData({
+        prologueCharacterId: 'player',
+        'formData.prologue': '由玩家开启群聊第一句话。',
+        'formData.prologueCharacterId': 'player'
+      })
+    } else {
+      // 选择群成员作为开场白，回填该角色的开场白
+      const character = this.data.selectedCharacters.find(c => c.id == id)
+      if (character) {
+        this.setData({
+          prologueCharacterId: character.id,
+          'formData.prologue': character.prologue || `你好，我是${name}。`,
+          'formData.prologueCharacterId': character.id
+        })
+      }
+    }
   },
 
   /**
@@ -117,9 +134,18 @@ Page({
    * 添加角色
    */
   onAddCharacters() {
-    wx.showToast({
-      title: '角色选择组件待接入',
-      icon: 'none'
+    const selectedRoles = encodeURIComponent(JSON.stringify(this.data.selectedCharacters))
+    wx.navigateTo({
+      url: `/pages/group/role-select/index?selectedRoles=${selectedRoles}`
+    })
+  },
+
+  /**
+   * 接收角色选择返回的数据
+   */
+  onRoleSelectBack(selectedRoles) {
+    this.setData({
+      selectedCharacters: selectedRoles || []
     })
   },
 

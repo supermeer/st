@@ -1,0 +1,145 @@
+<wxs module="utils" src="../../discover/utils.wxs"></wxs>
+<view class="role-select-page">
+  <!-- 自定义导航栏 -->
+  <custom-nav
+    class="custom-nav"
+    show-back="{{true}}"
+    show-home="{{false}}"
+    title="选择角色"
+  />
+
+  <!-- 标签页切换 -->
+  <view class="tabs-container">
+    <view
+      class="tab-item {{activeTab === 'system' ? 'active' : ''}}"
+      bindtap="onTabChange"
+      data-key="system"
+    >
+      星语角色
+    </view>
+    <view
+      class="tab-item {{activeTab === 'my' ? 'active' : ''}}"
+      bindtap="onTabChange"
+      data-key="my"
+    >
+      我的角色
+    </view>
+  </view>
+
+  <!-- 搜索栏 -->
+  <view class="search-container">
+    <view class="search-wrapper {{showSearchInput ? 'active' : ''}}">
+      <t-icon name="search" size="36rpx" color="#999" />
+      <input
+        class="search-input"
+        placeholder="搜索角色名称"
+        placeholder-class="search-placeholder"
+        value="{{searchKeyword}}"
+        bindinput="onSearchInput"
+        bindconfirm="onSearchConfirm"
+        bindclear="onClearSearch"
+        focus="{{showSearchInput}}"
+      />
+      <view class="search-clear" bindtap="onClearSearch" wx:if="{{searchKeyword}}">
+        <t-icon name="close-circle-filled" size="32rpx" color="#999" />
+      </view>
+    </view>
+    <view class="search-toggle" bindtap="onToggleSearch">
+      <t-icon wx:if="{{!showSearchInput}}" name="search" size="44rpx" color="#fff" />
+      <text wx:if="{{!showSearchInput}}" class="search-toggle-text">搜索</text>
+      <text wx:if="{{showSearchInput}}" class="search-toggle-text">取消</text>
+    </view>
+  </view>
+
+  <!-- 筛选标签 -->
+  <view class="filter-tags" wx:if="{{tagList.length > 0}}">
+    <scroll-view class="tags-scroll" scroll-x show-scrollbar="{{false}}">
+      <view
+        class="tag-item {{utils.includes(activeTags, item.id) ? 'active' : ''}}"
+        wx:for="{{tagList}}"
+        wx:key="id"
+        bindtap="onTagChange"
+        data-value="{{item.id}}"
+      >
+        #{{item.name}}
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 角色列表 -->
+  <scroll-view
+    class="content-scroll"
+    scroll-y
+    bindscrolltolower="onLoadMore"
+    bindscroll="onScroll"
+    lower-threshold="100"
+  >
+    <view class="role-list">
+      <view
+        class="role-card {{item._selected ? 'selected' : ''}}"
+        wx:for="{{roleList}}"
+        wx:key="id"
+        bindtap="onRoleClick"
+        data-role="{{item}}"
+      >
+        <!-- 选中标记 -->
+        <view class="select-mark" wx:if="{{item._selected}}">
+          <t-icon name="check-circle-filled" size="48rpx" color="#4A9EFF" />
+        </view>
+
+        <!-- 背景图 -->
+        <image
+          class="role-bg"
+          src="{{item.backgroundImage}}"
+          mode="aspectFill"
+          wx:if="{{item.backgroundImage}}"
+        />
+
+        <!-- 角色信息 -->
+        <view class="role-info">
+          <view class="role-name-row">
+            <text class="role-name">{{item.name}}</text>
+            <t-icon name="check-circle-filled" size="28rpx" color="#4A9EFF" wx:if="{{item.verified}}" />
+          </view>
+          <role-hot-container wx:if="{{activeTab == 'system'}}" chatCount="{{item.messageCount}}" roleHot="{{item.browseCount}}" />
+          <view class="role-tags">
+            <text class="role-tag" wx:for="{{item.tagNames}}" wx:key="index" wx:for-item="tag">#{{tag}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty-container" wx:if="{{listIsEmpty && roleList.length === 0}}">
+      <t-icon name="search" size="80rpx" color="rgba(255,255,255,0.3)" />
+      <text class="empty-text">暂无角色</text>
+    </view>
+
+    <!-- 加载中 -->
+    <view class="loading-container" wx:if="{{loadMoreStatus === 1 && roleList.length > 0}}">
+      <text class="loading-text">加载中...</text>
+    </view>
+
+    <!-- 已全部加载 -->
+    <view class="loading-container" wx:if="{{loadMoreStatus === 2 && roleList.length > 0}}">
+      <text class="loading-text">已加载全部角色</text>
+    </view>
+
+    <!-- 加载失败 -->
+    <view class="loading-container" wx:if="{{loadMoreStatus === 3}}">
+      <text class="loading-text retry" bindtap="onRetryLoad">加载失败，点击重试</text>
+    </view>
+
+    <view style="height: calc(120rpx + {{pageInfo.safeAreaBottom}}px);"></view>
+  </scroll-view>
+</view>
+
+<!-- 固定底部按钮 -->
+<view class="bottom-footer" style="padding-bottom: {{pageInfo.safeAreaBottom}}px;">
+  <view class="save-btn {{selectedRoles.length > 0 ? 'has-selected' : ''}}" bindtap="onSave">
+    <text class="save-btn-text">确定选择</text>
+    <text class="save-btn-count" wx:if="{{selectedRoles.length > 0}}">{{selectedRoles.length}}</text>
+  </view>
+</view>
+
+<t-toast id="t-toast" />

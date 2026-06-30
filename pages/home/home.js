@@ -2,7 +2,7 @@ import userStore from '../../store/user'
 import SystemInfo from '../../utils/system'
 import { getHomePlotMessage } from '../../services/ai/chat'
 import { getCharacterDetail, shareCharacter } from '../../services/role/index'
-import { redeemInviteCode, getActivity } from '../../services/usercenter/index'
+import { redeemInviteCode, getActivity, getMinorReminderConfig, confirmAdultIdentity } from '../../services/usercenter/index'
 
 Page({
   data: {
@@ -23,6 +23,7 @@ Page({
     showBG: true
   },
   onLoad(e) {
+    this.testMinorDialog()
     const ev = wx.getStorageSync('aE')
     if (ev == '0') {
       this.setData({
@@ -166,6 +167,61 @@ Page({
     this.setData({ isLogin: true })
     this.getHomePlotMessage()
     this.redeemInviteCodeFun()
+    // 检查未成年人提醒弹窗
+    this.checkMinorReminder()
+  },
+  // 检查未成年人提醒弹窗
+  async checkMinorReminder() {
+    // 如果已经确认过，直接返回
+    if (wx.getStorageSync('minorConfirmed')) {
+      return
+    }
+    try {
+      const res = await getMinorReminderConfig()
+      if (res && res.showMinorReminder) {
+        // 显示未成年人提醒弹窗
+        const dialog = this.selectComponent('#minorTipDialog')
+        if (dialog) {
+          dialog.show({
+            onConfirm: async () => {
+              // 确认后同步到后端
+              await this.syncMinorConfirm()
+            },
+            onCancel: () => {
+              // 取消后的处理
+              console.log('用户取消未成年人确认')
+            }
+          })
+        }
+      }
+    } catch (err) {
+      console.error('获取未成年人提醒配置失败', err)
+    }
+  },
+  testMinorDialog() {
+    const dialog = this.selectComponent('#minorTipDialog')
+    if (dialog) {
+      dialog.show({
+        onConfirm: async () => {
+          await this.syncMinorConfirm()
+        },
+      })
+      onCancel: () => {
+        console.log('用户取消未成年人确认')
+      }
+    }
+  },
+  // 同步未成年人确认到后端
+  async syncMinorConfirm() {
+    try {
+      await confirmAdultIdentity({
+        confirmed: true,
+        confirmTime: Date.now()
+      })
+      wx.setStorageSync('minorConfirmed', true)
+    } catch (err) {
+      console.error('同步未成年人确认失败', err)
+    }
   },
   async redeemInviteCodeFun() {
     if (this.data.inviteForm.isInvite) {

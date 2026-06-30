@@ -64,7 +64,8 @@
       "root": "pages/group",
       "name": "group",
       "pages": [
-        "add/index"
+        "add/index",
+        "role-select/index"
       ]
     },
     {

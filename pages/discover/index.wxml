@@ -27,6 +27,7 @@
           id="nav-tab-{{index}}"
         > 
           {{item.name}}
+          <view class="nav-red-dot" wx:if="{{item.id === 'group' && showGroupRedDot}}"></view>
           <view class="nav-underline" wx:if="{{activeNav === item.id}}"></view>
         </view>
       </view>
@@ -121,6 +122,40 @@
             <view class="role-tags">
               <text class="role-tag blur-glass" wx:for="{{item.tagNames}}" wx:key="index" wx:for-item="tag">#{{tag}}</text>
             </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 群聊列表 -->
+      <view class="group-list" wx:if="{{activeNav === 'group'}}">
+        <view 
+          class="group-card" 
+          wx:for="{{groupList}}" 
+          wx:key="id"
+          bindtap="onGroupClick"
+          data-id="{{item.id}}"
+        >
+          <!-- 群成员头像列表 -->
+          <view class="group-members">
+            <view class="member-avatar" wx:for="{{item.members}}" wx:key="id" wx:for-item="member" style="z-index: {{index}}">
+              <image class="member-avatar-img" src="{{member.portrait}}" mode="aspectFill" />
+            </view>
+          </view>
+          
+          <!-- 群聊信息 -->
+          <view class="group-info">
+            <view class="group-name-row">
+              <text class="group-name">{{item.name}}</text>
+              <!-- 
+                <view class="group-badge" wx:if="{{item.ifHot}}">热门</view>
+               -->
+            </view>
+            <text class="group-desc">{{item.description || '暂无简介'}}</text>
+          </view>
+          
+          <!-- 热度信息 -->
+          <view class="group-footer">
+            <role-hot-container chatCount="{{item.messageCount}}" roleHot="{{item.browseCount}}" />
           </view>
         </view>
       </view>

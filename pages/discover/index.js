@@ -3,6 +3,7 @@ import SystemInfo from '../../utils/system'
 import Toast from 'tdesign-miniprogram/toast/index'
 import { getCharacterType, getCharacterTag, getCharacterList, getCurrentPlotByCharacterId } from '../../services/role/index'
 import { getModelList, getGlobalModelId, isSpringFestivalExpired, getActivity } from '../../services/usercenter/index'
+import { getGroupList } from '../../services/group/index'
 
 Page(
   Object.assign({}, userStore.data, {
@@ -19,6 +20,7 @@ Page(
       activeNav: '',
       showSwiper: false,
       navScrollLeft: 0,
+      showGroupRedDot: true,
 
       sortField: 'browseCount',
       sortOrder: 'desc',
@@ -50,6 +52,110 @@ Page(
       },
       // 角色列表
       roleList: [],
+      
+      // 群聊列表
+      groupList: [
+        {
+          id: 'group_1',
+          name: '修仙聊天群',
+          description: '修仙问道，共赴长生之路',
+          backgroundImage: 'https://picsum.photos/702/380?random=1',
+          memberCount: 128,
+          messageCount: 3582,
+          ifHot: true,
+          tags: ['修仙', '玄幻', '古风']
+        },
+        {
+          id: 'group_2',
+          name: '现代都市日常',
+          description: '繁华都市中的温馨故事',
+          backgroundImage: 'https://picsum.photos/702/380?random=2',
+          memberCount: 256,
+          messageCount: 8934,
+          ifHot: true,
+          tags: ['都市', '日常', '治愈']
+        },
+        {
+          id: 'group_3',
+          name: '星际冒险小队',
+          description: '探索宇宙未知，挑战星辰大海',
+          backgroundImage: 'https://picsum.photos/702/380?random=3',
+          memberCount: 64,
+          messageCount: 1205,
+          ifHot: false,
+          tags: ['科幻', '冒险', '星际']
+        },
+        {
+          id: 'group_4',
+          name: '校园青春物语',
+          description: '青春不留遗憾，一起成长吧',
+          backgroundImage: 'https://picsum.photos/702/380?random=4',
+          memberCount: 189,
+          messageCount: 4521,
+          ifHot: false,
+          tags: ['校园', '青春', '纯爱']
+        },
+        {
+          id: 'group_5',
+          name: '异世界转生团',
+          description: '穿越异世界，开启第二人生',
+          backgroundImage: 'https://picsum.photos/702/380?random=5',
+          memberCount: 312,
+          messageCount: 10234,
+          ifHot: true,
+          tags: ['异世界', '转生', '冒险']
+        },
+        {
+          id: 'group_6',
+          name: '古风言情专区',
+          description: '诗词歌赋，诉说千古情缘',
+          backgroundImage: 'https://picsum.photos/702/380?random=6',
+          memberCount: 98,
+          messageCount: 2156,
+          ifHot: false,
+          tags: ['古风', '言情', '虐恋']
+        },
+        {
+          id: 'group_7',
+          name: '悬疑探案组',
+          description: '抽丝剥茧，揭开真相的面纱',
+          backgroundImage: 'https://picsum.photos/702/380?random=7',
+          memberCount: 145,
+          messageCount: 3890,
+          ifHot: false,
+          tags: ['悬疑', '推理', '烧脑']
+        },
+        {
+          id: 'group_8',
+          name: '二次元同好会',
+          description: 'ACG爱好者的聚集地',
+          backgroundImage: 'https://picsum.photos/702/380?random=8',
+          memberCount: 520,
+          messageCount: 15890,
+          ifHot: true,
+          tags: ['二次元', '动漫', '游戏']
+        },
+        {
+          id: 'group_9',
+          name: '职场成长日记',
+          description: '职场小白进阶之路',
+          backgroundImage: 'https://picsum.photos/702/380?random=9',
+          memberCount: 76,
+          messageCount: 1890,
+          ifHot: false,
+          tags: ['职场', '成长', '励志']
+        },
+        {
+          id: 'group_10',
+          name: '奇幻冒险大陆',
+          description: '魔法与剑的世界，等你探索',
+          backgroundImage: 'https://picsum.photos/702/380?random=10',
+          memberCount: 234,
+          messageCount: 6780,
+          ifHot: true,
+          tags: ['奇幻', '冒险', '魔法']
+        }
+      ],
       
       // 下拉刷新
       refreshing: false,
@@ -97,6 +203,9 @@ Page(
       // 注意：loadRoleList会在getCharacterType中设置第一个nav后自动调用
       this.getSpringFestivalExpired()
       userStore.refreshPointInfo()
+      
+      // 检查是否需要显示群聊红点
+      this.checkGroupRedDot()
     },
 
     onShow: function () {
@@ -161,8 +270,10 @@ Page(
 
     async getCharacterType() {
       const res = await getCharacterType()
+      // 在navList第二个位置添加群聊标签
+      const navList = [...res.slice(0, 1), { id: 'group', name: '群聊' }, ...res.slice(1)]
       this.setData({
-        navList: res
+        navList: navList
       })
       // 默认选中第一个
       if (res && res.length > 0 && !this.data.activeNav) {
@@ -190,15 +301,30 @@ Page(
       const index = e.currentTarget.dataset.index
       if (value === this.data.activeNav) return
 
+      // 如果切换到群聊标签，隐藏红点并标记已查看
+      if (value === 'group') {
+        this.setData({
+          showGroupRedDot: false,
+        })
+        // 标记已查看过群聊
+        wx.setStorageSync('hasSeenGroup', true)
+      }
+
       this.setData({
         activeNav: value,
         roleList: [],
+        groupList: [],
         loadMoreStatus: 0,
       }, () => {
         this.updateShowSwiper()
       })
       this.data.pageNo = 1
-      this.loadRoleList(true)
+
+      if (value === 'group') {
+        this.loadGroupList(true)
+      } else {
+        this.loadRoleList(true)
+      }
       
       // 滚动到选中标签的中间位置
       this.scrollToNavTab(index)
@@ -352,7 +478,12 @@ Page(
       })
 
       this.data.pageNo = 1
-      this.loadRoleList(true)
+
+      if (this.data.activeNav === 'group') {
+        this.loadGroupList(true)
+      } else {
+        this.loadRoleList(true)
+      }
     },
 
     // 刷新超时
@@ -370,9 +501,11 @@ Page(
 
     // 上拉加载更多
     onLoadMore() {
-      const { roleList, loadMoreStatus, totalCount } = this.data
+      const { roleList, groupList, loadMoreStatus, totalCount } = this.data
       
-      if (roleList.length >= totalCount) {
+      const currentList = this.data.activeNav === 'group' ? groupList : roleList
+      
+      if (currentList.length >= totalCount) {
         this.setData({
           loadMoreStatus: 2, // 已全部加载
         })
@@ -381,7 +514,11 @@ Page(
 
       if (loadMoreStatus !== 0) return
 
-      this.loadRoleList(false)
+      if (this.data.activeNav === 'group') {
+        this.loadGroupList(false)
+      } else {
+        this.loadRoleList(false)
+      }
     },
 
     // 重试加载
@@ -455,9 +592,259 @@ Page(
       })
     },
 
+    // 检查群聊红点
+    checkGroupRedDot() {
+      const hasSeenGroup = wx.getStorageSync('hasSeenGroup')
+      if (hasSeenGroup) {
+        this.setData({
+          showGroupRedDot: false
+        })
+      }
+    },
+
+    // 加载群聊列表
+    async loadGroupList(isRefresh = false) {
+      if (isRefresh) {
+        this.data.pageNo = 1
+      } else {
+        this.setData({
+          pageNo: this.data.pageNo + 1
+        })
+      }
+
+      this.setData({
+        loadMoreStatus: 1,
+      })
+
+      try {
+        let records = []
+        try {
+          const res = await getGroupList({})
+          records = res && res.records ? res.records : []
+        } catch (e) {
+          // 接口不存在时使用测试数据
+          records = []
+        }
+        
+        // 如果接口没有返回数据，使用测试数据
+        const mockGroupList = [
+          {
+            id: 'group_1',
+            name: '修仙聊天群',
+            description: '修仙问道，共赴长生之路',
+            backgroundImage: 'https://picsum.photos/702/380?random=1',
+            memberCount: 128,
+            messageCount: 3582,
+            browseCount: 12580,
+            ifHot: true,
+            tags: ['修仙', '玄幻', '古风'],
+            members: [
+              { id: 'm1', portrait: 'https://i.pravatar.cc/100?img=1' },
+              { id: 'm2', portrait: 'https://i.pravatar.cc/100?img=2' },
+              { id: 'm3', portrait: 'https://i.pravatar.cc/100?img=3' },
+              { id: 'm4', portrait: 'https://i.pravatar.cc/100?img=4' },
+              { id: 'm5', portrait: 'https://i.pravatar.cc/100?img=5' },
+              { id: 'm6', portrait: 'https://i.pravatar.cc/100?img=6' }
+            ]
+          },
+          {
+            id: 'group_2',
+            name: '现代都市日常',
+            description: '繁华都市中的温馨故事',
+            backgroundImage: 'https://picsum.photos/702/380?random=2',
+            memberCount: 256,
+            messageCount: 8934,
+            browseCount: 25680,
+            ifHot: true,
+            tags: ['都市', '日常', '治愈'],
+            members: [
+              { id: 'm7', portrait: 'https://i.pravatar.cc/100?img=7' },
+              { id: 'm8', portrait: 'https://i.pravatar.cc/100?img=8' },
+              { id: 'm9', portrait: 'https://i.pravatar.cc/100?img=9' }
+            ]
+          },
+          {
+            id: 'group_3',
+            name: '星际冒险小队',
+            description: '探索宇宙未知，挑战星辰大海',
+            backgroundImage: 'https://picsum.photos/702/380?random=3',
+            memberCount: 64,
+            messageCount: 1205,
+            browseCount: 8920,
+            ifHot: false,
+            tags: ['科幻', '冒险', '星际'],
+            members: [
+              { id: 'm10', portrait: 'https://i.pravatar.cc/100?img=10' },
+              { id: 'm11', portrait: 'https://i.pravatar.cc/100?img=11' },
+              { id: 'm12', portrait: 'https://i.pravatar.cc/100?img=12' },
+              { id: 'm13', portrait: 'https://i.pravatar.cc/100?img=13' },
+              { id: 'm14', portrait: 'https://i.pravatar.cc/100?img=14' }
+            ]
+          },
+          {
+            id: 'group_4',
+            name: '校园青春物语',
+            description: '青春不留遗憾，一起成长吧',
+            backgroundImage: 'https://picsum.photos/702/380?random=4',
+            memberCount: 189,
+            messageCount: 4521,
+            browseCount: 15600,
+            ifHot: false,
+            tags: ['校园', '青春', '纯爱'],
+            members: [
+              { id: 'm15', portrait: 'https://i.pravatar.cc/100?img=15' },
+              { id: 'm16', portrait: 'https://i.pravatar.cc/100?img=16' },
+              { id: 'm17', portrait: 'https://i.pravatar.cc/100?img=17' }
+            ]
+          },
+          {
+            id: 'group_5',
+            name: '异世界转生团',
+            description: '穿越异世界，开启第二人生',
+            backgroundImage: 'https://picsum.photos/702/380?random=5',
+            memberCount: 312,
+            messageCount: 10234,
+            browseCount: 38900,
+            ifHot: true,
+            tags: ['异世界', '转生', '冒险'],
+            members: [
+              { id: 'm18', portrait: 'https://i.pravatar.cc/100?img=18' },
+              { id: 'm19', portrait: 'https://i.pravatar.cc/100?img=19' },
+              { id: 'm20', portrait: 'https://i.pravatar.cc/100?img=20' },
+              { id: 'm21', portrait: 'https://i.pravatar.cc/100?img=21' },
+              { id: 'm22', portrait: 'https://i.pravatar.cc/100?img=22' },
+              { id: 'm23', portrait: 'https://i.pravatar.cc/100?img=23' },
+              { id: 'm24', portrait: 'https://i.pravatar.cc/100?img=24' },
+              { id: 'm25', portrait: 'https://i.pravatar.cc/100?img=25' }
+            ]
+          },
+          {
+            id: 'group_6',
+            name: '古风言情专区',
+            description: '诗词歌赋，诉说千古情缘',
+            backgroundImage: 'https://picsum.photos/702/380?random=6',
+            memberCount: 98,
+            messageCount: 2156,
+            browseCount: 7800,
+            ifHot: false,
+            tags: ['古风', '言情', '虐恋'],
+            members: [
+              { id: 'm26', portrait: 'https://i.pravatar.cc/100?img=26' },
+              { id: 'm27', portrait: 'https://i.pravatar.cc/100?img=27' }
+            ]
+          },
+          {
+            id: 'group_7',
+            name: '悬疑探案组',
+            description: '抽丝剥茧，揭开真相的面纱',
+            backgroundImage: 'https://picsum.photos/702/380?random=7',
+            memberCount: 145,
+            messageCount: 3890,
+            browseCount: 11200,
+            ifHot: false,
+            tags: ['悬疑', '推理', '烧脑'],
+            members: [
+              { id: 'm28', portrait: 'https://i.pravatar.cc/100?img=28' },
+              { id: 'm29', portrait: 'https://i.pravatar.cc/100?img=29' },
+              { id: 'm30', portrait: 'https://i.pravatar.cc/100?img=30' },
+              { id: 'm31', portrait: 'https://i.pravatar.cc/100?img=31' }
+            ]
+          },
+          {
+            id: 'group_8',
+            name: '二次元同好会',
+            description: 'ACG爱好者的聚集地',
+            backgroundImage: 'https://picsum.photos/702/380?random=8',
+            memberCount: 520,
+            messageCount: 15890,
+            browseCount: 45600,
+            ifHot: true,
+            tags: ['二次元', '动漫', '游戏'],
+            members: [
+              { id: 'm32', portrait: 'https://i.pravatar.cc/100?img=32' },
+              { id: 'm33', portrait: 'https://i.pravatar.cc/100?img=33' },
+              { id: 'm34', portrait: 'https://i.pravatar.cc/100?img=34' },
+              { id: 'm35', portrait: 'https://i.pravatar.cc/100?img=35' },
+              { id: 'm36', portrait: 'https://i.pravatar.cc/100?img=36' },
+              { id: 'm37', portrait: 'https://i.pravatar.cc/100?img=37' },
+              { id: 'm38', portrait: 'https://i.pravatar.cc/100?img=38' }
+            ]
+          },
+          {
+            id: 'group_9',
+            name: '职场成长日记',
+            description: '职场小白进阶之路',
+            backgroundImage: 'https://picsum.photos/702/380?random=9',
+            memberCount: 76,
+            messageCount: 1890,
+            browseCount: 6200,
+            ifHot: false,
+            tags: ['职场', '成长', '励志'],
+            members: [
+              { id: 'm39', portrait: 'https://i.pravatar.cc/100?img=39' },
+              { id: 'm40', portrait: 'https://i.pravatar.cc/100?img=40' },
+              { id: 'm41', portrait: 'https://i.pravatar.cc/100?img=41' }
+            ]
+          },
+          {
+            id: 'group_10',
+            name: '奇幻冒险大陆',
+            description: '魔法与剑的世界，等你探索',
+            backgroundImage: 'https://picsum.photos/702/380?random=10',
+            memberCount: 234,
+            messageCount: 6780,
+            browseCount: 19800,
+            ifHot: true,
+            tags: ['奇幻', '冒险', '魔法'],
+            members: [
+              { id: 'm42', portrait: 'https://i.pravatar.cc/100?img=42' },
+              { id: 'm43', portrait: 'https://i.pravatar.cc/100?img=43' },
+              { id: 'm44', portrait: 'https://i.pravatar.cc/100?img=44' },
+              { id: 'm45', portrait: 'https://i.pravatar.cc/100?img=45' },
+              { id: 'm46', portrait: 'https://i.pravatar.cc/100?img=46' }
+            ]
+          }
+        ]
+
+        const finalRecords = records.length > 0 ? records : mockGroupList
+        const newList = isRefresh ? [...finalRecords] : [...this.data.groupList, ...finalRecords]
+        const totalCount = records.length > 0 ? (records.length) : mockGroupList.length
+
+        this.setData({
+          totalCount: totalCount,
+          groupList: newList,
+          loadMoreStatus: newList.length >= totalCount ? 2 : 0,
+          listIsEmpty: newList.length === 0,
+          refreshing: false,
+        })
+      } catch (error) {
+        console.error('加载群聊列表失败:', error)
+        
+        this.setData({
+          loadMoreStatus: 3,
+          refreshing: false,
+        })
+
+        Toast({
+          context: this,
+          selector: '#t-toast',
+          message: '加载失败，请重试',
+        })
+      }
+    },
+
+    // 点击群聊卡片
+    onGroupClick(e) {
+      const { id } = e.currentTarget.dataset
+      wx.navigateTo({
+        url: `/pages/group/chat/index?groupId=${id}`
+      })
+    },
+
     updateShowSwiper() {
       const firstNavId = this.data.navList && this.data.navList.length > 0 ? this.data.navList[0].id : ''
-      const showSwiper = !!firstNavId && this.data.activeNav === firstNavId
+      // 群聊标签时不显示轮播图
+      const showSwiper = !!firstNavId && this.data.activeNav === firstNavId && this.data.activeNav !== 'group'
 
       if (this.data.showSwiper !== showSwiper) {
         this.setData({

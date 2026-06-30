@@ -28,3 +28,6 @@
   id="richtextDialog"
   bind:action="richtextAction"
 />
+
+<!-- 未成年人提醒弹窗 -->
+<minor-tip-dialog id="minorTipDialog" />

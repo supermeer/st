@@ -226,7 +226,91 @@
   justify-content: center;
 }
 
-/* 开场白选择器 */
+/* 开场白区域 */
+.prologue-item {
+  margin-bottom: 28rpx;
+}
+
+/* 开场白角色选择列表 */
+.prologue-characters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20rpx;
+  margin-top: 16rpx;
+  margin-bottom: 20rpx;
+}
+
+.prologue-character {
+  position: relative;
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 24rpx;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.prologue-character.selected {
+  border: 4rpx solid #4A9EFF;
+}
+
+.prologue-character-avatar {
+  width: 100%;
+  height: 100%;
+}
+
+.member-avatar-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 24rpx;
+}
+
+/* 玩家头像 */
+.player-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.player-text {
+  font-size: 22rpx;
+  color: #fff;
+  font-weight: bold;
+}
+
+/* 选中标记 */
+.prologue-character-check {
+  position: absolute;
+  right: 4rpx;
+  bottom: 4rpx;
+}
+
+/* 开场白内容显示 */
+.prologue-content {
+  min-height: 180rpx;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 16rpx;
+  padding: 20rpx;
+  box-sizing: border-box;
+}
+
+.prologue-text {
+  font-size: 26rpx;
+  color: #fff;
+  line-height: 1.6;
+  word-break: break-all;
+}
+
+.prologue-placeholder {
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.3);
+  line-height: 1.6;
+}
+
+/* 开场白选择器（已废弃，保留兼容性） */
 .prologue-selector {
   margin-bottom: 20rpx;
   padding: 20rpx 24rpx;

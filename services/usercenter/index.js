@@ -117,3 +117,43 @@ function mockCheckPhoneStatus() {
 export function updateUserInfo(data) {
   return request.post('/api/v1/user/user/updateUserInfo', data)
 }
+
+/**
+ * 获取未成年人提醒配置
+ * @returns {Promise} - 返回是否显示未成年人提醒弹窗
+ */
+export function getMinorReminderConfig() {
+  if (config.useMock) {
+    return mockGetMinorReminderConfig()
+  }
+  return request.get('/api/v1/user/user/getMinorReminderConfig')
+}
+
+/**
+ * 确认成年人身份（同步到后端）
+ * @param {Object} data - 确认参数
+ * @returns {Promise}
+ */
+export function confirmAdultIdentity(data) {
+  if (config.useMock) {
+    return mockConfirmAdultIdentity()
+  }
+  return request.post('/api/v1/user/user/confirmAdultIdentity', data)
+}
+
+// ==================== Mock Functions ====================
+
+function mockGetMinorReminderConfig() {
+  const { delay } = require('../_utils/delay')
+  return delay().then(() => ({
+    showMinorReminder: true  // 修改为 false 可测试不显示弹窗
+  }))
+}
+
+function mockConfirmAdultIdentity() {
+  const { delay } = require('../_utils/delay')
+  return delay().then(() => ({
+    success: true,
+    message: '确认成功'
+  }))
+}

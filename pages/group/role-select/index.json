@@ -1,0 +1,14 @@
+{
+  "navigationBarTitleText": "选择角色",
+  "navigationStyle": "custom",
+  "enablePullDownRefresh": false,
+  "usingComponents": {
+    "t-pull-down-refresh": "tdesign-miniprogram/pull-down-refresh/pull-down-refresh",
+    "t-image": "tdesign-miniprogram/image/image",
+    "t-icon": "tdesign-miniprogram/icon/icon",
+    "t-toast": "tdesign-miniprogram/toast/toast",
+    "load-more": "/components/load-more/index",
+    "role-hot-container": "/components/role-hot-container/index",
+    "custom-nav": "/components/custom-nav/index"
+  }
+}

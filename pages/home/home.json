@@ -10,6 +10,7 @@
     "background-sheet": "/components/background-sheet/index",
     "activity-dialog": "/components/activity-dialog/index",
     "tip-dialog": "/components/tip-dialog/index",
-    "richtext-dialog": "/components/richtext-dialog/index"
+    "richtext-dialog": "/components/richtext-dialog/index",
+    "minor-tip-dialog": "/components/minor-tip-dialog/index"
   }
 }
