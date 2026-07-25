@@ -1,0 +1,13 @@
+<view class="group-page-container" style="background-image: url('{{showBG ? currentBg : ''}}'); background-repeat: no-repeat; background-position: center center; background-size: cover;">
+  <view class="group-content">
+    <group-chat
+      class="group-container"
+      bind:currentBgChange="onCurrentBgChange"
+      groupInfo="{{groupInfo}}"
+      showBack="{{true}}"
+    />
+  </view>
+</view>
+
+<auth id="auth" check-phone="{{false}}" bind:loginSuccess="loginSuccess" />
+<tip-dialog id="tip-dialog" />

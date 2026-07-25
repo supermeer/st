@@ -1,0 +1,147 @@
+<!--pages/group/detail/index.wxml-->
+<view class="group-detail-page">
+  <!-- 固定背景图 -->
+  <image class="page-bg" src="{{showBG ? currentBg : ''}}" mode="aspectFill"></image>
+  
+  <!-- 固定顶部导航栏 -->
+  <custom-nav title="" showBack="{{true}}" showHome="{{false}}" transparent="{{true}}" />
+  <!-- 可滚动内容区域 -->
+  <scroll-view
+    class="scroll-content"
+    scroll-y
+    enhanced
+    show-scrollbar="{{false}}"
+    scroll-top="{{scrollTop}}"
+    id="groupDetailScrollView"
+    style="height: calc(100% - {{ pageInfo.navHeight + pageInfo.safeAreaBottom}}px)"
+  >
+    
+    <!-- 毛玻璃信息卡片 -->
+    <view class="info-card blur-glass">
+      <view class="group-name-section">
+        <text class="group-name">{{groupInfo.name || '角色名称'}}</text>
+        <t-icon wx:if="{{groupInfo.gender === '男'}}" name="gender-male" class="group-gender male" />
+        <t-icon wx:elif="{{groupInfo.gender === '女'}}" name="gender-female" class="group-gender female" />
+        <view wx:if="{{plotInfo.id}}" class="chat-setting" bind:tap="onDialogSetting">
+          对话设定
+          <t-icon name="chevron-right-s" class="chat-setting-icon" size="24" />
+        </view>
+      </view>
+      <view class="group-tags">
+        <text class="tag" wx:for="{{groupInfo.tags}}" wx:key="index">#{{item.name}}</text>
+      </view>
+      <view wx:if="{{(groupInfo.publishStatus && groupInfo.publishStatus > 0) || groupInfo.isSystem == 1}}" class="role-hot-container">
+        <role-hot-container chatCount="{{groupInfo.messageCount}}" roleHot="{{groupInfo.browseCount}}" />
+      </view>
+    </view>
+
+    <view class="detail-content blur-glass">
+      <!-- 标签页 -->
+      <view class="tabs">
+        <text class="tab {{currentTab === '1' ? 'active' : ''}}" bind:tap="onTabChange" data-tab="1">关于TA</text>
+        <text class="tab {{currentTab === '2' ? 'active' : ''}}" bind:tap="onTabChange" data-tab="2">记忆</text>
+        <!-- <text class="tab {{currentTab === '3' ? 'active' : ''}}" bind:tap="onTabChange" data-tab="3">故事</text> -->
+      </view>
+      
+      <!-- 内容区域 -->
+      <view wx:if="{{currentTab === '1'}}" class="content-section">
+        <view class="section-title-container">
+          <view class="section-title">TA的设定</view>
+        </view>
+        <view class="section-content like-blur-glass">
+          <text>{{descriptionDisplay || groupInfo.description || '暂无描述'}}</text>
+          <text wx:if="{{descriptionNeedFold}}" class="fold-toggle" bind:tap="toggleDescription">
+            {{descriptionExpanded ? '收起 ▴' : '展开 ▾'}}
+          </text>
+        </view>
+        
+        <view class="section-title-container">
+          <view class="section-title">开场白</view>
+        </view>
+        <view class="section-content like-blur-glass">
+          <text>{{prologueDisplay || storyInfo.prologue || '暂无'}}</text>
+          <text wx:if="{{prologueNeedFold}}" class="fold-toggle" bind:tap="togglePrologue">
+            {{prologueExpanded ? '收起 ▴' : '展开 ▾'}}
+          </text>
+        </view>
+
+        <view class="section-title-container" bind:tap="onChatVoice">
+          <view class="section-title">角色声音</view>
+          <t-icon wx:if="{{plotInfo.id}}" name="chevron-right-s" class="section-title-icon" size="28" />
+        </view>
+        <view class="style-content like-blur-glass" bind:tap="onChatStyle">
+          <text>{{groupInfo.userVoiceName || groupInfo.voiceName || ''}}</text>
+          <view class="style-right-content">
+            <text class="style-right-text">{{groupInfo.userVoiceName ? '' : '默认设置'}}</text>
+          </view>
+        </view>
+
+        <!-- <view class="section-title-container" bind:tap="onNewChatStyle">
+          <view class="section-title">对话风格</view>
+          <t-icon wx:if="{{plotInfo.id}}" name="add-circle-filled" class="section-title-icon" size="18" />
+        </view>
+        <view class="style-content like-blur-glass" bind:tap="onChatStyle">
+          <text>{{plotInfo.chatStyle.title || '默认风格'}}</text>
+          <view wx:if="{{plotInfo.id}}" class="style-right-content">
+            <text class="style-right-text">选择风格</text>
+            <t-icon name="chevron-right-s" class="section-title-icon" size="28" />
+          </view>
+        </view> -->
+      </view>
+      <view wx:if="{{currentTab === '2'}}" class="content-section">
+        <view class="section-title-container" bind:tap="onPlotSelect">
+          <view class="section-title">当前剧情</view>
+          <t-icon name="chevron-right-s" class="section-title-icon" size="24" />
+        </view>
+        <view class="plot-content like-blur-glass">
+          <text>{{ plotInfo.id ? plotInfo.title : '暂无'}}</text>
+        </view>
+        <view class="section-title-container" bind:tap="onMySetting">
+          <view class="section-title">我的设定</view>
+          <t-icon wx:if="{{plotInfo.id}}" name="chevron-right-s" class="section-title-icon" size="24" />
+        </view>
+        <view class="setting-block like-blur-glass">
+          <view class="setting-row">
+            <view class="setting-item-inline">
+              <text class="setting-item-title">我的名称</text>
+              <text class="setting-item-value">{{plotInfo.persona.userAddressedAs || '暂无'}}</text>
+            </view>
+            <view class="setting-item-inline">
+              <text class="setting-item-title">性别</text>
+              <text class="setting-item-value">{{plotInfo.persona.gender || '暂无'}}</text>
+            </view>
+          </view>
+          <view class="setting-identity">
+            <text class="setting-item-title">我是谁</text>
+            <view class="identity-content">
+              <text>{{identityDisplay || plotInfo.persona.identity || '暂无'}}</text>
+              <text wx:if="{{identityNeedFold}}" class="fold-toggle-inline" bind:tap="toggleIdentity">
+                {{identityExpanded ? '收起 ▴' : '展开 ▾'}}
+              </text>
+            </view>
+          </view>
+        </view>
+        <view class="section-title-container" bind:tap="onMemorySetting">
+          <view class="section-title">
+            智能体记忆力
+            <t-icon name="info-circle" size="36rpx" color="#ffffff" catchtap="onMemoryDesc" />
+          </view>
+          <text class="section-desc yellow-btn-text">记忆加强</text>
+          <t-icon name="chevron-right-s" class="section-title-icon" size="24" />
+        </view>
+        <memory-display 
+          currentMemory="{{plotInfo.memoryCount}}"
+          memoryOptions="{{memoryOptions}}"
+        />
+      </view>
+    </view>
+    
+  </scroll-view>
+  
+  <!-- 记忆力增强弹窗 -->
+  <memory-sheet id="memorySheet" />
+
+  <!-- 记忆力说明遮罩层 -->
+  <memory-desc-overlay show="{{ showMemoryDescOverlay }}" bind:close="onCloseMemoryDesc" />
+</view>
+<tip-dialog id="tip-dialog" />

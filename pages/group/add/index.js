@@ -1,4 +1,6 @@
 import SystemInfo from '../../../utils/system'
+import { verifyUrls } from '../../../services/file/index'
+import GroupChatService from '../../../services/ai/group-chat'
 
 Page({
   /**
@@ -13,10 +15,11 @@ Page({
       id: null,
       name: '',
       description: '',
-      plotName: '',
+      storyTitle: '',
+      scene: '',
       plotSetting: '',
       prologue: '',
-      prologueCharacterId: null,
+      prologueCharacterId: '',
       userAddressedAs: '',
       identity: '',
       personaGender: '',
@@ -25,14 +28,21 @@ Page({
     showUploader: false,
     currentBg: '',
     
-    selectedCharacters: [],
-    prologueCharacterId: null
+    selectedCharacters: []
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
+
+
+    const storyDialog = this.selectComponent('#story-dialog')
+    storyDialog.show({
+      onConfirm: () => {
+        console.log('onConfirm')
+      }
+    })
     this.setData({
       pageInfo: { ...this.data.pageInfo, ...SystemInfo.getPageInfo() }
     })
@@ -41,15 +51,6 @@ Page({
     if (nav) {
       nav.setBackAction(this.backAction)
     }
-
-    // 测试数据
-    this.setData({
-      selectedCharacters: [
-        { id: 1, name: '测试角色1', avatarUrl: 'https://picsum.photos/200' },
-        { id: 2, name: '测试角色2', avatarUrl: 'https://picsum.photos/201' },
-        { id: 3, name: '测试角色3', avatarUrl: '' }
-      ]
-    })
   },
 
   backAction() {
@@ -95,26 +96,11 @@ Page({
    * 选择开场白角色
    */
   onSelectPrologueCharacter(e) {
-    const { id, name } = e.currentTarget.dataset
-    
-    if (id === 'player') {
-      // 选择玩家作为开场白
-      this.setData({
-        prologueCharacterId: 'player',
-        'formData.prologue': '由玩家开启群聊第一句话。',
-        'formData.prologueCharacterId': 'player'
-      })
-    } else {
-      // 选择群成员作为开场白，回填该角色的开场白
-      const character = this.data.selectedCharacters.find(c => c.id == id)
-      if (character) {
-        this.setData({
-          prologueCharacterId: character.id,
-          'formData.prologue': character.prologue || `你好，我是${name}。`,
-          'formData.prologueCharacterId': character.id
-        })
-      }
-    }
+    const { id } = e.currentTarget.dataset
+    const character = this.data.selectedCharacters.find(c => c.id == id)
+    this.setData({
+      'formData.prologueCharacterId': character?.id || null
+    })
   },
 
   /**
@@ -216,8 +202,8 @@ Page({
   /**
    * 提交表单
    */
-  onSubmit() {
-    const { formData } = this.data
+  async onSubmit() {
+    const { formData, selectedCharacters } = this.data
 
     if (!formData.name) {
       wx.showToast({
@@ -233,43 +219,65 @@ Page({
       })
       return
     }
-    if (!formData.plotName) {
+    if (!selectedCharacters || selectedCharacters.length == 0) {
       wx.showToast({
-        title: '请输入剧情名称',
+        title: '请选择角色',
         icon: 'none'
       })
       return
     }
-    if (!formData.plotSetting) {
+    if (!formData.storyTitle) {
       wx.showToast({
-        title: '请输入剧情设定',
+        title: '请输入故事名称',
         icon: 'none'
       })
       return
     }
-    if (!formData.prologue) {
+    if (!formData.scene) {
       wx.showToast({
-        title: '请输入开场白',
+        title: '请输入故事设定',
         icon: 'none'
       })
       return
     }
+    // if (!formData.prologue) {
+    //   wx.showToast({
+    //     title: '请输入开场白',
+    //     icon: 'none'
+    //   })
+    //   return
+    // }
 
     wx.showLoading({
       title: '保存中...',
       mask: true
     })
 
-    setTimeout(() => {
+    try {
+      const params = {
+        name: formData.name,
+        description: formData.description,
+        characterIds: selectedCharacters.map(c => c.id),
+        defaultBackgroundImage: formData.backgroundImage || '',
+        prologue: formData.prologue,
+        prologueCharacterId: formData.prologueCharacterId || undefined
+      }
+
+      const res = await GroupChatService.createGroupChat(params)
+
       wx.hideLoading()
       wx.showToast({
-        title: '保存成功',
+        title: '创建成功',
         icon: 'success',
         duration: 1000
       })
+
       setTimeout(() => {
         wx.navigateBack()
       }, 1000)
-    }, 1000)
+    } catch (err) {
+      wx.hideLoading()
+      console.error('创建群聊失败:', err)
+    }
   }
 })

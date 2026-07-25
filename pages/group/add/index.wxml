@@ -114,8 +114,8 @@
             class="form-input form-input-inline" 
             placeholder="请输入" 
             placeholder-class="input-placeholder"
-            value="{{formData.plotName}}"
-            data-field="plotName"
+            value="{{formData.storyTitle}}"
+            data-field="storyTitle"
             bindinput="onInputChange"
             maxlength="50"
           />
@@ -127,14 +127,14 @@
             <text class="label-required">*</text>
             <text>故事设定</text>
           </view>
-          <view class="textarea-counter">{{formData.plotSetting.length}}/10000</view>
+          <view class="textarea-counter">{{formData.scene.length || 0}}/10000</view>
           <view class="label-placeholder">决定群聊对话的背景，会对外展示，引起用户的对话兴趣。</view>
           <textarea 
             class="form-textarea" 
             placeholder="如，当前剧情发生在学霸宿舍里，师尊意外穿越成为学霸室友。" 
             placeholder-class="textarea-placeholder"
-            value="{{formData.plotSetting}}"
-            data-field="plotSetting"
+            value="{{formData.scene}}"
+            data-field="scene"
             bindinput="onTextareaChange"
             maxlength="10000"
             auto-height
@@ -149,25 +149,12 @@
           
           <!-- 开场白角色选择 -->
           <view class="prologue-characters">
-            <!-- 玩家选项 -->
-            <view 
-              class="prologue-character {{prologueCharacterId === 'player' ? 'selected' : ''}}"
-              bindtap="onSelectPrologueCharacter"
-              data-id="player"
-            >
-              <view class="prologue-character-avatar player-avatar">
-                <text class="player-text">玩家</text>
-              </view>
-              <view class="prologue-character-check" wx:if="{{prologueCharacterId === 'player'}}">
-                <t-icon name="check-circle-filled" size="28rpx" color="#4A9EFF" />
-              </view>
-            </view>
             
             <!-- 群成员选项 -->
             <view 
               wx:for="{{selectedCharacters}}" 
               wx:key="id" 
-              class="prologue-character {{prologueCharacterId == item.id ? 'selected' : ''}}"
+              class="prologue-character {{formData.prologueCharacterId == item.id ? 'selected' : ''}}"
               bindtap="onSelectPrologueCharacter"
               data-id="{{item.id}}"
               data-name="{{item.name}}"
@@ -181,21 +168,20 @@
               <view wx:else class="prologue-character-avatar member-avatar-placeholder">
                 <t-icon name="user" size="40rpx" color="rgba(255,255,255,0.6)" />
               </view>
-              <view class="prologue-character-check" wx:if="{{prologueCharacterId == item.id}}">
+              <view class="prologue-character-check" wx:if="{{formData.prologueCharacterId == item.id}}">
                 <t-icon name="check-circle-filled" size="28rpx" color="#4A9EFF" />
               </view>
             </view>
           </view>
           
           <view class="form-label">
-            <text class="label-required">*</text>
             <text>开场白</text>
           </view>
           <view class="label-placeholder">决定智能体对话效果，引起用户的对话兴趣。</view>
           <!-- 开场白内容 -->
           <view class="prologue-content">
             <view class="prologue-text" wx:if="{{formData.prologue}}">{{formData.prologue}}</view>
-            <view class="prologue-placeholder" wx:else>请选择开场白角色</view>
+            <view class="prologue-placeholder" wx:else>请输入</view>
           </view>
         </view>
       </view>
@@ -238,3 +224,5 @@
   />
 </view>
 <tip-dialog id="tip-dialog" />
+
+<story-dialog id="story-dialog" />

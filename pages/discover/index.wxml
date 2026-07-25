@@ -134,6 +134,7 @@
           wx:key="id"
           bindtap="onGroupClick"
           data-id="{{item.id}}"
+          data-name="{{item.name}}"
         >
           <!-- 群成员头像列表 -->
           <view class="group-members">

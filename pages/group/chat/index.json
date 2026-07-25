@@ -1,0 +1,12 @@
+{
+  "navigationBarTitleText": "群聊",
+  "onReachBottomDistance": 10,
+  "backgroundTextStyle": "light",
+  "enablePullDownRefresh": false,
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "group-chat": "/components/group-chat/index",
+    "auth": "/components/auth/index",
+    "tip-dialog": "/components/tip-dialog/index"
+  }
+}

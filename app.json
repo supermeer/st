@@ -65,7 +65,9 @@
       "name": "group",
       "pages": [
         "add/index",
-        "role-select/index"
+        "role-select/index",
+        "chat/index",
+        "detail/index"
       ]
     },
     {

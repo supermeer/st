@@ -23,7 +23,7 @@ Page({
     showBG: true
   },
   onLoad(e) {
-    this.testMinorDialog()
+    // this.testMinorDialog()
     const ev = wx.getStorageSync('aE')
     if (ev == '0') {
       this.setData({

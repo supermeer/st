@@ -9,7 +9,8 @@
     "background-sheet": "/components/background-sheet/index",
     "tip-dialog": "/components/tip-dialog/index",
     "image-uploader": "/components/image-uploader/index",
-    "t-image": "tdesign-miniprogram/image/image"
+    "t-image": "tdesign-miniprogram/image/image",
+    "story-dialog": "/components/story-dialog/index"
   },
   "navigationBarTitleText": "创建群聊"
 }

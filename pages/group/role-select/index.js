@@ -179,9 +179,8 @@ Page(
           return
         }
         selectedRoles.push({
-          id: role.id,
-          name: role.name,
-          avatarUrl: role.portrait || role.avatarUrl || ''
+          ...role,
+          avatarUrl: role.avatarUrl || role.backgroundImage || ''
         })
       }
 

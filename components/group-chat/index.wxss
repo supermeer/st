@@ -1,0 +1,135 @@
+.group-chat-container {
+  width: 100%;
+  background: #00000049;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  transition: height 0.2s ease-in-out;
+}
+
+.group-info-container {
+  width: 100%;
+  height: 100rpx;
+  padding: 0 32rpx;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.group-info {
+  box-sizing: border-box;
+  height: 70rpx;
+  color: #fff;
+  border-radius: 35rpx;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 0 24rpx;
+  margin-left: 8rpx;
+}
+
+.group-name {
+  font-size: 26rpx;
+  font-weight: bold;
+  line-height: 1.2;
+}
+
+.group-tip {
+  font-size: 20rpx;
+  color: #aaa;
+  line-height: 1.2;
+}
+
+.message-list {
+  flex: 1;
+  height: 0;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.message-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 100%;
+  box-sizing: border-box;
+  padding: 0 24rpx;
+}
+
+.role-msg-block {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 24rpx;
+  animation: messageSlideIn 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.user-msg-block {
+  margin-bottom: 24rpx;
+  animation: messageSlideIn 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.role-msg-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8rpx;
+}
+
+.role-msg-avatar {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 12rpx;
+  background: #333;
+  flex-shrink: 0;
+}
+
+.role-msg-avatar--placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 24rpx;
+  font-weight: bold;
+  background: linear-gradient(135deg, #6a6a6a, #2c2c2c);
+}
+
+.role-msg-name {
+  font-size: 22rpx;
+  color: #ccc;
+}
+
+.role-msg-bubble {
+  max-width: 80%;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 20rpx;
+  padding: 20rpx 24rpx;
+  color: #fff;
+  font-size: 28rpx;
+  line-height: 1.6;
+  word-break: break-word;
+}
+
+.loading-container {
+  display: flex;
+  align-items: center;
+  min-height: 40rpx;
+}
+
+.input-area {
+  flex: none;
+  background: transparent;
+}
+
+@keyframes messageSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20rpx);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

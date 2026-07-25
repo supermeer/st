@@ -1,0 +1,78 @@
+<view class="group-chat-container" style="height: {{contentHeight}}; padding-top: {{safeAreaTop}}px; padding-bottom: {{keyboardHeight <= 0 && showBack ? safeAreaBottom : 0}}px;">
+  <!-- 顶部群信息 -->
+  <view class="group-info-container">
+    <view wx:if="{{showBack}}" bindtap="onBack">
+      <t-icon name="chevron-left" class="back-icon" size="26" color="#fff" />
+    </view>
+    <view class="group-info blur-glass">
+      <text class="group-name">{{groupInfo.name || '群聊'}}</text>
+      <text class="group-tip">{{roles.length}} 位成员 · 内容由AI生成</text>
+    </view>
+  </view>
+
+  <!-- 消息列表 -->
+  <scroll-view
+    class="message-list"
+    scroll-y="{{true}}"
+    scroll-into-view="{{intoViewId}}"
+    scroll-with-animation="{{scrollAnimation}}"
+    show-scrollbar="{{false}}"
+    upper-threshold="30"
+    bindscroll="onScroll"
+    enable-passive="{{true}}"
+  >
+    <view class="message-content-wrapper">
+      <block wx:for="{{msgList}}" wx:key="id" wx:for-item="msg">
+        <view wx:if="{{msg.senderType === 2}}" class="role-msg-block" id="msg-{{msg.id}}">
+          <!-- 群聊角色气泡：头像 + 名字 + 复用 role-msg 内容部分 -->
+          <view class="role-msg-header">
+            <t-image
+              wx:if="{{msg.avatarUrl}}"
+              class="role-msg-avatar"
+              src="{{msg.avatarUrl}}"
+              mode="aspectFill"
+            />
+            <view wx:else class="role-msg-avatar role-msg-avatar--placeholder">
+              {{msg.roleName ? msg.roleName.slice(0,1) : '?'}}
+            </view>
+            <text class="role-msg-name">{{msg.roleName || '未知角色'}}</text>
+          </view>
+          <view class="role-msg-bubble">
+            <view wx:if="{{msg.loading && !msg.content}}" class="loading-container">
+              <t-loading theme="dots" size="30px" class="loading-icon" />
+            </view>
+            <view wx:else>
+              <view wx:if="{{msg.htmlContent}}" class="markdown-body">
+                <rich-text nodes="{{msg.htmlContent}}"></rich-text>
+              </view>
+              <text wx:else>{{msg.content}}</text>
+            </view>
+          </view>
+        </view>
+        <view wx:else class="user-msg-block" id="msg-{{msg.id}}">
+          <user-msg message="{{msg}}" disabled="{{isGenerating}}" />
+        </view>
+      </block>
+      <view id="bottom-anchor" style="height: 1rpx;"></view>
+    </view>
+  </scroll-view>
+
+  <!-- 底部输入区域：角色条 + 输入框 -->
+  <view class="input-area">
+    <role-bar
+      roles="{{roles}}"
+      active-role-id="{{activeRoleId}}"
+      bind:roleTap="onRoleTap"
+    />
+    <input-box
+      plotId="{{groupInfo.id}}"
+      roleInfo="{{groupInfo}}"
+      disabled="{{isGenerating}}"
+      bind:keyboardHeightChange="onKeyboardHeightChange"
+      bind:inputLineChange="onInputLineChange"
+      bind:sendMessage="sendMessage"
+    />
+  </view>
+</view>
+
+<points-recharge-dialog id="pointsRechargeDialog" />
