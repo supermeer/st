@@ -172,6 +172,10 @@
   margin-top: 4rpx;
 }
 
+.rule-info-item .warn {
+  color: #f00;
+}
+
 .bottom-container {
   z-index: 100;
   position: fixed;

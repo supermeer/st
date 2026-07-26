@@ -23,7 +23,7 @@ page {
   padding: 0 32rpx;
   box-sizing: border-box;
   /* flex: 1; */
-  padding-bottom: 32rpx;
+  padding-bottom: 12rpx;
   overflow: auto;
   /* height: calc(100vh - 44px - env(safe-area-inset-bottom) - env(safe-area-inset-top) - 172rpx); */
   display: flex;
@@ -40,7 +40,7 @@ page {
 
 .user-info {
   width: 100%;
-  margin-top: 30rpx;
+  margin-top: 10rpx;
   display: flex;
   align-items: center;
   color: #fff;
@@ -110,8 +110,8 @@ page {
 
 .score-box {
   width: 100%;
-  padding: 32rpx 24rpx;
-  margin-top: 30rpx;
+  padding: 12rpx 24rpx;
+  margin-top: 12rpx;
   background-size: 100% 100%;
   background-repeat: no-repeat;
   display: flex;
@@ -207,6 +207,59 @@ page {
   margin-left: 12rpx;
 }
 
+/* 一级 tab：智能体 / 群聊 */
+.content-tabs {
+  display: inline-flex;
+  align-items: center;
+  height: 70rpx;
+  padding: 0 12rpx;
+  margin-top: 8rpx;
+  white-space: nowrap;
+}
+
+.content-tab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 24rpx;
+  height: 70rpx;
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #999;
+  white-space: nowrap;
+  transition: all 0.3s;
+}
+
+.content-tab.active {
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 600;
+}
+
+.content-tab-underline {
+  position: absolute;
+  bottom: 8rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 48rpx;
+  height: 6rpx;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  border-radius: 3rpx;
+}
+
+.content-tab-red-dot {
+  position: absolute;
+  top: 10rpx;
+  right: 12rpx;
+  width: 16rpx;
+  height: 16rpx;
+  background-color: #ff4949;
+  border-radius: 50%;
+}
+
 .role-type-tabs {
   width: 100%;
   display: inline-flex;
@@ -239,7 +292,7 @@ page {
   flex-wrap: wrap;
   padding: 16rpx 0;
   gap: 16rpx;
-  max-height: calc(100% - 630rpx);
+  max-height: calc(100% - 500rpx);
   overflow-y: auto;
 }
 
@@ -388,4 +441,118 @@ page {
 .copy-btn {
   color: var(--theme-color);
   flex-shrink: 0;
+}
+
+/* 群聊二级 tab：私密 / 公开 */
+.group-type-tabs {
+  width: 100%;
+  display: inline-flex;
+  height: 70rpx;
+  white-space: nowrap;
+  padding-bottom: 10rpx;
+}
+
+.group-type-tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 24rpx;
+  height: 60rpx;
+  font-weight: bold;
+  color: #999;
+  white-space: nowrap;
+  transition: all 0.3s;
+  margin-left: 20rpx;
+}
+
+.group-type-tab.active {
+  background: rgba(240, 240, 240, 0.2);
+  border-radius: 35rpx;
+  color: #fff;
+}
+
+/* 群聊列表 */
+.group-list {
+  display: flex;
+  flex-direction: column;
+  padding: 16rpx 0;
+  gap: 24rpx;
+}
+
+.group-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20rpx;
+  overflow: hidden;
+  transition: all 0.3s;
+  padding: 24rpx;
+  position: relative;
+}
+
+.group-card:active {
+  transform: scale(0.98);
+  opacity: 0.9;
+}
+
+.group-members {
+  margin-bottom: 20rpx;
+  z-index: 1;
+}
+
+.member-avatar {
+  width: 88rpx;
+  height: 88rpx;
+  margin-right: -16rpx;
+  display: inline-block;
+  border-radius: 50%;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.member-avatar-img {
+  width: 100%;
+  height: 100%;
+}
+
+.group-info {
+  margin-bottom: 16rpx;
+}
+
+.group-name-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12rpx;
+}
+
+.group-name {
+  flex: 1;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #ffffff;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.group-desc {
+  display: block;
+  font-size: 24rpx;
+  color: #999999;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.group-footer {
+  display: flex;
+  align-items: center;
+}
+
+.group-empty-state {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80rpx 32rpx;
+  color: #999;
 }

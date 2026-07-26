@@ -10,6 +10,7 @@ Component({
     contentAlign: '',
     title: null,
     content: '回溯后，该条消息之后的对话将被清除，且不可撤回。',
+    richContent: '',
     cancelText: '取消',
     confirmText: '确认'
   },
@@ -19,6 +20,7 @@ Component({
      * 显示对话框
      * @param {Object} options 配置项
      * @param {String} options.content 提示内容
+     * @param {String|Array} options.richContent 富文本内容
      * @param {String} options.cancelText 取消按钮文字
      * @param {String} options.confirmText 确认按钮文字
      * @param {Function} options.onCancel 取消回调
@@ -30,6 +32,7 @@ Component({
         hideTopIcon = false,
         contentAlign = '',
         content = '回溯后，该条消息之后的对话将被清除，且不可撤回。',
+        richContent = '',
         cancelText = '取消',
         confirmText = '确认',
         onCancel,
@@ -46,6 +49,7 @@ Component({
         contentAlign,
         hideTopIcon,
         content,
+        richContent,
         cancelText,
         confirmText
       })

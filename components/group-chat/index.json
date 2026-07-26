@@ -5,6 +5,7 @@
     "user-msg": "/components/chat/user-msg/index",
     "input-box": "/components/chat/input-box/index",
     "role-bar": "/components/group-chat/role-bar/index",
+    "group-avatar": "/components/group-avatar/index",
     "t-image": "tdesign-miniprogram/image/image",
     "t-icon": "tdesign-miniprogram/icon/icon",
     "t-loading": "tdesign-miniprogram/loading/loading",

@@ -22,6 +22,11 @@
     <text wx:if="{{content}}" class="tip-dialog-content" style="text-align: {{contentAlign}}">
       {{content}}
     </text>
+    <rich-text
+      wx:if="{{richContent}}"
+      class="tip-dialog-rich-content"
+      nodes="{{richContent}}"
+    />
     <view class="btns-top-container">
       <slot name="btns-top" />
     </view>

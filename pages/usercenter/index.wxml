@@ -53,53 +53,121 @@
       </view>
       <t-image wx:if="{{vipInfo.ifVip}}" class="vip-box-icon" src="/static/vip/vip.png"/>
     </view>                                                        
-    <view class="roles-title">
-      智能体
-      <view class="roles-title-desc">(长按智能体卡片可以发布、编辑等)</view>
-    </view>
-    <view class="role-type-tabs">
-      <view 
-        class="role-type-tab {{activeRoleType === item.value ? 'active' : ''}}" 
-        wx:for="{{roleTypeList}}" 
-        wx:key="value"
-        bindtap="onRoleTypeChange"
-        data-value="{{item.value}}"
-        data-index="{{index}}"
-        id="role-tab-{{index}}"
+    <view class="content-tabs">
+      <view
+        class="content-tab {{activeMainTab === 'role' ? 'active' : ''}}"
+        bindtap="onMainTabChange"
+        data-value="role"
       >
-        {{item.name}} {{item.count}}
+        智能体
+        <view class="content-tab-underline" wx:if="{{activeMainTab === 'role'}}"></view>
+      </view>
+      <view
+        class="content-tab {{activeMainTab === 'group' ? 'active' : ''}}"
+        bindtap="onMainTabChange"
+        data-value="group"
+      >
+        <text>群聊</text>
+        <view class="content-tab-red-dot" wx:if="{{showGroupRedDot}}"></view>
+        <view class="content-tab-underline" wx:if="{{activeMainTab === 'group'}}"></view>
       </view>
     </view>
-    <view class="role-list">
-      <view 
-        class="role-card" 
-        wx:for="{{roleList}}" 
-        wx:key="id"
-        style="background-image: url('{{item.backgroundImage || item.avatar}}');"
-        bind:tap="onRoleClick"
-        bind:longpress="onLongPress"
-        data-id="{{item.id}}"
-      >
-        <view wx:if="{{item.publishStatus == 3}}" class="reject-reason-btn" catch:tap="showRejectReason" data-role="{{item}}">查看原因</view>
+
+    <block wx:if="{{activeMainTab === 'role'}}">
+      <view class="roles-title">
+        智能体
+        <view class="roles-title-desc">(长按智能体卡片可以发布、编辑等)</view>
+      </view>
+      <view class="role-type-tabs">
         <view
-          wx:if="{{item._statusBadge && item._statusBadge.text}}"
-          class="role-status-ribbon {{item._statusBadge.className}}"
+          class="role-type-tab {{activeRoleType === item.value ? 'active' : ''}}"
+          wx:for="{{roleTypeList}}"
+          wx:key="value"
+          bindtap="onRoleTypeChange"
+          data-value="{{item.value}}"
+          data-index="{{index}}"
+          id="role-tab-{{index}}"
         >
-          {{item._statusBadge.text}}
+          {{item.name}} {{item.count}}
         </view>
-        <view class="role-info">
-          <view class="role-name-row">
-            <text class="role-name">{{item.name}}</text>
+      </view>
+      <view class="role-list">
+        <view
+          class="role-card"
+          wx:for="{{roleList}}"
+          wx:key="id"
+          style="background-image: url('{{item.backgroundImage || item.avatar}}');"
+          bind:tap="onRoleClick"
+          bind:longpress="onLongPress"
+          data-id="{{item.id}}"
+        >
+          <view wx:if="{{item.publishStatus == 3}}" class="reject-reason-btn" catch:tap="showRejectReason" data-role="{{item}}">查看原因</view>
+          <view
+            wx:if="{{item._statusBadge && item._statusBadge.text}}"
+            class="role-status-ribbon {{item._statusBadge.className}}"
+          >
+            {{item._statusBadge.text}}
           </view>
-          <role-hot-container wx:if="{{item.publishStatus && item.publishStatus != 0}}" chatCount="{{item.messageCount}}" roleHot="{{item.browseCount}}" />
+          <view class="role-info">
+            <view class="role-name-row">
+              <text class="role-name">{{item.name}}</text>
+            </view>
+            <role-hot-container wx:if="{{item.publishStatus && item.publishStatus != 0}}" chatCount="{{item.messageCount}}" roleHot="{{item.browseCount}}" />
+          </view>
+        </view>
+        <view wx:if="{{roleList.length === 0}}" class="role-empty-state">
+          <t-icon name="empty" size="64" color="#ccc" />
+          <text class="empty-text">参与创作者激励活动，奖励超香！<text class="author-btn" bindtap="onActivityClick">查看活动</text></text>
+          <view class="empty-desc" bindtap="createRole"><t-icon class="role-create-btn" name="user-add" size="24" />创建智能体</view>
         </view>
       </view>
-      <view wx:if="{{roleList.length === 0}}" class="role-empty-state">
-        <t-icon name="empty" size="64" color="#ccc" />
-        <text class="empty-text">参与创作者激励活动，奖励超香！<text class="author-btn" bindtap="onActivityClick">查看活动</text></text>
-        <view class="empty-desc" bindtap="createRole"><t-icon class="role-create-btn" name="user-add" size="24" />创建智能体</view>
+    </block>
+
+    <block wx:if="{{activeMainTab === 'group'}}">
+      <view class="group-type-tabs">
+        <view
+          class="group-type-tab {{activeGroupType === item.value ? 'active' : ''}}"
+          wx:for="{{groupTypeList}}"
+          wx:key="value"
+          bindtap="onGroupTypeChange"
+          data-value="{{item.value}}"
+          data-index="{{index}}"
+          id="group-tab-{{index}}"
+        >
+          {{item.name}} {{item.count}}
+        </view>
       </view>
-    </view>
+      <view class="group-list">
+        <view
+          class="group-card"
+          wx:for="{{groupList}}"
+          wx:key="groupChatId"
+          bindtap="onGroupClick"
+          data-groupchatid="{{item.groupChatId}}"
+          data-name="{{item.name}}"
+        >
+          <view class="group-members">
+            <view class="member-avatar" wx:for="{{item.avatarUrls}}" wx:key="id" wx:for-item="member" style="z-index: {{index}}">
+              <image class="member-avatar-img" src="{{member}}" mode="aspectFill" />
+            </view>
+          </view>
+          <view class="group-info">
+            <view class="group-name-row">
+              <text class="group-name">{{item.name}}</text>
+            </view>
+            <text class="group-desc">{{item.description || '暂无简介'}}</text>
+          </view>
+          <view class="group-footer">
+            <role-hot-container chatCount="{{item.messageCount}}" roleHot="{{item.browseCount}}" />
+          </view>
+        </view>
+        <view wx:if="{{groupList.length === 0}}" class="group-empty-state">
+          <t-icon name="empty" size="64" color="#ccc" />
+          <text class="empty-text">暂无群聊</text>
+          <view class="empty-desc" bindtap="onCreateGroup"><t-icon class="role-create-btn" name="user-add" size="24" />创建群聊</view>
+        </view>
+      </view>
+    </block>
   </view>
 </view>
 

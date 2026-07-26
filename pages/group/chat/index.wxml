@@ -3,7 +3,7 @@
     <group-chat
       class="group-container"
       bind:currentBgChange="onCurrentBgChange"
-      groupInfo="{{groupInfo}}"
+      groupInfo="{{groupForm}}"
       showBack="{{true}}"
     />
   </view>

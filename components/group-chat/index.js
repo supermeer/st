@@ -1,15 +1,13 @@
 import systemInfo from '../../utils/system'
-import GroupChatService from '../../services/ai/group-chat'
-import {
-  feedGroupChunk,
-  flushGroupChunk,
-  resolveRoleMeta
-} from '../../utils/groupChunkParser'
+import GroupChatService, {
+  getPlotMessage
+} from '../../services/ai/group-chat'
+import { resolveRoleMeta } from '../../utils/groupChunkParser'
 const { formatMessage } = require('../../utils/msgHandler')
 
 Component({
   properties: {
-    // { id, name, avatarUrl, roles: [...] }
+    // { id, name, avatarUrls, characterIds, roles: [...], plotId }
     groupInfo: {
       type: Object,
       value: {}
@@ -19,8 +17,42 @@ Component({
       value: false
     }
   },
+  observers: {
+    'groupInfo.roles'(roles) {
+      if (Array.isArray(roles)) {
+        this.setData({ roles: roles.map((r) => ({ ...r })) })
+      }
+    },
+    'groupInfo.plotId': function (newVal) {
+      if (newVal) {
+        this.setData({
+          chatDetail: {
+            ...this.data.chatDetail,
+            plotId: newVal
+          },
+          'pagination.plotId': newVal
+        })
+        this.resetPagination()
+        this.getMessageList()
+      } else {
+        this.setData({
+          pagination: {
+            size: 10,
+            current: 1,
+            plotId: null
+          },
+          chatDetail: {
+            ...this.data.chatDetail,
+            plotId: null
+          },
+          msgList: []
+        })
+      }
+    }
+  },
   pageLifetimes: {
     show() {
+      console.log(this.properties.groupInfo, '=======')
       this.getPageInfo()
       this.setData({
         keepFullScreen: wx.getStorageSync('alwaysFullScreen') === 'true'
@@ -61,8 +93,12 @@ Component({
     isGenerating: false,
     userScrolled: false,
     _isAutoScrolling: false,
+    chatDetail: {
+      plotId: null,
+      updateTime: null
+    },
     // 分页
-    pagination: { size: 10, current: 1 }
+    pagination: { size: 10, current: 1, plotId: null }
   },
   methods: {
     onBack() {
@@ -168,9 +204,30 @@ Component({
      * 用户点击发送
      * 复用现有 input-box 的 sendMessage 事件格式：{ content, imageList }
      */
-    sendMessage(e) {
+    async sendMessage(e) {
       const { content, imageList = [] } = e.detail || {}
       if (!content && (!imageList || imageList.length === 0)) return
+
+      // 首次发送时，若还没有 plotId，则先创建一个群聊剧情
+      if (!this.data.chatDetail.plotId) {
+        try {
+          const plotId = await GroupChatService.createPlot({
+            groupId: this.properties.groupInfo.id
+          })
+          this.setData({
+            chatDetail: {
+              ...this.data.chatDetail,
+              plotId: plotId
+            },
+            'pagination.plotId': plotId
+          })
+        } catch (err) {
+          console.error('[group-chat] createPlot failed:', err)
+          wx.showToast({ title: '创建剧情失败', icon: 'none' })
+          return
+        }
+      }
+
       this.setData({ userScrolled: false })
 
       // 先 push 用户消息
@@ -188,14 +245,49 @@ Component({
     },
 
     /**
+     * 把一个 speaker_start 推送成"待填充"的占位 AI 消息，并加入 msgList
+     */
+    _pushSpeakerPlaceholder({ speakerId, speakerName }) {
+      const meta = resolveRoleMeta(this.data.roles, speakerName || speakerId)
+      const aiMsg = {
+        id: speakerId || `a_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+        senderType: 2,
+        content: '',
+        htmlContent: '',
+        thinkContent: '',
+        thinkHtmlContent: '',
+        mainContent: '',
+        hasThinking: false,
+        isThinking: false,
+        loading: true,
+        error: false,
+        time: Date.now(),
+        // 群聊专有字段
+        roleMeta: meta,
+        roleName: meta.name,
+        avatarUrl: meta.avatarUrl,
+        groupRoleId: meta.id
+      }
+      this.setData({
+        msgList: [...this.data.msgList, aiMsg],
+        activeRoleId: meta.id || speakerId || ''
+      })
+    },
+
+    /**
      * 启动群聊流式请求
+     *
+     * 流式事件约定（后端单次返回内可能有多个发言者）：
+     *   { eventType: 'speaker_start', msg: { speakerId, name } }   群成员开始说话
+     *   { eventType: 'text',          msg: '增量正文' }             累加到当前说话者
+     *   { eventType: 'thinking',      msg: '增量思考' }             累加到当前说话者的思考段
+     *   { eventType: 'speaker_end',   msg: { speakerId } }          群成员说话结束（标记 loading=false）
+     *   { eventType: 'aiMessageId',   msg: 'xxx' }                 可选：覆盖占位消息的 id
+     *   { eventType: 'userMessageId', msg: 'xxx' }                 可选：覆盖用户消息的 id
+     *   { eventType: 'modelStatus',   msg: { modelId, status } }   模型状态
      */
     _startStream({ content, imageList }) {
-      // 流式状态：把 isGenerating 设为 true
       this.setData({ isGenerating: true })
-
-      // 解析器状态保存在 this._parserState 中
-      this._parserState = { buffer: '', currentRole: null }
 
       // 防抖刷新
       let updateTimer = null
@@ -216,68 +308,104 @@ Component({
         pendingUpdate = true
       }
 
-      // 把一段已"闭合"的某角色消息真正落地到 msgList
-      const appendCompletedRole = ({ roleName, content: text }) => {
-        const meta = resolveRoleMeta(this.data.roles, roleName)
-        const aiMsg = {
-          id: `a_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
-          senderType: 2,
-          content: text,
-          htmlContent: formatMessage(text || ''),
-          thinkContent: '',
-          thinkHtmlContent: '',
-          mainContent: text || '',
-          hasThinking: false,
-          isThinking: false,
-          loading: false,
-          error: false,
-          time: Date.now(),
-          // 群聊专有字段
-          roleMeta: meta,
-          roleName: meta.name,
-          avatarUrl: meta.avatarUrl,
-          groupRoleId: meta.id
+      // 当前正在说话的角色对应的 msgList 下标
+      let currentSpeakerIdx = -1
+
+      const resolveSpeakerInfo = (raw) => {
+        // msg 可能是字符串（speakerId）或对象 { speakerId, name }
+        if (raw && typeof raw === 'object') {
+          return {
+            speakerId: raw.speakerId || raw.id || raw.roleId || '',
+            name: raw.name || raw.roleName || ''
+          }
         }
-        this.setData({ msgList: [...this.data.msgList, aiMsg] })
-        // 标记当前正在说话的角色（用于底部 role-bar 高亮）
-        if (meta.id) {
-          this.setData({ activeRoleId: meta.id })
-        }
+        return { speakerId: raw || '', name: '' }
       }
 
       GroupChatService.sendMessage(
         {
           groupId: this.properties.groupInfo.id,
           userMessage: content || '',
-          imageList: (imageList || []).map((i) => i.fileKey || i.localUrl)
+          imageList: (imageList || []).map((i) => i.fileKey || i.localUrl),
+          plotId: this.data.chatDetail.plotId
         },
         (eventData) => {
           const payload = eventData && eventData.payload
           if (!payload) return
-          const { type, msg } = payload
+          // 兼容后端可能用 eventType 或 type
+          const eventType = payload.eventType || payload.type
+          const { msg } = payload
 
-          if (type === 'text') {
-            // 群聊：每次 chunk 都喂给解析器，解析器可能吐出多条已闭合的角色消息
-            const { state, completed } = feedGroupChunk(this._parserState, msg)
-            this._parserState = state
-            completed.forEach(appendCompletedRole)
-          } else if (type === 'thinking') {
-            // 思考过程：可以挂到最后一条 AI 消息上（如果存在）
-            const last = this.data.msgList[this.data.msgList.length - 1]
-            if (last && last.senderType === 2) {
-              last.thinkContent = (last.thinkContent || '') + (msg || '')
-              last.thinkHtmlContent = formatMessage(last.thinkContent || '')
-              last.isThinking = true
-              last.hasThinking = true
+          if (eventType === 'speaker_start') {
+            const { speakerId, name } = resolveSpeakerInfo(msg)
+            this._pushSpeakerPlaceholder({ speakerId, speakerName: name })
+            currentSpeakerIdx = this.data.msgList.length - 1
+          } else if (eventType === 'text') {
+            // 把增量文本追加到当前说话者；若还没有 speaker_start 兜底建一个
+            if (currentSpeakerIdx < 0) {
+              this._pushSpeakerPlaceholder({ speakerId: '', speakerName: '' })
+              currentSpeakerIdx = this.data.msgList.length - 1
+            }
+            const cur = this.data.msgList[currentSpeakerIdx]
+            if (cur && cur.senderType === 2) {
+              cur.content = (cur.content || '') + (msg || '')
+              cur.mainContent = cur.content
+              cur.htmlContent = formatMessage(cur.content || '')
+              cur.isThinking = false
               scheduleUpdate()
             }
-          } else if (type === 'roleStart') {
-            // 后端主动告知下一个发言角色：{ roleId }
-            if (msg) {
-              this.setData({ activeRoleId: msg })
+          } else if (eventType === 'thinking') {
+            // 思考过程：挂到当前说话者（如果存在）
+            const target =
+              currentSpeakerIdx >= 0
+                ? this.data.msgList[currentSpeakerIdx]
+                : this.data.msgList[this.data.msgList.length - 1]
+            if (target && target.senderType === 2) {
+              target.thinkContent = (target.thinkContent || '') + (msg || '')
+              target.thinkHtmlContent = formatMessage(target.thinkContent || '')
+              target.isThinking = true
+              target.hasThinking = true
+              scheduleUpdate()
             }
-          } else if (type === 'aiMessageId' || type === 'userMessageId') {
-            // 单聊里的 ID 同步，群聊可暂时忽略
+          } else if (eventType === 'speaker_end') {
+            const { speakerId } = resolveSpeakerInfo(msg)
+            // 优先按 speakerId 匹配；否则就关闭最近一个仍在 loading 的 AI 消息
+            let targetIdx = -1
+            if (speakerId) {
+              targetIdx = this.data.msgList.findIndex(
+                (m) => m.senderType === 2 && m.loading && m.id === speakerId
+              )
+            }
+            if (targetIdx < 0) {
+              for (let i = this.data.msgList.length - 1; i >= 0; i--) {
+                const m = this.data.msgList[i]
+                if (m.senderType === 2 && m.loading) {
+                  targetIdx = i
+                  break
+                }
+              }
+            }
+            if (targetIdx >= 0) {
+              this.data.msgList[targetIdx].loading = false
+              this.data.msgList[targetIdx].isThinking = false
+              // 标记下一个追加文本时的"当前说话者"为空
+              currentSpeakerIdx = -1
+              scheduleUpdate()
+            }
+          } else if (eventType === 'aiMessageId') {
+            // 把最新一条 AI 消息的 id 同步为后端真实 id
+            for (let i = this.data.msgList.length - 1; i >= 0; i--) {
+              if (this.data.msgList[i].senderType === 2) {
+                this.data.msgList[i].id = msg
+                break
+              }
+            }
+          } else if (eventType === 'userMessageId' && this.data.msgList.length >= 2) {
+            // 把倒数第二条（用户消息）的 id 同步为后端真实 id
+            const userMsg = this.data.msgList[this.data.msgList.length - 2]
+            userMsg.id = msg
+          } else if (eventType === 'modelStatus') {
+            // 模型状态：{ modelId, status } —— 群聊暂不弹窗
           }
 
           if (!this.data.userScrolled) this.scrollToBottom()
@@ -289,14 +417,16 @@ Component({
             updateTimer = null
           }
           flushUpdate()
-          // 把 buffer 中剩余的最后一段也补上
-          const tail = flushGroupChunk(this._parserState)
-          tail.forEach(appendCompletedRole)
-          this._parserState = { buffer: '', currentRole: null }
 
-          // 关闭"生成中"标志（按"还有任何消息在 loading"判断；
-          // 群聊里 addAIMessage 已经把 loading 设为 false，这里直接结束即可）
-          this.setData({ isGenerating: false, activeRoleId: '' })
+          // 流结束后，确保所有 AI 消息都退出 loading 态
+          const list = this.data.msgList.map((m) =>
+            m.senderType === 2 && m.loading ? { ...m, loading: false, isThinking: false } : m
+          )
+          this.setData({
+            msgList: list,
+            isGenerating: false,
+            activeRoleId: ''
+          })
           setTimeout(() => this.scrollToBottom(true), 50)
         })
         .catch((err) => {
@@ -309,6 +439,181 @@ Component({
             wx.showToast({ title: '群聊暂时不可用', icon: 'none' })
           }
         })
+    },
+
+    // 下拉刷新处理
+    onLoadMore() {
+      if (this.data.isLoadingMore || !this.data.hasMore) {
+        return
+      }
+      if (!this.data.pagination.plotId) {
+        this.noMoreHandle()
+        return
+      }
+      this.setData({
+        isLoadingMore: true,
+        refresherTriggered: true,
+        topMsg: this.data.msgList[0]
+      })
+      this.loadMoreMessages()
+    },
+    stopRefresh() {
+      this.setData({
+        refresherTriggered: false,
+        isLoadingMore: false
+      })
+    },
+    noMoreHandle() {
+      this.setData({
+        isLoadingMore: false,
+        hasMore: false,
+        refresherTriggered: false
+      })
+    },
+    loadMoreHandle(msgs) {
+      const topMsg = this.data.topMsg
+      const topMsgId = topMsg && topMsg.id ? topMsg.id : null
+      this._isAutoScrolling = true
+      this.setData(
+        {
+          scrollAnimation: false,
+          msgList: [...msgs, ...this.data.msgList],
+          isLoadingMore: false,
+          refresherTriggered: false
+        },
+        () => {
+          if (topMsgId) {
+            this.scrollToView(`msg-${topMsgId}`)
+          }
+          setTimeout(() => {
+            this._isAutoScrolling = false
+            this.setData({ scrollAnimation: true })
+          }, 200)
+        }
+      )
+    },
+    resetLoadStatus() {
+      this.setData({
+        hasMore: true,
+        isLoadingMore: false,
+        refresherTriggered: false
+      })
+    },
+    getMsgListHandle(msgs) {
+      this.setData({ msgList: msgs })
+      this.scrollToBottom()
+    },
+    getMessageList() {
+      if (!this.data.pagination.plotId) {
+        this.setData({ msgList: [] })
+        return
+      }
+      this.resetPagination()
+      getPlotMessage({
+        size: this.data.pagination.size,
+        current: this.data.pagination.current,
+        plotId: this.data.pagination.plotId
+      })
+        .then((res) => {
+          let messageList = []
+          if (res && res.records && Array.isArray(res.records)) {
+            messageList = res.records
+          } else if (Array.isArray(res)) {
+            messageList = res
+          }
+          const formattedMessages = messageList.map((msg) => {
+            if (msg.senderType === 2 && msg.content) {
+              return {
+                ...msg,
+                thinkContent: msg.reasoningContent || '',
+                thinkHtmlContent: formatMessage(msg.reasoningContent || ''),
+                htmlContent: formatMessage(msg.content),
+                mainContent: msg.content,
+                hasThinking: !!msg.reasoningContent
+              }
+            }
+            return msg
+          })
+          const pagination = {
+            current: res.current || this.data.pagination.current,
+            size: res.size || this.data.pagination.size,
+            plotId: this.data.pagination.plotId
+          }
+          const hasMore =
+            res.current && res.pages
+              ? res.current < res.pages
+              : messageList.length >= pagination.size
+          this.setData({
+            msgList: formattedMessages,
+            pagination: pagination,
+            hasMore: hasMore
+          })
+          setTimeout(() => {
+            this.scrollToBottom(true)
+          }, 100)
+        })
+        .catch((err) => {
+          console.error('[group-chat] 获取消息列表失败:', err)
+          this.setData({ msgList: [] })
+        })
+    },
+    loadMoreMessages() {
+      if (!this.data.pagination.plotId) {
+        this.noMoreHandle()
+        return
+      }
+      const nextPage = this.data.pagination.current + 1
+      getPlotMessage({
+        size: this.data.pagination.size,
+        current: nextPage,
+        plotId: this.data.pagination.plotId
+      })
+        .then((res) => {
+          let newMessages = []
+          if (res && res.records && Array.isArray(res.records)) {
+            newMessages = res.records
+          } else if (Array.isArray(res)) {
+            newMessages = res
+          }
+          const formattedMessages = newMessages.map((msg) => {
+            if (msg.senderType === 2 && msg.content) {
+              return { ...msg, htmlContent: formatMessage(msg.content) }
+            }
+            return msg
+          })
+          if (formattedMessages.length === 0) {
+            this.noMoreHandle()
+          } else {
+            const pagination = {
+              ...this.data.pagination,
+              current: res.current || nextPage,
+              size: res.size || this.data.pagination.size
+            }
+            const hasMore =
+              res.current && res.pages
+                ? res.current < res.pages
+                : formattedMessages.length >= pagination.size
+            this.setData({ pagination: pagination, hasMore: hasMore })
+            this.loadMoreHandle(formattedMessages)
+          }
+        })
+        .catch((err) => {
+          console.error('[group-chat] 加载更多消息失败:', err)
+          this.stopRefresh()
+        })
+    },
+    resetPagination() {
+      this.setData({
+        'pagination.current': 1,
+        hasMore: true,
+        isLoadingMore: false,
+        refresherTriggered: false
+      })
+    },
+    scrollToView(id) {
+      setTimeout(() => {
+        this.setData({ intoViewId: id })
+      }, 0)
     },
 
     onButtonClick() {

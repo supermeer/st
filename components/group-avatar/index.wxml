@@ -1,0 +1,12 @@
+<view
+  class="group-avatar group-avatar--{{visibleUrls.length}}"
+  style="width: {{size}}rpx; height: {{size}}rpx; gap: {{gap}}rpx; padding: {{gap}}rpx; background-color: {{backgroundColor}}; --avatar-gap: {{gap}}rpx;"
+>
+  <image
+    wx:for="{{visibleUrls}}"
+    wx:key="*this"
+    class="group-avatar__item"
+    src="{{item}}"
+    mode="aspectFill"
+  />
+</view>

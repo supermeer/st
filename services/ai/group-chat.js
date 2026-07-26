@@ -20,7 +20,7 @@ const GroupChatService = {
    */
   sendMessage(data, onChunk) {
     return request.post(
-      '/api/v1/server/group/generateContent',
+      '/api/v1/server/groupChat/generateContent',
       data,
       {
         enableChunked: true,
@@ -30,7 +30,16 @@ const GroupChatService = {
   },
 
   /**
-   * 获取群聊历史消息
+   * 创建群聊剧情
+   * @param {object} data - { groupId, title?, ... }
+   * @returns {Promise<string>} - 返回新创建的 plotId
+   */
+  createPlot(data) {
+    return request.post('/api/v1/server/plot/createGroupPlot', data)
+  },
+
+  /**
+   * 获取群聊剧情历史消息（分页）
    * 期望返回：{ records: [...], current, size, pages } 或 [...]
    */
   getMessageList(params) {
@@ -50,6 +59,13 @@ const GroupChatService = {
   createGroupChat(data) {
     return request.post('/api/v1/server/groupChat/createGroupChat', data)
   }
+}
+
+/**
+ * 获取群聊剧情历史消息（分页），与单聊 getPlotMessage 保持命名一致
+ */
+export function getPlotMessage(params) {
+  return request.get('/api/v1/server/plot/getGroupPlotMessage', params)
 }
 
 export default GroupChatService

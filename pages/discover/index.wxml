@@ -131,15 +131,15 @@
         <view 
           class="group-card" 
           wx:for="{{groupList}}" 
-          wx:key="id"
+          wx:key="groupChatId"
           bindtap="onGroupClick"
-          data-id="{{item.id}}"
+          data-groupchatid="{{item.groupChatId}}"
           data-name="{{item.name}}"
         >
           <!-- 群成员头像列表 -->
           <view class="group-members">
-            <view class="member-avatar" wx:for="{{item.members}}" wx:key="id" wx:for-item="member" style="z-index: {{index}}">
-              <image class="member-avatar-img" src="{{member.portrait}}" mode="aspectFill" />
+            <view class="member-avatar" wx:for="{{item.avatarUrls}}" wx:key="id" wx:for-item="member" style="z-index: {{index}}">
+              <image class="member-avatar-img" src="{{member}}" mode="aspectFill" />
             </view>
           </view>
           

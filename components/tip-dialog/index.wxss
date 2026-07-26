@@ -145,6 +145,16 @@
   padding: 0 20rpx;
 }
 
+.tip-dialog-rich-content {
+  width: 100%;
+  color: #ffffff;
+  font-size: 28rpx;
+  line-height: 44rpx;
+  margin-bottom: 36rpx;
+  padding: 0 20rpx;
+  box-sizing: border-box;
+}
+
 .btns-top-container {
   margin-bottom: 36rpx;
   padding: 0 20rpx;

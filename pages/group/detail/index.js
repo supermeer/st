@@ -9,6 +9,16 @@ import {
   updatePlot,
   getMemoryType
 } from '../../../services/ai/chat'
+
+const SYNC_PLAYER_VOICE_RICH_CONTENT = `
+  <div style="width: 100%; color: #ffffff; font-size: 26rpx; line-height: 42rpx; text-align: left;">
+    <div style="font-size: 28rpx; font-weight: bold; margin-bottom: 16rpx;">说明</div>
+    <div style="margin-bottom: 12rpx;">1、群内角色，默认使用系统音色</div>
+    <div>2、「<span style="color: #a78bfa;">一键同步玩家音色</span>」，支持批量修改为您对所有角色设置的专属声音。如需修改某角色声音，进入群成员查看设定调整角色声音</div>
+    <div style="margin-top: 32rpx; text-align: center;">您是否一键同步玩家音色？</div>
+  </div>
+`
+
 Page({
   /**
    * 页面的初始数据
@@ -296,6 +306,30 @@ Page({
   //     }
   //   })
   // },
+  showSyncPlayerVoiceDialog(options = {}) {
+    const tipDialog = this.selectComponent('#tip-dialog')
+    if (!tipDialog) return
+
+    const {
+      title = '一键同步玩家音色',
+      richContent = SYNC_PLAYER_VOICE_RICH_CONTENT,
+      cancelText = '取消',
+      confirmText = '一键同步',
+      onCancel,
+      onConfirm
+    } = options
+
+    tipDialog.show({
+      title,
+      content: '',
+      richContent,
+      cancelText,
+      confirmText,
+      onCancel,
+      onConfirm
+    })
+  },
+
   onChatVoice() {
     wx.navigateTo({
       url: `/pages/role/voice-list/index?characterId=${this.data.groupInfo.id || ''}&voiceId=${this.data.groupInfo.userVoiceId || this.data.groupInfo.voiceId || ''}`

@@ -1,6 +1,7 @@
 import userStore from '../../store/user'
 import SystemInfo from '../../utils/system'
 import ActionSheet, { ActionSheetTheme } from 'tdesign-miniprogram/action-sheet'
+import { getUserGroupChatList } from '../../services/group/index'
 import {
   getCharacterList,
   getCurrentPlotByCharacterId,
@@ -52,9 +53,13 @@ function getRoleStatusBadge(role) {
 
 Page({
   data: {
+    activeMainTab: 'role',
     roleList: [],
     privateRoleList: [],
     publicRoleList: [],
+    groupList: [],
+    privateGroupList: [],
+    publicGroupList: [],
     isDev: false,
     pageInfo: {},
     editingRole: null,
@@ -72,6 +77,20 @@ Page({
       }
     ],
     activeRoleType: '1',
+    groupTypeList: [
+      {
+        name: '私密',
+        value: '1',
+        count: 0
+      },
+      {
+        name: '公开',
+        value: '2',
+        count: 0
+      }
+    ],
+    activeGroupType: '1',
+    showGroupRedDot: true,
     contentHeight: '100vh',
     wxCode: 'XYJG_8647902'
   },
@@ -90,6 +109,7 @@ Page({
     this.setData({
       contentHeight: `calc(100vh - ${this.data.pageInfo.safeAreaBottom || 0}px - ${this.data.pageInfo.tabbarHeight || 100}rpx - ${this.data.pageInfo.navHeight}px)`
     })
+    this.checkGroupRedDot()
   },
 
   onShow(e) {
@@ -103,7 +123,9 @@ Page({
     this.getTabBar().init()
     userStore.refreshVipInfo()
     userStore.refreshPointInfo()
+    this.checkGroupRedDot()
     this.getCharacterList()
+    this.getGroupList()
   },
 
   syncRoleListByPublishStatus(allRoleList) {
@@ -224,6 +246,90 @@ Page({
       activeRoleType: value,
       roleList
     })
+  },
+
+  // 一级 tab 切换：智能体 / 群聊
+  onMainTabChange(e) {
+    const value = e.currentTarget.dataset.value
+    if (value === this.data.activeMainTab) return
+
+    // 切到群聊，标记已查看、清掉红点；与 discover 同 key 互通
+    if (value === 'group') {
+      this.setData({ showGroupRedDot: false })
+      wx.setStorageSync('hasSeenGroup', true)
+    }
+
+    this.setData({ activeMainTab: value })
+  },
+
+  // 群聊二级 tab 切换：私密 / 公开
+  onGroupTypeChange(e) {
+    const value = e.currentTarget.dataset.value
+    if (value === this.data.activeGroupType) return
+
+    const groupList = value === '1'
+      ? (this.data.privateGroupList || [])
+      : (this.data.publicGroupList || [])
+
+    this.setData({
+      activeGroupType: value,
+      groupList
+    })
+  },
+
+  // 同步群聊红点状态（与 discover 共享 hasSeenGroup）
+  checkGroupRedDot() {
+    const hasSeenGroup = wx.getStorageSync('hasSeenGroup')
+    if (hasSeenGroup && this.data.showGroupRedDot) {
+      this.setData({ showGroupRedDot: false })
+    }
+  },
+
+  // 加载群聊列表（私密 + 公开分别请求一次，复用 discover 已有的接口）
+  getGroupList() {
+    Promise.all([
+      getUserGroupChatList({ current: 1, size: 1000, ifSystem: false }),
+      getUserGroupChatList({ current: 1, size: 1000, ifSystem: true })
+    ]).then(([privateRes, publicRes]) => {
+      const privateRecords = (privateRes && privateRes.records) || []
+      const publicRecords = (publicRes && publicRes.records) || []
+
+      const groupTypeList = (this.data.groupTypeList || []).map((t) => {
+        if (t.value === '1') return { ...t, count: privateRecords.length }
+        if (t.value === '2') return { ...t, count: publicRecords.length }
+        return t
+      })
+
+      const groupList = this.data.activeGroupType === '1' ? privateRecords : publicRecords
+
+      this.setData({
+        privateGroupList: privateRecords,
+        publicGroupList: publicRecords,
+        groupTypeList,
+        groupList
+      })
+    }).catch((err) => {
+      console.error('加载群聊列表失败:', err)
+    })
+  },
+
+  // 点击群聊卡片
+  onGroupClick(e) {
+    const { groupchatid, name } = e.currentTarget.dataset
+    wx.navigateTo({
+      url: `/pages/group/chat/index?groupId=${groupchatid}&name=${encodeURIComponent(name || '')}`
+    })
+  },
+
+  // 群聊为空时的创建按钮，复用 TabBar 的创建选择弹窗
+  onCreateGroup() {
+    const tabBar = this.getTabBar()
+    if (tabBar) {
+      const dialog = tabBar.selectComponent('#createSelectDialog')
+      if (dialog) {
+        dialog.show()
+      }
+    }
   },
 
   async onActivityClick() {

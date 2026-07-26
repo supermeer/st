@@ -1,64 +1,134 @@
 import SystemInfo from '../../../utils/system'
-import { getGroupDetail } from '../../../services/group/index'
+import {
+  getGroupDetail,
+  getCurrentPlotByGroupChatId
+} from '../../../services/group/index'
 Page({
   data: {
     pageInfo: {},
     paddingBtm: 0,
-    groupInfo: {},
+    groupForm: {
+      id: null,
+      type: '',
+      plotId: null
+    },
+    shareForm: {
+      id: null,
+      type: '',
+      plotId: null,
+      isShare: false
+    },
     currentBg: '',
     showBG: true
   },
   onLoad(e) {
     const ev = wx.getStorageSync('aE')
     if (ev == '0') {
-      this.setData({ showBG: false })
+      this.setData({
+        showBG: false
+      })
     }
-    const { groupId, name } = e
+    const { groupId, plotId, isShare, id } = e
     const pageInfo = SystemInfo.getPageInfo()
-    this.setData({
-      groupInfo: {
-        id: groupId,
-        name: name || '群聊',
-        roles: []
-      },
-      pageInfo: { ...pageInfo, ...this.data.pageInfo },
-      paddingBtm: `${pageInfo.safeAreaBottom}px`
+    if (!isShare) {
+      this.setData({
+        groupForm: {
+          type: '',
+          id: groupId || null,
+          plotId: plotId || null
+        },
+        'shareForm.isShare': isShare,
+        pageInfo: { ...pageInfo, ...this.data.pageInfo },
+        paddingBtm: `${pageInfo.safeAreaBottom}px`
+      })
+    } else {
+      this.setData({
+        shareForm: {
+          type: '',
+          id: groupId || null,
+          plotId: plotId || null,
+          isShare: true
+        },
+        pageInfo: { ...pageInfo, ...this.data.pageInfo },
+        paddingBtm: `${pageInfo.safeAreaBottom}px`
+      })
+      const authRef =
+        this.selectComponent('auth') || this.selectComponent('#auth')
+      authRef && authRef.login()
+    }
+  },
+  loginSuccess() {
+    this.getCurrentPlotByGroupChatId(this.data.shareForm.id)
+  },
+  getCurrentPlotByGroupChatId(id) {
+    if (!id) return
+    getCurrentPlotByGroupChatId(id).then((res) => {
+      this.setData({
+        groupForm: {
+          ...this.data.groupForm,
+          ...this.data.shareForm,
+          plotId: res && res.plotId ? res.plotId : null
+        }
+      })
+      // 拉一次群聊基础信息，渲染群成员
+      this.fetchGroupDetail(id)
     })
-    this.fetchGroupDetail(groupId)
   },
   fetchGroupDetail(id) {
     if (!id) return
     getGroupDetail(id)
       .then((res) => {
         const data = res || {}
-        const rawMembers = data.roles || data.members || data.characterList || []
-        const roles = rawMembers.map((m) => ({
-          id: m.id,
-          name: m.name || m.roleName || '',
-          avatarUrl: m.avatarUrl || m.portrait || ''
+        const rawMembers = Array.isArray(data.characterIds) ? data.characterIds : []
+        const rawAvatars = Array.isArray(data.avatarUrls) ? data.avatarUrls : []
+        const rawNames = Array.isArray(data.characterNames) ? data.characterNames : []
+        console.log('[groupDetail]', {
+          characterIds: rawMembers,
+          avatarUrls: rawAvatars,
+          characterNames: rawNames
+        })
+        const roles = rawMembers.map((cid, index) => ({
+          id: cid,
+          name: rawNames[index] || data.name || `角色${index + 1}`,
+          avatarUrl: rawAvatars[index] || ''
         }))
         this.setData({
-          groupInfo: {
-            ...this.data.groupInfo,
+          groupForm: {
+            ...this.data.groupForm,
             ...data,
-            id,
-            name: data.name || data.groupName || this.data.groupInfo.name,
             roles
           }
         })
       })
-      .catch(() => {
-        // 接口未就绪时不阻断页面渲染
+      .catch((err) => {
+        console.error('[fetchGroupDetail] failed:', err)
       })
   },
+  changePlot(event) {
+    const { plotId, type, groupId } = event
+    this.setData({
+      groupForm: {
+        ...this.data.groupForm,
+        plotId: plotId,
+        type: type,
+        id: groupId
+      }
+    })
+  },
   onCurrentBgChange(e) {
-    this.setData({ currentBg: e.detail.bg || '' })
+    this.setCurrentBg(e.detail.bg)
+  },
+  setCurrentBg(e) {
+    this.setData({
+      currentBg: e
+    })
   },
   async onShareAppMessage() {
-    const { id, name } = this.data.groupInfo || {}
+    const { id, plotId } = this.data.groupForm || {}
+    const path = `/pages/group/chat/index?groupId=${id}${plotId ? `&plotId=${plotId}` : ''}`
     return {
-      title: name || '星语酒馆',
-      path: `/pages/group/chat/index?groupId=${id}`,
+      title: '星语酒馆',
+      path,
       imageUrl: '/images/global-share.jpg'
     }
   }

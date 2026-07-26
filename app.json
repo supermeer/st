@@ -13,7 +13,7 @@
     "pages/lock/index",
     "pages/lock/set/index"
   ],
-  "subpackages": [
+  "subPackages": [
     {
       "root": "pages/share",
       "name": "share",

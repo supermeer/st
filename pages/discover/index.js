@@ -3,7 +3,7 @@ import SystemInfo from '../../utils/system'
 import Toast from 'tdesign-miniprogram/toast/index'
 import { getCharacterType, getCharacterTag, getCharacterList, getCurrentPlotByCharacterId } from '../../services/role/index'
 import { getModelList, getGlobalModelId, isSpringFestivalExpired, getActivity } from '../../services/usercenter/index'
-import { getUserGroupChatList } from '../../services/group/index'
+import { getUserGroupChatList, getCurrentPlotByGroupChatId } from '../../services/group/index'
 
 Page(
   Object.assign({}, userStore.data, {
@@ -550,11 +550,11 @@ Page(
     },
 
     // 点击群聊卡片
-    onGroupClick(e) {
-      const { id } = e.currentTarget.dataset
-      const target = e.currentTarget.dataset.name || ''
+    async onGroupClick(e) {
+      const { groupchatid } = e.currentTarget.dataset
+      const res = await getCurrentPlotByGroupChatId(groupchatid)
       wx.navigateTo({
-        url: `/pages/group/chat/index?groupId=${id}&name=${encodeURIComponent(target)}`
+        url: `/pages/group/chat/index?groupId=${groupchatid}${res && res.plotId ? `&plotId=${res.plotId}` : ''}`
       })
     },
 
