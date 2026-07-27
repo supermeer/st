@@ -501,3 +501,11 @@
     opacity: 1;
   }
 }
+
+/* 底部输入区域容器：角色条 + 输入框 */
+.input-area {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  flex-shrink: 0;
+}

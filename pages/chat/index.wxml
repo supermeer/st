@@ -6,6 +6,8 @@
       bind:retryMessage="onRetryMessage"
       bind:currentBgChange="onCurrentBgChange"
       roleInfo="{{roleForm}}"
+      groupInfo="{{groupForm}}"
+      plotInfo="{{plotInfo}}"
       showBack="{{true}}"
       isShare="{{shareForm.isShare}}"
     />

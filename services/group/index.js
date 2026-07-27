@@ -16,3 +16,7 @@ export function getGroupChatList(params) {
 export function getUserGroupChatList(params) {
     return request.get('/api/v1/server/groupChat/getGroupChatList', params)
 }
+
+export function getCurrentPlotByGroupChatId(groupChatId) {
+    return request.get(`/api/v1/server/plot/getCurrentPlotByGroupChatId?groupChatId=${groupChatId}`)
+}
