@@ -59,18 +59,30 @@
       <view id="bottom-anchor" style="height: 1rpx;"></view>
     </view>
   </scroll-view>
-  <input-box
-    class="input-box"
-    plotId="{{chatDetail.plotId}}"
-    roleInfo="{{roleDetail}}"
-    disabled="{{isGenerating}}"
-    bind:keyboardHeightChange="onKeyboardHeightChange"
-    bind:inputLineChange="onInputLineChange"
-    bind:hideTabbar="hideTabbar"
-    bind:showTabbar="showTabbar"
-    bind:sendMessage="sendMessage"
-    bind:buttonClick="onButtonClick"
-  />
+  <!-- 底部输入区域：角色条 + 输入框 -->
+  <view class="input-area">
+    <role-bar
+      wx:if="{{plotInfo.isGroupChat}}"
+      class="role-bar"
+      roles="{{groupInfo.roles}}"
+      active-role-id="{{activeRoleId}}"
+      bind:roleTap="onRoleTap"
+    />
+    <input-box
+      class="input-box"
+      plotId="{{chatDetail.plotId}}"
+      roleInfo="{{roleDetail}}"
+      groupInfo="{{groupInfo}}"
+      isGroupChat="{{plotInfo.isGroupChat}}"
+      disabled="{{isGenerating}}"
+      bind:keyboardHeightChange="onKeyboardHeightChange"
+      bind:inputLineChange="onInputLineChange"
+      bind:hideTabbar="hideTabbar"
+      bind:showTabbar="showTabbar"
+      bind:sendMessage="sendMessage"
+      bind:buttonClick="onButtonClick"
+    />
+  </view>
 </view>
 
 <block wx:if="{{maskVisible}}">

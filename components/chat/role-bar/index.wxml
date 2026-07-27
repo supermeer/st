@@ -1,0 +1,29 @@
+<view class="role-bar">
+  <scroll-view
+    class="role-bar-scroll"
+    scroll-x="{{true}}"
+    enable-flex="{{true}}"
+    enhanced="{{true}}"
+    show-scrollbar="{{false}}"
+  >
+    <view class="role-bar-list">
+      <view
+        wx:for="{{roles}}"
+        wx:key="id"
+        class="role-bar-item {{activeRoleId === item.id ? 'active' : ''}}"
+        data-id="{{item.id}}"
+        data-name="{{item.name}}"
+        bindtap="onRoleTap"
+      >
+        <view class="role-bar-avatar-wrapper">
+          <t-image
+            class="role-bar-avatar"
+            src="{{item.avatarUrl}}"
+            mode="aspectFill"
+          />
+        </view>
+        <text class="role-bar-name">{{item.name}}</text>
+      </view>
+    </view>
+  </scroll-view>
+</view>

@@ -5,14 +5,23 @@ import {
   shareCharacter,
   enterFromDiscover
 } from '../../services/role/index'
+import { getCurrentPlotByGroupChatId } from '../../services/group/index'
 Page({
   data: {
     pageInfo: {},
     paddingBtm: 0,
-    roleForm: {
+    plotInfo: {
       id: null,
       type: '',
-      plotId: null
+      isGroupChat: false
+    },
+    roleForm: {
+      id: null,
+      type: ''
+    },
+    groupForm: {
+      id: null,
+      type: ''
     },
     shareForm: {
       id: null,
@@ -30,15 +39,36 @@ Page({
         showBG: false
       })
     }
-    const { plotId, characterId, isShare, id, isDiscover = false } = e
+    const { plotId, characterId, isShare, id, isDiscover = false, groupId } = e
+    if (groupId) {
+      this.setData({
+        plotInfo: {
+          ...this.data.plotInfo,
+          isGroupChat: true
+        },
+        groupForm: {
+          id: groupId,
+          type: 'group'
+        }
+      })
+    }
+    this.setData({
+      plotInfo: {
+        ...this.data.plotInfo,
+        id: plotId || null
+      }
+    })
     const pageInfo = SystemInfo.getPageInfo()
     isDiscover && enterFromDiscover({id: characterId, characterId})
     if (!isShare) {
       this.setData({
         roleForm: {
           type: '',
-          id: characterId || null,
-          plotId: plotId || null
+          id: characterId || null
+        },
+        groupForm: {
+          id: groupId || null,
+          type: 'group'
         },
         'shareForm.isShare': isShare,
         pageInfo: { ...pageInfo, ...this.data.pageInfo },
@@ -61,15 +91,32 @@ Page({
     }
   },
   loginSuccess() {
-    this.getCurrentPlotByCharacterId(this.data.shareForm.id)
+    if (this.data.plotInfo.isGroupChat) {
+      this.getCurrentPlotByGroupId(this.data.groupForm.id)
+    } else {
+      this.getCurrentPlotByCharacterId(this.data.shareForm.id)
+    }
+  },
+  getCurrentPlotByGroupId(id) {
+    getCurrentPlotByGroupChatId(id).then((res) => {
+      this.setData({
+        plotInfo: {
+          ...this.data.plotInfo,
+          id: res && res.plotId ? res.plotId : null
+        }
+      })
+    })
   },
   getCurrentPlotByCharacterId(id) {
     getCurrentPlotByCharacterId(id).then((res) => {
       this.setData({
+        plotInfo: {
+          ...this.data.plotInfo,
+          id: res && res.plotId ? res.plotId : null
+        },
         roleForm: {
           ...this.data.roleForm,
-          ...this.data.shareForm,
-          plotId: res && res.plotId ? res.plotId : null
+          ...this.data.shareForm
         }
       })
     })
@@ -77,11 +124,9 @@ Page({
   changePlot(event) {
     const { plotId, type, characterId } = event
     this.setData({
-      roleForm: {
-        ...this.data.roleForm,
-        plotId: plotId,
-        type: type,
-        id: characterId
+      plotInfo: {
+        ...this.data.plotInfo,
+        id: plotId || null
       }
     })
   },

@@ -7,11 +7,20 @@ import {
   forkPlotFromMessage,
   rollbackPlotMessage
 } from '../../services/ai/chat'
+import { getCurrentPlotByGroupChatId, getGroupDetail } from '../../services/group/index'
 import { getCharacterDetail } from '../../services/role/index'
 const { formatMessage } = require('../../utils/msgHandler')
 Component({
   properties: {
     roleInfo: {
+      type: Object,
+      value: {}
+    },
+    groupInfo: {
+      type: Object,
+      value: {}
+    },
+    plotInfo: {
       type: Object,
       value: {}
     },
@@ -36,7 +45,7 @@ Component({
       this.setData({
         keepFullScreen: wx.getStorageSync('alwaysFullScreen') === 'true'
       })
-      this.getRoleInfo()
+      this.getChatInfo()
       // 当前所在页面每次显示时都会触发
       // 1. 重置键盘高度相关状态，避免沿用上一次的高度
       this.setData({
@@ -67,7 +76,22 @@ Component({
   observers: {
     'roleInfo.id': function (newVal) {
       if (newVal) {
-        this.getRoleInfo()
+        this.getChatInfo()
+      }
+    },
+    'groupInfo.id': function (newVal) {
+      if (newVal) {
+        this.getChatInfo(newVal)
+      }
+    },
+    'plotInfo.id': function (newVal) {
+      if (newVal) {
+        this.setData({
+          chatDetail: {
+            ...this.data.chatDetail,
+            plotId: newVal
+          }
+        })
       }
     },
     'roleInfo.plotId': function (newVal) {
@@ -173,7 +197,8 @@ Component({
       size: 10, // 每页数量
       current: 1, // 当前页码
       plotId: null // 剧情ID
-    }
+    },
+    activeRoleId: '' // 当前正在发言的角色ID（用于群聊角色条高亮）
   },
   methods: {
     // 处理子组件蒙版显示/隐藏事件
@@ -376,21 +401,40 @@ Component({
         tabbarHeight: pageInfo.tabbarHeight
       })
     },
-    getRoleInfo() {
-      if (!this.properties.roleInfo.id) {
+    getChatInfo() {
+      if (!this.properties.roleInfo.id && !this.data.groupInfo.id) {
         return
       }
-      getCharacterDetail(this.properties.roleInfo.id).then((res) => {
-        this.setData({
-          roleDetail: {
-            ...this.data.roleDetail,
-            ...res
-          },
-          currentStoryDetail: {
-            ...this.data.currentStoryDetail,
-            ...res.defaultStoryDetail
-          }
-        })
+      const method = this.data.plotInfo.isGroupChat ? getGroupDetail : getCharacterDetail
+      method(this.properties.roleInfo.id || this.data.groupInfo.id).then((res) => {
+        if (this.data.plotInfo.isGroupChat) {
+          const data = res || {}
+          const rawMembers = data.roles || data.members || data.characterList || []
+          const roles = rawMembers.map((m) => ({
+            id: m.id,
+            name: m.name || m.roleName || '',
+            avatarUrl: m.avatarUrl || m.portrait || ''
+          }))
+          this.setData({
+            groupInfo: {
+              ...this.data.groupInfo,
+              ...data,
+              name: data.name || data.groupName || this.data.groupInfo.name,
+              roles
+            }
+          })
+        } else {
+          this.setData({
+            roleDetail: {
+              ...this.data.roleDetail,
+              ...res
+            },
+            currentStoryDetail: {
+              ...this.data.currentStoryDetail,
+              ...res.defaultStoryDetail
+            }
+          })
+        }
         let bg =
           res.backgroundImage ||
           res.defaultStoryDetail.defaultBackgroundImage ||
@@ -766,6 +810,11 @@ Component({
       wx.navigateTo({
         url: `/pages/role/role-detail/index?characterId=${this.properties.roleInfo.id}&plotId=${this.data.chatDetail.plotId || ''}`
       })
+    },
+    // 角色条点击事件（用于群聊场景）
+    onRoleTap(e) {
+      const { id, name } = e.detail || {}
+      wx.showToast({ title: `${name}`, icon: 'none' })
     },
     // 下拉刷新处理
     onLoadMore() {
