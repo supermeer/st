@@ -549,15 +549,6 @@ Page(
       }
     },
 
-    // 点击群聊卡片
-    async onGroupClick(e) {
-      const { groupchatid } = e.currentTarget.dataset
-      const res = await getCurrentPlotByGroupChatId(groupchatid)
-      wx.navigateTo({
-        url: `/pages/group/chat/index?groupId=${groupchatid}${res && res.plotId ? `&plotId=${res.plotId}` : ''}`
-      })
-    },
-
     updateShowSwiper() {
       const firstNavId = this.data.navList && this.data.navList.length > 0 ? this.data.navList[0].id : ''
       // 群聊标签时不显示轮播图
@@ -646,6 +637,14 @@ Page(
           isInvite: true
         })
       }
+    },
+    // 点击群聊卡片
+    async onGroupClick(e) {
+      const { groupchatid } = e.currentTarget.dataset
+      const res = await getCurrentPlotByGroupChatId(groupchatid)
+      wx.navigateTo({
+        url: `/pages/chat/index?groupId=${groupchatid}&plotId=${res && res.plotId ? res.plotId : ''}`
+      })
     },
     // 点击角色卡片
     async onRoleClick(e) {

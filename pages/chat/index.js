@@ -5,7 +5,7 @@ import {
   shareCharacter,
   enterFromDiscover
 } from '../../services/role/index'
-import { getCurrentPlotByGroupChatId } from '../../services/group/index'
+import { getCurrentPlotByGroupChatId, getGroupDetail } from '../../services/group/index'
 Page({
   data: {
     pageInfo: {},
@@ -40,21 +40,10 @@ Page({
       })
     }
     const { plotId, characterId, isShare, id, isDiscover = false, groupId } = e
-    if (groupId) {
-      this.setData({
-        plotInfo: {
-          ...this.data.plotInfo,
-          isGroupChat: true
-        },
-        groupForm: {
-          id: groupId,
-          type: 'group'
-        }
-      })
-    }
     this.setData({
       plotInfo: {
         ...this.data.plotInfo,
+        isGroupChat: !!groupId,
         id: plotId || null
       }
     })
@@ -140,10 +129,18 @@ Page({
   },
   async onShareAppMessage() {
     const { id } = this.data.roleForm || {}
+    const groupId = this.data.groupForm.id || ''
     shareCharacter({characterId: id})
-    let path = `/pages/chat/index?characterId=${id}&isShare=${true}`
-    const characterDetail = await getCharacterDetail(id)
-    if (characterDetail.isSystem != 1) {
+    let path = `/pages/chat/index?characterId=${id || ''}&groupId=${groupId || ''}&isShare=${true}`
+    let isSystem = false;
+    if (id) {
+      const characterDetail = await getCharacterDetail(id)
+      isSystem = characterDetail.isSystem == 1
+    } else {
+      const groupInfo = await getGroupDetail(groupId)
+      isSystem = groupInfo.isSystem == 1
+    }
+    if (!isSystem) {
       path = '/pages/home/home'
     }
     return {

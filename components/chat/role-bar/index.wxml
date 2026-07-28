@@ -22,7 +22,7 @@
             mode="aspectFill"
           />
         </view>
-        <text class="role-bar-name">{{item.name}}</text>
+        <text class="role-bar-name">{{item.name}}abc</text>
       </view>
     </view>
   </scroll-view>

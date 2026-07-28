@@ -1,5 +1,9 @@
 <view class="role-msg-wrapper">
   <!-- 消息容器 -->
+  <view class="role-info">
+    <t-image class="avatar" src="{{message.avatarUrl}}" mode="aspectFill" />
+    {{message.roleName}}
+  </view>
   <view 
     class="msg-container mes_text" 
     id="msg-content-{{message.id}}"

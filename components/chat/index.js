@@ -35,8 +35,6 @@ Component({
   },
   lifetimes: {
     attached: function () {
-      // this.getPageInfo()
-      // this.getRoleInfo()
     }
   },
   pageLifetimes: {
@@ -90,16 +88,6 @@ Component({
           chatDetail: {
             ...this.data.chatDetail,
             plotId: newVal
-          }
-        })
-      }
-    },
-    'roleInfo.plotId': function (newVal) {
-      if (newVal) {
-        this.setData({
-          chatDetail: {
-            ...this.data.chatDetail,
-            plotId: newVal
           },
           'pagination.plotId': newVal
         })
@@ -148,6 +136,12 @@ Component({
       name: '',
       avatarUrl: '',
       description: ''
+    },
+    groupDetail: {
+      name: '',
+      avatarUrl: '',
+      description: '',
+      roles: [],
     },
     avatarUrl: null,
     currentStoryDetail: {},
@@ -407,80 +401,84 @@ Component({
       }
       const method = this.data.plotInfo.isGroupChat ? getGroupDetail : getCharacterDetail
       method(this.properties.roleInfo.id || this.data.groupInfo.id).then((res) => {
+        let detailData = {}
         if (this.data.plotInfo.isGroupChat) {
           const data = res || {}
-          const rawMembers = data.roles || data.members || data.characterList || []
-          const roles = rawMembers.map((m) => ({
-            id: m.id,
-            name: m.name || m.roleName || '',
-            avatarUrl: m.avatarUrl || m.portrait || ''
+          const rawMembers = data.characterIds
+          const roles = rawMembers.map((m, index) => ({
+            id: m,
+            avatarUrl: data.avatarUrls[index]
           }))
-          this.setData({
-            groupInfo: {
-              ...this.data.groupInfo,
+          detailData = {
+            groupDetail: {
+              ...this.data.groupDetail,
               ...data,
-              name: data.name || data.groupName || this.data.groupInfo.name,
               roles
             }
-          })
+          }
         } else {
-          this.setData({
+          detailData = {
             roleDetail: {
               ...this.data.roleDetail,
               ...res
-            },
-            currentStoryDetail: {
-              ...this.data.currentStoryDetail,
-              ...res.defaultStoryDetail
             }
-          })
+          }
         }
-        let bg =
-          res.backgroundImage ||
-          res.defaultStoryDetail.defaultBackgroundImage ||
-          ''
-        if (!res.currentPlotId) {
-          // 处理剧情文本折叠（默认故事）
-          const scene = res.defaultStoryDetail?.scene || ''
-          const needFold = scene.length > 60
-          const display =
-            needFold && !this.data.sceneExpanded
-              ? scene.slice(0, 60) + '…'
-              : scene
+        this.setData({
+          ...detailData,
+          currentStoryDetail: {
+            ...this.data.currentStoryDetail,
+            storyId: res.defaultStoryId,
+            ...res.defaultStoryDetail
+          },
 
-          const defaultMsg = {
-            senderType: 2, // AI/角色消息
-            content: this.data.currentStoryDetail.prologue,
-            htmlContent: formatMessage(this.data.currentStoryDetail.prologue),
-            loading: false,
-            time: Date.now()
-          }
+        })
+        // let bg =
+        //   res.backgroundImage ||
+        //   res.defaultStoryDetail.defaultBackgroundImage ||
+        //   ''
+        // if (!res.currentPlotId) {
+        //   // 处理剧情文本折叠（默认故事）
+        //   const scene = res.defaultStoryDetail?.scene || ''
+        //   const needFold = scene.length > 60
+        //   const display =
+        //     needFold && !this.data.sceneExpanded
+        //       ? scene.slice(0, 60) + '…'
+        //       : scene
 
-          this.setData({
-            msgList: defaultMsg.content ? [defaultMsg] : [],
-            sceneNeedFold: needFold,
-            sceneDisplay: display,
-            hasMore: false
-          })
-        } else {
-          if (
-            res.currentPlotId === this.data.chatDetail.plotId &&
-            res.plotDetailVO.updateTime > this.data.chatDetail.updateTime
-          ) {
-            this.setData({
-              'pagination.current': 1
-            })
-            this.getMessageList()
-          }
-          bg = res.plotDetailVO.backgroundImage
-          // 处理剧情文本折叠（剧情详情，如果plotDetailVO没有scene则使用defaultStoryDetail的）
-          const plotScene =
-            res.plotDetailVO?.scene || res.plotDetailVO?.story?.scene || ''
-          const plotNeedFold = plotScene.length > 60
-          const plotDisplay =
-            plotNeedFold && !this.data.sceneExpanded
-              ? plotScene.slice(0, 60) + '…'
-              : plotScene
+        //   const defaultMsg = {
+        //     senderType: 2, // AI/角色消息
+        //     content: this.data.currentStoryDetail.prologue,
+        //     htmlContent: formatMessage(this.data.currentStoryDetail.prologue),
+        //     loading: false,
+        //     time: Date.now()
+        //   }
+
+        //   this.setData({
+        //     msgList: defaultMsg.content ? [defaultMsg] : [],
+        //     sceneNeedFold: needFold,
+        //     sceneDisplay: display,
+        //     hasMore: false
+        //   })
+        // } else {
+        //   if (
+        //     res.currentPlotId === this.data.chatDetail.plotId &&
+        //     res.plotDetailVO.updateTime > this.data.chatDetail.updateTime
+        //   ) {
+        //     this.setData({
+        //       'pagination.current': 1
+        //     })
+        //     this.getMessageList()
+        //   }
+        //   bg = res.plotDetailVO.backgroundImage
+        //   // 处理剧情文本折叠（剧情详情，如果plotDetailVO没有scene则使用defaultStoryDetail的）
+        //   const plotScene =
+        //     res.plotDetailVO?.scene || res.plotDetailVO?.story?.scene || ''
+        //   const plotNeedFold = plotScene.length > 60
+        //   const plotDisplay =
+        //     plotNeedFold && !this.data.sceneExpanded
+        //       ? plotScene.slice(0, 60) + '…'
+        //       : plotScene
 
           this.setData({
             chatDetail: {
@@ -494,13 +492,13 @@ Component({
             sceneNeedFold: plotNeedFold,
             sceneDisplay: plotDisplay
           })
-        }
-        this.triggerEvent('currentBgChange', {
-          bg
-        })
-        this.setData({
-          avatarUrl: bg
-        })
+        // }
+        // this.triggerEvent('currentBgChange', {
+        //   bg
+        // })
+        // this.setData({
+        //   avatarUrl: bg
+        // })
       })
     },
     getNewMessage() {
@@ -518,7 +516,9 @@ Component({
       }
       if (!this.data.chatDetail.plotId) {
         const plotId = await ChatService.createPlot({
-          characterId: this.properties.roleInfo.id
+          characterId: this.properties.roleInfo.id || undefined,
+          groupChatId: this.properties.groupInfo.id || undefined,
+          storyId: this.data.currentStoryDetail.storyId || undefined,
         })
         this.setData({
           chatDetail: {
@@ -585,7 +585,7 @@ Component({
           const url = eventData.payload.url
           const type = eventData.payload.type
           const latestMessage = this.data.msgList[this.data.msgList.length - 1]
-          if (!latestMessage.loading) {
+          if (!latestMessage.loading && type !== 'group_chat_end') {
             this.addAIMessage()
           } else {
             if (type === 'text') {
@@ -652,12 +652,37 @@ Component({
                 })
               }
             }
+            if (type === 'speaker_end') {
+              const lastMsg = this.data.msgList[this.data.msgList.length - 1]
+              if (lastMsg) {
+                lastMsg.loading = false
+                this.setData({
+                  msgList: [...this.data.msgList]
+                })
+                scheduleUpdate()
+              }
+            }
+            if (type === 'speaker_start') {
+              const obj = JSON.parse(msg || '{}')
+              console.log(obj)
+              const lastMsg = this.data.msgList[this.data.msgList.length - 1]
+              if (lastMsg) {
+                lastMsg.loading = true
+                lastMsg.avatarUrl = obj.speakerAvatar || ''
+                lastMsg.roleName = obj.speakerName || ''
+                this.setData({
+                  msgList: [...this.data.msgList]
+                })
+                console.log(obj)
+              }
+            }
           }
           // 仅在用户未手动滚动时自动滚动到底部
           if (!this.data.userScrolled) {
             this.scrollToBottom()
           }
-        }
+        },
+        this.data.plotInfo.isGroupChat
       )
         .then((res) => {
           // 流式完成时，确保所有待处理的更新被刷新

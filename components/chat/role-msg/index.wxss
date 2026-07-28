@@ -3,6 +3,23 @@
   width: 100%;
 }
 
+.role-info {
+  display: flex;
+  align-items: center;
+  padding-left: 24rpx;
+  color: #ddd;
+  font-weight: bold;
+  font-size: 32rpx;
+  padding-bottom: 24rpx;
+}
+.avatar {
+  width: 80rpx;
+  height: 80rpx;
+  overflow: hidden;
+  border-radius: 40rpx;
+  margin-right: 12rpx;
+}
+
 .msg-container {
   width: 100%;
   padding-left: 24rpx;

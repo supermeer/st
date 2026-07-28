@@ -8,8 +8,12 @@ const ChatService = {
    * @param {string} content - 消息内容
    * @returns {Promise} - 返回Promise对象
    */
-  sendMessage(data, onChunk) {
-    return request.post('/api/v1/server/plot/generateContent', data, {
+  sendMessage(data, onChunk, isGroup = false) {
+    let url = '/api/v1/server/plot/generateContent'
+    if (isGroup) {
+      url = '/api/v1/server/groupChat/generateContent'
+    }
+    return request.post(url, data, {
       enableChunked: true,
       onChunk
     })

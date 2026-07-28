@@ -1,7 +1,6 @@
 .role-bar {
   width: 100%;
   box-sizing: border-box;
-  background: rgba(0, 0, 0, 0.35);
   -webkit-backdrop-filter: blur(20rpx);
   backdrop-filter: blur(20rpx);
   padding: 16rpx 0;
@@ -22,13 +21,14 @@
 
 .role-bar-item {
   display: inline-flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   margin: 0 12rpx;
-  width: 96rpx;
   flex-shrink: 0;
+  padding: 0 12rpx 0 0;
   transition: transform 0.2s ease;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 20rpx;
 }
 
 .role-bar-item:active {
@@ -36,8 +36,8 @@
 }
 
 .role-bar-avatar-wrapper {
-  width: 80rpx;
-  height: 80rpx;
+  width: 40rpx;
+  height: 40rpx;
   border-radius: 50%;
   padding: 4rpx;
   box-sizing: border-box;
@@ -59,13 +59,13 @@
 }
 
 .role-bar-name {
-  margin-top: 8rpx;
   font-size: 22rpx;
   color: #fff;
   max-width: 96rpx;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  margin-left: 12rpx;
 }
 
 .role-bar-item.active .role-bar-name {

@@ -4,7 +4,7 @@
     <view wx:if="{{showBack}}" bindtap="onBack">
       <t-icon name="chevron-left" class="back-icon" size="26" color="#fff" />
     </view>
-    <view class="role-info blur-glass" bindtap="goRoleInfo">
+    <view wx:if="{{!plotInfo.isGroupChat}}" class="role-info blur-glass" bindtap="goRoleInfo">
       <t-image class="role-avatar" src="{{avatarUrl}}" mode="aspectFill" />
       <view class="role-msg">
         <text class="role-name">{{roleDetail.name}}</text>
@@ -12,6 +12,19 @@
         <!-- <text class="role-job">{{roleDetail.description}}</text> -->
       </view>
       <t-icon name="setting-1" class="role-detail-icon" size="18" color="#ddd" />
+    </view>
+    <view wx:else class="group-info blur-glass">
+      <group-avatar
+        class="group-info-avatar"
+        urls="{{groupDetail.avatarUrls}}"
+        size="{{56}}"
+        gap="{{2}}"
+        background-color="rgba(255, 255, 255, 0.16)"
+      />
+      <view class="group-info-content">
+        <text class="group-name">{{groupDetail.name || '群聊'}}（{{groupDetail.roles.length || roles.length}}）</text>
+        <text class="group-tip">内容由AI生成</text>
+      </view>
     </view>
   </view>
   <scroll-view 
@@ -64,7 +77,7 @@
     <role-bar
       wx:if="{{plotInfo.isGroupChat}}"
       class="role-bar"
-      roles="{{groupInfo.roles}}"
+      roles="{{groupDetail.roles}}"
       active-role-id="{{activeRoleId}}"
       bind:roleTap="onRoleTap"
     />
