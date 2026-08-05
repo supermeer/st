@@ -10,6 +10,8 @@ Component({
     btns: Array,
     message: Object,
     roleDetail: Object,
+    groupDetail: Object,
+    plotInfo: Object,
     disabled: {
       type: Boolean,
       value: false
@@ -173,6 +175,9 @@ Component({
         showTip: false
       })
       wx.setStorageSync('tipMark', true)
+    },
+    changePlot() {
+      this.triggerEvent('changePlot')
     }
   }
 })

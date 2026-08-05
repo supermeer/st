@@ -13,7 +13,7 @@
       </view>
       <t-icon name="setting-1" class="role-detail-icon" size="18" color="#ddd" />
     </view>
-    <view wx:else class="group-info blur-glass">
+    <view wx:else class="group-info blur-glass" bindtap="groupInfo">
       <group-avatar
         class="group-info-avatar"
         urls="{{groupDetail.avatarUrls}}"
@@ -25,6 +25,7 @@
         <text class="group-name">{{groupDetail.name || '群聊'}}（{{groupDetail.roles.length || roles.length}}）</text>
         <text class="group-tip">内容由AI生成</text>
       </view>
+      <t-icon name="setting-1" class="role-detail-icon" size="18" color="#ddd" />
     </view>
   </view>
   <scroll-view 
@@ -61,7 +62,18 @@
         </text>
       </view>
       <view wx:for="{{msgList}}" wx:key="id" id="msg-{{item.id}}">
-        <role-msg wx:if="{{item.senderType === 2}}" class="message-item" message="{{item}}" isLatest="{{index === msgList.length - 1}}" disabled="{{isGenerating}}" bind:buttonClick="onButtonClick" bind:maskShow="onMaskShow" roleDetail="{{roleDetail}}" />
+        <role-msg
+          wx:if="{{item.senderType === 2}}"
+          class="message-item"
+          message="{{item}}"
+          isLatest="{{index === msgList.length - 1}}"
+          disabled="{{isGenerating}}"
+          bind:buttonClick="onButtonClick"
+          bind:maskShow="onMaskShow"
+          roleDetail="{{roleDetail}}"
+          groupDetail="{{groupDetail}}"
+          plotInfo="{{plotInfo}}"
+        />
         <user-msg wx:if="{{item.senderType === 1}}" class="message-item" message="{{item}}" disabled="{{isGenerating}}" bind:buttonClick="onButtonClick" bind:maskShow="onMaskShow" />
       </view>
       <view wx:if="{{msgList.length > 0 && msgList[msgList.length - 1].error}}" class="retry-container">
@@ -86,7 +98,7 @@
       plotId="{{chatDetail.plotId}}"
       roleInfo="{{roleDetail}}"
       groupInfo="{{groupInfo}}"
-      isGroupChat="{{plotInfo.isGroupChat}}"
+      plotInfo="{{chatDetail}}"
       disabled="{{isGenerating}}"
       bind:keyboardHeightChange="onKeyboardHeightChange"
       bind:inputLineChange="onInputLineChange"
@@ -175,3 +187,5 @@
 
 <model-err-dialog id="modelErrDialog" />
 <model-sheet id="modelSheet" />
+
+<story-dialog id="story-dialog" />

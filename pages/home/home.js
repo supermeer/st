@@ -9,10 +9,19 @@ Page({
     isLogin: false,
     pageInfo: {},
     paddingBtm: 0,
+    plotInfo: {
+      id: null,
+      type: '',
+      isGroupChat: false
+    },
     roleForm: {
       id: null,
       type: '',
       plotId: null
+    },
+    groupForm: {
+      id: null,
+      type: ''
     },
     isInvite: false,
     inviteForm: {
@@ -145,14 +154,29 @@ Page({
   },
   getHomePlotMessage() {
     getHomePlotMessage().then((res) => {
-      if (res.plotId && this.data.roleForm.plotId === res.plotId) {
+      if (res.plotId && this.data.plotInfo.id === res.plotId) {
         return
       }
+      if (res.groupChatId) {
+        this.setData({
+          groupForm: {
+            id: res.groupChatId || null
+          }
+        })
+      }
+      if (res.characterId) {
+        this.setData({
+          roleForm: {
+            type: res.type,
+            id: res.characterId || null,
+            // plotId: res.plotId || null
+          }
+        })
+      }
       this.setData({
-        roleForm: {
-          type: res.type,
-          id: res.characterId || null,
-          plotId: res.plotId || null
+        plotInfo: {
+          id: res.plotId || null,
+          type: res.type || ''
         }
       })
     })

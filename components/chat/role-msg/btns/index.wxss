@@ -30,6 +30,10 @@
     height: 40rpx;
 }
 
+.btm-image-left {
+    margin-right: 8rpx;
+}
+
 .btn-text {
     font-size: 24rpx;
     color: #ddd;
@@ -62,4 +66,11 @@
 .btm-close-text {
     color: #bbb;
     margin-left: 24rpx;
+}
+
+.btm-change-text {
+    color: #de1c24;
+    font-weight: bold;
+    font-size: 26rpx;
+    margin-left: 12rpx;
 }

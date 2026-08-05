@@ -2,6 +2,8 @@ Component({
   properties: {
     message: Object,
     roleDetail: Object,
+    groupDetail: Object,
+    plotInfo: Object,
     isLatest: Boolean,
     disabled: {
       type: Boolean,

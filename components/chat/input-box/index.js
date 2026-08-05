@@ -1,10 +1,13 @@
 import { inspirationReply } from '../../../services/ai/chat'
 Component({
   properties: {
-    plotId: {
-      type: String
+    plotInfo: {
+      type: Object
     },
     roleInfo: {
+      type: Object
+    },
+    groupInfo: {
       type: Object
     },
     disabled: {
@@ -529,7 +532,8 @@ Component({
     },
     getInspiration() {
       inspirationReply({
-        plotId: this.properties.plotId,
+        plotId: this.properties.plotInfo.id,
+        groupId: this.properties.groupInfo.id,
         characterId: this.properties.roleInfo.id
       })
         .then((res) => {

@@ -531,6 +531,7 @@ Component({
       // 发送新消息时重置用户滚动状态，恢复自动滚动
       this.setData({ userScrolled: false })
       const msg = this.addUserMessage(content, imageList)
+      // tolist群聊 手动发送 
       this.setData({
         operatingForm: {
           operate: 'sendMessage',
@@ -543,7 +544,7 @@ Component({
       })
     },
 
-    generateRequest(type, requestData) {
+    generateRequest(type, requestData, roleList = []) {
       const { content, imageList } = requestData
       let fileKeys = []
       if (imageList && imageList.length > 0) {
@@ -578,6 +579,7 @@ Component({
         {
           userMessage: content || '',
           imageList: fileKeys,
+          characterIds: roleList && roleList.length > 0 ? roleList : undefined,
           plotId: this.data.chatDetail.plotId
         },
         (eventData) => {
@@ -662,20 +664,15 @@ Component({
                 scheduleUpdate()
               }
             }
-            if (type === 'speaker_start') {
-              const obj = JSON.parse(msg || '{}')
-              console.log(obj)
-              const lastMsg = this.data.msgList[this.data.msgList.length - 1]
-              if (lastMsg) {
-                lastMsg.loading = true
-                lastMsg.avatarUrl = obj.speakerAvatar || ''
-                lastMsg.roleName = obj.speakerName || ''
-                this.setData({
-                  msgList: [...this.data.msgList]
-                })
-                console.log(obj)
-              }
-            }
+          }
+          if (type === 'speaker_start') {
+            const lastMsg = this.data.msgList[this.data.msgList.length - 1]
+            const obj = JSON.parse(msg || '{}')
+            lastMsg.avatarUrl = obj.speakerAvatar || ''
+            lastMsg.roleName = obj.speakerName || ''
+            this.setData({
+              msgList: [...this.data.msgList]
+            })
           }
           // 仅在用户未手动滚动时自动滚动到底部
           if (!this.data.userScrolled) {
@@ -836,10 +833,14 @@ Component({
         url: `/pages/role/role-detail/index?characterId=${this.properties.roleInfo.id}&plotId=${this.data.chatDetail.plotId || ''}`
       })
     },
+    groupInfo() {
+      wx.navigateTo({
+        url: `/pages/group/detail/index?groupId=${this.properties.groupInfo.groupId || ''}`
+      })
+    },
     // 角色条点击事件（用于群聊场景）
     onRoleTap(e) {
-      const { id, name } = e.detail || {}
-      wx.showToast({ title: `${name}`, icon: 'none' })
+      this.generateRequest('sendMessage', {}, [e.detail.id])
     },
     // 下拉刷新处理
     onLoadMore() {
@@ -1100,7 +1101,7 @@ Component({
     /**
      * 添加 AI 消息（初始为 loading 状态）
      */
-    addAIMessage() {
+    addAIMessage(roleInfo = {}) {
       const aiMsg = {
         id: Date.now(),
         senderType: 2, // AI/角色消息
@@ -1113,7 +1114,8 @@ Component({
         hasThinking: false, // 是否有思考过程
         isThinking: false, // 是否正在思考中
         loading: true,
-        time: Date.now()
+        time: Date.now(),
+        ...roleInfo
       }
 
       this.setData({
@@ -1211,6 +1213,7 @@ Component({
                 getCurrentPages()[getCurrentPages().length - 1]
               currentPage.changePlot({
                 characterId: this.properties.roleInfo.id,
+                groupId: this.data.groupInfo.groupId,
                 plotId: res,
                 type: 'history'
               })
@@ -1273,6 +1276,7 @@ Component({
                 getCurrentPages()[getCurrentPages().length - 1]
               currentPage.changePlot({
                 characterId: characterId,
+                groupId: this.data.groupInfo.groupId,
                 plotId: res,
                 type: 'new'
               })
@@ -1289,6 +1293,13 @@ Component({
               title: '复制成功',
               icon: 'none'
             })
+          }
+        })
+      } else if (e.detail.action === 'changePlot') {
+        const storyDialog = this.selectComponent('#story-dialog')
+        storyDialog.show({
+          onConfirm: () => {
+            console.log('onConfirm')
           }
         })
       }

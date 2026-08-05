@@ -16,10 +16,16 @@
     <text class="btn-text">播放</text>
   </view>
 
-  <view wx:if="{{showTip && isLatest}}" class="bottom-line">
+  <view wx:if="{{showTip && isLatest && !plotInfo.isGroupChat}}" class="bottom-line">
     <text class="btm-text">如果不知道回什么，可以点击</text>
     <image class="btm-image" src="/static/chat/linggan.png" />
     <text class="btm-close-text" catchtap="closeTip">不再提示</text>
+  </view>
+
+  <view wx:if="{{showTip && isLatest && plotInfo.isGroupChat }}" class="bottom-line">
+    <image class="btm-image btm-image-left" src="/static/activity/new_model_icon.png" />
+    <text class="btm-text">剧情、开场没意思？我来</text>
+    <text class="btm-change-text" data-action="changePlot" catchtap="onBtnClick">换个开场~</text>
   </view>
   
 </view>

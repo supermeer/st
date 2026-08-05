@@ -12,6 +12,10 @@ export function getGroupChatList(params) {
     return request.get('/api/v1/server/group/getGroupChatList', params)
 }
 
+export function shareGroup(data) {
+    return request.post('/api/v1/server/group/shareGroup', data)
+}
+
 // 群聊列表接口（用户端）
 export function getUserGroupChatList(params) {
     return request.get('/api/v1/server/groupChat/getGroupChatList', params)

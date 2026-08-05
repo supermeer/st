@@ -13,10 +13,10 @@
   padding-bottom: 24rpx;
 }
 .avatar {
-  width: 80rpx;
-  height: 80rpx;
+  width: 100rpx;
+  height: 100rpx;
   overflow: hidden;
-  border-radius: 40rpx;
+  border-radius: 50rpx;
   margin-right: 12rpx;
 }
 

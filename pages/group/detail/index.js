@@ -1,9 +1,8 @@
 import SystemInfo from '../../../utils/system'
 import {
-  getCharacterDetail,
-  shareCharacter,
-  getStoryDetail
-} from '../../../services/role/index'
+  getGroupDetail,
+  shareGroup
+} from '../../../services/group/index'
 import {
   getPlotDetail,
   updatePlot,
@@ -83,12 +82,6 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-    const memorySheet = this.selectComponent('#story-dialog')
-    memorySheet.show({
-      onConfirm: () => {
-        console.log('onConfirm')
-      }
-    })
     const ev = wx.getStorageSync('aE')
     if (ev == '0') {
       this.setData({
@@ -96,11 +89,11 @@ Page({
       })
     }
     // 获取传递的参数
-    if (options.characterId) {
+    if (options.groupId) {
       this.setData({
         groupInfo: {
           ...this.data.groupInfo,
-          id: options.characterId
+          id: options.groupId
         }
       })
     }
@@ -118,7 +111,7 @@ Page({
     }
   },
   loadGroupDetail(id) {
-    getCharacterDetail(id).then((res) => {
+    getGroupDetail(id).then((res) => {
       const merged = {
         ...this.data.groupInfo,
         ...res
@@ -332,7 +325,7 @@ Page({
 
   onChatVoice() {
     wx.navigateTo({
-      url: `/pages/role/voice-list/index?characterId=${this.data.groupInfo.id || ''}&voiceId=${this.data.groupInfo.userVoiceId || this.data.groupInfo.voiceId || ''}`
+      url: `/pages/role/voice-list/index?groupId=${this.data.groupInfo.id || ''}&voiceId=${this.data.groupInfo.userVoiceId || this.data.groupInfo.voiceId || ''}`
     })
   },
 
@@ -410,8 +403,8 @@ Page({
   },
   async onShareAppMessage() {
     const { id, isSystem } = this.data.groupInfo || {}
-    shareCharacter({characterId: id})
-    let path = `/pages/chat/index?characterId=${id}&isShare=${true}`
+    shareGroup({groupId: id})
+    let path = `/pages/chat/index?groupId=${id}&isShare=${true}`
     if (isSystem != 1) {
       path = '/pages/home/home'
     }
