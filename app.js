@@ -155,7 +155,8 @@ App({
     if (
       config.baseUrl === 'http://192.168.1.44:19000' ||
       config.baseUrl === 'http://10.0.106.58:19000' ||
-      config.baseUrl === 'https://www.yours-x.com/character-test'
+      config.baseUrl === 'https://www.yours-x.com/character-test' ||
+      config.baseUrl === 'https://www.yours-x.com/character-audit'
     ) {
       aE = 1
     }

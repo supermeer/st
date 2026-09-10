@@ -68,12 +68,16 @@ export function getChatStyleList(params) {
     return request.get('/api/v1/server/story/getChatStyleList', params)
 }
 
-export function getPlotListByCharacterId(characterId) {
-    return request.get(`/api/v1/server/plot/getPlotListByCharacterId?characterId=${characterId}`)
+export function getPlotListByCharacterId(params) {
+    return request.get(`/api/v1/server/plot/getPlotListByCharacterId`, params)
 }
 
 export function getCharacterDetail(characterId, ifReplace = 1) {
     return request.get(`/api/v1/server/character/getCharacterDetail?characterId=${characterId}&ifReplace=${ifReplace}`)
+}
+
+export function getCharacterDetailByParams(params) {
+    return request.get(`/api/v1/server/character/getCharacterDetail`, {...params, ifReplace: params.ifReplace || 1})
 }
 
 export function restorePlotChatStyle(data) {

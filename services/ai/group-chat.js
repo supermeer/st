@@ -58,6 +58,13 @@ const GroupChatService = {
    */
   createGroupChat(data) {
     return request.post('/api/v1/server/groupChat/createGroupChat', data)
+  },
+
+  /**
+   * 更新群聊
+   */
+  updateGroupChat(data) {
+    return request.post('/api/v1/server/groupChat/updateGroupChat', data)
   }
 }
 
@@ -66,6 +73,20 @@ const GroupChatService = {
  */
 export function getPlotMessage(params) {
   return request.get('/api/v1/server/plot/getGroupPlotMessage', params)
+}
+
+/**
+ * 获取群聊剧情列表
+ */
+export function getPlotListByGroupChatId(params) {
+  return request.get('/api/v1/server/groupChat/getPlotListByGroupChatId', params)
+}
+
+/**
+ * 获取故事列表
+ */
+export function getStoryList(params) {
+  return request.get('/api/v1/server/story/getStoryList', params)
 }
 
 export default GroupChatService

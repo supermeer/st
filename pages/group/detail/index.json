@@ -10,7 +10,8 @@
     "memory-display": "/components/memory-display/index",
     "role-hot-container": "/components/role-hot-container/index",
     "tip-dialog": "/components/tip-dialog/index",
-    "story-dialog": "/components/story-dialog/index"
+    "story-dialog": "/components/story-dialog/index",
+    "t-image": "tdesign-miniprogram/image/image"
   },
   "navigationBarTitleText": "角色详情"
 }

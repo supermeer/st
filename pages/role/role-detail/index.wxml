@@ -39,7 +39,9 @@
       <!-- 标签页 -->
       <view class="tabs">
         <text class="tab {{currentTab === '1' ? 'active' : ''}}" bind:tap="onTabChange" data-tab="1">关于TA</text>
-        <text class="tab {{currentTab === '2' ? 'active' : ''}}" bind:tap="onTabChange" data-tab="2">记忆</text>
+        <text class="tab {{currentTab === '2' ? 'active' : ''}}" bind:tap="onTabChange" data-tab="2">故事</text>
+        <text class="tab {{currentTab === '3' ? 'active' : ''}}" bind:tap="onTabChange" data-tab="3">记忆</text>
+        <text class="tab {{currentTab === '4' ? 'active' : ''}}" bind:tap="onTabChange" data-tab="4">群聊</text>
         <!-- <text class="tab {{currentTab === '3' ? 'active' : ''}}" bind:tap="onTabChange" data-tab="3">故事</text> -->
       </view>
       
@@ -54,17 +56,6 @@
             {{descriptionExpanded ? '收起 ▴' : '展开 ▾'}}
           </text>
         </view>
-        
-        <view class="section-title-container">
-          <view class="section-title">开场白</view>
-        </view>
-        <view class="section-content like-blur-glass">
-          <text>{{prologueDisplay || storyInfo.prologue || '暂无'}}</text>
-          <text wx:if="{{prologueNeedFold}}" class="fold-toggle" bind:tap="togglePrologue">
-            {{prologueExpanded ? '收起 ▴' : '展开 ▾'}}
-          </text>
-        </view>
-
         <view class="section-title-container" bind:tap="onChatVoice">
           <view class="section-title">角色声音</view>
           <t-icon wx:if="{{plotInfo.id}}" name="chevron-right-s" class="section-title-icon" size="28" />
@@ -74,6 +65,29 @@
           <view class="style-right-content">
             <text class="style-right-text">{{roleInfo.userVoiceName ? '' : '默认设置'}}</text>
           </view>
+        </view>
+
+        <view class="section-title-container" bind:tap="onChatVoice">
+          <view class="section-title">创作者</view>
+        </view>
+        <view class="section-content like-blur-glass">
+          <view class="group-role-item creator-item" wx:if="{{creatorInfo.creatorUserId}}">
+            <t-image class="creator-avatar" src="{{creatorInfo.creatorAvatar}}" mode="aspectFill" />
+            <view class="role-content-box">
+              <view class="role-name">{{creatorInfo.creatorNickname}}</view>
+            </view>
+            <view wx:if="{{!isOwnCreator}}" class="follow-btn-container">
+              <view wx:if="{{isFollowed}}" class="follow-btn followed" bind:tap="onUnfollow">
+                <t-icon name="check" size="20" color="var(--magic-color)" class="follow-icon" />
+                <text>已关注</text>
+              </view>
+              <view wx:else class="follow-btn unfollowed" bind:tap="onFollow">
+                <t-icon name="user-add" size="20" color="var(--magic-color)" class="follow-icon" />
+                <text style="color:var(--magic-color)">关注</text>
+              </view>
+            </view>
+          </view>
+          <view wx:else class="no-creator-tip">暂无创作者信息</view>
         </view>
 
         <!-- <view class="section-title-container" bind:tap="onNewChatStyle">
@@ -89,6 +103,38 @@
         </view> -->
       </view>
       <view wx:if="{{currentTab === '2'}}" class="content-section">
+        <view class="section-title-container" bind:tap="onChangeStory">
+          <view class="section-title">当前故事</view>
+          <t-icon name="chevron-right-s" class="section-title-icon ml-auto" size="24" />
+        </view>
+        <view class="section-content like-blur-glass">
+          <text>
+            {{storyInfo.title}}
+          </text>
+        </view>
+
+        <view class="section-title-container">
+          <view class="section-title">故事剧情</view>
+        </view>
+        <view class="section-content like-blur-glass">
+          <text>
+            {{storyInfo.scene || '暂无'}}
+          </text>
+        </view>
+        
+        <view class="section-title-container">
+          <view class="section-title">开场白</view>
+        </view>
+        <view class="section-content like-blur-glass">
+          <text>{{prologueDisplay || storyInfo.prologue || '暂无'}}</text>
+          <text wx:if="{{prologueNeedFold}}" class="fold-toggle" bind:tap="togglePrologue">
+            {{prologueExpanded ? '收起 ▴' : '展开 ▾'}}
+          </text>
+        </view>
+
+        <view class="new-story-line" bind:tap="newStoryAction">这个故事没意思？打开脑洞，<text class="new-story-btn">来个新开局！</text></view>
+      </view>
+      <view wx:if="{{currentTab === '3'}}" class="content-section">
         <view class="section-title-container" bind:tap="onPlotSelect">
           <view class="section-title">当前剧情</view>
           <t-icon name="chevron-right-s" class="section-title-icon" size="24" />
@@ -134,6 +180,64 @@
           memoryOptions="{{memoryOptions}}"
         />
       </view>
+      <view wx:if="{{currentTab === '4'}}" class="content-section">
+        <view class="group-list">
+          <view
+            wx:if="{{publicGroupChats && publicGroupChats.length}}"
+            class="group-card"
+            wx:for="{{publicGroupChats}}"
+            wx:key="groupChatId"
+            wx:for-item="group"
+            bindtap="onGroupClick"
+            data-groupchatid="{{group.groupChatId}}"
+          >
+            <!-- 背景图（如果有，取首张作为视觉背景） -->
+            <view
+              wx:if="{{group.backgroundImages && group.backgroundImages.length}}"
+              class="group-card-bg"
+              style="background-image: url('{{group.backgroundImages[0]}}');"
+            >
+              <view class="group-card-bg-mask"></view>
+            </view>
+
+            <!-- 群成员头像列表 -->
+            <view wx:if="{{group.backgroundImages && group.backgroundImages.length}}" class="group-members">
+              <view
+                class="member-avatar"
+                wx:for="{{group.backgroundImages}}"
+                wx:key="index"
+                wx:for-item="bg"
+                style="z-index: {{index}}"
+              >
+                <image class="member-avatar-img" src="{{bg}}" mode="aspectFill" />
+              </view>
+            </view>
+            <view wx:else class="group-members">
+              <view class="member-avatar" style="z-index: 0;">
+                <image class="member-avatar-img" src="/static/global/role-default.png" mode="aspectFill" />
+              </view>
+            </view>
+
+            <!-- 群聊信息 -->
+            <view class="group-info">
+              <view class="group-name-row">
+                <text class="group-name">{{group.name}}</text>
+              </view>
+              <text class="group-desc">{{group.description || '暂无简介'}}</text>
+            </view>
+
+            <!-- 热度信息 -->
+            <view wx:if="{{group.heat}}" class="group-footer">
+              <role-hot-container roleHot="{{group.heat}}" chatCount="{{group.chatCount || 0}}" />
+            </view>
+          </view>
+
+          <view wx:if="{{!publicGroupChats || !publicGroupChats.length}}" class="group-empty">
+            暂无关联群聊
+          </view>
+        </view>
+      </view>
+
     </view>
     
   </scroll-view>
@@ -145,3 +249,5 @@
   <memory-desc-overlay show="{{ showMemoryDescOverlay }}" bind:close="onCloseMemoryDesc" />
 </view>
 <tip-dialog id="tip-dialog" />
+
+<story-dialog id="story-dialog" />

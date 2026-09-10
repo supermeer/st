@@ -4,6 +4,9 @@ import Toast from 'tdesign-miniprogram/toast/index'
 import { getCharacterType, getCharacterTag, getCharacterList, getCurrentPlotByCharacterId } from '../../services/role/index'
 import { getModelList, getGlobalModelId, isSpringFestivalExpired, getActivity } from '../../services/usercenter/index'
 import { getUserGroupChatList, getCurrentPlotByGroupChatId } from '../../services/group/index'
+import {
+  createPlot
+} from '../../services/ai/chat'
 
 Page(
   Object.assign({}, userStore.data, {
@@ -282,7 +285,11 @@ Page(
         loadMoreStatus: 0,
       })
       this.data.pageNo = 1
-      this.loadRoleList(true)
+      if (this.data.activeNav === 'group') {
+        this.loadGroupList(true)
+      } else {
+        this.loadRoleList(true)
+      }
       
       // 滚动到选中标签的中间位置
       if (activeTags.length > 0 && activeTags.includes(value)) {
@@ -294,7 +301,11 @@ Page(
       this.setData({
         sortField: e.detail
       })
-      this.loadRoleList(true)
+      if (this.data.activeNav === 'group') {
+        this.loadGroupList(true)
+      } else {
+        this.loadRoleList(true)
+      }
     },
 
     // 滚动标签到中间
@@ -519,7 +530,11 @@ Page(
         const params = {
           current: this.data.pageNo,
           size: this.data.pageSize,
-          ifSystem: false,
+          ifSystem: true,
+          sortOrder: this.data.sortOrder,
+          sortField: this.data.sortField,
+          characterTypeIds: this.data.activeNav,
+          characterTagIds: this.data.activeTags.join(',')
         }
         const res = await getUserGroupChatList(params)
         const records = res && res.records ? res.records : []
@@ -642,8 +657,14 @@ Page(
     async onGroupClick(e) {
       const { groupchatid } = e.currentTarget.dataset
       const res = await getCurrentPlotByGroupChatId(groupchatid)
+      let plotId = res && res.plotId ? res.plotId : ''
+      if (!plotId) {
+        plotId = await createPlot({
+          groupChatId: groupchatid
+        })
+      }
       wx.navigateTo({
-        url: `/pages/chat/index?groupId=${groupchatid}&plotId=${res && res.plotId ? res.plotId : ''}`
+        url: `/pages/chat/index?groupId=${groupchatid}&plotId=${plotId}`
       })
     },
     // 点击角色卡片

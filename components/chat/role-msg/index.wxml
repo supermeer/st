@@ -1,8 +1,8 @@
 <view class="role-msg-wrapper">
   <!-- 消息容器 -->
-  <view class="role-info">
-    <t-image class="avatar" src="{{message.avatarUrl}}" mode="aspectFill" />
-    {{message.roleName}}
+  <view wx:if="{{plotInfo.isGroupChat}}" class="role-info">
+    <t-image wx:if="{{message.backgroundImage}}" class="avatar" src="{{message.backgroundImage}}" mode="aspectFill" />
+    {{message.name}}
   </view>
   <view 
     class="msg-container mes_text" 

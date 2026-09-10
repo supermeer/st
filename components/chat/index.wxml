@@ -13,7 +13,7 @@
       </view>
       <t-icon name="setting-1" class="role-detail-icon" size="18" color="#ddd" />
     </view>
-    <view wx:else class="group-info blur-glass" bindtap="groupInfo">
+    <view wx:else class="group-info blur-glass" bindtap="goGroupInfo">
       <group-avatar
         class="group-info-avatar"
         urls="{{groupDetail.avatarUrls}}"
@@ -22,7 +22,7 @@
         background-color="rgba(255, 255, 255, 0.16)"
       />
       <view class="group-info-content">
-        <text class="group-name">{{groupDetail.name || '群聊'}}（{{groupDetail.roles.length || roles.length}}）</text>
+        <text class="group-name">{{groupDetail.name || '群聊'}}（{{groupDetail.characterInfos.length || characterInfos.length}}）</text>
         <text class="group-tip">内容由AI生成</text>
       </view>
       <t-icon name="setting-1" class="role-detail-icon" size="18" color="#ddd" />
@@ -52,8 +52,8 @@
         <view class="plot-title">
           <t-image class="plot-icon" src="/static/chat/juqing.png" />
           <text>剧情</text>
-          <view wx:if="{{(roleDetail && roleDetail.publishStatus > 0) || roleDetail.isSystem == 1}}" style="padding-left: 20rpx;">
-            <role-hot-container chatCount="{{roleDetail.messageCount}}" roleHot="{{roleDetail.browseCount}}" />
+          <view wx:if="{{(roleDetail && roleDetail.publishStatus > 0) || roleDetail.isSystem == 1 || groupDetail.publishStatus > 0 || groupDetail.isSystem == 1}}" style="padding-left: 20rpx;">
+            <role-hot-container chatCount="{{roleDetail.messageCount || groupDetail.messageCount}}" roleHot="{{roleDetail.browseCount || groupDetail.browseCount}}" />
           </view>
         </view>
         <text class="plot-content">{{sceneNeedFold ? sceneDisplay : currentStoryDetail.scene}}</text>
@@ -89,7 +89,7 @@
     <role-bar
       wx:if="{{plotInfo.isGroupChat}}"
       class="role-bar"
-      roles="{{groupDetail.roles}}"
+      roles="{{groupDetail.characterInfos}}"
       active-role-id="{{activeRoleId}}"
       bind:roleTap="onRoleTap"
     />

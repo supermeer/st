@@ -642,14 +642,21 @@ Component({
       this.setData({ showUploader: false })
     },
 
-    storyList() {
+    plotList() {
       this.setData({
         showBoard: false,
         showInspiration: false
       })
-      wx.navigateTo({
-        url: `/pages/role/story/index?roleId=${this.properties.roleInfo.id}`
-      })
+      if (this.properties.groupInfo.id) {
+        wx.navigateTo({
+          url: `/pages/group/plot/index?groupId=${this.properties.groupInfo.id}`
+        })
+      }
+      if (this.properties.roleInfo.id) {
+        wx.navigateTo({
+          url: `/pages/role/plot/index?roleId=${this.properties.roleInfo.id}`
+        })
+      }
       this.triggerEvent('showTabbar')
     },
     report() {

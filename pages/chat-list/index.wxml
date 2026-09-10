@@ -27,8 +27,13 @@
       bindscroll="onScroll"
       style="height: {{scrollHeight}};"
     >
+      <!-- 加载状态 -->
+      <view wx:if="{{loading}}" class="loading-state">
+        <t-loading theme="circular" size="80rpx" class="large" />
+      </view>
+
       <!-- 聊天列表 -->
-      <view class="chat-list" wx:if="{{chatList.length > 0}}">
+      <view class="chat-list" wx:elif="{{chatList.length > 0}}">
         <view class="chat-item-wrapper" wx:for="{{chatList}}" wx:key="plotId">
           <van-swipe-cell
             id="swipeCell-{{item.plotId}}"
@@ -42,12 +47,20 @@
               data-id="{{item.plotId}}"
               bindtap="onChatItemClick"
             >
-              <view class="chat-avatar">
+              <view wx:if="{{item.characterId}}" class="chat-avatar">
                 <image src="{{item.backgroundImage || '/static/chat/default-avatar.png'}}" mode="aspectFill" />
               </view>
+              <group-avatar
+                wx:if="{{item.groupChatId}}"
+                class="group-avatar"
+                urls="{{item.avatarUrls}}"
+                size="{{96}}"
+                gap="{{2}}"
+                background-color="rgba(255, 255, 255, 0.16)"
+              />
               <view class="chat-info">
                 <view class="chat-header">
-                  <view class="chat-name">{{item.name}}</view>
+                  <view class="chat-name">{{item.name}}{{item.characterInfos ? '(' + item.characterInfos.length + ')' : ''}}</view>
                   <view class="chat-time">{{item.timeText}}</view>
                 </view>
                 <view class="chat-last-msg">{{item.description}}</view>
@@ -59,7 +72,7 @@
                 <t-icon name="backtop" size="18px" color="#fff" />
                 {{item.isTop ? '取消置顶' : '置顶'}}
               </view>
-              <view class="swipe-action delete-btn" catch:tap="onDeleteChat" data-id="{{item.characterId}}">
+              <view class="swipe-action delete-btn" catch:tap="onDeleteChat" data-id="{{item.characterId}}" data-group-chat-id="{{item.groupChatId}}">
                 <t-icon name="delete" size="18px" color="#ee5a6f" />
                 删除
               </view>
@@ -71,9 +84,15 @@
       </view>
 
       <!-- 空状态 -->
-      <view class="empty-state" wx:else>
+      <view class="empty-state" wx:elif="{{!loadError}}">
         <t-icon name="unhappy" size="100rpx" color="#ccc" />
         <text class="empty-text">暂无聊天记录</text>
+      </view>
+
+      <!-- 加载失败重试 -->
+      <view class="empty-state error-state" wx:else bindtap="onRetryLoad">
+        <t-icon name="error" size="100rpx" color="#ccc" />
+        <text class="empty-text">加载失败，点击重试</text>
       </view>
     </scroll-view>
   </t-pull-down-refresh>

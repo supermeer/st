@@ -90,3 +90,27 @@
 .poster-info{position:absolute;left:16rpx;bottom:16rpx;color:#fff;text-shadow:0 2rpx 6rpx rgba(0,0,0,.6)}
 .poster-name{font-size:32rpx;font-weight:700}
 .poster-sub{font-size:24rpx;color:#e5e7eb}
+
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 500rpx;
+  padding-top: 100rpx;
+  --td-loading-color: var(--theme-color-purple);
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 200rpx 0;
+}
+
+.empty-text {
+  margin-top: 32rpx;
+  font-size: 28rpx;
+  color: #999999;
+}

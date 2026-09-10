@@ -22,40 +22,44 @@
   </view>
 
   <scroll-view class="content" scroll-y style="height: calc(100vh - {{pageInfo.navHeight}}px - 180rpx);" bindscrolltolower="onLoadMore">
-
-    <!-- 人气：纵向榜单样式（带TOP徽标） -->
-    <view wx:if="{{activeTab==='hot'}}" class="list-hot">
-      <view class="hot-item" wx:for="{{list}}" wx:key="id" bindtap="onRoleClick" data-id="{{item.characterId}}">
-        <image class="cover" src="{{item.url}}" mode="aspectFill" />
-        <view class="meta">
-          <view class="name">{{item.name}}</view>
-          <role-hot-container chatCount="{{item.chatCount}}" roleHot="{{item.heat}}" />
-          <view class="desc">{{item.description || ''}}</view>
-        </view>
-        <view class="rank-badge {{index < 3 ? 'top3' : ''}}">TOP {{index + 1 < 10 ? '0' + (index + 1) : index + 1}}</view>
-      </view>
+    <!-- 加载状态 -->
+    <view wx:if="{{loading}}" class="loading-state">
+      <t-loading theme="circular" class="large" size="80rpx" layout="vertical" />
     </view>
 
-    <!-- 宝藏：两列卡片网格 -->
-    <view wx:elif="{{activeTab==='wow'}}" class="list-grid">
-      <view class="grid-card" wx:for="{{list}}" wx:key="id" bindtap="onRoleClick" data-id="{{item.characterId}}">
-        <image class="grid-cover" src="{{item.url}}" mode="aspectFill" />
-        <view class="grid-info">
-          <view class="grid-name">{{item.name}}</view>
-          <view class="increase-box">
-              <t-image src="/static/discover/increase.png" class="increase-icon" mode="aspectFill" />
-              对话暴涨{{ item.ratioStr }}
+    <block wx:elif="{{list.length > 0}}">
+      <!-- 人气：纵向榜单样式（带TOP徽标） -->
+      <view wx:if="{{activeTab==='hot'}}" class="list-hot">
+        <view class="hot-item" wx:for="{{list}}" wx:key="id" bindtap="onRoleClick" data-id="{{item.characterId}}">
+          <image class="cover" src="{{item.url}}" mode="aspectFill" />
+          <view class="meta">
+            <view class="name">{{item.name}}</view>
+            <role-hot-container chatCount="{{item.chatCount}}" roleHot="{{item.heat}}" />
+            <view class="desc">{{item.description || ''}}</view>
           </view>
-          <view class="role-tags">
-            <text class="role-tag blur-glass" wx:for="{{item.tagList}}" wx:key="index" wx:for-item="tag">#{{tag}}</text>
+          <view class="rank-badge {{index < 3 ? 'top3' : ''}}">TOP {{index + 1 < 10 ? '0' + (index + 1) : index + 1}}</view>
+        </view>
+      </view>
+
+      <!-- 宝藏：两列卡片网格 -->
+      <view wx:elif="{{activeTab==='wow'}}" class="list-grid">
+        <view class="grid-card" wx:for="{{list}}" wx:key="id" bindtap="onRoleClick" data-id="{{item.characterId}}">
+          <image class="grid-cover" src="{{item.url}}" mode="aspectFill" />
+          <view class="grid-info">
+            <view class="grid-name">{{item.name}}</view>
+            <view class="increase-box">
+                <t-image src="/static/discover/increase.png" class="increase-icon" mode="aspectFill" />
+                对话暴涨{{ item.ratioStr }}
+            </view>
+            <view class="role-tags">
+              <text class="role-tag blur-glass" wx:for="{{item.tagList}}" wx:key="index" wx:for-item="tag">#{{tag}}</text>
+            </view>
           </view>
         </view>
       </view>
-    </view>
 
-    <!-- 新崽 -->
-    <block wx:elif="{{activeTab==='new'}}">
-      <view class="list-grid" wx:if="{{!listIsEmpty}}">
+      <!-- 新崽 -->
+      <view wx:elif="{{activeTab==='new'}}" class="list-grid">
         <view class="grid-card" wx:for="{{list}}" wx:key="id" bindtap="onRoleClick" data-id="{{item.characterId}}">
           <image class="grid-cover" src="{{item.url}}" mode="aspectFill" />
           <view class="grid-info">
@@ -67,13 +71,22 @@
           </view>
         </view>
       </view>
-      <view class="empty-container" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:200rpx 0;" wx:else>
-        <t-icon name="unhappy" size="120rpx" color="#666666" />
-        <text class="empty-text" style="margin-top:32rpx;font-size:28rpx;color:#999999;">暂无新崽，稍后再来看看</text>
-      </view>
+
+      <load-more wx:if="{{pageNo > 1}}" status="{{loadMoreStatus}}" list-is-empty="{{listIsEmpty}}" bind:retry="onRetryLoad" />
     </block>
 
-    <load-more wx:if="{{pageNo > 1}}" status="{{loadMoreStatus}}" list-is-empty="{{listIsEmpty}}" bind:retry="onRetryLoad" />
+    <!-- 空状态 -->
+    <view class="empty-state" wx:elif="{{!loadError}}">
+      <t-icon name="unhappy" size="100rpx" color="#ccc" />
+      <text class="empty-text">{{activeTab === 'new' ? '暂无新崽，稍后再来看看' : '暂无数据'}}</text>
+    </view>
+
+    <!-- 加载失败重试 -->
+    <view class="empty-state error-state" wx:else bindtap="onRetryLoad">
+      <t-icon name="error" size="100rpx" color="#ccc" />
+      <text class="empty-text">加载失败，点击重试</text>
+    </view>
+
     <view style="height: {{pageInfo.safeAreaBottom}}px;"></view>
   </scroll-view>
 

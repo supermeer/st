@@ -1,13 +1,17 @@
 import SystemInfo from '../../../utils/system'
 import {
   getGroupDetail,
-  shareGroup
+  shareGroup,
+  followUser,
+  unfollowUser
 } from '../../../services/group/index'
 import {
   getPlotDetail,
   updatePlot,
-  getMemoryType
+  getMemoryType,
+  createStory
 } from '../../../services/ai/chat'
+import userStore from '../../../store/user'
 
 const SYNC_PLAYER_VOICE_RICH_CONTENT = `
   <div style="width: 100%; color: #ffffff; font-size: 26rpx; line-height: 42rpx; text-align: left;">
@@ -34,6 +38,8 @@ Page({
     },
     storyInfo: {
       id: null,
+      title: '暂无',
+      scene: '暂无',
       prologue: '' //开场白
     },
     plotInfo: {
@@ -70,7 +76,15 @@ Page({
     // 记忆力说明遮罩层
     showMemoryDescOverlay: false,
     memoryOptions: [],
-    showBG: true
+    showBG: true,
+    // 创作者信息
+    creatorInfo: {
+      creatorUserId: null,
+      creatorNickname: '',
+      creatorAvatar: '',
+    },
+    isFollowed: false,
+    isOwnCreator: false
   },
 
   // 防抖定时器（记忆力滑块）
@@ -88,6 +102,14 @@ Page({
         showBG: false
       })
     }
+    if (options.plotId) {
+      this.setData({
+        plotInfo: {
+          ...this.data.plotInfo,
+          id: options.plotId
+        }
+      })
+    }
     // 获取传递的参数
     if (options.groupId) {
       this.setData({
@@ -103,15 +125,13 @@ Page({
   },
 
   async onShow() {
-
-    console.log('onShow')
     if (this.data.groupInfo.id) {
       await this.getMemoryType()
-      this.loadGroupDetail(this.data.groupInfo.id)
+      this.loadGroupDetail()
     }
   },
-  loadGroupDetail(id) {
-    getGroupDetail(id).then((res) => {
+  loadGroupDetail() {
+    getGroupDetail(this.data.groupInfo.id, this.data.plotInfo.id).then((res) => {
       const merged = {
         ...this.data.groupInfo,
         ...res
@@ -122,10 +142,20 @@ Page({
         needFold && !this.data.descriptionExpanded
           ? desc.slice(0, 120) + '…'
           : desc
+      const currentUserId = userStore.data?.userInfo?.id
+      const creatorId = res.creatorUserId || null
       this.setData({
         groupInfo: merged,
         descriptionNeedFold: needFold,
-        descriptionDisplay: display
+        descriptionDisplay: display,
+        // 设置创作者信息
+        creatorInfo: {
+          creatorUserId: creatorId,
+          creatorNickname: res.creatorNickname || '',
+          creatorAvatar: res.creatorAvatar || '',
+        },
+        isFollowed: res.isFollowedCreator || false,
+        isOwnCreator: !!(currentUserId && creatorId && currentUserId == creatorId)
       })
       const plotId = res.currentPlotId
       if (!res.currentPlotId) {
@@ -204,12 +234,12 @@ Page({
   },
   onTabChange(event) {
     const tab = event.currentTarget.dataset.tab
-    if (tab == 3) {
-      wx.navigateTo({
-        url: `/pages/role/story/index?roleId=${this.data.groupInfo.id}`
-      })
-      return
-    }
+    // if (tab == 2) {
+    //   wx.navigateTo({
+    //     url: `/pages/role/story/index?roleId=${this.data.groupInfo.id}`
+    //   })
+    //   return
+    // }
     this.setData({ currentTab: tab })
   },
   onMemoryDesc() {
@@ -272,7 +302,7 @@ Page({
   },
   onDialogSetting() {
     wx.navigateTo({
-      url: `/pages/role/chat-setting/index?plotId=${this.data.plotInfo.id}&roleName=${this.data.groupInfo.name}`
+      url: `/pages/role/chat-setting/index?plotId=${this.data.plotInfo.id}&groupChatName=${this.data.groupInfo.name}&groupId=${this.data.groupInfo.id}`
     })
   },
   onNewChatStyle() {
@@ -359,9 +389,33 @@ Page({
       url: `/pages/role/my-setting/index?personaId=${this.data.plotInfo.persona?.id || ''}&storyId=${this.data.storyInfo.id}&avatarUrl=${this.data.currentBg}&plotId=${this.data.plotInfo.id}`
     })
   },
+  onChangeStory() {
+    wx.navigateTo({
+      url: `/pages/group/story/index?groupId=${this.data.groupInfo.id}`
+    })
+  },
+  newStoryAction() {
+    const storyDialog = this.selectComponent('#story-dialog')
+    storyDialog.show({
+      onConfirm: (data) => {
+        createStory({
+          ...data,
+          groupChatId: this.data.groupInfo.id
+        }).then((res) => {
+          if (res.code == 200) {
+            wx.showToast({ title: '创建成功', icon: 'success' })
+            this.setData({
+              storyInfo: { ...this.data.storyInfo, ...res.data }
+            })
+          }
+        })
+      },
+      roles: this.data.groupInfo.characterInfos
+    })
+  },
   onPlotSelect() {
     wx.navigateTo({
-      url: `/pages/role/story/index?roleId=${this.data.groupInfo.id}`
+      url: `/pages/group/plot/index?groupId=${this.data.groupInfo.id}`
     })
   },
   // 折叠/展开：设定
@@ -401,6 +455,15 @@ Page({
       identityDisplay: display
     })
   },
+  onSyncVoice() {
+    // this.showSyncPlayerVoiceDialog()
+  },
+  onCharacterInfo(e) {
+    const item = e.currentTarget.dataset.item
+    wx.navigateTo({
+      url: `/pages/role/role-detail/index?characterId=${item.id}`
+    })
+  },
   async onShareAppMessage() {
     const { id, isSystem } = this.data.groupInfo || {}
     shareGroup({groupId: id})
@@ -412,6 +475,40 @@ Page({
       title: '星语酒馆',
       path,
       imageUrl: '/images/global-share.jpg'
+    }
+  },
+  // 关注创作者
+  async onFollow() {
+    const creatorId = this.data.creatorInfo.creatorUserId
+    if (!creatorId) {
+      wx.showToast({ title: '创作者信息不存在', icon: 'none' })
+      return
+    }
+    if (this.data.isOwnCreator) {
+      wx.showToast({ title: '不能关注自己', icon: 'none' })
+      return
+    }
+    try {
+      await followUser(creatorId)
+      this.setData({ isFollowed: true })
+      wx.showToast({ title: '关注成功', icon: 'success' })
+    } catch (error) {
+      console.error('关注失败:', error)
+    }
+  },
+  // 取关创作者
+  async onUnfollow() {
+    const creatorId = this.data.creatorInfo.creatorUserId
+    if (!creatorId) {
+      wx.showToast({ title: '创作者信息不存在', icon: 'none' })
+      return
+    }
+    try {
+      await unfollowUser(creatorId)
+      this.setData({ isFollowed: false })
+      wx.showToast({ title: '已取消关注', icon: 'success' })
+    } catch (error) {
+      console.error('取关失败:', error)
     }
   }
 })

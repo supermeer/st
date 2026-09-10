@@ -18,24 +18,25 @@
         <view class="form-label">
           <text class="label-required">*</text>
           <text>故事名称</text>
+          <view class="textarea-counter">{{formData.title.length}}/50</view>
+        </view>
+        
+        <view class="textarea-counter-row">
+          <view class="label-placeholder">故事名称，便于用户快速了解故事信息</view>
         </view>
         <view class="input-wrapper">
           <input
             class="form-input"
             placeholder="请输入"
             placeholder-class="input-placeholder"
-            value="{{formData.plotName}}"
-            data-field="plotName"
+            value="{{formData.title}}"
+            data-field="title"
             bindinput="onInputChange"
             maxlength="50"
           />
-          <view wx:if="{{formData.plotName}}" class="input-clear" data-field="plotName" bindtap="onClearInput">
+          <view wx:if="{{formData.title}}" class="input-clear" data-field="title" bindtap="onClearInput">
             <t-icon name="close-circle-filled" size="32rpx" color="rgba(255,255,255,0.4)" />
           </view>
-        </view>
-        <view class="textarea-counter-row">
-          <view class="label-placeholder">故事名称，便于用户快速了解故事信息</view>
-          <view class="textarea-counter">{{formData.plotName.length}}/50</view>
         </view>
       </view>
 
@@ -44,17 +45,17 @@
         <view class="form-label">
           <text class="label-required">*</text>
           <text>故事设定</text>
+          <view class="textarea-counter">{{formData.scene.length}}/10000</view>
         </view>
         <view class="textarea-counter-row">
           <view class="label-placeholder">决定群聊对话的背景，会对外展示，引起用户的对话兴趣。</view>
-          <view class="textarea-counter">{{formData.plotSetting.length}}/10000</view>
         </view>
         <textarea
           class="form-textarea"
           placeholder="如，当前剧情发生在学霸宿舍里，师尊意外穿越成为学霸室友。"
           placeholder-class="textarea-placeholder"
-          value="{{formData.plotSetting}}"
-          data-field="plotSetting"
+          value="{{formData.scene}}"
+          data-field="scene"
           bindinput="onTextareaChange"
           maxlength="10000"
           auto-height
@@ -69,20 +70,6 @@
 
         <!-- 开场白角色选择 -->
         <view class="prologue-characters">
-          <!-- 玩家选项 -->
-          <view
-            class="prologue-character {{formData.prologueCharacterId === 'player' ? 'selected' : ''}}"
-            bindtap="onSelectPrologueCharacter"
-            data-id="player"
-          >
-            <view class="prologue-character-avatar player-avatar">
-              <text class="player-text">玩家</text>
-            </view>
-            <view class="prologue-character-check" wx:if="{{formData.prologueCharacterId === 'player'}}">
-              <t-icon name="check-circle-filled" size="28rpx" color="#4A9EFF" />
-            </view>
-          </view>
-
           <!-- 群成员选项 -->
           <view
             wx:for="{{roles}}"
@@ -93,29 +80,33 @@
             data-name="{{item.name}}"
           >
             <t-image
-              wx:if="{{item.avatarUrl}}"
+              wx:if="{{item.avatar}}"
               class="prologue-character-avatar"
-              src="{{item.avatarUrl}}"
+              src="{{item.avatar}}"
               mode="aspectFill"
             />
-            <view wx:else class="prologue-character-avatar member-avatar-placeholder">
-              <t-icon name="user" size="40rpx" color="rgba(255,255,255,0.6)" />
-            </view>
-            <view class="prologue-character-check" wx:if="{{formData.prologueCharacterId == item.id}}">
-              <t-icon name="check-circle-filled" size="28rpx" color="#4A9EFF" />
-            </view>
           </view>
         </view>
 
         <view class="form-label">
-          <text class="label-required">*</text>
           <text>开场白</text>
         </view>
-        <view class="label-placeholder">决定智能体对话效果，引起用户的对话兴趣。</view>
+        <view class="textarea-counter-row">
+          <view class="label-placeholder">决定智能体对话效果，引起用户的对话兴趣。</view>
+        </view>
         <!-- 开场白内容 -->
         <view class="prologue-content">
-          <view class="prologue-text" wx:if="{{formData.prologue}}">{{formData.prologue}}</view>
-          <view class="prologue-placeholder" wx:else>请选择开场白角色</view>
+          <textarea 
+            wx:if="{{formData.prologueCharacterId}}"
+            class="form-textarea" 
+            placeholder="群聊的第一句话。" 
+            placeholder-class="textarea-placeholder"
+            value="{{formData.prologue}}"
+            data-field="prologue"
+            bindinput="onTextareaChange"
+            maxlength="10000"
+          />
+          <view wx:else class="prologue-placeholder">由玩家开启群聊第一句话。</view>
         </view>
       </view>
     </scroll-view>

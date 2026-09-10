@@ -94,6 +94,16 @@ page {
   height: 100%;
 }
 
+.group-avatar {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 24rpx;
+  flex-shrink: 0;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
 /* 聊天信息 */
 .chat-info {
   flex: 1;
@@ -185,10 +195,25 @@ page {
   padding-top: 100rpx;
 }
 
+.empty-state.error-state {
+  cursor: pointer;
+}
+
 .empty-text {
   margin-top: 32rpx;
   font-size: 28rpx;
   color: #999999;
+}
+
+/* 加载状态 */
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 500rpx;
+  padding-top: 100rpx;
+  --td-loading-color: var(--theme-color-purple);
 }
 
 /* 悬浮按钮 */

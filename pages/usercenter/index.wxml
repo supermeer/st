@@ -52,7 +52,22 @@
         <view wx:else class="open-vip-btm-line">无限畅聊 记忆增强 更多灵感回复</view>
       </view>
       <t-image wx:if="{{vipInfo.ifVip}}" class="vip-box-icon" src="/static/vip/vip.png"/>
-    </view>                                                        
+    </view>
+    <view class="star-yao-ji-entry" bind:tap="onStarYaoJiClick">
+      <view class="star-yao-ji-entry-left">
+        <view class="star-yao-ji-entry-icon-wrapper">
+          <view class="star-yao-ji-entry-icon"></view>
+        </view>
+        <view class="star-yao-ji-entry-text">
+          <view class="star-yao-ji-entry-title">星耀集</view>
+          <view class="star-yao-ji-entry-desc">我的收益 · 我的战绩</view>
+        </view>
+      </view>
+      <view class="star-yao-ji-entry-right">
+        <view class="star-yao-ji-entry-tag">参与</view>
+        <t-icon name="chevron-right" size="18" color="#ffd54a" />
+      </view>
+    </view>
     <view class="content-tabs">
       <view
         class="content-tab {{activeMainTab === 'role' ? 'active' : ''}}"
@@ -142,23 +157,29 @@
           class="group-card"
           wx:for="{{groupList}}"
           wx:key="groupChatId"
-          bindtap="onGroupClick"
+          bind:tap="onGroupClick"
+          bind:longpress="onGroupLongPress"
+          data-id="{{item.groupChatId}}"
           data-groupchatid="{{item.groupChatId}}"
           data-name="{{item.name}}"
         >
-          <view class="group-members">
-            <view class="member-avatar" wx:for="{{item.avatarUrls}}" wx:key="id" wx:for-item="member" style="z-index: {{index}}">
-              <image class="member-avatar-img" src="{{member}}" mode="aspectFill" />
-            </view>
+          <group-avatar
+            class="group-card-avatar"
+            urls="{{item.avatarUrls}}"
+            fill="{{true}}"
+            background-color="rgba(255, 255, 255, 0.16)"
+          />
+          <view wx:if="{{item.publishStatus == 3}}" class="group-reject-reason-btn" catch:tap="showGroupRejectReason" data-group="{{item}}">查看原因</view>
+          <view
+            wx:if="{{item._statusBadge && item._statusBadge.text}}"
+            class="group-status-ribbon {{item._statusBadge.className}}"
+          >
+            {{item._statusBadge.text}}
           </view>
           <view class="group-info">
             <view class="group-name-row">
               <text class="group-name">{{item.name}}</text>
             </view>
-            <text class="group-desc">{{item.description || '暂无简介'}}</text>
-          </view>
-          <view class="group-footer">
-            <role-hot-container chatCount="{{item.messageCount}}" roleHot="{{item.browseCount}}" />
           </view>
         </view>
         <view wx:if="{{groupList.length === 0}}" class="group-empty-state">
@@ -208,3 +229,9 @@
 <t-toast id="t-toast" />
 
 <t-dialog id="t-dialog" />
+
+<group-authorize-dialog
+  id="authorize-dialog"
+  bind:confirm="onAuthorizeConfirm"
+  bind:close="onAuthorizeClose"
+/>

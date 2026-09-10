@@ -3,6 +3,9 @@ import {
   getGroupDetail,
   getCurrentPlotByGroupChatId
 } from '../../../services/group/index'
+import {
+  createPlot
+} from '../../../services/ai/chat'
 Page({
   data: {
     pageInfo: {},
@@ -60,19 +63,24 @@ Page({
   loginSuccess() {
     this.getCurrentPlotByGroupChatId(this.data.shareForm.id)
   },
-  getCurrentPlotByGroupChatId(id) {
+  async getCurrentPlotByGroupChatId(id) {
     if (!id) return
-    getCurrentPlotByGroupChatId(id).then((res) => {
-      this.setData({
-        groupForm: {
-          ...this.data.groupForm,
-          ...this.data.shareForm,
-          plotId: res && res.plotId ? res.plotId : null
-        }
+    const res = getCurrentPlotByGroupChatId(id)
+    let plotId = res && res.plotId ? res.plotId : ''
+    if (!plotId) {
+      plotId = await createPlot({
+        groupChatId: id
       })
-      // 拉一次群聊基础信息，渲染群成员
-      this.fetchGroupDetail(id)
+    }
+    this.setData({
+      groupForm: {
+        ...this.data.groupForm,
+        ...this.data.shareForm,
+        plotId: plotId
+      }
     })
+    // 拉一次群聊基础信息，渲染群成员
+    this.fetchGroupDetail(id)
   },
   fetchGroupDetail(id) {
     if (!id) return

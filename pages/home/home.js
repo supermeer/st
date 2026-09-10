@@ -2,6 +2,7 @@ import userStore from '../../store/user'
 import SystemInfo from '../../utils/system'
 import { getHomePlotMessage } from '../../services/ai/chat'
 import { getCharacterDetail, shareCharacter } from '../../services/role/index'
+import { getGroupDetail, shareGroup } from '../../services/group/index'
 import { redeemInviteCode, getActivity, getMinorReminderConfig, confirmAdultIdentity } from '../../services/usercenter/index'
 
 Page({
@@ -157,26 +158,36 @@ Page({
       if (res.plotId && this.data.plotInfo.id === res.plotId) {
         return
       }
-      if (res.groupChatId) {
-        this.setData({
-          groupForm: {
-            id: res.groupChatId || null
-          }
-        })
-      }
-      if (res.characterId) {
-        this.setData({
-          roleForm: {
-            type: res.type,
-            id: res.characterId || null,
-            // plotId: res.plotId || null
-          }
-        })
-      }
+      // if (res.groupChatId) {
+      //   this.setData({
+      //     groupForm: {
+      //       id: res.groupChatId || null
+      //     }
+      //   })
+      // }
+      // if (res.characterId) {
+      //   this.setData({
+      //     roleForm: {
+      //       type: res.type,
+      //       id: res.characterId || null,
+      //       // plotId: res.plotId || null
+      //     }
+      //   })
+      // }
       this.setData({
         plotInfo: {
           id: res.plotId || null,
+          type: res.type || '',
+          isGroupChat: res.groupChatId ? true : false
+        },
+        groupForm: {
+          id: res.groupChatId || null,
           type: res.type || ''
+        },
+        roleForm: {
+          id: res.characterId || null,
+          type: res.type || '',
+          plotId: res.plotId || null
         }
       })
     })
@@ -284,15 +295,35 @@ Page({
     this.getTabBar().show()
   },
   changePlot(event) {
-    const { plotId, type, characterId } = event
+    const { plotId, type, characterId, groupChatId } = event
     this.setData({
-      roleForm: {
-        ...this.data.roleForm,
-        plotId: plotId,
+      plotInfo: {
+        ...this.data.plotInfo,
+        id: plotId,
         type: type,
-        id: characterId
+        isGroupChat: groupChatId ? true : false
       }
     })
+    if (groupChatId) {
+      this.setData({
+        groupForm: {
+          ...this.data.groupForm,
+          plotId: plotId,
+          type: type,
+          id: groupChatId
+        }
+      })
+    }
+    if (characterId) {
+      this.setData({
+        roleForm: {
+          ...this.data.roleForm,
+          plotId: plotId,
+          type: type,
+          id: characterId
+        }
+      })
+    }
   },
   onCurrentBgChange(e) {
     this.setCurrentBg(e.detail.bg)
@@ -303,16 +334,36 @@ Page({
     })
   },
   async onShareAppMessage() {
-    const { id } = this.data.roleForm || {}
-    shareCharacter({characterId: id})
-    let path = `/pages/chat/index?characterId=${id}&isShare=${true}`
+    const { id: characterId } = this.data.roleForm || {}
+    const { id: groupChatId } = this.data.groupForm || {}
+    if (characterId) {
+      shareCharacter({characterId: characterId})
+    } else if (groupChatId) {
+      shareGroup({groupChatId: groupChatId})
+    }
+    let path = ''
+    if (characterId) {
+      path = `/pages/chat/index?characterId=${id}&isShare=${true}`
+    }
+    if (groupChatId) {
+      path = `/pages/chat/index?groupChatId=${groupChatId}&isShare=${true}`
+    }
     if (this.data.isInvite) {
       const code = await getApp().getInviteCode()
       path = `/pages/home/home?inviteCode=${code}&isInvite=${true}`
       console.log(path)
     } else {
-      const characterDetail = await getCharacterDetail(id)
-      if (characterDetail.isSystem != 1) {
+      let isSystem = 1
+      if (characterId) {
+        const characterDetail = await getCharacterDetail(characterId)
+        isSystem = characterDetail.isSystem
+      }
+      if (groupChatId) {
+        console.log(1111111)
+        const groupChatDetail = await getGroupDetail(groupChatId, this.data.plotInfo.id)
+        isSystem = groupChatDetail.isSystem
+      }
+      if (isSystem != 1) {
         path = '/pages/home/home'
       }
     }

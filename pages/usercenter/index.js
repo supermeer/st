@@ -1,14 +1,25 @@
 import userStore from '../../store/user'
 import SystemInfo from '../../utils/system'
 import ActionSheet, { ActionSheetTheme } from 'tdesign-miniprogram/action-sheet'
-import { getUserGroupChatList } from '../../services/group/index'
+import {
+  getUserGroupChatList,
+  getCurrentPlotByGroupChatId,
+  applyPublish,
+  getAuditRejectReason as getGroupAuditRejectReason,
+  unpublishGroup,
+  deleteGroup
+} from '../../services/group/index'
+import {
+  createPlot
+} from '../../services/ai/chat'
 import {
   getCharacterList,
   getCurrentPlotByCharacterId,
   deleteCharacter,
   applyCharacterPublished,
   getAuditRejectReason,
-  unpublishChar
+  unpublishChar,
+  updateCharacter
 } from '../../services/role/index'
 import {
   redeemInviteCode,
@@ -51,6 +62,17 @@ function getRoleStatusBadge(role) {
   return { text: '', className: '' }
 }
 
+// 通用：智能体 / 群聊复用同一份状态映射
+function getItemStatusBadge(item) {
+  return getRoleStatusBadge(item)
+}
+
+// 判断是否为私密（草稿/未发布）
+function isPrivateByPublishStatus(item) {
+  const ps = item?.publishStatus
+  return ps === 0 || ps === '0' || !ps
+}
+
 Page({
   data: {
     activeMainTab: 'role',
@@ -64,6 +86,10 @@ Page({
     pageInfo: {},
     editingRole: null,
     editingRoleInfo: null,
+    editingGroup: null,
+    editingGroupInfo: null,
+    groupActionType: null,
+    authorizeLoading: false,
     roleTypeList: [
       {
         name: '私密',
@@ -226,6 +252,13 @@ Page({
     })
   },
 
+  // 星耀集入口
+  onStarYaoJiClick() {
+    wx.navigateTo({
+      url: '/pages/star-yao-ji/index'
+    })
+  },
+
   // 积分充值按钮
   onPointsRechargeClick() {
     const dialog = this.selectComponent('#pointsRechargeDialog')
@@ -288,11 +321,17 @@ Page({
   // 加载群聊列表（私密 + 公开分别请求一次，复用 discover 已有的接口）
   getGroupList() {
     Promise.all([
-      getUserGroupChatList({ current: 1, size: 1000, ifSystem: false }),
-      getUserGroupChatList({ current: 1, size: 1000, ifSystem: true })
+      getUserGroupChatList({ current: 1, size: 1000, isPublished: false }),
+      getUserGroupChatList({ current: 1, size: 1000, isPublished: true })
     ]).then(([privateRes, publicRes]) => {
-      const privateRecords = (privateRes && privateRes.records) || []
-      const publicRecords = (publicRes && publicRes.records) || []
+      const privateRecords = ((privateRes && privateRes.records) || []).map((item) => ({
+        ...item,
+        _statusBadge: getItemStatusBadge(item)
+      }))
+      const publicRecords = ((publicRes && publicRes.records) || []).map((item) => ({
+        ...item,
+        _statusBadge: getItemStatusBadge(item)
+      }))
 
       const groupTypeList = (this.data.groupTypeList || []).map((t) => {
         if (t.value === '1') return { ...t, count: privateRecords.length }
@@ -314,10 +353,17 @@ Page({
   },
 
   // 点击群聊卡片
-  onGroupClick(e) {
-    const { groupchatid, name } = e.currentTarget.dataset
+  async onGroupClick(e) {
+    const { groupchatid } = e.currentTarget.dataset
+    const res = await getCurrentPlotByGroupChatId(groupchatid)
+    let plotId = res && res.plotId ? res.plotId : ''
+    if (!plotId) {
+      plotId = await createPlot({
+        groupChatId: groupchatid
+      })
+    }
     wx.navigateTo({
-      url: `/pages/group/chat/index?groupId=${groupchatid}&name=${encodeURIComponent(name || '')}`
+      url: `/pages/chat/index?groupId=${groupchatid}&plotId=${plotId || ''}`
     })
   },
 
@@ -391,6 +437,56 @@ Page({
     }
   },
 
+  onGroupLongPress(e) {
+    const id = e.currentTarget.dataset.id
+    const info = (this.data.groupList || []).find((item) => item.groupChatId == id)
+
+    let publishStatus = info?.publishStatus
+
+    this.setData({
+      editingGroup: id,
+      editingGroupInfo: info || {},
+      groupActionType: 'group'
+    })
+
+    let items = []
+
+    // 0 / 未提交（草稿/私密）
+    if (publishStatus == 0 || !publishStatus) {
+      items = ['编辑', '发布群聊', '删除']
+    }
+    // 1 审核中：阻断
+    if (publishStatus == 1) {
+      wx.showToast({
+        title: '群聊正在审核中，无法进行操作',
+        icon: 'none',
+        duration: 2500
+      })
+      this.setData({ groupActionType: null })
+      return
+    }
+    // 2 已发布：支持下架
+    if (publishStatus == 2) {
+      items = ['编辑', '下架群聊']
+    }
+    // 3 已驳回：可以重新编辑/删除/发布
+    if (publishStatus == 3) {
+      items = ['编辑', '发布群聊', '删除']
+    }
+    // 4 已下架：可以重新发布
+    if (publishStatus == 4) {
+      items = ['编辑', '发布群聊']
+    }
+
+    ActionSheet.show({
+      theme: ActionSheetTheme.List,
+      selector: '#actionSheet',
+      context: this,
+      cancelText: '取消',
+      items
+    })
+  },
+
   onLongPress(e) {
     const id = e.currentTarget.dataset.id
     const info = this.data.roleList.find((item) => item.id == id)
@@ -420,6 +516,7 @@ Page({
     }
     if (publishStatus == 2) {
       items.push('下架智能体')
+      items.unshift('群聊授权')
     }
     if (publishStatus == 3) {
       items = [
@@ -445,6 +542,128 @@ Page({
   },
   handleSelected(e) {
     const type = e.detail.selected
+
+    if (this.data.groupActionType === 'group') {
+      if (type === '编辑') {
+        const groupId = this.data.editingGroup
+        getCurrentPlotByGroupChatId(groupId).then((plotRes) => {
+          const plotId = plotRes && plotRes.plotId ? plotRes.plotId : ''
+          wx.navigateTo({
+            url: `/pages/group/add/index?id=${groupId}&plotId=${plotId}`
+          })
+        }).catch(() => {
+          wx.navigateTo({
+            url: `/pages/group/add/index?id=${groupId}`
+          })
+        })
+        this.setData({ groupActionType: null })
+        return
+      }
+      if (type === '删除') {
+        const groupId = this.data.editingGroup
+        const tipDialog = this.selectComponent('#tip-dialog')
+        tipDialog.show({
+          content: '删除后，该群聊将无法恢复，确认删除？',
+          cancelText: '取消',
+          confirmText: '确认',
+          onConfirm: () => {
+            deleteGroup({ groupChatId: groupId })
+              .then(() => {
+                wx.showToast({ title: '已删除', icon: 'success' })
+                this.getGroupList()
+              })
+              .catch((err) => {
+                wx.showToast({
+                  title: err || '删除失败，请稍后重试',
+                  icon: 'none'
+                })
+              })
+              .finally(() => {
+                this.setData({ groupActionType: null })
+              })
+          },
+          onCancel: () => {
+            this.setData({ groupActionType: null })
+          }
+        })
+        return
+      }
+      if (type === '发布群聊') {
+        const groupId = this.data.editingGroup
+        const tipDialog = this.selectComponent('#tip-dialog')
+        tipDialog.show({
+          hideTopIcon: true,
+          contentAlign: 'justify',
+          content:
+            '版权声明：\n请确认此群聊是您的原创群聊，不侵犯他人的IP或其他权益。侵犯他人权益的群聊无法获得认证，影响您使用本平台的服务。\n\n1、创建的群聊为本人独立创作，不存在抄袭、剽窃等任何形式的侵权，也不侵犯肖像权等他人权益。\n2、同意平台管理规则，如因群聊引发的法律纠纷或争议均由本人承担责任。\n\n',
+          cancelText: '取消',
+          confirmText: '同意并发布',
+          onConfirm: () => {
+            applyPublish({ groupChatId: groupId })
+              .then(() => {
+                wx.showToast({
+                  title: '提交发布成功！',
+                  icon: 'none',
+                  duration: 2500
+                })
+                this.getGroupList()
+              })
+              .catch((err) => {
+                wx.showToast({
+                  title: err?.msg || '发布失败，请稍后重试',
+                  icon: 'none'
+                })
+              })
+              .finally(() => {
+                this.setData({ groupActionType: null })
+              })
+          },
+          onCancel: () => {
+            this.setData({ groupActionType: null })
+          }
+        })
+        return
+      }
+      if (type === '下架群聊') {
+        const groupId = this.data.editingGroup
+        const tipDialog = this.selectComponent('#tip-dialog')
+        tipDialog.show({
+          hideTopIcon: true,
+          contentAlign: 'left',
+          content:
+            '下架群聊，所有人将无法搜索TA。但不影响已加入的用户。',
+          cancelText: '取消',
+          confirmText: '继续下架',
+          onConfirm: () => {
+            unpublishGroup({ groupChatId: groupId })
+              .then(() => {
+                wx.showToast({
+                  title: '下架成功',
+                  icon: 'none',
+                  duration: 2500
+                })
+                this.getGroupList()
+              })
+              .catch((err) => {
+                wx.showToast({
+                  title: err?.msg || '下架失败，请稍后重试',
+                  icon: 'none'
+                })
+              })
+              .finally(() => {
+                this.setData({ groupActionType: null })
+              })
+          },
+          onCancel: () => {
+            this.setData({ groupActionType: null })
+          }
+        })
+        return
+      }
+      this.setData({ groupActionType: null })
+      return
+    }
+
     if (type === '删除') {
       const deleteRequest = () => {
         deleteCharacter({
@@ -547,6 +766,10 @@ Page({
         }
       })
     }
+    if (type === '群聊授权') {
+      this.openAuthorizeDialog()
+      return
+    }
     if (type === '音色设置') {
       wx.navigateTo({
         url: `/pages/role/voice-list/index?characterId=${this.data.editingRole}&from=usercenter`
@@ -575,6 +798,28 @@ Page({
       }
     })
   },
+  async showGroupRejectReason(e) {
+    const { group = {} } = e.currentTarget.dataset
+    const groupChatId = group.groupChatId
+    if (!groupChatId) {
+      wx.showToast({ title: '群聊信息缺失', icon: 'none' })
+      return
+    }
+    const res = await getGroupAuditRejectReason({ groupChatId })
+    const tipDialog = this.selectComponent('#reject-dialog')
+    tipDialog.show({
+      title: '驳回原因',
+      hideTopIcon: true,
+      content: res || '暂无驳回原因',
+      cancelText: '取消',
+      confirmText: '去修改',
+      onConfirm: () => {
+        wx.navigateTo({
+          url: `/pages/group/add/index?id=${groupChatId}&publishStatus=${group.publishStatus}`
+        })
+      }
+    })
+  },
   copyAction() {
     wx.setClipboardData({
       data: this.data.wxCode,
@@ -595,6 +840,66 @@ Page({
           title: '已复制到粘贴板',
           icon: 'none'
         })
+      }
+    })
+  },
+  openAuthorizeDialog() {
+    const id = this.data.editingRole
+    const role = this.data.roleList.find((item) => item.id == id)
+    if (!id) {
+      wx.showToast({ title: '智能体信息缺失', icon: 'none' })
+      return
+    }
+    this.setData({
+      authorizeLoading: false
+    })
+
+    const dialog = this.selectComponent('#authorize-dialog')
+    dialog.setData({ loading: false })
+    dialog.show({
+      name: role?.name || '',
+      authorize: 'open'
+    })
+  },
+
+  // 用户点击授权弹窗的"确认"
+  // detail.authorize: 'open' 开放 -> 调 applyPublish；'close' 关闭 -> 调 /unpublish
+  onAuthorizeConfirm(e) {
+    const id = this.data.editingRole
+    const role = this.data.roleList.find((item) => item.id == id)
+    const ifGroupChat = role?.ifGroupChat
+
+    const authorize = (e && e.detail && e.detail.authorize) == 'open' ? true : false
+
+    const dialog = this.selectComponent('#authorize-dialog')
+
+    this.setData({
+      authorizeLoading: true
+    })
+    if (dialog) dialog.setData({ loading: true })
+    updateCharacter({
+      id,
+      ifGroupChat: authorize
+    }).then(res => {
+      wx.showToast({
+        title: authorize ? '授权成功' : '取消授权成功',
+        icon: 'success'
+      })
+      this.getCharacterList()
+    })
+    .catch(err => {
+      wx.showToast({
+        title: err?.msg || (authorize ? '授权失败，请稍后重试' : '取消授权失败，请稍后重试'),
+        icon: 'none'
+      })
+    })
+    .finally(() => {
+      this.setData({
+        authorizeLoading: false
+      })
+      if (dialog) {
+        dialog.setData({ loading: false })
+        dialog.hide()
       }
     })
   }

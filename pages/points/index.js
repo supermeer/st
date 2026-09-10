@@ -117,6 +117,11 @@ Page({
       url: "/pages/vip/packages/index"
     })
   },
+  adReward() {
+    wx.navigateTo({
+      url: '/pages/ad/index'
+    })
+  },
   async invite() {
     const richtext = await getActivity({activityType: 1})
     const richtextDialog = this.selectComponent('#richtextDialog')

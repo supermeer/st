@@ -7,8 +7,20 @@
   
   <!-- 固定角色信息卡片 -->
   <view class="chat-header blur-glass" style="top: {{ pageInfo.navHeight }}px">
-    <image class="chat-avatar" src="{{currentBg}}" mode="aspectFill"></image>
-    <view class="chat-name">{{roleInfo.name}}</view>
+    <group-avatar
+      wx:if="{{groupChatInfo.id}}"
+      class="chat-avatar"
+      urls="{{groupChatInfo.avatarUrls}}"
+      size="{{96}}"
+      gap="{{2}}"
+    />
+    <image
+      wx:else
+      class="chat-avatar"
+      src="{{currentBg}}"
+      mode="aspectFill"
+    ></image>
+    <view class="chat-name">{{roleInfo.name || groupChatInfo.name}}</view>
   </view>
 
   <!-- 可滚动内容区域 -->
@@ -119,6 +131,22 @@
             <t-icon name="chevron-right" size="40rpx" color="rgba(255,255,255,0.6)" />
           </view>
         </view>
+
+        <view class="setting-item">
+          <view class="setting-label">
+            角色自动对话
+            <view wx:if="{{showAutoReplyNew}}" class="setting-item-new">new</view>
+            <t-icon name="info-circle" size="36rpx" color="#ffffff" catchtap="onAutoReply" />
+          </view>
+          <view class="setting-action">
+            <t-switch
+              class="setting-switch"
+              value="{{autoReply}}"
+              data-key="autoReply"
+              bindchange="onSwitchChange"
+            />
+          </view>
+        </view>
       </view>
 
     </view>
@@ -136,6 +164,8 @@
 
   <!-- 记忆力说明遮罩层 -->
   <memory-desc-overlay show="{{ showMemoryDescOverlay }}" bind:close="onCloseMemoryDesc" />
+
+  <autoreply-desc-overlay show="{{ showAutoReplyDescOverlay}}" bind:close="onCloseAutoReply" />
 </view>
 
 <image-uploader

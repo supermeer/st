@@ -16,6 +16,10 @@ Component({
       type: String,
       value: '#e6e6e6',
     },
+    fill: {
+      type: Boolean,
+      value: false,
+    },
   },
 
   data: {

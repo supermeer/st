@@ -29,9 +29,9 @@
       <view class="benefits-list">
         <!-- <view class="benefit-item">无限畅聊</view>
         <view class="benefit-item">记忆增强</view> -->
-        <view class="benefit-item">更多剧情</view>
-        <view class="benefit-item">更多灵感</view>
-        <view class="benefit-item">更多沉浸式体验</view>
+        <view class="benefit-item">会员不支持无限畅聊，</view>
+        <view class="benefit-item">仔细查看权益后，</view>
+        <view class="benefit-item">再进行购买</view>
       </view>
     </view>
 

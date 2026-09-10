@@ -111,7 +111,7 @@
       <t-image class="board-box-image" src="/static/chat/tupian.png" />
       <text>图片</text>
     </view>
-    <view class="input-box-board-item" bindtap="storyList">
+    <view class="input-box-board-item" bindtap="plotList">
       <t-image class="board-box-image" src="/static/chat/juqing.png" />
       <text>其他剧情</text>
     </view>

@@ -1,0 +1,176 @@
+<view class="creator-page">
+  <!-- 星空背景（金色光点，固定） -->
+  <view class="starry-bg">
+    <view class="star-dot star-dot-1"></view>
+    <view class="star-dot star-dot-2"></view>
+    <view class="star-dot star-dot-3"></view>
+    <view class="star-dot star-dot-4"></view>
+    <view class="star-dot star-dot-5"></view>
+    <view class="star-dot star-dot-6"></view>
+    <view class="star-dot star-dot-7"></view>
+    <view class="star-dot star-dot-8"></view>
+    <view class="star-dot star-dot-9"></view>
+    <view class="star-dot star-dot-10"></view>
+    <view class="star-dot star-dot-11"></view>
+    <view class="star-dot star-dot-12"></view>
+    <view class="star-dot star-dot-13"></view>
+    <view class="star-dot star-dot-14"></view>
+    <view class="star-dot star-dot-15"></view>
+    <view class="star-dot star-dot-16"></view>
+    <view class="star-dot star-dot-17"></view>
+    <view class="star-dot star-dot-18"></view>
+    <view class="star-dot star-dot-19"></view>
+    <view class="star-dot star-dot-20"></view>
+  </view>
+
+  <!-- 固定顶部：自定义导航栏 -->
+  <custom-nav
+    class="creator-nav"
+    show-back="{{true}}"
+    show-left-logo="{{false}}"
+    show-home="{{false}}"
+    transparent="{{true}}"
+  >
+    <text slot="center">星耀集</text>
+  </custom-nav>
+
+  <!-- 固定头部：用户卡 + 公告 + 三栏统计卡 -->
+  <view class="creator-header" id="creator-header">
+    <!-- 顶部用户信息卡（紫色渐变） -->
+    <view class="user-card">
+      <view class="user-card-avatar-wrapper">
+        <t-image class="user-card-avatar" src="{{userInfo.avatarUrl || '/static/usercenter/user_icon.png'}}" />
+      </view>
+      <view class="user-card-text">
+        <view class="user-card-name">{{userInfo.nickname || '小柚子'}}</view>
+        <view class="user-card-badge" wx:if="{{userBadge.text}}">
+          <text class="user-card-badge-icon">{{userBadge.icon || '⭐'}}</text>
+          <text>{{userBadge.text}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 公告行 -->
+    <view class="announcement-row" bindtap="onAnnouncementClick" wx:if="{{announcementText}}">
+      <t-icon name="notification" size="28rpx" color="#ffd54a" class="announcement-icon" />
+      <text class="announcement-text">{{announcementText}}</text>
+      <t-icon name="chevron-right" size="20rpx" color="#999" class="announcement-arr" />
+    </view>
+
+    <!-- 三栏统计卡 -->
+    <view class="stat-grid">
+      <view class="stat-card stat-card--role" bindtap="onStatCardClick" data-type="role">
+        <view class="stat-card-bg"></view>
+        <view class="stat-card-content">
+          <view class="stat-card-num">{{stats.roleCount || 0}}<text class="stat-card-unit">个</text></view>
+          <view class="stat-card-label">我的智能体</view>
+          <view class="stat-card-btn" catchtap="onCreateRoleClick">创建</view>
+        </view>
+      </view>
+
+      <view class="stat-card stat-card--group" bindtap="onStatCardClick" data-type="group">
+        <view class="stat-card-bg"></view>
+        <view class="stat-card-content">
+          <view class="stat-card-num">{{stats.groupCount || 0}}<text class="stat-card-unit">个</text></view>
+          <view class="stat-card-label">我的群聊</view>
+          <view class="stat-card-btn" catchtap="onCreateGroupClick">创建</view>
+        </view>
+      </view>
+
+      <view class="stat-card stat-card--income" bindtap="onStatCardClick" data-type="income">
+        <view class="stat-card-bg"></view>
+        <view class="stat-card-content">
+          <view class="stat-card-num stat-card-num--small">
+            今日<text class="stat-card-income">+{{stats.todayIncome || 0}}</text>
+          </view>
+          <view class="stat-card-label">收益明细</view>
+          <view class="stat-card-btn" catchtap="onViewIncomeClick">查看</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 可滚动内容区域 -->
+  <scroll-view
+    class="creator-scroll"
+    scroll-y
+    enhanced
+    show-scrollbar="{{false}}"
+    style="height: {{scrollHeight}}px;"
+  >
+    <!-- 我的收益 -->
+    <view class="income-section">
+      <view class="section-title">
+        <view class="section-title-bar"></view>
+        <text>我的收益</text>
+      </view>
+      <view class="income-grid">
+        <view class="income-item">
+          <view class="income-item-value">{{income.characterIncome || 0}}</view>
+          <view class="income-item-label">智能体收益</view>
+        </view>
+        <view class="income-item">
+          <view class="income-item-value">{{income.groupIncome || 0}}</view>
+          <view class="income-item-label">群聊收益</view>
+        </view>
+        <view class="income-item">
+          <view class="income-item-value">{{income.fanCount || 0}}</view>
+          <view class="income-item-label">粉丝数（人）</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 我的战绩 -->
+    <view class="achievement-section">
+      <view class="section-title">
+        <view class="section-title-bar"></view>
+        <text>我的战绩</text>
+      </view>
+
+      <!-- 战绩汇总卡 -->
+      <view class="achievement-summary">
+        <view class="achievement-summary-row">
+          <view class="achievement-summary-num">{{publicRoleCount || 0}}<text class="achievement-summary-unit">个</text></view>
+          <view class="achievement-summary-label">公开智能体</view>
+        </view>
+        <view class="achievement-summary-divider"></view>
+        <view class="achievement-summary-row">
+          <view class="achievement-summary-num">已打败 <text class="achievement-summary-percent">{{beatPercent || 0}}%</text></view>
+          <view class="achievement-summary-label">的星语造星师</view>
+        </view>
+      </view>
+
+      <!-- 智能体战绩列表 -->
+      <view wx:if="{{roleAchievements.length > 0}}" class="role-achievement-list">
+        <view
+          class="role-achievement-item"
+          wx:for="{{roleAchievements}}"
+          wx:key="id"
+          bindtap="onAchievementClick"
+          data-item="{{item}}"
+        >
+          <t-image class="role-achievement-avatar" src="{{item.backgroundImage || item.avatar || '/static/usercenter/user_icon.png'}}" />
+          <view class="role-achievement-info">
+            <view class="role-achievement-name">{{item.name}}</view>
+            <view class="role-achievement-tags" wx:if="{{item.tags && item.tags.length}}">
+              <view class="role-achievement-tag" wx:for="{{item.tags}}" wx:key="$idx" wx:for-item="tag">
+                <text class="role-achievement-tag-tick">✓</text>
+                <text>{{tag}}</text>
+              </view>
+            </view>
+          </view>
+          <t-icon name="chevron-right" size="28rpx" color="#666" class="role-achievement-arr" />
+        </view>
+      </view>
+
+      <view wx:else class="empty-state">
+        <t-icon name="empty" size="80rpx" color="#666" />
+        <text class="empty-text">暂无公开智能体</text>
+        <view class="empty-btn" bindtap="onCreateRoleClick">创建智能体</view>
+      </view>
+    </view>
+
+    <!-- 底部占位 -->
+    <view class="bottom-placeholder"></view>
+  </scroll-view>
+</view>

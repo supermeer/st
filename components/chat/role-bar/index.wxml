@@ -18,11 +18,11 @@
         <view class="role-bar-avatar-wrapper">
           <t-image
             class="role-bar-avatar"
-            src="{{item.avatarUrl}}"
+            src="{{item.avatar}}"
             mode="aspectFill"
           />
         </view>
-        <text class="role-bar-name">{{item.name}}abc</text>
+        <text class="role-bar-name">{{item.name}}</text>
       </view>
     </view>
   </scroll-view>

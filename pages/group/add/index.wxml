@@ -3,7 +3,7 @@
   <image class="page-bg" src="{{currentBg}}" mode="aspectFill"></image>
   
   <!-- 固定顶部导航栏 -->
-  <custom-nav id="groupAddNav" title="" showBack="{{true}}" showHome="{{false}}" transparent="{{true}}" />
+  <custom-nav id="groupAddNav" title="{{pageTitle}}" showBack="{{true}}" showHome="{{false}}" transparent="{{true}}" />
 
   <!-- 可滚动内容区域 -->
   <scroll-view
@@ -16,11 +16,11 @@
     <!-- 表单内容 -->
     <view class="form-content" style="padding-bottom: calc({{ pageInfo.safeAreaBottom}}px + 140rpx);">
 
-      <!-- 创建群聊背景按钮 -->
+      <!-- 创建/更换群聊背景按钮 -->
       <view class="bg-button-wrapper" bindtap="onChatBackground">
         <view class="bg-button">
           <t-icon name="star" size="36rpx" color="var(--yellow-btn-color)" />
-          <text class="bg-button-text">创建群聊背景</text>
+          <text class="bg-button-text">{{isEdit ? '更换群聊背景' : '创建群聊背景'}}</text>
         </view>
       </view>
 
@@ -180,8 +180,17 @@
           <view class="label-placeholder">决定智能体对话效果，引起用户的对话兴趣。</view>
           <!-- 开场白内容 -->
           <view class="prologue-content">
-            <view class="prologue-text" wx:if="{{formData.prologue}}">{{formData.prologue}}</view>
-            <view class="prologue-placeholder" wx:else>请输入</view>
+            <textarea 
+              wx:if="{{formData.prologueCharacterId}}"
+              class="form-textarea" 
+              placeholder="群聊的第一句话。" 
+              placeholder-class="textarea-placeholder"
+              value="{{formData.prologue}}"
+              data-field="prologue"
+              bindinput="onTextareaChange"
+              maxlength="10000"
+            />
+            <view wx:else class="prologue-placeholder">由玩家开启群聊第一句话。</view>
           </view>
         </view>
       </view>
@@ -206,7 +215,7 @@
   <!-- 固定底部提交按钮 -->
   <view class="submit-footer" style="padding-bottom: {{ pageInfo.safeAreaBottom }}px;">
     <view class="submit-btn" bindtap="onSubmit">
-      保存设定
+      {{submitBtnText}}
     </view>
   </view>
 

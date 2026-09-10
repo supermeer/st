@@ -1,0 +1,26 @@
+<van-overlay show="{{ show }}" bind:click="onClose" custom-style="background: rgba(0, 0, 0, 0.6);" custom-class="custom-class">
+  <view class="autoreply-desc-wrapper" catchtap="onClose">
+    <view class="autoreply-desc-content blur-glass content-class" catchtap="noop">
+      <view class="autoreply-desc-title">什么是自动对话</view>
+      <view class="autoreply-desc-text mb">
+        自动对话打开：
+      </view>
+      <view class="autoreply-desc-text">
+        1、角色自主闲聊唠嗑，剧情自然自行推进。
+        2、这种方式有点费积分哦。
+      </view>
+      <view class="autoreply-desc-text mt">
+        自动对话关闭：
+      </view>
+      <view class="autoreply-desc-text">
+        1、你点谁才开口，由你把控对话节奏与走向。
+        2、这种方式更省积分哦。
+      </view>
+
+      <view class=confirm-btn" catchtap="onClose">
+        知道了
+      </view>
+      
+    </view>
+  </view>
+</van-overlay>

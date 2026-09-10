@@ -1,6 +1,12 @@
 import SystemInfo from '../../../utils/system'
 import Message from 'tdesign-miniprogram/message/index';
 import { getPlotDetail, updatePlot, getMemoryType } from '../../../services/ai/chat'
+import {
+  getGroupDetail,
+  shareGroup,
+  followUser,
+  unfollowUser
+} from '../../../services/group/index'
 import { getModelList, getGlobalModelId } from '../../../services/usercenter/index'
 import { QUOTE_GRADIENT_OPTIONS } from '../../../utils/msgHandler'
 import { verifyUrls } from '../../../services/file/index'
@@ -12,6 +18,9 @@ Page({
     keepFullScreen: false,
     autoPlayAudio: false,
     showAutoPlayAudioNew: false,
+    autoReply: true,
+    showAutoReplyNew: false,
+    showAutoReplyDescOverlay: false,
     quoteGradientName: '金青渐变',
     pageInfo: {
       safeAreaBottom: 0,
@@ -21,6 +30,10 @@ Page({
       id: null,
       name: '',
       avatar: ''
+    },
+    groupChatInfo: {
+      id: null,
+      name: '',
     },
     plotInfo: {
       totalMemory: 30,
@@ -100,6 +113,23 @@ Page({
         }
       })
     }
+    if (options.groupChatName) {
+      this.setData({
+        groupChatInfo: {
+          ...this.data.groupChatInfo,
+          name: options.groupChatName
+        }
+      })
+    }
+    if (options.groupId) {
+      this.setData({
+        groupChatInfo: {
+          ...this.data.groupChatInfo,
+          id: options.groupId
+        }
+      })
+      this.loadGroupInfo(options.groupId)
+    }
     this.setData({
       pageInfo: { ...this.data.pageInfo, ...SystemInfo.getPageInfo() }
     })
@@ -107,6 +137,7 @@ Page({
     this.getModelList()
     const newModelMark = wx.getStorageSync('newModelMark')
     const newAutoPlayAudioMark = wx.getStorageSync('newAutoPlayAudioMark')
+    const newAutoReplyMark = wx.getStorageSync('newAutoReplyMark')
     if (!newModelMark) {
       wx.setStorageSync('newModelMark', true)
       this.setData({
@@ -118,6 +149,11 @@ Page({
         showAutoPlayAudioNew: true
       })
     }
+    if (!newAutoReplyMark) {
+      this.setData({
+        showAutoReplyNew: true
+      })
+    }
   },
   onShow() {
     const savedId = wx.getStorageSync('quoteGradient') || 'gold-cyan'
@@ -126,6 +162,8 @@ Page({
       keepFullScreen: wx.getStorageSync('alwaysFullScreen') === 'true',
       autoPlayAudio: wx.getStorageSync('autoPlayAudio') === 'true',
       showAutoPlayAudioNew: !wx.getStorageSync('newAutoPlayAudioMark'),
+      autoReply: wx.getStorageSync('autoReply') == '0' ? false : true,
+      showAutoReplyNew: !wx.getStorageSync('newAutoReplyMark'),
       quoteGradientName: option ? option.name : '金青渐变'
     })
     getGlobalModelId().then(res => {
@@ -159,7 +197,22 @@ Page({
           ...this.data.plotInfo,
           ...res
         },
-        currentBg: res.backgroundImage
+        currentBg: res.backgroundImage || res.prologueCharacterBackgroundImage
+      })
+      if (res.storyId) {
+        this.getStoryInfo(res.storyId)
+      }
+    })
+  },
+
+  loadGroupInfo(groupId) {
+    getGroupDetail(groupId, this.data.plotInfo.id).then(res => {
+      if (!res) return
+      this.setData({
+        groupChatInfo: {
+          ...this.data.groupChatInfo,
+          avatarUrls: Array.isArray(res.avatarUrls) ? res.avatarUrls : []
+        }
       })
     })
   },
@@ -271,10 +324,20 @@ Page({
       showMemoryDescOverlay: true
     })
   },
-
   onCloseMemoryDesc() {
     this.setData({
       showMemoryDescOverlay: false
+    })
+  },
+
+  onAutoReply() {
+    this.setData({
+      showAutoReplyDescOverlay: true
+    })
+  },
+  onCloseAutoReply() {
+    this.setData({
+      showAutoReplyDescOverlay: false
     })
   },
 
@@ -477,6 +540,17 @@ Page({
       wx.setStorageSync('autoPlayAudio', value ? 'true' : 'false')
       if (!wx.getStorageSync('newAutoPlayAudioMark')) {
         wx.setStorageSync('newAutoPlayAudioMark', true)
+      }
+      return
+    }
+    if (key === 'autoReply') {
+      this.setData({
+        autoReply: value,
+        showAutoReplyNew: false
+      })
+      wx.setStorageSync('autoReply', value ? '1' : '0')
+      if (!wx.getStorageSync('newAutoReplyMark')) {
+        wx.setStorageSync('newAutoReplyMark', true)
       }
       return
     }

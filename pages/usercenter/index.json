@@ -16,7 +16,9 @@
     "tip-dialog": "/components/tip-dialog/index",
     "role-hot-container": "/components/role-hot-container/index",
     "richtext-dialog": "/components/richtext-dialog/index",
-    "t-dialog": "tdesign-miniprogram/dialog/dialog"
+    "t-dialog": "tdesign-miniprogram/dialog/dialog",
+    "group-avatar": "/components/group-avatar/index",
+    "group-authorize-dialog": "/components/group-authorize-dialog/index"
   },
   "enablePullDownRefresh": false
 }

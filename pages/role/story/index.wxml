@@ -1,10 +1,10 @@
 <view class="plot-page">
   <!-- 固定背景图 -->
   <image class="page-bg" src="{{showBG ? currentBg : ''}}" mode="aspectFill"></image>
-  
+
   <!-- 固定顶部导航栏 -->
   <custom-nav title="故事剧情" showBack="{{true}}" showHome="{{false}}" transparent="{{true}}" />
-  
+
   <!-- 固定角色信息卡片 -->
   <view class="role-header blur-glass" style="top: {{ pageInfo.navHeight }}px">
     <image class="role-avatar" src="{{currentBg}}" mode="aspectFill"></image>
@@ -24,10 +24,10 @@
     id="plotScrollView"
     style="height: calc(100% - {{ pageInfo.navHeight}}px);"
   >
-    
+
     <!-- 故事列表 -->
-    <view class="plot-list" style="padding-bottom: {{ pageInfo.safeAreaBottom}}px;">
-      <view class="plot-item-wrapper" wx:for="{{plotList}}" wx:key="id">
+    <view class="plot-list" style="padding-top: 220rpx; padding-bottom: calc({{ pageInfo.safeAreaBottom }}px + 200rpx);">
+      <view class="plot-item-wrapper" wx:for="{{storyList}}" wx:key="id">
         <van-swipe-cell
           id="swipeCell-{{item.id}}"
           class="plot-swipe-cell"
@@ -35,21 +35,20 @@
           async-close
           data-id="{{item.id}}"
         >
-          <view class="plot-item blur-glass" bind:tap="onPlotTap" data-id="{{item.id}}">
+          <view class="plot-item blur-glass" bind:tap="onStoryTap" data-id="{{item.id}}">
             <view class="plot-header">
               <t-image
-              class="plot-status-icon"
-              src="/static/role/story_s.png"
-              mode="aspectFill"
-              wx:if="{{item.id === currentPlotId}}"
+                class="plot-status-icon"
+                src="/static/role/story_s.png"
+                mode="aspectFill"
+                wx:if="{{item.id === currentStoryId}}"
               />
               <view class="plot-title">{{item.title}}</view>
               <text class="plot-time">{{item.time}}</text>
             </view>
-            <!-- <view class="plot-desc">{{item.description}}111</view> -->
             <view class="plot-footer">
-              <text class="chat-count">本地对话数：{{item.messageCount}}</text>
-              <view class="footer-right-content" wx:if="{{item.id !== currentPlotId}}">
+              <text class="chat-count">剧情：{{item.scene || '暂无'}}</text>
+              <view class="footer-right-content" wx:if="{{item.id !== currentStoryId}}">
                 <view class="footer-right-text">进入剧情</view>
                 <t-icon name="chevron-right-s" class="plot-footer-icon" size="24" />
               </view>
@@ -65,10 +64,15 @@
         </van-swipe-cell>
       </view>
     </view>
-    
+
   </scroll-view>
+
+  <!-- 固定底部创建故事按钮 -->
+  <view class="submit-footer" style="padding-bottom: {{ pageInfo.safeAreaBottom }}px;">
+    <view class="submit-btn" bindtap="onCreateStory">创建新故事</view>
+  </view>
 </view>
 
- <t-toast id="t-toast" />
+<t-toast id="t-toast" />
 <tip-dialog id="tip-dialog" />
-
+<story-dialog id="story-dialog" />

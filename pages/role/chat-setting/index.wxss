@@ -44,6 +44,7 @@
   border-radius: 48rpx;
   border: 4rpx solid rgba(255, 255, 255, 0.3);
   flex-shrink: 0;
+  overflow: hidden;
 }
 
 .chat-name {
@@ -77,6 +78,10 @@
 }
 
 .section-title .t-icon {
+  margin-left: 12rpx;
+}
+
+.setting-label .t-icon {
   margin-left: 12rpx;
 }
 

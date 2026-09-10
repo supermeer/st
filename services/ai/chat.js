@@ -28,6 +28,7 @@ const ChatService = {
   },
 
   createPlot(data) {
+    data.autoReply = wx.getStorageSync('autoReply') === 'true'
     return request.post('/api/v1/server/plot/createPlot', data)
   },
 
@@ -118,6 +119,14 @@ export function rollbackPlotMessage(data) {
   return request.post('/api/v1/server/plot/rollbackPlotMessage', data)
 }
 
+/**
+ * 仅保存用户消息（不触发AI回复）
+ * 用于 autoReply 关闭的场景
+ */
+export function saveUserMessage(data) {
+  return request.post('/api/v1/server/plot/saveUserMessage', data)
+}
+
 export function inspirationReply(data) {
   return request.post('/api/v1/server/plot/inspirationReply', data)
 }
@@ -138,6 +147,13 @@ export function setCurrentMessage(data) {
 // 获取记忆类型列表
 export function getMemoryType() {
   return request.get('/api/v1/server/plot/getMemoryType')
+}
+
+export function createStory(data) {
+  return request.post('/api/v1/server/story/createStory', data)
+}
+export function updateStory(data) {
+  return request.post('/api/v1/server/story/updateStory', data)
 }
 
 export default ChatService

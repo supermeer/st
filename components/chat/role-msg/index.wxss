@@ -9,15 +9,16 @@
   padding-left: 24rpx;
   color: #ddd;
   font-weight: bold;
-  font-size: 32rpx;
-  padding-bottom: 24rpx;
+  font-size: 28rpx;
+  padding-bottom: 12rpx;
+  padding-top: 12rpx;
 }
 .avatar {
-  width: 100rpx;
-  height: 100rpx;
+  width: 70rpx;
+  height: 70rpx;
   overflow: hidden;
-  border-radius: 50rpx;
-  margin-right: 12rpx;
+  border-radius: 35rpx;
+  margin-right: 20rpx;
 }
 
 .msg-container {

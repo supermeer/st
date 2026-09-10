@@ -683,7 +683,7 @@ Page({
         confirmText: '去聊天',
         onCancel: () => {
           wx.navigateBack()
-          const app = getApp()
+          // const app = getApp()
           wx.openCustomerServiceChat({
             extInfo: { url: app.globalData.wxCustomerService.url },
             corpId: app.globalData.wxCustomerService.corpId,

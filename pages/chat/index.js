@@ -5,6 +5,9 @@ import {
   shareCharacter,
   enterFromDiscover
 } from '../../services/role/index'
+import {
+  createPlot
+} from '../../services/ai/chat'
 import { getCurrentPlotByGroupChatId, getGroupDetail } from '../../services/group/index'
 Page({
   data: {
@@ -86,14 +89,19 @@ Page({
       this.getCurrentPlotByCharacterId(this.data.shareForm.id)
     }
   },
-  getCurrentPlotByGroupId(id) {
-    getCurrentPlotByGroupChatId(id).then((res) => {
-      this.setData({
-        plotInfo: {
-          ...this.data.plotInfo,
-          id: res && res.plotId ? res.plotId : null
-        }
+  async getCurrentPlotByGroupId(id) {
+    const res = getCurrentPlotByGroupChatId(id)
+    let plotId = res && res.plotId ? res.plotId : ''
+    if (!plotId) {
+      plotId = await createPlot({
+        groupChatId: id
       })
+    }
+    this.setData({
+      plotInfo: {
+        ...this.data.plotInfo,
+        id: plotId
+      }
     })
   },
   getCurrentPlotByCharacterId(id) {

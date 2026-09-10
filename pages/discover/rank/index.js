@@ -17,6 +17,9 @@ Page({
     totalCount: 0,
     loadMoreStatus: 0,
     listIsEmpty: false,
+
+    loading: true,
+    loadError: false,
   },
 
   onLoad(options) {
@@ -40,13 +43,25 @@ Page({
   onTabChange(e) {
     const type = e.currentTarget.dataset.type
     if (type === this.data.activeTab) return
-    this.setData({ activeTab: type, list: [], pageNo: 1, totalCount: 0, loadMoreStatus: 0 })
+    this.setData({
+      activeTab: type,
+      list: [],
+      pageNo: 1,
+      totalCount: 0,
+      loadMoreStatus: 0,
+      loading: true,
+      loadError: false,
+    })
     this.loadList(true)
   },
 
   async loadList(isRefresh = false) {
     if (isRefresh) {
       this.data.pageNo = 1
+      this.setData({
+        loading: true,
+        loadError: false,
+      })
     } else {
       if (this.data.loadMoreStatus === 1) return
       this.setData({ pageNo: this.data.pageNo + 1 })
@@ -70,10 +85,16 @@ Page({
         totalCount: res.total || 0,
         loadMoreStatus: newList.length >= (res.total || 0) ? 2 : 0,
         listIsEmpty: newList.length === 0,
+        loading: false,
+        loadError: false,
       })
     } catch (e) {
       console.error('loadList error', e)
-      this.setData({ loadMoreStatus: 3 })
+      this.setData({
+        loadMoreStatus: 3,
+        loading: false,
+        loadError: isRefresh || this.data.list.length === 0,
+      })
       Toast({ context: this, selector: '#t-toast', message: '加载失败，请重试' })
     }
   },
@@ -85,6 +106,10 @@ Page({
   },
 
   onRetryLoad() {
+    if (this.data.list.length === 0) {
+      this.loadList(true)
+      return
+    }
     if (this.data.loadMoreStatus === 3) this.loadList(false)
   },
 

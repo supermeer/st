@@ -18,6 +18,10 @@ Page(
       // 聊天列表数据
       chatList: [],
       
+      // 加载状态
+      loading: true,
+      loadError: false,
+      
       // 下拉刷新
       refreshing: false,
       loadingProps: {
@@ -74,7 +78,7 @@ Page(
         refreshing: true,
       })
 
-      this.loadChatList()
+      this.loadChatList(true)
     },
 
     /**
@@ -95,34 +99,45 @@ Page(
     /**
      * 加载聊天列表
      */
-    async loadChatList() {
+    async loadChatList(isRefresh = false) {
+      // 仅在首次加载（非下拉刷新）时展示全屏 loading
+      if (!isRefresh) {
+        this.setData({
+          loading: true,
+          loadError: false
+        })
+      }
       try {
         const params = {
           pageNo: 1,
           pageSize: 100
         }
         const res = await getChatList(params)
-        // 格式化时间
         const chatList = res.map(item => {
           return {
             ...item,
+            avatarUrls: item.groupChatId ? item.characterInfos.map(info => info.avatar) : [],
             timeText: this.formatTime(item.createTime)
           }
         })
         this.setData({
           chatList,
+          loading: false,
+          loadError: false,
           refreshing: false
         })
       } catch (error) {
         console.error('加载聊天列表失败:', error)
-        
+
         Toast({
           context: this,
           selector: '#t-toast',
           message: error.message || '加载失败，请重试',
         })
-        
+
         this.setData({
+          loading: false,
+          loadError: true,
           refreshing: false
         })
       }
@@ -162,9 +177,15 @@ Page(
     onChatItemClick(e) {
       const { id } = e.currentTarget.dataset
       const plot = this.data.chatList.find(item => item.plotId === id)
-      wx.navigateTo({
-        url: `/pages/chat/index?plotId=${id}&characterId=${plot.characterId}`
-      })
+      if (plot.groupChatId) {
+        wx.navigateTo({
+          url: `/pages/chat/index?plotId=${id}&groupId=${plot.groupChatId}`
+        })
+      } else {
+        wx.navigateTo({
+          url: `/pages/chat/index?plotId=${id}&characterId=${plot.characterId}`
+        })
+      }
     },
     onTopChat(e) {
       const { id } = e.currentTarget.dataset
@@ -172,6 +193,7 @@ Page(
       const isTop = !plot.isTop
       this.topChat({
         characterId: plot.characterId,
+        groupChatId: plot.groupChatId,
         plotId: plot.plotId,
         isTop
       })
@@ -180,7 +202,7 @@ Page(
      * 删除聊天
      */
     onDeleteChat(e) {
-      const { id } = e.currentTarget.dataset
+      const { id, groupChatId } = e.currentTarget.dataset
       
       const tipDialog = this.selectComponent('#tip-dialog')
       tipDialog.show({
@@ -192,26 +214,26 @@ Page(
         },
         onConfirm: () => {
           // 确认删除
-          this.deleteChat(id)
+          this.deleteChat(id, groupChatId)
         }
       })
     },
     /**
      * 执行删除操作
      */
-    async deleteChat(id) {
+    async deleteChat(id, groupChatId) {
       try {
-        await deleteChat({ characterId: id })
+        await deleteChat({ characterId: id, groupChatId })
         Toast({
           context: this,
           selector: '#t-toast',
           message: '删除成功',
         })
-        this.loadChatList()
-        
+        this.loadChatList(true)
+
       } catch (error) {
         console.error('删除聊天失败:', error)
-        
+
         Toast({
           context: this,
           selector: '#t-toast',
@@ -220,15 +242,15 @@ Page(
       }
     },
     // 置顶
-    async topChat({ characterId, plotId, isTop }) {
+    async topChat({ characterId, plotId, groupChatId, isTop }) {
       try {
-        await topChat({ characterId, isTop })
+        await topChat({ characterId, groupChatId, isTop })
         Toast({
           context: this,
           selector: '#t-toast',
           message: isTop ? '置顶成功' : '取消置顶成功',
         })
-        this.loadChatList()
+        this.loadChatList(true)
         // 右滑关闭
         this.closeSwipeCell(plotId)
       } catch (error) {
@@ -244,6 +266,13 @@ Page(
       if (swipeCell) {
         swipeCell.close()
       }
+    },
+
+    /**
+     * 加载失败重试
+     */
+    onRetryLoad() {
+      this.loadChatList()
     }
   })
 )

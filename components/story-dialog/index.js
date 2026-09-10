@@ -5,8 +5,8 @@ Component({
     visible: false,
     roles: [],
     formData: {
-      plotName: '',
-      plotSetting: '',
+      title: '',
+      scene: '',
       prologue: '',
       prologueCharacterId: null
     }
@@ -18,7 +18,7 @@ Component({
      * @param {Object} options 配置项
      * @param {Array} options.roles 开场白角色列表 [{ id, name, avatarUrl, prologue }]
      * @param {Function} options.onCancel 取消回调
-     * @param {Function} options.onConfirm 确认回调，参数为 { plotName, plotSetting, prologue, prologueCharacterId }
+     * @param {Function} options.onConfirm 确认回调，参数为 { title, scene, prologue, prologueCharacterId }
      */
     show(options = {}) {
       const { roles = [], onCancel, onConfirm } = options
@@ -30,8 +30,8 @@ Component({
         visible: true,
         roles,
         formData: {
-          plotName: '',
-          plotSetting: '',
+          title: '',
+          scene: '',
           prologue: '',
           prologueCharacterId: null
         }
@@ -109,24 +109,21 @@ Component({
      * 选择开场白角色
      */
     onSelectPrologueCharacter(e) {
-      const { id, name } = e.currentTarget.dataset
-
-      if (id === 'player') {
-        // 选择玩家作为开场白
+      const { id } = e.currentTarget.dataset
+      if (this.data.formData.prologueCharacterId == id) {
         this.setData({
-          'formData.prologueCharacterId': 'player',
-          'formData.prologue': '由玩家开启群聊第一句话。'
+          'formData.prologueCharacterId': null
         })
-      } else {
-        // 选择群成员作为开场白，回填该角色的开场白
-        const character = this.data.roles.find(c => c.id == id)
-        if (character) {
-          this.setData({
-            'formData.prologueCharacterId': character.id,
-            'formData.prologue': character.prologue || `你好，我是${name}。`
-          })
-        }
+        return 
       }
+      // 选择群成员作为开场白，回填该角色的开场白
+      const character = this.data.roles.find(c => c.id == id)
+      if (character) {
+        this.setData({
+          'formData.prologueCharacterId': character.id
+        })
+      }
+      
     },
 
     /**
@@ -135,21 +132,21 @@ Component({
     onConfirm() {
       const { formData } = this.data
 
-      if (!formData.plotName) {
+      if (!formData.title) {
         wx.showToast({
           title: '请输入故事名称',
           icon: 'none'
         })
         return
       }
-      if (!formData.plotSetting) {
+      if (!formData.scene) {
         wx.showToast({
           title: '请输入故事设定',
           icon: 'none'
         })
         return
       }
-      if (!formData.prologue) {
+      if (!formData.prologue && formData.prologueCharacterId) {
         wx.showToast({
           title: '请输入开场白',
           icon: 'none'
@@ -159,8 +156,8 @@ Component({
 
       if (typeof this._onConfirm === 'function') {
         this._onConfirm({
-          plotName: formData.plotName,
-          plotSetting: formData.plotSetting,
+          title: formData.title,
+          scene: formData.scene,
           prologue: formData.prologue,
           prologueCharacterId: formData.prologueCharacterId
         })

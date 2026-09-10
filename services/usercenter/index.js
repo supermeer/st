@@ -118,6 +118,41 @@ export function updateUserInfo(data) {
   return request.post('/api/v1/user/user/updateUserInfo', data)
 }
 
+// ==================== 创作者中心 ====================
+
+/**
+ * 我的收益概览
+ * 返回字段（按业务约定）：
+ *   characterIncome: 智能体收益（积分/星币数量）
+ *   groupIncome: 群聊收益
+ *   fanCount: 粉丝数
+ */
+export function getMyIncomeOverview() {
+  return request.get('/api/v1/user/creator/getMyIncomeOverview')
+}
+
+/**
+ * 我的战绩列表（公开智能体 + 群聊的详情）
+ * 传入 sourceType:
+ *   1 - 智能体
+ *   2 - 群聊
+ * 不传时返回全部
+ */
+export function getMyAchievements(params) {
+  return request.get('/api/v1/user/creator/getMyAchievements', params)
+}
+
+/**
+ * 收益明细（按时间维度）
+ */
+export function getMyIncomeDetails(params) {
+  return request.get('/api/v1/user/creator/getMyIncomeDetails', params)
+}
+
+export function getStarShowcase(params) {
+  return request.get('/api/v1/user/user/getStarShowcase', params)
+}
+
 /**
  * 获取未成年人提醒配置
  * @returns {Promise} - 返回是否显示未成年人提醒弹窗

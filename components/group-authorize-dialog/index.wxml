@@ -1,0 +1,76 @@
+<view class="group-authorize-mask" wx:if="{{visible}}" bindtap="onMaskClick" catchtouchmove="{{true}}">
+  <view class="group-authorize-container" catchtap="noop">
+    <!-- 标题栏 -->
+    <view class="group-authorize-header">
+      <view class="group-authorize-title">群聊授权</view>
+      <view class="group-authorize-close" bindtap="onClose">
+        <t-icon name="close" size="36rpx" color="rgba(255,255,255,0.6)" />
+      </view>
+    </view>
+
+    <!-- 副标题 -->
+    <view class="group-authorize-subtitle">
+      允许他人在创建群聊时，可以使用您发布的智能体
+    </view>
+
+    <!-- 选项列表 -->
+    <view class="group-authorize-options">
+      <!-- 开放授权 -->
+      <view
+        class="option-item {{authorize === 'open' ? 'is-active' : ''}}"
+        bindtap="onSelectOption"
+        data-value="open"
+      >
+        <view class="option-radio {{authorize === 'open' ? 'is-active' : ''}}">
+          <view wx:if="{{authorize === 'open'}}" class="radio-dot"></view>
+        </view>
+        <view class="option-content">
+          <view class="option-label-row">
+            <text class="option-label">开放授权</text>
+          </view>
+          <view class="option-desc">
+            开放群聊授权后，别人能拉您的智能体进群畅聊。开放后，您的智能体可能增加更多曝光，且可按该智能体的聊天积分消耗提成赚收益。
+          </view>
+        </view>
+        <view class="option-tag">推荐</view>
+      </view>
+
+      <!-- 关闭授权 -->
+      <view
+        class="option-item {{authorize === 'close' ? 'is-active' : ''}}"
+        bindtap="onSelectOption"
+        data-value="close"
+      >
+        <view class="option-radio {{authorize === 'close' ? 'is-active' : ''}}">
+          <view wx:if="{{authorize === 'close'}}" class="radio-dot"></view>
+        </view>
+        <view class="option-content">
+          <view class="option-label-row">
+            <text class="option-label">关闭授权</text>
+          </view>
+          <view class="option-desc">
+            关闭群聊授权后，别人将无法拉您的智能体进群，该智能体仅你本人可以进群。这样可能会降低您的智能体曝光度及收益。
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 底部提示 -->
+    <view class="group-authorize-tip">
+      收益详情可查看最新
+      <text class="group-authorize-link" catchtap="onTapRule">《创作者激励规则》</text>
+    </view>
+
+    <!-- 底部按钮 -->
+    <view class="group-authorize-footer">
+      <view class="btn btn-cancel" bindtap="onClose">返回</view>
+      <view
+        class="btn btn-confirm {{loading ? 'is-loading' : ''}}"
+        bindtap="onConfirm"
+      >
+        <text wx:if="{{loading}}" class="loading-text">保存中...</text>
+        <text wx:else>保存</text>
+      </view>
+    </view>
+  </view>
+</view>

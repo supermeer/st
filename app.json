@@ -7,6 +7,7 @@
     "pages/chat-list/index",
     "pages/usercenter/index",
     "pages/usercenter/edit/index",
+    "pages/star-yao-ji/index",
     "pages/points/index",
     "pages/points/detail/index",
     "pages/points/role-detail/index",
@@ -23,18 +24,6 @@
       "root": "pages/contentadd",
       "name": "contentadd",
       "pages": ["index", "blog/index", "theme/index", "style/index"]
-    },
-    {
-      "root": "pages/goods",
-      "name": "goods",
-      "pages": [
-        "list/index",
-        "details/index",
-        "search/index",
-        "result/index",
-        "comments/index",
-        "comments/create/index"
-      ]
     },
     {
       "root": "pages/order",
@@ -57,7 +46,8 @@
         "chat-style/add/index",
         "voice-list/index",
         "world-book/index",
-        "world-book-edit/index"
+        "world-book-edit/index",
+        "plot/index"
       ]
     },
     {
@@ -67,7 +57,9 @@
         "add/index",
         "role-select/index",
         "chat/index",
-        "detail/index"
+        "detail/index",
+        "story/index",
+        "plot/index"
       ]
     },
     {

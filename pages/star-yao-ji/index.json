@@ -1,0 +1,10 @@
+{
+  "navigationBarTitleText": "星耀集",
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "t-image": "tdesign-miniprogram/image/image",
+    "t-icon": "tdesign-miniprogram/icon/icon",
+    "custom-nav": "/components/custom-nav/index",
+    "t-toast": "tdesign-miniprogram/toast/toast"
+  }
+}

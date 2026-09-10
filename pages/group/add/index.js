@@ -1,21 +1,33 @@
 import SystemInfo from '../../../utils/system'
 import { verifyUrls } from '../../../services/file/index'
 import GroupChatService from '../../../services/ai/group-chat'
+import { getGroupDetail } from '../../../services/group/index'
+import {
+  createPlot,
+  updatePlot,
+  getCurrentPlotByGroupChatId
+} from '../../../services/ai/chat'
 
 Page({
   /**
    * 页面的初始数据
    */
   data: {
+    isEdit: false,
+    pageTitle: '创建群聊',
+    submitBtnText: '保存设定',
     pageInfo: {
       safeAreaBottom: 0,
       navHeight: 0
     },
     formData: {
       id: null,
+      storyId: null,
+      plotId: null,
       name: '',
       description: '',
       storyTitle: '',
+      title: '',
       scene: '',
       plotSetting: '',
       prologue: '',
@@ -27,7 +39,7 @@ Page({
     },
     showUploader: false,
     currentBg: '',
-    
+
     selectedCharacters: []
   },
 
@@ -43,11 +55,75 @@ Page({
     if (nav) {
       nav.setBackAction(this.backAction)
     }
+
+    if (options && options.id) {
+      this.setData({
+        isEdit: true,
+        pageTitle: '编辑群聊',
+        submitBtnText: '保存修改',
+        'formData.id': options.id,
+        'formData.plotId': options.plotId || null
+      })
+      this.loadGroupForEdit(options.id, options.plotId || null)
+    }
+  },
+
+  /**
+   * 编辑模式：从详情接口回填表单
+   */
+  loadGroupForEdit(groupId, plotId) {
+    getGroupDetail(groupId, plotId).then((res) => {
+      if (!res) return
+
+      // 角色成员：detail 用 avatar 字段，role-select 用 avatarUrl 字段，统一映射成 avatarUrl
+      const selectedCharacters = (res.characterInfos || []).map((c) => ({
+        id: c.id,
+        name: c.name,
+        avatarUrl: c.avatar || c.avatarUrl || ''
+      }))
+
+      const story = res.plotDetailVO && res.plotDetailVO.story
+        ? res.plotDetailVO.story
+        : res.defaultStoryDetail || {}
+
+      const persona = (res.plotDetailVO && res.plotDetailVO.persona) || res.defaultPersona || {}
+
+      const backgroundImage =
+        (res.plotDetailVO && res.plotDetailVO.backgroundImage) ||
+        res.backgroundImage ||
+        ''
+
+      this.setData({
+        selectedCharacters,
+        currentBg: backgroundImage,
+        formData: {
+          ...this.data.formData,
+          id: groupId,
+          storyId: story.id || null,
+          plotId: res.currentPlotId || plotId || null,
+          name: res.name || '',
+          description: res.description || '',
+          storyTitle: story.title || '',
+          title: story.title || '',
+          scene: story.scene || '',
+          prologue: story.prologue || '',
+          prologueCharacterId: story.prologueCharacterId || '',
+          userAddressedAs: persona.userAddressedAs || '',
+          identity: persona.identity || '',
+          personaGender: persona.gender || '',
+          backgroundImage
+        }
+      })
+    }).catch((err) => {
+      console.error('加载群聊详情失败:', err)
+    })
   },
 
   backAction() {
     const tipDialog = this.selectComponent('#tip-dialog')
-    let content = '退出当前页面后，编辑的内容不会被保存，确认退出？'
+    let content = this.data.isEdit
+      ? '退出当前页面后，修改的内容不会被保存，确认退出？'
+      : '退出当前页面后，编辑的内容不会被保存，确认退出？'
     tipDialog.show({
       title: '提示',
       content,
@@ -91,7 +167,7 @@ Page({
     const { id } = e.currentTarget.dataset
     const character = this.data.selectedCharacters.find(c => c.id == id)
     this.setData({
-      'formData.prologueCharacterId': character?.id || null
+      'formData.prologueCharacterId': this.data.formData.prologueCharacterId == character.id ? null : character.id,
     })
   },
 
@@ -122,6 +198,7 @@ Page({
    * 接收角色选择返回的数据
    */
   onRoleSelectBack(selectedRoles) {
+    console.log('onRoleSelectBack', selectedRoles)
     this.setData({
       selectedCharacters: selectedRoles || []
     })
@@ -195,7 +272,7 @@ Page({
    * 提交表单
    */
   async onSubmit() {
-    const { formData, selectedCharacters } = this.data
+    const { formData, selectedCharacters, isEdit } = this.data
 
     if (!formData.name) {
       wx.showToast({
@@ -211,9 +288,9 @@ Page({
       })
       return
     }
-    if (!selectedCharacters || selectedCharacters.length == 0) {
+    if (!selectedCharacters || selectedCharacters.length < 2) {
       wx.showToast({
-        title: '请选择角色',
+        title: '请选择至少2个角色',
         icon: 'none'
       })
       return
@@ -232,13 +309,6 @@ Page({
       })
       return
     }
-    // if (!formData.prologue) {
-    //   wx.showToast({
-    //     title: '请输入开场白',
-    //     icon: 'none'
-    //   })
-    //   return
-    // }
 
     wx.showLoading({
       title: '保存中...',
@@ -247,29 +317,81 @@ Page({
 
     try {
       const params = {
+        groupChatId: formData.id || undefined,
         name: formData.name,
         description: formData.description,
         characterIds: selectedCharacters.map(c => c.id),
         defaultBackgroundImage: formData.backgroundImage || '',
         prologue: formData.prologue,
+        storyTitle: formData.storyTitle,
+        title: formData.storyTitle,
+        scene: formData.scene,
         prologueCharacterId: formData.prologueCharacterId || undefined
       }
+      let method = GroupChatService.createGroupChat
+      if (isEdit) {
+        method = GroupChatService.updateGroupChat
+      }
 
-      const res = await GroupChatService.createGroupChat(params)
+      const res = await method(params)
 
       wx.hideLoading()
-      wx.showToast({
-        title: '创建成功',
-        icon: 'success',
-        duration: 1000
-      })
 
-      setTimeout(() => {
-        wx.navigateBack()
-      }, 1000)
+      const tipDialog = this.selectComponent('#tip-dialog')
+      let content = '有任何问题，可添加客服微信咨询。'
+
+      // 编辑模式：同步开场白角色到 plot（参照新增接口走 updatePlot）
+      const onAfterChatSuccess = async () => {
+        try {
+          let plotId = formData.plotId
+          if (!plotId) {
+            const cur = await getCurrentPlotByGroupChatId(res.groupChatId || formData.id)
+            plotId = cur && cur.plotId
+          }
+          if (plotId && formData.prologueCharacterId) {
+            await updatePlot({
+              id: plotId,
+              prologueCharacterId: formData.prologueCharacterId
+            })
+          }
+        } catch (e) {
+          console.error('更新开场白角色失败:', e)
+        }
+
+        wx.redirectTo({
+          url: `/pages/chat/index?plotId=${formData.plotId || ''}&groupId=${res.groupChatId || formData.id}`
+        })
+      }
+
+      const onAfterCreatePlot = async () => {
+        const plotRes = await createPlot({
+          groupChatId: res.groupChatId,
+          storyId: res.defaultStoryId,
+        })
+        wx.redirectTo({
+          url: `/pages/chat/index?plotId=${plotRes || ''}&groupId=${res.groupChatId}`
+        })
+      }
+
+      tipDialog.show({
+        title: `${isEdit ? '更新成功' : '创建成功'}`,
+        content,
+        cancelText: '添加客服',
+        confirmText: '去聊天',
+        onCancel: () => {
+          // wx.navigateBack()
+          const app = getApp()
+          wx.openCustomerServiceChat({
+            extInfo: { url: app.globalData.wxCustomerService.url },
+            corpId: app.globalData.wxCustomerService.corpId,
+            success(res) {}
+          })
+        },
+        onConfirm: isEdit ? onAfterChatSuccess : onAfterCreatePlot
+      })
     } catch (err) {
       wx.hideLoading()
-      console.error('创建群聊失败:', err)
+      console.error(`${this.data.isEdit ? '更新' : '创建'}群聊失败:`, err)
     }
   }
 })

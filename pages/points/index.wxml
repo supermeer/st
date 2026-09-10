@@ -48,6 +48,15 @@
           开会员直接<text class="point-item-desc-white">送积分</text>！还有<text class="point-item-desc-white">一堆福利</text>等你来薅！
         </view>
       </view>
+      <view class="point-item" bindtap="adReward">
+        <view class="point-item-header">
+          看广告赚积分
+          <view class="point-item-header-right">去赚积分<t-icon name="chevron-right" size="20" /></view>
+        </view>
+        <view class="point-item-desc">
+          观看广告<text class="point-item-desc-white">赚积分</text>！每次<text class="point-item-desc-white">10积分</text>等你来赚！
+        </view>
+      </view>
       <view class="point-item" bindtap="invite">
         <view class="point-item-header">
           <view class="point-item-title">邀请好友赚积分<view class="point-item-title-tag gn">不限次</view></view>

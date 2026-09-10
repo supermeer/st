@@ -98,7 +98,7 @@ page {
 
 /* 详情内容区域 */
 .detail-content {
-  border-radius: 24rpx 24rpx 0 0;
+  border-radius: 24rpx;
   margin: 0 32rpx;
   padding: 32rpx;
 }
@@ -151,6 +151,51 @@ page {
   padding-bottom: 56rpx; /* 给右下角按钮留出空间 */
 }
 
+.group-role-item {
+  display: flex;
+  align-items: center;
+  padding: 12rpx 0;
+}
+.role-avatar {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.role-content-box {
+  margin-left: 12rpx;
+  padding-right: 12rpx;
+}
+
+.role-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8rpx;
+}
+
+.role-tag {
+  display: inline-block;
+  padding: 4rpx 12rpx;
+  font-size: 22rpx;
+  color: #999999;
+  border-radius: 4rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 160rpx;
+}
+
+.new-story-line {
+  color: #bbb;
+  font-size: 28rpx;
+  margin-top: 40rpx;
+  text-align: center;
+}
+.new-story-btn {
+  color: var(--yellow-btn-color);
+}
+
 .fold-toggle {
   position: absolute;
   right: 16rpx;
@@ -186,6 +231,12 @@ page {
 }
 .section-title-icon {
   color: #fff;
+  flex-shark: 0;
+  flex-grow: 0;
+}
+
+.ml-auto {
+  margin-left: auto;
 }
 
 .like-blur-glass {
@@ -264,4 +315,54 @@ page {
 }
 .style-right-icon {
   color: #fff;
+}
+
+/* 创作者样式 */
+.creator-item {
+  justify-content: space-between;
+}
+
+.creator-item .role-content-box {
+  flex: 1;
+}
+
+.follow-btn-container {
+  flex-shrink: 0;
+  margin-left: 12rpx;
+}
+
+.follow-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10rpx 24rpx;
+  font-size: 26rpx;
+  text-align: center;
+  color: var(--magic-color);
+}
+
+.follow-icon {
+  margin-right: 8rpx;
+}
+
+.follow-btn.unfollowed {
+  color: #fff;
+}
+
+.follow-btn.followed {
+  color: var(--magic-color);
+}
+
+.creator-avatar {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.no-creator-tip {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 26rpx;
+  padding: 20rpx 0;
 }

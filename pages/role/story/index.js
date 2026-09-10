@@ -1,6 +1,8 @@
 import SystemInfo from '../../../utils/system'
-import { getPlotListByCharacterId, getCharacterDetail } from '../../../services/role/index'
-import { deletePlot, setCurrentPlot } from '../../../services/ai/chat'
+import { deletePlot, setCurrentPlot, createStory } from '../../../services/ai/chat'
+import { getCharacterDetail } from '../../../services/role/index'
+import { getStoryList } from '../../../services/ai/group-chat'
+import ChatService from '../../../services/ai/chat'
 import Toast from 'tdesign-miniprogram/toast/index'
 import dayjs from 'dayjs'
 Page({
@@ -16,11 +18,10 @@ Page({
     roleInfo: {
       id: null,
       name: '',
-      avatar: '',
       description: ''
     },
-    plotList: [],
-    currentPlotId: null,
+    storyList: [],
+    currentStoryId: null,
     currentBg: '',
     showBG: true
   },
@@ -43,8 +44,8 @@ Page({
           id: options.roleId
         }
       })
-      this.loadPlotList(options.roleId)
       this.loadCharacterInfo(options.roleId)
+      this.loadStoryList(options.roleId)
     }
     this.setData({
       pageInfo: { ...this.data.pageInfo, ...SystemInfo.getPageInfo() }
@@ -53,35 +54,39 @@ Page({
 
   loadCharacterInfo(roleId) {
     getCharacterDetail(roleId).then(res => {
+      console.log(res)
       let currentBg = res.backgroundImage
       if (res.currentPlotId) {
         currentBg = res.plotDetailVO.backgroundImage
       }
       this.setData({
-        roleInfo: { ...this.data.roleInfo, ...res },
-        currentPlotId: res.currentPlotId || null,
-        currentBg: currentBg || ''
+        roleInfo: {
+          ...this.data.roleInfo,
+          ...res
+        },
+        currentBg: currentBg || '',
+        currentStoryId: res.plotDetailVO?.storyId || null
       })
     })
   },
   /**
-   * 加载剧情列表
+   * 加载故事列表
    */
-  loadPlotList(roleId) {
-    getPlotListByCharacterId(roleId).then(res => {
+  loadStoryList(roleId) {
+    getStoryList({ characterId: roleId }).then(res => {
+      const list = Array.isArray(res) ? res : (res.list || [])
       this.setData({
-        plotList: [...res.list || []].map(item => ({
+        storyList: list.map(item => ({
           ...item,
           time: this.formatTime(item.updateTime)
-        })),
-        currentPlotId: res.currentPlotId || null
+        }))
       })
     })
   },
 
   formatTime(timestamp) {
     if (!timestamp) return ''
-    
+
     const now = dayjs()
     const time = dayjs(timestamp)
     const diffDays = now.diff(time, 'day')
@@ -103,38 +108,27 @@ Page({
       return time.format('YYYY-MM-DD')
     }
   },
-  async onPlotTap(event) {
+  // 如果是当前故事，直接跳转到聊天页面，如果不是，则根据story创建新剧情，跳转到聊天页面
+  async onStoryTap(event) {
     const id = event.currentTarget.dataset.id
-    const plot = this.data.plotList.find(item => item.id === id)
-    if (plot.ifCurrent) {
+    if (id === this.data.currentStoryId) {
       return
     }
-    try {
-      await setCurrentPlot({ plotId: id, characterId: this.data.roleInfo.id })
-      Toast({
-        context: this,
-        selector: '#t-toast',
-        message: '剧情切换成功',
-      })
-      wx.navigateTo({
-        url: `/pages/chat/index?plotId=${id}&characterId=${this.data.roleInfo.id}`
-      })
-    } catch (error) {
-      console.error('设置当前剧情失败:', error)
-      Toast({
-        context: this,
-        selector: '#t-toast',
-        message: error.message || '设置当前剧情失败，请重试',
-      })
-    }
+    const plotId = await ChatService.createPlot({
+      characterId: this.data.roleInfo.id || undefined,
+      storyId: id || undefined,
+    })
+    wx.redirectTo({
+      url: `/pages/chat/index?plotId=${plotId}&characterId=${this.data.roleInfo.id}`
+    })
   },
-  
+
   /**
    * 删除故事
    */
   onDeletePlot(e) {
     const { id } = e.currentTarget.dataset
-    
+
     const tipDialog = this.selectComponent('#tip-dialog')
     tipDialog.show({
       content: '删除后，该剧情的所有对话将被清除，且不可撤回。',
@@ -149,7 +143,7 @@ Page({
       }
     })
   },
-  
+
   /**
    * 执行删除操作
    */
@@ -161,15 +155,15 @@ Page({
         selector: '#t-toast',
         message: '删除成功',
       })
-      // 重新加载剧情列表
+      // 重新加载故事列表
       if (this.data.roleInfo.id) {
-        this.loadPlotList(this.data.roleInfo.id)
+        this.loadStoryList(this.data.roleInfo.id)
       }
       // 关闭滑动
       this.closeSwipeCell(id)
     } catch (error) {
       console.error('删除剧情失败:', error)
-      
+
       Toast({
         context: this,
         selector: '#t-toast',
@@ -177,7 +171,7 @@ Page({
       })
     }
   },
-  
+
   /**
    * 关闭滑动单元格
    */
@@ -187,11 +181,57 @@ Page({
       swipeCell.close()
     }
   },
-  
+
   onShow() {
     if (this.data.roleInfo.id) {
-      this.loadPlotList(this.data.roleInfo.id)
+      this.loadStoryList(this.data.roleInfo.id)
+    }
+  },
+
+  /**
+   * 创建新故事 - 弹出创建故事弹窗
+   */
+  onCreateStory() {
+    const storyDialog = this.selectComponent('#story-dialog')
+    if (!storyDialog) {
+      wx.showToast({ title: '弹窗未就绪', icon: 'none' })
+      return
+    }
+    storyDialog.show({
+      onConfirm: (data) => {
+        this.createStory(data)
+      },
+      // 单角色场景：把当前角色作为可选的开场白角色传入
+      roles: [{ id: this.data.roleInfo.id, avatar: this.data.currentBg }]
+    })
+  },
+
+  /**
+   * 调用创建故事接口，成功后刷新故事列表
+   */
+  async createStory(data) {
+    try {
+      const res = await createStory({
+        ...data,
+        characterId: this.data.roleInfo.id
+      })
+      if (res && (res.code == 200 || res.code === undefined)) {
+        wx.showToast({ title: '创建成功', icon: 'success' })
+        if (this.data.roleInfo.id) {
+          this.loadStoryList(this.data.roleInfo.id)
+        }
+      } else {
+        wx.showToast({
+          title: (res && res.message) || '创建失败',
+          icon: 'none'
+        })
+      }
+    } catch (error) {
+      console.error('创建故事失败:', error)
+      wx.showToast({
+        title: (error && error.message) || '创建失败，请重试',
+        icon: 'none'
+      })
     }
   }
 })
-

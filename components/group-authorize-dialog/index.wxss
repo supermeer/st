@@ -1,0 +1,208 @@
+/* 遮罩层 */
+.group-authorize-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+/* 弹窗容器 - 居中弹出 */
+.group-authorize-container {
+  width: 622rpx;
+  background: #1a1a1a;
+  border-radius: 32rpx;
+  padding: 32rpx 36rpx 36rpx;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 标题栏 */
+.group-authorize-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16rpx;
+  height: 44rpx;
+}
+
+.group-authorize-title {
+  color: #ffffff;
+  font-size: 32rpx;
+  font-weight: 600;
+}
+
+.group-authorize-close {
+  position: absolute;
+  right: -8rpx;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48rpx;
+  height: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 副标题 */
+.group-authorize-subtitle {
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.6;
+  margin-bottom: 32rpx;
+}
+
+/* 选项列表 */
+.group-authorize-options {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+  margin-bottom: 28rpx;
+}
+
+/* 选项卡片 */
+.option-item {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  padding: 28rpx 28rpx;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2rpx solid rgba(255, 255, 255, 0.08);
+  border-radius: 20rpx;
+  box-sizing: border-box;
+  transition: all 0.2s;
+}
+
+.option-item.is-active {
+  border-color: rgba(167, 139, 250, 0.6);
+  background: rgba(124, 90, 255, 0.1);
+}
+
+/* 单选圆圈 */
+.option-radio {
+  width: 36rpx;
+  height: 36rpx;
+  border-radius: 50%;
+  border: 2rpx solid rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  margin-right: 20rpx;
+  margin-top: 4rpx;
+}
+
+.option-radio.is-active {
+  border-color: #a78bfa;
+  background: linear-gradient(135deg, #7c5aff 0%, #a78bfa 100%);
+}
+
+.radio-dot {
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 50%;
+  background: #ffffff;
+}
+
+/* 选项内容 */
+.option-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.option-label-row {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.option-label {
+  font-size: 30rpx;
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.option-desc {
+  margin-top: 12rpx;
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.55);
+  line-height: 1.6;
+}
+
+/* 推荐角标 - 卡片右上角 */
+.option-tag {
+  position: absolute;
+  top: -2rpx;
+  right: -2rpx;
+  font-size: 22rpx;
+  color: #ffffff;
+  background: linear-gradient(135deg, #ff8a3d 0%, #ff6b35 100%);
+  padding: 6rpx 16rpx;
+  border-radius: 0 20rpx 0 20rpx;
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+/* 底部提示 */
+.group-authorize-tip {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.6;
+  margin-bottom: 32rpx;
+}
+
+.group-authorize-link {
+  color: #a78bfa;
+}
+
+/* 底部按钮 */
+.group-authorize-footer {
+  display: flex;
+  gap: 20rpx;
+}
+
+.btn {
+  flex: 1;
+  height: 88rpx;
+  border-radius: 44rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30rpx;
+  font-weight: 500;
+  box-sizing: border-box;
+}
+
+.btn-cancel {
+  background: transparent;
+  border: 2rpx solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.btn-confirm {
+  background: linear-gradient(135deg, #7c5aff 0%, #a78bfa 50%, #8b5cf6 100%);
+  color: #ffffff;
+  box-shadow: 0 4rpx 20rpx rgba(124, 90, 255, 0.4);
+}
+
+.btn-confirm:active {
+  opacity: 0.85;
+}
+
+.btn-confirm.is-loading {
+  opacity: 0.7;
+}
+
+.loading-text {
+  color: #ffffff;
+}
